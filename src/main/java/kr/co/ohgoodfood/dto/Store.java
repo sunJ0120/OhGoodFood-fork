@@ -5,8 +5,8 @@ import java.sql.Date;
 import lombok.Data;
 
 @Data
-public class Stroe {
-    private String store_id;
+public class Store {
+	private String store_id;
     private String confirmed;
     private String business_number;
     private String store_address;
