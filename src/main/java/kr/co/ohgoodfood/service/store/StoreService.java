@@ -1,5 +1,10 @@
 package kr.co.ohgoodfood.service.store;
 
-public class StoreService {
+import kr.co.ohgoodfood.dto.Store;
+
+public interface StoreService {
+
+	public Store login(Store vo);
+	
 
 }

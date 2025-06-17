@@ -1,0 +1,136 @@
+@font-face {
+    font-family: 'nanumesquareneo';
+    src: url('font/NanumSquareNeo-aLt.ttf');
+}
+@font-face {
+    font-family: 'nanumesquareneo_b';
+    src: url('font/NANUMSQUARENEO-BRG.ttf');
+}
+body{
+    font-family: 'nanumesquareneo';
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+#wrapper{
+    width: 440px;
+    height: 956px;
+    background-color: #F5F3EA;   
+    display: flex;
+    flex-direction: column;
+}
+header{
+    height: 30px;
+    padding: 20px 15px 20px 15px;;
+    border-bottom: solid 1px #717171;
+}
+.header-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.icon-container{
+    display: flex;
+    gap:10px;
+    align-items: center;
+}
+.icon{
+    width: 20px;
+}
+main{
+    display: flex;
+}
+#main-image {
+    margin-top: 13px;
+}
+.menu-container{
+    display: flex;
+}
+.main-body-container {
+    left: 0;
+    height: 600px; 
+    background-color: #99A99B;
+    z-index: 0;
+    margin-top: -40px;  
+    border-radius: 20px 20px 0 0;
+}
+.main-middle-container {
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;   
+    gap: 16px;                
+    align-items: center;
+}
+.main-middle-container #first-input {
+    margin-top: 60px;
+}
+.main-middle-container input {
+    width: 335px;
+    font-family: "nanumesquareneo";
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.login-button {
+    width: 358px;
+    padding: 12px;
+    background: #f5f3ea;
+    color : #99A99B;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    font-family: "nanumesquareneo";
+    cursor: pointer;
+}
+.sub-links {
+    margin-top: 10px;
+    width: 346px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    color: #F5F3EA;
+    font-weight: bold;
+    font-family: "nanumesquareneo";
+}
+.sub-links a {
+    text-decoration: none;
+    color: #F5F3EA;
+}
+.sub-links a:hover {
+    text-decoration: underline;
+    color: #000;
+}
+.main-line {
+  margin-top: 10px;
+  height: 1px;
+  background-color: #F5F3EA;
+  width: 100%;
+  max-width: 440px;
+}
+.sns-login-box {
+    margin-top: 30px;
+    width: 346px;
+    background-color: #F5F3EA;
+    border-radius: 10px;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'nanumesquareneo';
+}
+.sns-login-title {
+    font-size: 20px;
+    font-weight: extrabold;
+    color: #8B6D5C;
+    margin-bottom: 10px;
+}
+.sns-login-box img {
+    width: 320px;
+    height: auto;
+    border-radius: 8px;
+}
