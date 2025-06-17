@@ -1,3 +1,7 @@
+
+
+body{
+
 @font-face {
     font-family: 'nanumesquareneo';
     src: url('font/NanumSquareNeo-aLt.ttf');
@@ -20,4 +24,5 @@ body{
     height: 956px;
     background-color: #F5F3EA;
     
-}
+
+  }

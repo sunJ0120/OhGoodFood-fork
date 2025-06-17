@@ -1,3 +1,898 @@
+
+.div-wrapper {
+  width: 440px;
+  height: 1356px;
+}
+
+.div-wrapper .overlap-group {
+  position: relative;
+  width: 453px;
+  height: 1873px;
+  left: -2px;
+}
+
+.div-wrapper .rectangle {
+  position: absolute;
+  width: 440px;
+  height: 1873px;
+  top: 0;
+  left: 2px;
+  background-color: #f5f3ea;
+}
+
+.div-wrapper .line {
+  top: 85px;
+  left: 2px;
+  position: absolute;
+  width: 440px;
+  height: 1px;
+  object-fit: cover;
+}
+
+.div-wrapper .div {
+  position: absolute;
+  width: 440px;
+  height: 88px;
+  top: 182px;
+  left: 2px;
+  background-color: #99a99b;
+  border-radius: 48px 48px 0px 0px;
+}
+
+.div-wrapper .text-wrapper {
+  position: absolute;
+  width: 315px;
+  height: 42px;
+  top: 281px;
+  left: 28px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-2 {
+  position: absolute;
+  width: 315px;
+  height: 42px;
+  top: 281px;
+  left: 59px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #ff8888;
+  font-size: 15px;
+  letter-spacing: -0.15px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-3 {
+  position: absolute;
+  width: 315px;
+  height: 42px;
+  top: 390px;
+  left: 138px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #ff8888;
+  font-size: 15px;
+  letter-spacing: -0.15px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-4 {
+  position: absolute;
+  width: 315px;
+  height: 42px;
+  top: 390px;
+  left: 28px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-5 {
+  position: absolute;
+  width: 411px;
+  height: 42px;
+  top: 672px;
+  left: 28px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .rectangle-2 {
+  position: absolute;
+  width: 315px;
+  height: 55px;
+  top: 329px;
+  left: 28px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-6 {
+  position: absolute;
+  width: 266px;
+  height: 55px;
+  top: 328px;
+  left: 42px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .rectangle-3 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 433px;
+  left: 28px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .rectangle-4 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 502px;
+  left: 28px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .rectangle-5 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 718px;
+  left: 25px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .img {
+  top: 269px;
+  left: 0;
+  position: absolute;
+  width: 440px;
+  height: 1px;
+  object-fit: cover;
+}
+
+.div-wrapper .text-wrapper-7 {
+  position: absolute;
+  width: 411px;
+  height: 42px;
+  top: 568px;
+  left: 28px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .rectangle-6 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 610px;
+  left: 28px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-8 {
+  position: absolute;
+  top: 206px;
+  left: 176px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #f5f3ea;
+  font-size: 25px;
+  text-align: center;
+  letter-spacing: -0.25px;
+  line-height: 42px;
+  white-space: nowrap;
+}
+
+.div-wrapper .text-wrapper-9 {
+  position: absolute;
+  width: 266px;
+  height: 55px;
+  top: 432px;
+  left: 42px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-10 {
+  position: absolute;
+  width: 266px;
+  height: 55px;
+  top: 501px;
+  left: 42px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-11 {
+  position: absolute;
+  width: 266px;
+  height: 55px;
+  top: 609px;
+  left: 42px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-12 {
+  position: absolute;
+  width: 266px;
+  height: 55px;
+  top: 717px;
+  left: 42px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .rectangle-7 {
+  position: absolute;
+  width: 70px;
+  height: 50px;
+  top: 329px;
+  left: 351px;
+  background-color: #8b6d5c;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-13 {
+  position: absolute;
+  width: 70px;
+  height: 29px;
+  top: 339px;
+  left: 351px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #ffffff;
+  font-size: 15px;
+  text-align: center;
+  letter-spacing: -0.15px;
+  line-height: 42px;
+  white-space: nowrap;
+}
+
+.div-wrapper .removebg-preview {
+  position: absolute;
+  width: 156px;
+  height: 31px;
+  top: 28px;
+  left: 17px;
+  object-fit: cover;
+}
+
+.div-wrapper .rectangle-8 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 1137px;
+  left: 27px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-14 {
+  position: absolute;
+  width: 255px;
+  height: 57px;
+  top: 1136px;
+  left: 49px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .rectangle-9 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 1271px;
+  left: 27px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-15 {
+  position: absolute;
+  width: 255px;
+  height: 55px;
+  top: 1270px;
+  left: 49px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .p {
+  position: absolute;
+  width: 315px;
+  height: 42px;
+  top: 814px;
+  left: 30px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 400;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .span {
+  font-weight: 800;
+  letter-spacing: -0.04px;
+}
+
+.div-wrapper .text-wrapper-16 {
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.02px;
+}
+
+.div-wrapper .rectangle-10 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 862px;
+  left: 27px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-17 {
+  position: absolute;
+  width: 116px;
+  height: 56px;
+  top: 861px;
+  left: 49px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .rectangle-11 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 964px;
+  left: 30px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-18 {
+  position: absolute;
+  width: 175px;
+  height: 56px;
+  top: 963px;
+  left: 52px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .div-2 {
+  position: absolute;
+  width: 390px;
+  height: 30px;
+  top: 932px;
+  left: 30px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 400;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 30px;
+}
+
+.div-wrapper .rectangle-12 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 1031px;
+  left: 31px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-19 {
+  position: absolute;
+  width: 198px;
+  height: 56px;
+  top: 1030px;
+  left: 53px;
+  font-family: "NanumSquare Neo-Regular", Helvetica;
+  font-weight: 400;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .element {
+  position: absolute;
+  width: 315px;
+  height: 42px;
+  top: 1096px;
+  left: 31px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 400;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .div-3 {
+  position: absolute;
+  width: 315px;
+  height: 62px;
+  top: 1208px;
+  left: 30px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 400;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 30px;
+}
+
+.div-wrapper .div-4 {
+  position: absolute;
+  width: 315px;
+  height: 30px;
+  top: 1342px;
+  left: 31px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 400;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 30px;
+}
+
+.div-wrapper .rectangle-13 {
+  position: absolute;
+  width: 393px;
+  height: 88px;
+  top: 1383px;
+  left: 27px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-20 {
+  position: absolute;
+  width: 111px;
+  top: 1388px;
+  left: 91px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 18px;
+  letter-spacing: -0.18px;
+  line-height: 42px;
+  white-space: nowrap;
+}
+
+.div-wrapper .check-square {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  top: 1397px;
+  left: 62px;
+}
+
+.div-wrapper .text-wrapper-21 {
+  position: absolute;
+  width: 111px;
+  top: 1426px;
+  left: 91px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #a3a3a3;
+  font-size: 18px;
+  letter-spacing: -0.18px;
+  line-height: 42px;
+  white-space: nowrap;
+}
+
+.div-wrapper .text-wrapper-22 {
+  position: absolute;
+  width: 111px;
+  top: 1388px;
+  left: 292px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 18px;
+  letter-spacing: -0.18px;
+  line-height: 42px;
+  white-space: nowrap;
+}
+
+.div-wrapper .check-square-2 {
+  top: 1397px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 263px;
+}
+
+.div-wrapper .text-wrapper-23 {
+  position: absolute;
+  width: 111px;
+  top: 1425px;
+  left: 292px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #000000;
+  font-size: 18px;
+  letter-spacing: -0.18px;
+  line-height: 42px;
+  white-space: nowrap;
+}
+
+.div-wrapper .check-square-3 {
+  top: 1434px;
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  left: 263px;
+}
+
+.div-wrapper .rectangle-14 {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 1438px;
+  left: 65px;
+}
+
+.div-wrapper .div-5 {
+  position: absolute;
+  width: 376px;
+  height: 62px;
+  top: 1483px;
+  left: 36px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 400;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 30px;
+}
+
+.div-wrapper .rectangle-15 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 1785px;
+  left: 27px;
+  background-color: #99a99b;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-24 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 1784px;
+  left: 27px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #ffffff;
+  font-size: 22px;
+  text-align: center;
+  letter-spacing: -0.22px;
+  line-height: 42px;
+}
+
+.div-wrapper .element-2 {
+  position: absolute;
+  width: 440px;
+  height: 87px;
+  top: 1708px;
+  left: 4px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #ff8888;
+  font-size: 16px;
+  text-align: center;
+  letter-spacing: -0.16px;
+  line-height: 30px;
+}
+
+.div-wrapper .rectangle-16 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 1649px;
+  left: 36px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-25 {
+  position: absolute;
+  width: 255px;
+  height: 55px;
+  top: 1648px;
+  left: 58px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .text-wrapper-26 {
+  position: absolute;
+  width: 315px;
+  height: 42px;
+  top: 1606px;
+  left: 36px;
+  font-family: "NanumSquare Neo-ExtraBold", Helvetica;
+  font-weight: 800;
+  color: #5c5c5c;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+}
+
+.div-wrapper .rectangle-17 {
+  position: absolute;
+  width: 393px;
+  height: 55px;
+  top: 1546px;
+  left: 36px;
+  background-color: #ffffff;
+  border-radius: 10px;
+}
+
+.div-wrapper .text-wrapper-27 {
+  position: absolute;
+  width: 371px;
+  height: 50px;
+  top: 1545px;
+  left: 58px;
+  font-family: "NanumSquare Neo-Bold", Helvetica;
+  font-weight: 700;
+  color: #7b7b7b;
+  font-size: 20px;
+  letter-spacing: -0.20px;
+  line-height: 42px;
+  white-space: nowrap;
+}
+
+.div-wrapper .vector {
+  position: absolute;
+  width: 15px;
+  height: 27px;
+  top: 24px;
+  left: 403px;
+}
+
+.div-wrapper .vector-2 {
+  position: absolute;
+  width: 15px;
+  height: 13px;
+  top: 31px;
+  left: 410px;
+}
+/* Inject original CSS here */
+
+body {
+  font-family: "NanumSquare Neo", Helvetica, Arial, sans-serif;
+  background-color: #f5f3ea;
+  color: #5c5c5c;
+  line-height: 1.6;
+}
+
+.signup-wrapper {
+  max-width: 440px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo {
+  width: 156px;
+  height: 31px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  position: relative;
+}
+
+.menu-icon,
+.menu-icon-overlay {
+  width: 15px;
+  height: 27px;
+}
+
+.menu-icon-overlay {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  height: 13px;
+}
+
+.signup-form h1 {
+  font-size: 25px;
+  font-weight: 800;
+  color: #f5f3ea;
+  text-align: center;
+  background-color: #99a99b;
+  padding: 20px 0;
+  border-radius: 48px 48px 0 0;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.sub-label {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+input[type="file"] {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background-color: #ffffff;
+  font-size: 20px;
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.duplicate-check {
+  padding: 10px 15px;
+  background-color: #8b6d5c;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.error-message {
+  color: #ff8888;
+  font-size: 15px;
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 15px;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-weight: 700;
+}
+
+.file-placeholder {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 15px;
+  color: #7b7b7b;
+}
+
+.signup-notice {
+  text-align: center;
+  color: #ff8888;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0;
+}
+
+.signup-button {
+  width: 100%;
+  padding: 15px;
+  background-color: #99a99b;
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+=======
 @font-face {
     font-family: 'nanumesquareneo';
     src: url('font/NanumSquareNeo-aLt.ttf');
