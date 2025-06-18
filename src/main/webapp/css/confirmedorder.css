@@ -298,7 +298,7 @@ footer{
 }
 
 .order-card-img {
-    width: 130px;
+    width: 140px;
     
     border-radius: 8px;
     object-fit: cover;
@@ -318,7 +318,7 @@ footer{
 
 .order-card-info b {
     color : #000000;
-    font-size: 15px;
+    font-size: 13px;
     font-family: 'nanumesquareneo';
     font-weight: bold;
 }
@@ -341,26 +341,34 @@ footer{
     align-items: center;
     border : 1px solid #D8A8AB;
     border-radius: 10px;
+     background-color: #D8A8AB;
+     color: #FFFFFF;
     
 }
-.order-card-btn[data-status="today"] {
-    background-color: #D8A8AB;
-    color: #FFFFFF;
-}
-.order-card-btn[data-status="complete"] {
-    background-color: #8B6D5C;
-    color: #FFFFFF;
-}
-.order-btn-pickup[data-status="line"] {
-    text-decoration: line-through;
-}
+
+
 .order-card-btns {
     margin-top: 10px;
     display: flex;
     gap: 10px;
     justify-content: flex-end;
 }
-
+.order-btn-pickup {
+    background: #FFFFFF;
+    color: #8B6D5C;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: 'nanumesquareneo_b';
+    padding: 6px 16px;
+    margin-top: 8px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    display: inline-block;
+    text-align: center;
+    font-weight: bold;
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+}
 .order-btn {
     padding: 5px 18px;
     border: none;
@@ -383,11 +391,4 @@ footer{
 }
 .order-group {
     margin-top: 5px;
-}
-.order-card-btns button {
-    color : #8B6D5C;
-    font-size: 15px;
-    font-weight: bold;
-    font-family: 'nanumesquareneo';
-    background-color: #FFFFFF;
 }
