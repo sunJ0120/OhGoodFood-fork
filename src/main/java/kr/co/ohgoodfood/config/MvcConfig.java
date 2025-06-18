@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -78,6 +79,8 @@ public class MvcConfig implements WebMvcConfigurer {
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean ssf = new SqlSessionFactoryBean();
 		ssf.setDataSource(dataSource()); // 의존성 주입
+		//mapper 인터페이스를 내부에세 연결하기 위함이다.
+		ssf.setTypeAliasesPackage("kr.co.ohgoodfood");
 		return ssf.getObject();
 	}
 

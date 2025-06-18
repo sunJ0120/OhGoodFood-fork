@@ -1,11 +1,12 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Date;
+import java.sql.Time;
 
 import lombok.Data;
 
 @Data
-public class Stroe {
+public class Store {
     private String store_id;
     private String confirmed;
     private String business_number;
@@ -15,8 +16,8 @@ public class Stroe {
     private String store_explain;
     private String store_telnumber;
     private String store_status;
-    private Date opened_at;
-    private Date closed_at;
+    private Time opened_at;
+    private Time closed_at;
     private String store_pwd;
     private String owner_name;
     private String category_bakery;
