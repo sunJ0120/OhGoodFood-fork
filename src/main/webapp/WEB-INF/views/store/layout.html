@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../css/layout.css">
+    <link rel="stylesheet" href="../../../css/layout.css">
 </head>
 <body>
      <div id="wrapper">
         <header>
             <div class="header-container">
-                <img src="../img/ohgoodfood_logo.png" alt="Logo Image">
+                <img src="../../../img/ohgoodfood_logo.png" alt="Logo Image">
                 <div class="icon-container">
-                        <img src="../img/alarm_active.png" alt="알람" class="icon">
-                        <img src="../img/bookmark.png" alt="즐겨찾기" class="icon">
-                        <img src="../img/logout.png" alt="로그아웃" class="icon">
+                        <img src="../../../img/alarm_active.png" alt="알람" class="icon">
+                        
+                        <img src="../../../img/logout.png" alt="로그아웃" class="icon">
                 </div>
             </div>
         </header>
@@ -25,16 +25,16 @@
             <div class="footer-container">
                 <div class="menu-container">
                     <div class="menu-item">
-                        <img src="../img/home.png" data-name="home" alt="홈" class="menu-icon">
+                        <img src="../../../img/home.png" data-name="home" alt="홈" class="menu-icon">
                     </div>
                     <div class="menu-item">
-                        <img src="../img/review.png" data-name="review" alt="리뷰" class="menu-icon">
+                        <img src="../../../img/review.png" data-name="review" alt="리뷰" class="menu-icon">
                     </div>
                     <div class="menu-item">
-                        <img src="../img/order.png" data-name="order" alt="주문" class="menu-icon">
+                        <img src="../../../img/order.png" data-name="order" alt="주문" class="menu-icon">
                     </div>
                     <div class="menu-item">
-                        <img src="../img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+                        <img src="../../../img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
                     </div>
                 </div>
             </div>
@@ -50,12 +50,12 @@ menuItems.forEach(item => {
             i.classList.remove('active');
             const img = i.querySelector('img');
             // 기본 이미지로 복원
-            img.src = `../img/${img.dataset.name}.png`;
+            img.src = `../../../img/${img.dataset.name}.png`;
         });
         this.classList.add('active');
         const img = this.querySelector('img');
         // active 이미지로 변경
-        img.src = `../img/${img.dataset.name}_active.png`;
+        img.src = `../../../img/${img.dataset.name}_active.png`;
     });
 });
 </script>
