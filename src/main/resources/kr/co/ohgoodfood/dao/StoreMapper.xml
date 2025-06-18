@@ -3,6 +3,17 @@
 <mapper namespace="kr.co.ohgoodfood.dao.StoreMapper">
 
 	<select id="login" parameterType="kr.co.ohgoodfood.dto.Store" resultType="kr.co.ohgoodfood.dto.Store">
-		SELECT * FROM Store WHERE store_id=#{store_id} AND store_pwd=MD5(#{store_pwd})
+		SELECT * FROM Store WHERE store_id=#{store_id} AND store_pwd=#{store_pwd}
 	</select>
-
+	
+	<insert id="insert" parameterType="kr.co.ohgoodfood.dto.Store">
+		INSERT INTO Store(
+			store_id, store_pwd, owner_name, store_telnumber, store_name, 
+			store_address, business_number, 
+		)VALUES (
+		
+		)
+		
+	
+	</insert>
+</mapper>

@@ -15,8 +15,8 @@ public class Store {
     private String store_explain;
     private String store_telnumber;
     private String store_status;
-    private Date opened_at;
-    private Date closed_at;
+    private String opened_at;
+    private String closed_at;
     private String store_pwd;
     private String owner_name;
     private String category_bakery;

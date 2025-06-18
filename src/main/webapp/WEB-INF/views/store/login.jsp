@@ -1,25 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../css/storelogin.css">
+    <link rel="stylesheet" href="/css/storelogin.css">
 </head>
 <body>
      <div id="wrapper">
         <header>
             <div class="header-container">
-                <img src="../img/ohgoodfood_logo.png" alt="Logo Image">
+                <img src="/img/ohgoodfood_logo.png" alt="Logo Image">
                 <div class="icon-container">
-                        <img src="../img/login.png" alt="로그인" class="icon">
+                        <img src="/img/login.png" alt="로그인" class="icon">
                 </div>
             </div>
         </header>
         <main>
             <div class="menu-container">
                 <div class="main-head-container" id="main-image">
-                    <img src="../img/group.png" alt="Family" width="446px" height="317px">
+                    <img src="/img/group.png" alt="Family" width="446px" height="317px">
                     <form action="/store/login" method="post" onsubmit="return loginCheck();">
                     <div class="main-body-container">
                         <div class="main-middle-container">
@@ -27,14 +29,14 @@
                             <input type="password" placeholder="password" id="password" name="store_pwd">
                             <button type="submit" class="login-button">로그인</button>
                             <div class="sub-links">
-                                <a href="#">아이디 찾기</a> |
-                                <a href="#">비밀번호 찾기</a> |
+                                <a href="/store/findid">아이디 찾기</a> |
+                                <a href="/store/findpwd">비밀번호 찾기</a> |
                                 <a href="/store/signup">회원가입</a>
                             </div>
                             <div class="main-line"></div>
                             <div class="sns-login-box">
                                 <div class="sns-login-title">SNS로그인</div>
-                                <img src="../img/kakaologin.png" alt="카카오로그인" />
+                                <img src="/img/kakaologin.png" alt="카카오로그인" />
                             </div>
                         </div>
                     </div>
