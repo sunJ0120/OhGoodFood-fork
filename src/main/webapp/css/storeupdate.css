@@ -1,0 +1,75 @@
+.saveBtn{
+    background-color: #8B6D5C;
+    border: none;
+    height: 30px;
+    width: 45px;
+    border-radius: 10px;
+    color:#F5F3EA;
+}
+.cancleBtn{
+    background-color: #F5F3EA;
+    border: 1px solid #8B6D5C;
+    height: 30px;
+    width: 45px;
+    border-radius: 10px;
+    color:#8B6D5C;
+    margin-left:5px;
+}
+.business-hours-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.time-divider {
+    font-size: 18px;
+    color: #888;
+}
+.details-container input[type="time"]{
+    width:100%;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 11px;
+    background: #fff;
+    width: 85px;
+    height: 20px;
+    font-family: 'nanumesquareneo_b';
+}
+.details-container input[type="text"] {
+    width: 210px;
+    height:35px;
+    margin-bottom:0px;
+}
+
+.timer-icon{
+    width: 20px;
+    margin-left: 10px;
+    margin-right: -22px;
+    cursor: pointer;
+}
+
+/*알람 모달*/
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.4);
+  justify-content: center;
+  align-items: center;
+}
+.modal-content {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  min-width: 220px;
+  text-align: center;
+  position: relative;
+}
+.close-modal {
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  font-size: 24px;
+  cursor: pointer;
+}

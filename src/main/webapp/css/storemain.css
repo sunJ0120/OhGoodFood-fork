@@ -91,10 +91,10 @@ main{
   justify-content: center;
   gap: 8px;
   margin-top: 10px;
-  position: absolute;      /* 추가 */
+  position: absolute;     
   left: 0;
   right: 0;
-  bottom: 12px;            /* 이미지 아래쪽에 표시 */
+  bottom: 12px;          
   z-index: 2;
   pointer-events: none;
 }
@@ -235,10 +235,9 @@ main{
     color: #8B6D5C;
     font-weight: bold;
 }
-input[type="text"] {
-    /* 여기에 원하는 스타일을 작성하세요 */
+input[type="text"], input[type="number"] {
     width: 180px;
-    height:34px;
+    height: 34px;
     padding: 10px;
     border: 1px solid #8B6D5C;
     border-radius: 10px;
