@@ -5,7 +5,7 @@ import java.sql.Date;
 import lombok.Data;
 
 @Data
-public class Alram {
+public class Alarm {
     private int alarm_no;
     private String alarm_title;
     private String alarm_contents;
