@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mapper의 이름은 Mapper 인터페이스와 맞춰준다. -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ohgoodfood.dao.UserMapper">
+    <!-- selectAllStore mapper -->
+    <!-- selectAllStore mapper, main과 BookMark의 카드에서 동시에 이용한다. -->
+    <select id="selectAllStore" resultType="kr.co.ohgoodfood.dto.MainStore">
+        SELECT
+            s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery, s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others AS category_others,
+            p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.origin_price AS origin_price, p.sale_price AS sale_price, p.reservation_end AS reservation_end, p.amount AS amount,
+            MIN(i.store_img) AS store_img,
+            b.bookmark_no AS bookmark_no
+        FROM Store s
+            JOIN Product p ON s.store_id = p.store_id
+            JOIN Image i ON i.store_id = s.store_id
+            LEFT JOIN Bookmark b ON b.store_id = s.store_id AND b.user_id = #{user_id}
+        GROUP BY s.store_id, s.store_name;
+    </select>
+
+    <!-- deleteBookmark mapper -->
+    <delete id="deleteBookmark" parameterType="map">
+        DELETE FROM Bookmark
+        WHERE bookmark_no = #{bookmark_no}
+        AND user_id = #{user_id};
+    </delete>
+
+    <!-- selectOrderList mapper -->
+    <select id="selectOrderList" resultType="kr.co.ohgoodfood.dto.UserOrder">
+        SELECT s.store_name AS store_name, s.store_id AS store_id,
+            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price,
+            o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.cancled_from AS cancled_from, o.order_code AS order_code,
+            MIN(i.store_img) AS store_img
+        FROM Store s
+        JOIN Product p ON s.store_id = p.store_id
+        JOIN Image i ON i.store_id = s.store_id
+        JOIN Orders o ON o.store_id = s.store_id
+        WHERE o.user_id = #{user_id}
+        GROUP BY s.store_id, s.store_name;
+    </select>
+
+    <!-- selectOrderListWithFilter mapper -->
+    <select id="selectOrderListWithFilter" resultType="kr.co.ohgoodfood.dto.UserOrder">
+        SELECT s.store_name AS store_name, s.store_id AS store_id,
+            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price,
+            o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.cancled_from AS cancled_from, o.order_code AS order_code,
+            MIN(i.store_img) AS store_img
+        FROM Store s
+        JOIN Product p ON s.store_id = p.store_id
+        JOIN Image i ON i.store_id = s.store_id
+        JOIN Orders o ON o.store_id = s.store_id
+        WHERE o.user_id = #{user_id} AND order_status = #{order_status}
+        GROUP BY s.store_id, s.store_name;
+    </select>
+
+    <!-- updateOrderCancledByUser mapper-->
+    <update id="updateOrderCancledByUser" parameterType="map">
+        UPDATE Orders
+            SET order_status = #{order_status},
+            cancled_from =  #{cancled_from}
+        WHERE order_no = #{order_no}
+        AND user_id = #{user_id};
+    </update>
+
+    <!-- updateOrderConfirmed mapper-->
+    <update id="updateOrderConfirmed" parameterType="map">
+        UPDATE Orders
+            SET order_status = #{order_status},
+            order_code = #{order_code}
+        WHERE order_no = #{order_no}
+        AND user_id = #{user_id};
+    </update>
+
+    <!-- updateOrderPickUp mapper-->
+    <update id="updateOrderPickup" parameterType="map">
+        UPDATE Orders
+            SET order_status = #{order_status}
+        WHERE order_no = #{order_no}
+        AND user_id = #{user_id};
+    </update>
+    <!-- selectUserOrderPay mapper-->
+    <select id="selectUserOrderPay" resultType="kr.co.ohgoodfood.dto.UserOrder">
+        SELECT  s.store_id AS store_id, s.store_name AS store_name,
+            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.amount AS amount, p.sale_price AS sale_price,
+            MIN(i.store_img) AS store_img
+        FROM Product p
+        JOIN Store s ON p.store_id = s.store_id
+        JOIN Image i ON i.store_id = s.store_id
+        WHERE p.product_no = #{product_no}
+        GROUP BY s.store_id, s.store_name;
+    </select>
+    <!-- selectUserOrderPayCheck mapper -->
+    <select id="selectUserOrderPayCheck" resultType="OrderPayCheck">
+        SELECT s.store_id AS store_id, s.store_status AS store_status,
+            p.product_no AS `product_no`, p.amount AS amount
+        FROM Store s JOIN Product p
+        ON s.store_id = p.store_id
+        WHERE product_no = #{product_no};
+    </select>
+</mapper>

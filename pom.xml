@@ -11,7 +11,9 @@
 		<java-version>11</java-version>
 		<org.springframework-version>5.2.25.RELEASE</org.springframework-version>
 		<org.aspectj-version>1.9.24</org.aspectj-version>
-		<org.slf4j-version>1.8.0-beta4</org.slf4j-version>
+<!--		<org.slf4j-version>1.8.0-beta4</org.slf4j-version>-->
+		<!-- slf4j가 안찍혀서 다운 그레이드 -->
+		<org.slf4j-version>1.7.36</org.slf4j-version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -99,8 +101,8 @@
 		<!-- Servlet -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -114,14 +116,14 @@
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
 		</dependency>
-	
-		<!-- Test 
+
+		<!-- Test
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency>   
+		</dependency>
 		-->
 		<dependency>
 		    <groupId>org.junit.jupiter</groupId>
@@ -223,6 +225,13 @@
 		    <version>5.2.25.RELEASE</version>
 		    <scope>test</scope>
 		</dependency>   
+		
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.32</version>
+		    <scope>provided</scope>
+		</dependency>
 	</dependencies>
     <build>
         <plugins>
