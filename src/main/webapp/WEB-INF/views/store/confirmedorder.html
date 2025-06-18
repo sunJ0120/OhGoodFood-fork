@@ -2,6 +2,7 @@
 <html lang="ko">
 
 <head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=440, initial-scale=1.0">
     <title>미확정 주문내역</title>
@@ -246,18 +247,47 @@
             }
                 });
             });
-            /*
-        document.querySelectorAll('.order-card-btn').forEach(function (button) {
-            if(button.innerText === '픽업 완료') {
-                document.querySelectorAll('.order-btn-pickup').forEach(function(pick) {
-                    pick.dataset.status = 'line';
-                });
-            }
+        $(document).ready(function () {
+            $('.order-card').each(function () {
+                const $orderBtn =$(this).find('.order-card-btn');
+                const status = $orderBtn.data('status');
+                const $pickupBtn = $(this).find('.order-btn-pickup');
 
+                if (status === 'complete') {
+                    
+                    $pickupBtn.css({
+                        'text-decoration': 'line-through',
+                        'color': '#8B6D5C'
+                    });
+                    $orderBtn.css({
+                        'background-color': '#8B6D5C',
+                        'color': '#FFFFFF',
+                        'border': '1px solid #8B6D5C'
+                    });
+                } else if (status === 'today') {
+                    
+                    $orderBtn.css({
+                        'background-color': '#D8A8AB',
+                        'color': '#FFFFFF',
+                        'border': '1px solid #D8A8AB'
+                    });
+                }
+            });
         });
-        
-        jquery로 다 바꿔야함
-        */
+
+        $(document).ready(function () {
+            $('.order-card').each(function () {
+                const status = $(this).find('.order-card-btn').data('status');
+                const $pickupBtn = $(this).find('.order-btn-pickup');
+
+                if (status === 'complete') {
+                    $pickupBtn.css({
+                        'text-decoration': 'line-through',
+                        'color': '#8B6D5C' 
+                    });
+                }
+            });
+        });
     </script>
 </body>
 
