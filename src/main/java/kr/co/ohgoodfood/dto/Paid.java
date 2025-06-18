@@ -14,9 +14,24 @@ public class Paid {
     private String fail_reason;
     private String refund_request;
     private String user_id;
-    private String order_no;
+    private int order_no;
 
     private int s_paid_no;
     private int s_paid_time;
     private int s_user_id;
+    private String s_store_id;
+
+    private String s_type;
+    private String s_value;
+
+    private int page;
+    private int startIdx;
+
+    public Paid() {
+        this.page = 1;
+    }
+
+    public int getStartIdx() {
+        return (page - 1) * 7;
+    }
 }
