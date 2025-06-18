@@ -3,6 +3,7 @@ package kr.co.ohgoodfood.service.store;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import kr.co.ohgoodfood.dao.StoreMapper;
 import kr.co.ohgoodfood.dto.Store;
 
 
@@ -15,5 +16,9 @@ public class StoreServiceImpl implements StoreService{
 	@Override
 	public Store login(Store vo) {
 		return mapper.login(vo);
+	}
+	@Override
+	public int insert(Store vo) {
+		return mapper.insert(vo);
 	}
 }

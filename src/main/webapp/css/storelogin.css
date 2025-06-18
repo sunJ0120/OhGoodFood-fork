@@ -63,7 +63,7 @@ main{
     gap: 16px;                
     align-items: center;
 }
-.main-middle-container #first-input {
+.main-middle-container #id {
     margin-top: 60px;
 }
 .main-middle-container input {
