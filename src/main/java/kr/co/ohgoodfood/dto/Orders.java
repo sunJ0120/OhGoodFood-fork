@@ -5,7 +5,7 @@ import java.sql.Date;
 import lombok.Data;
 
 @Data
-public class Order {
+public class Orders {
     private int order_no;
     private Date ordered_at;
     private int quantity;
@@ -19,5 +19,20 @@ public class Order {
     private int s_order_no;
     private Date s_ordered_at;
     private String s_order_status;
+    private String s_price;
+
+    private String s_type;
+    private String s_value;
+
+    private int page;
+    private int startIdx;
+
+    public Orders() {
+        this.page = 1;
+    }
+
+    public int getStartIdx() {
+        return (page - 1) * 7;
+    }
 }   
 
