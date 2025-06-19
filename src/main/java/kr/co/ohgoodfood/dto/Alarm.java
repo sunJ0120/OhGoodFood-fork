@@ -16,4 +16,18 @@ public class Alarm {
 
     private int s_alarm_no;
     private String s_receive_id;
+
+    private String s_type;
+    private String s_value;
+
+    private int page;
+    private int startIdx;
+
+    public Alarm() {
+        this.page = 1;
+    }
+    
+    public int getStartIdx() {
+        return (page - 1) * 10;
+    }
 }

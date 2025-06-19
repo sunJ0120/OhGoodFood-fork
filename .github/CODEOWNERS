@@ -1,0 +1,7 @@
+# 기능별 브랜치는 각 기능 팀 + 팀장이 리뷰
+/store/* @ohgoodteam/store @minsss0726 @window101 @parkeunhyo 
+/users/* @ohgoodteam/users @minsss0726 @gaaaani @sunJ0120 
+/admin/* @ohgoodteam/admin @minsss0726
+
+# dev 브랜치는 팀장만 리뷰
+/dev/* @minsss0726

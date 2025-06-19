@@ -2,6 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+   if (session.getAttribute("admin") == null) {
+         response.sendRedirect("login");
+         return;
+   }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -107,7 +113,7 @@
                         </select>
                     </div>
                     <div class="filterValue">
-                        <input class="searchBox" type="text" name="s_value">
+                        <input class="searchBox" type="text" name="s_value" value="${orders.s_value != null ? orders.s_value : ''}">
                         <div class="magnifying">
                             <input class="magnifyingButton" type="submit" value="">
                         </div>
@@ -147,8 +153,8 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="hidden" name="fail_reason" value="${vo.fail_reason}">
                                         <select name="fail_reason">
+                                            <option value="X" ${vo.fail_reason == 'X' ? 'selected' : ''}>X</option>
                                             <option value="잔액부족" ${vo.fail_reason == '잔액부족' ? 'selected' : ''}>잔액부족</option>
                                             <option value="카드사거부" ${vo.fail_reason == '카드사거부' ? 'selected' : ''}>카드사거부</option>
                                             <option value="환불" ${vo.fail_reason == '환불' ? 'selected' : ''}>환불</option>

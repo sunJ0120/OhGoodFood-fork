@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Admin;
 import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Orders;
 import kr.co.ohgoodfood.dto.Paid;
@@ -83,6 +84,8 @@ public interface AdminMapper {
     public void updatePaidFailReasonPersonal(Paid paid);
     // 알람 목록 조회 
     public List<Alarm> searchAlarm(Alarm alarm);
+    // 알람 개수 조회 
+    public int countAlarm(Alarm alarm);
     // 알람 읽음 처리 
     public void readAlarm(Alarm alarm);
     // 알람 표시 처리 
@@ -90,11 +93,15 @@ public interface AdminMapper {
     // 알람 보내기 
     public void sendAlarm(Alarm alarm);
     // 알람 수신자 체크 유저
-    public int checkReceiverAccount(Alarm alarm);
+    public Integer checkReceiverAccount(String receiveId);
     // 알람 수신자 체크 가게
-    public int checkReceiverStore(Alarm alarm);
+    public Integer checkReceiverStore(String receiveId);
     // 리뷰 목록 조회 
     public List<Review> searchReview(Review review);
+    // 리뷰 개수 조회 
+    public int countReview(Review review);
     // 리뷰 차단 
     public void blockReview(Review review);
+    // Admin 로그인 체크 
+    public int checkAdminLogin(Admin admin);
 }
