@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- 레이아웃(header/footer) 전용 CSS -->
+    <link rel="stylesheet" href="../../css/layout.css" />
+    <!-- 마이페이지 전용 CSS -->
+    <link rel="stylesheet" href="../../css/userMypage.css" />
+
+    <title>My Page</title>
+</head>
+
+<body>
+    <!-- 레이아웃 템플릿 -->
+    <div id="wrapper"></div>
+
+    <!-- 마이페이지용 템플릿 -->
+    <script type="text/template" id="userMypage-template">
+    <main class="mypage">
+      <!-- 1. 내 정보 -->
+      <section class="infoSection">
+        <h2 class="sectionTitle">
+          <img src="../img/user.png" alt="내 정보 아이콘" class="infoIcon" />
+           내 정보
+          <span class="actionButtons">
+            <img src="../img/refactor.png" alt="수정하기 아이콘" class="modifyIcon" />
+            <button type="button" class="modifyBtn">수정하기</button>
+            <img src="../img/refactor.png" alt="탈퇴하기 아이콘" class="outIcon" />
+            <button type="button" class="outBtn">탈퇴하기</button>
+          </span>
+        </h2>
+        <div class="infoForm">
+            <div class="infoItem">
+                <span class="valueText">ganni</span>
+            </div>
+            <div class="infoItem">
+                <span class="valueText">크롱</span>
+            </div>
+        </div>
+        
+      </section>
+        <hr class="infoLine" />
+      <!-- 2. 내가 쓴 리뷰 모음 -->
+        <section class="reviewSection">
+        <h2 class="sectionTitle">
+            <img src="../img/vector.png" alt="내 리뷰 모음 아이콘" class="infoIcon" />
+            내 리뷰 모음
+        </h2>
+
+        <div class="reviewContainer">
+            <div class="reviewList">
+            <!-- 리뷰 카드 반복 시작 -->
+            <div class="reviewCard">
+                <div class="reviewImageArea">
+                <img
+                    class="reviewImage"
+                    src="../img/pain.png"
+                    alt="리뷰 이미지"
+                />
+                </div>
+                <div class="reviewHeader">
+                <span class="reviewerName">크롱</span>
+                <time class="reviewDate">2025.06.11</time>
+                </div>
+                <hr class="line" />
+                <p class="reviewContent">
+                무려 성수에서 자리를 지키고 있지만 달콤한 휘낭시에와 쿠키를 먹을 수 있어서
+                감사합니다.
+                </p>
+                <!-- 매장 정보 -->
+                <div class="storeInfo">
+                <img
+                    class="storeImage"
+                    src="../img/saltpain.png"
+                    alt="매장 이미지"
+                />
+                <div class="storeDetail">
+                    <span class="storeName">러프도우</span>
+                    <span class="storeMenu">깜빠뉴 | 바게트 | 치아바타</span>
+                </div>
+                <div class="priceArea">
+                    <span class="originPrice">5,500원</span>
+                    <span class="salePrice">2,650원</span>
+                </div>
+                </div>
+            </div>
+
+            <div class="reviewCard">
+                <div class="reviewImageArea">
+                <img
+                    class="reviewImage"
+                    src="../img/pain.png"
+                    alt="리뷰 이미지"
+                />
+                </div>
+                <div class="reviewHeader">
+                <span class="reviewerName">크롱</span>
+                <time class="reviewDate">2025.06.11</time>
+                </div>
+                <hr class="line" />
+                <p class="reviewContent">
+                무려 성수에서 자리를 지키고 있지만 달콤한 휘낭시에와 쿠키를 먹을 수 있어서
+                감사합니다.
+                </p>
+                <!-- 매장 정보 -->
+                <div class="storeInfo">
+                <img
+                    class="storeImage"
+                    src="../img/saltpain.png"
+                    alt="매장 이미지"
+                />
+                <div class="storeDetail">
+                    <span class="storeName">러프도우</span>
+                    <span class="storeMenu">깜빠뉴 | 바게트 | 치아바타</span>
+                </div>
+                <div class="priceArea">
+                    <span class="originPrice">5,500원</span>
+                    <span class="salePrice">2,650원</span>
+                </div>
+                </div>
+            </div>
+
+            <div class="reviewCard">
+                <div class="reviewImageArea">
+                <img
+                    class="reviewImage"
+                    src="../img/pain.png"
+                    alt="리뷰 이미지"
+                />
+                </div>
+                <div class="reviewHeader">
+                <span class="reviewerName">크롱</span>
+                <time class="reviewDate">2025.06.11</time>
+                </div>
+                <hr class="line" />
+                <p class="reviewContent">
+                무려 성수에서 자리를 지키고 있지만 달콤한 휘낭시에와 쿠키를 먹을 수 있어서
+                감사합니다.
+                </p>
+                <!-- 매장 정보 -->
+                <div class="storeInfo">
+                <img
+                    class="storeImage"
+                    src="../img/saltpain.png"
+                    alt="매장 이미지"
+                />
+                <div class="storeDetail">
+                    <span class="storeName">러프도우</span>
+                    <span class="storeMenu">깜빠뉴 | 바게트 | 치아바타</span>
+                </div>
+                <div class="priceArea">
+                    <span class="originPrice">5,500원</span>
+                    <span class="salePrice">2,650원</span>
+                </div>
+                </div>
+            </div>
+            <!-- 리뷰 카드 반복 끝 -->
+            </div>
+            <div id="reviewLoader" class="loader" style="display:none">로딩 중…</div>
+        </div>
+        </section>
+
+    </main>
+  </script>
+
+    <!-- 레이아웃 로드 + 템플릿 삽입 스크립트 -->
+    <script>
+        $(function () {
+            $("#wrapper").load("layout.html #wrapper", function () {
+                var $main = $("#wrapper")
+                    .find("main")
+                    .empty()
+                    .append($("#userMypage-template").html());
+                // 메뉴바 활성화 
+                const menuItems = document.querySelectorAll('.menu-item');
+                menuItems.forEach(item => {
+                    item.addEventListener('click', function () {
+                        menuItems.forEach(i => {
+                            i.classList.remove('active');
+                            const img = i.querySelector('img');
+                            img.src = `../img/${img.dataset.name}.png`;
+                        });
+                        this.classList.add('active');
+                        const img = this.querySelector('img');
+                        img.src = `../img/${img.dataset.name}_active.png`;
+                    });
+                });
+                // 사용자 정보 로드 & 뿌리기
+                $.ajax({
+                    url: "/api/user",
+                    method: "GET",
+                    success: function (user) {
+                        var $vals = $main.find(".infoForm .valueText");
+                        $vals.eq(0).text(user.id);
+                        $vals.eq(1).text(user.nickname);
+                    },
+                    error: function () {
+                        console.error("유저 정보 로드 실패");
+                    }
+                });
+
+                setupReviewInfiniteScroll();
+            });
+
+            function setupReviewInfiniteScroll() {
+                var page = 1,
+                    loading = false,
+                    end = false;
+
+                // reviewList에만 스크롤 이벤트
+                var $list = $("#wrapper").find(".reviewList");
+                var $loader = $("#wrapper").find("#reviewLoader");
+
+                // 첫 화면 로드
+                loadReviews();
+
+                // 스크롤 끝 감지
+                $list.on("scroll", function () {
+                    if (!loading && !end &&
+                        this.scrollTop + this.clientHeight >= this.scrollHeight - 50) {
+                        loadReviews();
+                    }
+                });
+
+                function loadReviews() {
+                    loading = true;
+                    $loader.show();
+
+                    $.ajax({
+                        url: "/api/reviews",
+                        data: { page: page },
+                        success: function (res) {
+                            if (res.reviews && res.reviews.length) {
+                                res.reviews.forEach(function (r) {
+                                    var card = `
+<div class="reviewCard">
+  <div class="reviewImageArea">
+    <img class="reviewImage" src="${r.image}" alt="리뷰 이미지" />
+  </div>
+  <div class="reviewHeader">
+    <span class="reviewerName">${r.author}</span>
+    <time class="reviewDate">${r.date}</time>
+  </div>
+  <hr class="line" />
+  <p class="reviewContent">${r.text}</p>
+  <div class="storeInfo">
+    <img class="storeImage" src="${r.storeImage}" alt="매장 이미지" />
+    <div class="storeDetail">
+      <span class="storeName">${r.storeName}</span>
+      <span class="storeMenu">${r.menu}</span>
+    </div>
+    <div class="priceArea">
+      <span class="originPrice">${r.originalPrice}원</span>
+      <span class="salePrice">${r.salePrice}원</span>
+    </div>
+  </div>
+</div>`;
+                                    $list.append(card);
+                                });
+                                page++;
+                            } else {
+                                end = true;
+                                $loader.text("더 이상 리뷰가 없습니다");
+                            }
+                        },
+                        error: function () {
+                            $loader.text("리뷰 로드 실패");
+                        },
+                        complete: function () {
+                            loading = false;
+                            if (!end) $loader.hide();
+                        }
+                    });
+
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>
