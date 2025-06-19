@@ -2,6 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+   if (session.getAttribute("admin") == null) {
+         response.sendRedirect("login");
+         return;
+   }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -96,11 +102,13 @@
                 <div class="header">
                     <p>알람 관리</p>
                 </div>
+                <form method="post" action="<c:url value='/admin/sendalarmtouser'/>">
                 <div class="content">
                     <p class="menuName">알람 보내기</p>
                     <div class="recieveIdDiv">
                         <label for="receive_id">받는 유저 ID</label>
                         <input id="receive_id" type="text" name="receive_id">
+                        <input id="h_receive_id" type="hidden" name="receive_id" value="">
                         <input id="checkId" type="button" value="조회">
                     </div>
                     <div class="alarmTitleDiv">
@@ -109,12 +117,13 @@
                     </div>
                     <div class="alarmContentsDiv">
                         <label for="receive_id">알람 내용</label>
-                        <textarea id="alarm_contents" maxlength="100" name="alarm_contents">내용을 입력하세요</textarea>
+                        <textarea id="alarm_contents" maxlength="100" name="alarm_contents"></textarea>
                     </div>
                     <div class="sendButtonDiv">
-                        <input id="sendButton" type="button" value="보내기">
+                        <input id="sendButton" type="submit" value="보내기" disabled>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
     </div>
@@ -148,6 +157,40 @@
                 $(this).find(".submenu").css("display", "none");
             }
         );
+
+        $("#checkId").on("click",function() {
+            const receive_id = $("#receive_id").val();
+            if( receive_id === '' ){
+                return
+            }
+            $.ajax({
+                type: 'post',
+                url: '/admin/alarmcheckid',
+                data: { receive_id: receive_id},
+                success: function(result){
+                    if (result === true || result === 'true'){
+                        $("#sendButton").removeAttr("disabled");
+                        $("#receive_id").attr("disabled", "disabled");
+                        $("#h_receive_id").val(receive_id);
+                        alert("존재하는 ID입니다.")
+                    } else {
+                        alert("존재하지 않는 ID입니다.")
+                    }
+                }
+            })
+        })
+
+        $(document).ready(function() {
+            <c:choose>
+                <c:when test="${not empty error}">
+                    alert("${error}");
+                </c:when>
+                <c:when test="${not empty success}">
+                    alert("${success}"); 
+                </c:when>
+            </c:choose>
+        });
+        
     </script>
 </body>
 </html>

@@ -76,7 +76,7 @@
 		FROM Account
 		WHERE 1=1
 		<!-- 완전일치 검색 -->
-		<if test="s_type != null and s_type != ''">
+		<if test="s_value != null and s_value != ''">
 			AND ${s_type} = #{s_value}
 		</if>
 		<!-- 정렬 조건 -->
@@ -90,7 +90,7 @@
 		FROM Account
 		WHERE 1=1
 		<!-- 완전일치 검색 -->
-		<if test="s_type != null and s_type != ''">
+		<if test="s_value != null and s_value != ''">
 			AND ${s_type} = #{s_value}
 		</if>
 	</select>
@@ -101,7 +101,7 @@
 		FROM Store
 		WHERE 1=1
 		<!-- 완전일치 검색 -->
-		<if test="s_type != null and s_type != ''">
+		<if test="s_value != null and s_value != ''">
 			AND ${s_type} = #{s_value}
 		</if>
 		LIMIT ${startIdx}, 7
@@ -121,7 +121,7 @@
 		FROM Store
 		WHERE 1=1
 		<!-- 완전일치 검색 -->
-		<if test="s_type != null and s_type != ''">
+		<if test="s_value != null and s_value != ''">
 			AND ${s_type} = #{s_value}
 		</if>
 	</select>
@@ -258,7 +258,7 @@
 		FROM Paid
 		WHERE 1=1
 		<if test="s_value != null and s_value != ''">
-			AND p.${s_type} = #{s_value}
+			AND ${s_type} = #{s_value}
 		</if>
 	</select>
 
@@ -281,7 +281,20 @@
 		SELECT *
 		FROM Alarm
 		WHERE 1=1
-		AND receive_id = #{s_receive_id}
+		<if test="s_value != null and s_value != ''">
+			AND ${s_type} = #{s_value}
+		</if>
+		LIMIT ${startIdx}, 7
+	</select>
+
+	<!-- Alarm 개수 -->
+	<select id="countAlarm" parameterType="kr.co.ohgoodfood.dto.Alarm" resultType="int">
+		SELECT COUNT(*)
+		FROM Alarm
+		WHERE 1=1
+		<if test="s_value != null and s_value != ''">
+			AND ${s_type} = #{s_value}
+		</if>
 	</select>
 
 	<!-- Alarm 읽음 처리 -->
@@ -305,17 +318,17 @@
 	</insert>
 
 	<!-- 수신자 유효성 검사 Account -->
-	<select id="checkReceiverAccount" parameterType="kr.co.ohgoodfood.dto.Alarm" resultType="int">
+	<select id="checkReceiverAccount" parameterType="String" resultType="int">
 		SELECT COUNT(*)
 		FROM Account
-		WHERE user_id = #{receive_id} 
+		WHERE user_id = #{receiveId} 
 	</select>
 
 	<!-- 수신자 유효성 검사 Store -->
-	<select id="checkReceiverStore" parameterType="kr.co.ohgoodfood.dto.Alarm" resultType="int">
+	<select id="checkReceiverStore" parameterType="String" resultType="int">
 		SELECT COUNT(*)
 		FROM Store
-		WHERE store_id = #{receive_id}
+		WHERE store_id = #{receiveId}
 	</select>
 
 	<!-- Review 검색 -->
@@ -323,7 +336,17 @@
 		SELECT *
 		FROM Review
 		WHERE 1=1
-		<if test="s_type != null and s_type != ''">
+		<if test="s_value != null and s_value != ''">
+			AND ${s_type} = #{s_value}
+		</if>
+	</select>
+
+	<!-- Review 개수 -->
+	<select id="countReview" parameterType="kr.co.ohgoodfood.dto.Review" resultType="int">
+		SELECT COUNT(*)
+		FROM Review
+		WHERE 1=1
+		<if test="s_value != null and s_value != ''">
 			AND ${s_type} = #{s_value}
 		</if>
 	</select>
@@ -334,4 +357,18 @@
 		SET is_blocked = #{is_blocked}
 		WHERE review_no = #{review_no}
 	</update>
+
+	<!-- Admin 로그인 -->
+	<select id="loginAdmin" parameterType="kr.co.ohgoodfood.dto.Admin" resultType="kr.co.ohgoodfood.dto.Admin">
+		SELECT *
+		FROM Admin
+		WHERE admin_id = #{admin_id} AND admin_pwd = #{admin_pwd}
+	</select>
+
+    <!-- Admin 로그인 체크 -->
+	<select id="checkAdminLogin" parameterType="kr.co.ohgoodfood.dto.Admin" resultType="int">
+		SELECT COUNT(*)
+		FROM Admin
+		WHERE admin_id = #{admin_id} AND admin_pwd = #{admin_pwd}
+	</select>
 </mapper>

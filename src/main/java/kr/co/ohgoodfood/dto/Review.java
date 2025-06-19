@@ -21,4 +21,15 @@ public class Review {
     
     private String s_type;
     private String s_value;
+
+    private int page;
+    private int startIdx;
+
+    public Review() {
+        this.page = 1;
+    }
+
+    public void setStartIdx() {
+        this.startIdx = (this.page - 1) * 7;
+    }
 }

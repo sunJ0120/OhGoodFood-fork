@@ -2,6 +2,8 @@ package kr.co.ohgoodfood.controller.admin;
 
 import java.util.Arrays;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,10 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Admin;
+import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Orders;
 import kr.co.ohgoodfood.dto.Paid;
+import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
 import kr.co.ohgoodfood.service.admin.AdminService;
@@ -22,6 +29,23 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @GetMapping("/admin/login")
+    public String adminLogin(Model model) {
+        return "admin/login";
+    }
+
+    @PostMapping("/admin/login")
+    public String adminLogin(Model model, RedirectAttributes rttr, HttpServletRequest request ,@ModelAttribute Admin admin) {
+        if(adminService.checkAdminLogin(admin) == 1) {
+            request.getSession().setAttribute("admin", admin);
+            return "redirect:/admin/main";
+        } else {
+            rttr.addFlashAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
+            return "redirect:/admin/login";
+        }
+    }
+
 
     // main 페이지 이동 
     @GetMapping("/admin/main")
@@ -129,14 +153,50 @@ public class AdminController {
 
     // 알람 관리 이동
     @GetMapping("/admin/managedalarm")
-    public String manageAlarms(Model model) {
+    public String manageAlarms(Model model, @ModelAttribute Alarm alarm) {
+        model.addAttribute("map", adminService.alarmList(alarm));
         return "admin/managedalarm";
+    }
+
+    //알람 상태 변경
+    @PostMapping("/admin/updatealarm")
+    public String updateAlarm(@RequestParam("alarm_read") String[] alarmRead,
+    @RequestParam("alarm_no") int[] alarmNos, @RequestParam("alarm_displayed") String[] alarmDisplay) {
+        try {
+            for(int i=0; i<alarmNos.length; i++) {
+                Alarm alarm = new Alarm();
+                alarm.setAlarm_no(alarmNos[i]);
+                alarm.setAlarm_read(alarmRead[i]);
+                alarm.setAlarm_displayed(alarmDisplay[i]);
+                adminService.updateAlarm(alarm);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/admin/managedalarm";
     }
 
     // 리뷰 관리 이동
     @GetMapping("/admin/managedreviews")
-    public String manageCoupons(Model model) {
+    public String manageCoupons(Model model, @ModelAttribute Review review) {
+        model.addAttribute("map", adminService.reviewList(review));
         return "admin/managedreviews";
+    }
+
+    // 리뷰 블러드 처리
+    @PostMapping("/admin/updatereviews")
+    public String updateReviews(@RequestParam("review_no") int[] reviewNos, @RequestParam("is_blocked") String[] isBlocked) {
+        try {
+            for(int i=0; i<reviewNos.length; i++) {
+                Review review = new Review();
+                review.setReview_no(reviewNos[i]);
+                review.setIs_blocked(isBlocked[i]);
+                adminService.updateReview(review);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/admin/managedreviews";
     }
 
     // 결제 관리 이동
@@ -169,6 +229,38 @@ public class AdminController {
     @GetMapping("/admin/sendalarm")
     public String sendAlarm(Model model) {
         return "admin/sendalarm";
+    }
+
+    // 알람 수신자 체크
+    @PostMapping("/admin/alarmcheckid")
+    @ResponseBody
+    public boolean alarmCheckId(@RequestParam("receive_id") String receiveId) {
+        return adminService.alarmCheckId(receiveId);
+    }
+
+    // 알람 보내기
+    @PostMapping("/admin/sendalarmtouser")
+    public String sendAlarmToUser(RedirectAttributes rttr, @RequestParam("receive_id") String receiveId, 
+            @RequestParam("alarm_title") String alarmTitle, @RequestParam("alarm_contents") String alarmContents) {
+        try {
+            Alarm alarm = new Alarm();
+            alarm.setReceive_id(receiveId);
+            alarm.setAlarm_title(alarmTitle);
+            alarm.setAlarm_contents(alarmContents);
+            if(alarm.getAlarm_title() == null || alarm.getAlarm_title().equals("")) {
+                rttr.addFlashAttribute("error", "제목을 입력해주세요.");
+                return "redirect:/admin/sendalarm";
+            }
+            if(alarm.getAlarm_contents() == null || alarm.getAlarm_contents().equals("")) {
+                rttr.addFlashAttribute("error", "내용을 입력해주세요.");
+                return "redirect:/admin/sendalarm";
+            }
+            rttr.addFlashAttribute("success", "알람이 성공적으로 보내졌습니다.");
+            adminService.sendAlarm(alarm);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return "redirect:/admin/sendalarm";
     }
 
     // 가게 매출 조회 이동

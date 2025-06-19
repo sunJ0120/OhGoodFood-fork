@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 
 import kr.co.ohgoodfood.dao.AdminMapper;
 import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Admin;
+import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Orders;
 import kr.co.ohgoodfood.dto.Paid;
+import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
 
@@ -301,5 +304,95 @@ public class AdminServiceImpl implements AdminService{
     public boolean updatePaidFailReason(Paid paid) {
         adminMapper.updatePaidFailReasonPersonal(paid);
         return true;
+    }
+
+    // 알람 목록 가져오기
+    @Override
+    public Map<String, Object> alarmList(Alarm alarm) {
+        int count = adminMapper.countAlarm(alarm);
+        int totalPage = count / 7;
+        if(count % 7 != 0) {
+            totalPage++;
+        }
+        List<Alarm> list = adminMapper.searchAlarm(alarm);
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", list);
+        map.put("totalPage", totalPage);
+        map.put("count", count);
+        
+        int endPage = (int)Math.ceil(alarm.getPage() / 10.0) * 10;
+        int startPage = endPage - 9;
+        if(endPage > totalPage) {
+            endPage = totalPage;
+        }
+        boolean isPrev = startPage > 1;
+        boolean isNext = endPage < totalPage;
+        map.put("isPrev", isPrev);
+        map.put("isNext", isNext);
+        map.put("startPage", startPage);
+        map.put("endPage", endPage);
+        return map;
+    }
+
+    // 알람 상태 변경
+    @Override
+    public boolean updateAlarm(Alarm alarm) {
+        adminMapper.readAlarm(alarm);
+        adminMapper.displayAlarm(alarm);
+        return true;
+    }
+
+    // 알람 수신자 체크
+    @Override
+    public boolean alarmCheckId(String receiveId) {
+        return adminMapper.checkReceiverAccount(receiveId) > 0 || adminMapper.checkReceiverStore(receiveId) > 0;
+    }
+
+    // 알람 보내기
+    @Override
+    public boolean sendAlarm(Alarm alarm) {
+        adminMapper.sendAlarm(alarm);
+        return true;
+    }
+    
+    // 리뷰 목록 가져오기
+    @Override
+    public Map<String, Object> reviewList(Review review) {
+        int count = adminMapper.countReview(review);
+        int totalPage = count / 7;
+        if(count % 7 != 0) {
+            totalPage++;
+        }
+        List<Review> list = adminMapper.searchReview(review);
+        Map<String, Object> map = new HashMap<>();
+        map.put("list", list);
+        map.put("totalPage", totalPage);
+        map.put("count", count);
+        
+        int endPage = (int)Math.ceil(review.getPage() / 10.0) * 10;
+        int startPage = endPage - 9;
+        if(endPage > totalPage) {
+            endPage = totalPage;
+        }
+        boolean isPrev = startPage > 1;
+        boolean isNext = endPage < totalPage;
+        map.put("isPrev", isPrev);
+        map.put("isNext", isNext);
+        map.put("startPage", startPage);
+        map.put("endPage", endPage);
+        return map;
+    }
+
+    // 리뷰 블러드 처리
+    @Override
+    public boolean updateReview(Review review) {
+        adminMapper.blockReview(review);
+        return true;
+    }
+
+    // Admin 로그인 체크
+    @Override
+    public int checkAdminLogin(Admin admin) {
+        return adminMapper.checkAdminLogin(admin);
     }
 }

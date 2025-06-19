@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Map;
 
 import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Admin;
+import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Orders;
 import kr.co.ohgoodfood.dto.Paid;
+import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
 
@@ -94,4 +97,25 @@ public interface AdminService {
 
     // 결제 실패 이유 변경
     public boolean updatePaidFailReason(Paid paid);
+
+    // 알람 목록 가져오기
+    public Map<String, Object> alarmList(Alarm alarm);
+
+    // 알람 상태 변경
+    public boolean updateAlarm(Alarm alarm);
+    
+    // 알람 수신자 체크
+    public boolean alarmCheckId(String receiveId);
+
+    // 알람 보내기
+    public boolean sendAlarm(Alarm alarm);
+
+    // 리뷰 목록 가져오기
+    public Map<String, Object> reviewList(Review review);
+
+    // 리뷰 블러드 처리
+    public boolean updateReview(Review review);
+
+    // Admin 로그인 체크
+    public int checkAdminLogin(Admin admin);
 }

@@ -2,6 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+   if (session.getAttribute("admin") == null) {
+         response.sendRedirect("login");
+         return;
+   }
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -103,13 +109,13 @@
                     <form method="get" action="<c:url value='/admin/managedorders'/>">
                     <div class="usersFilter">
                         <select class="selectBox" name="s_type">
-                            <option value="user_id" ${store.s_type == 'user_id' ? 'selected' : ''}>고객 ID</option>
-                            <option value="store_id" ${store.s_type == 'store_id' ? 'selected' : ''}>가게 ID</option>
-                            <option value="order_no" ${store.s_type == 'order_no' ? 'selected' : ''}>주문 번호</option>
+                            <option value="user_id" ${orders.s_type == 'user_id' ? 'selected' : ''}>고객 ID</option>
+                            <option value="store_id" ${orders.s_type == 'store_id' ? 'selected' : ''}>가게 ID</option>
+                            <option value="order_no" ${orders.s_type == 'order_no' ? 'selected' : ''}>주문 번호</option>
                         </select>
                     </div>
                     <div class="filterValue">
-                        <input class="searchBox" type="text" name="s_value">
+                        <input class="searchBox" type="text" name="s_value" value="${orders.s_value != null ? orders.s_value : ''}">
                         <div class="magnifying">
                             <input class="magnifyingButton" type="submit" value=""> 
                         </div>
