@@ -28,7 +28,7 @@ public class StoreController {
 		if (login != null) {
 			sess.setAttribute("store", login);
 			model.addAttribute("msg", "로그인 성공");
-			model.addAttribute("url", "/store/mypage");
+			model.addAttribute("url", "/store/main");
 			return "store/alert";
 		} else {
 			model.addAttribute("msg", "로그인 실패");
@@ -66,9 +66,82 @@ public class StoreController {
 		model.addAttribute("url", url);
 		return "store/alert";
 	}
-	@GetMapping("/store/viewsales")
-    public String showViewSales() {
-        return "store/viewsales";
-    }
 
+	// 메인화면
+	@GetMapping("/store/main")
+	public String showMain(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+
+		if (login == null) {
+			// 로그인 안 되어 있으면 로그인 페이지로
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/store/login");
+			return "store/alert";
+		}
+
+		// 로그인 되어 있으면 viewsales.jsp로
+		return "store/main";
+	}
+
+	// 매출확인
+	@GetMapping("/store/viewsales")
+	public String showViewSales(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+
+		if (login == null) {
+			// 로그인 안 되어 있으면 로그인 페이지로
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/store/login");
+			return "store/alert";
+		}
+
+		// 로그인 되어 있으면 viewsales.jsp로
+		return "store/viewsales";
+	}
+
+	// 알람
+	@GetMapping("/store/alarm")
+	public String showAlarm(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+
+		if (login == null) {
+			// 로그인 안 되어 있으면 로그인 페이지로
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/store/login");
+			return "store/alert";
+		}
+
+		// 로그인 되어 있으면 alarm.jsp로
+		return "store/alarm";
+	}
+	//마이페이지
+	@GetMapping("/store/mypage")
+	public String showMypage(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+
+		if (login == null) {
+			// 로그인 안 되어 있으면 로그인 페이지로
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/store/login");
+			return "store/alert";
+		}
+
+		// 로그인 되어 있으면 mypage.jsp로
+		return "store/mypage";
+	}
+	//마이페이지 수정
+	@GetMapping("/store/updatemypage")
+	public String updateMyPage(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+
+		if (login == null) {
+			// 로그인 안 되어 있으면 로그인 페이지로
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/store/login");
+			return "store/alert";
+		}
+
+		// 로그인 되어 있으면 updatemypage.jsp로
+	    return "store/updatemypage";
+	}
 }

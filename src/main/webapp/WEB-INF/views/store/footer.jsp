@@ -4,7 +4,6 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
-    <title>Ohgoodfood</title>
     <link rel="stylesheet" href="../../../css/storefooter.css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
