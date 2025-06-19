@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>reviewWrite</title>
+    <link rel="stylesheet" href="../../css/reviewWrite.css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <header>
+            <div class="header-container">
+                <img src="../img/backdo.png" alt="뒤로가기" class="icon">
+                <div class="icon-container">
+                    <img src="../img/alarm_active.png" alt="알람" class="icon">
+                    <img src="../img/logout.png" alt="로그아웃" class="icon">
+                </div>
+            </div>
+        </header>
+        <main class="content">
+            <h2 class="review">리뷰 작성</h2>
+            <div class="reviewContainer">
+            <!-- 상품 정보 카드 -->
+            <section class="product-card">
+                <div class="thumb">
+                    <img class="reviewImage" src="../img/pain.png" alt="가게이미지" />
+                    <!-- <img src="${product.imageUrl}" alt="${product.name}" /> -->
+                </div>
+                <div class="details">
+                    <p class="name">러프도우</p>
+                    <p>구매처: 오목곰 베이커리</p>
+                    <p>수량: 2개</p>
+                    <p>결제 금액: 6,900원</p>
+                    <!-- <p class="name">${product.name}</p>
+                    <p>구매처: ${order.storeName}</p>
+                    <p>수량: ${order.quantity}개</p>
+                    <p>결제 금액: ${order.totalPrice}원</p> -->
+                </div>
+            </section>
+
+            <!-- 리뷰 입력 폼 -->
+            <form action="${pageContext.request.contextPath}/review/submit" method="post" enctype="multipart/form-data"
+                class="review-form">
+                <!-- 리뷰 텍스트 -->
+                <div class="field review-text">
+                    <label for="reviewContent" class="sr-only">리뷰 내용 (최대 100자)</label>
+                    <textarea id="reviewContent" name="content" placeholder="리뷰는 100자 이내로 작성해주세요." maxlength="100"
+                        rows="6"></textarea>
+                    <div class="char-count"><span id="currentCount">0</span>/100</div>
+                </div>
+
+                <!-- 사진 업로드 -->
+                <div class="field review-photo">
+                    <label class="photo-label">사진 <span class="required">*</span><small>사진은 필수로 첨부해주세요.</small></label>
+                    <div class="photo-input">
+                        <input type="file" id="photoFile" name="image" accept="image/*" hidden />
+                        <button type="button" id="btnAddPhoto" class="btn-add-photo">
+                            <img src="../img/plusbtn.png" alt="사진 추가" />
+                        </button>
+                        <div id="photoPreview" class="photo-preview"></div>
+                    </div>
+                </div>
+            </div>    
+
+                <!-- 등록 버튼 -->
+                <button type="submit" id="btnSubmit" class="btn-submit" disabled>리뷰 등록하기</button>
+            </form>
+        </main>
+
+    </div>
+</body>
+<script>
+    const menuItems = document.querySelectorAll('.menu-item');
+    menuItems.forEach(item => {
+        item.addEventListener('click', function () {
+            menuItems.forEach(i => {
+                i.classList.remove('active');
+                const img = i.querySelector('img');
+                // 기본 이미지로 복원
+                img.src = `../img/${img.dataset.name}.png`;
+            });
+            this.classList.add('active');
+            const img = this.querySelector('img');
+            // active 이미지로 변경
+            img.src = `../img/${img.dataset.name}_active.png`;
+        });
+    });
+</script>
+
+</html>
