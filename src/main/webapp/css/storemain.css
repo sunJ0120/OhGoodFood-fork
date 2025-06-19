@@ -247,7 +247,6 @@ input[type="text"], input[type="number"] {
     background-color: transparent;
 }
 
-
 /*알람 모달*/
 .modal {
   display: none;

@@ -16,25 +16,27 @@ public class StoreController {
 
 	@Autowired
 	private StoreService Storeservice;
-	
+
 	@GetMapping("/store/login")
 	public String login() {
 		return "store/login";
 	}
+
 	@PostMapping("/store/login")
 	public String login(HttpSession sess, Store vo, Model model) {
 		Store login = Storeservice.login(vo);
-		if(login != null) {
+		if (login != null) {
 			sess.setAttribute("store", login);
 			model.addAttribute("msg", "로그인 성공");
-	        model.addAttribute("url", "/store/mypage");
-	        return "store/alert";
-		}else {
+			model.addAttribute("url", "/store/mypage");
+			return "store/alert";
+		} else {
 			model.addAttribute("msg", "로그인 실패");
-	        model.addAttribute("url", "/store/login");
-	        return "store/login";
+			model.addAttribute("url", "/store/login");
+			return "store/login";
 		}
 	}
+
 	@GetMapping
 	public String logout(HttpSession sess, Model model) {
 		sess.invalidate();
@@ -42,19 +44,21 @@ public class StoreController {
 		model.addAttribute("url", "/store/login");
 		return "store/alert";
 	}
+
 	@GetMapping("/store/signup")
 	public String signup() {
 		return "store/signup";
 	}
+
 	@PostMapping("/store/signup")
 	public String signup(Store vo, Model model) {
 		int res = Storeservice.insert(vo);
 		String msg = "";
 		String url = "";
-		if(res > 0) {
+		if (res > 0) {
 			msg = "회원가입 성공";
 			url = "/store/mypage";
-		}else {
+		} else {
 			msg = "회원가입 실패";
 			url = "/store/signup";
 		}
@@ -62,23 +66,9 @@ public class StoreController {
 		model.addAttribute("url", url);
 		return "store/alert";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	@GetMapping("/store/viewsales")
+    public String showViewSales() {
+        return "store/viewsales";
+    }
+
 }
