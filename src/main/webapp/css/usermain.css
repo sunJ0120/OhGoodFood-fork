@@ -1,0 +1,310 @@
+main {
+    padding: 0 20px;
+    max-width: 440px;
+    margin: 0 0;
+    box-sizing: border-box;
+}
+
+.searchBar {
+    padding: 12px 0px;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #99a99b;
+    background-color: #F5F3EA;
+    padding: 0 12px;
+    height: 48px;
+}
+
+.searchInput {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-family: "nanumesquareneo_b", sans-serif;
+    background-color: transparent;
+    color: #7C7C7C;
+}
+
+.searchInput::placeholder {
+    color: #999;
+}
+
+.searchBtn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.searchBtn img {
+    width: 18px;
+    height: 18px;
+}
+
+.filterButtons {
+    display: flex;            /* 가로 정렬 */
+    gap: 8px;                 /* 버튼 사이 간격 */
+    padding: 1px 0px;       /* 여백 */
+    flex-wrap: wrap;          /* 버튼이 넘칠 경우 줄바꿈 허용 */
+}
+
+.filterBtn, .categoryFilterBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*min-width: 120px;*/
+
+    padding: 6px 10px;
+    background-color: #F5F3EA;
+    color: #8b6d5c;
+    border: 1px solid #8b6d5c;
+    border-radius: 10px;
+    font-family: "NanumSquare Neo-Bold", sans-serif;
+    font-size: 14px;
+
+    gap: 4px;
+}
+
+.categoryFilterBtn.active{
+    background-color: #D8A8AB;
+    color: white;
+}
+
+.categoryFilterBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 6px;
+    box-sizing: border-box;
+
+    width: 125px;
+}
+
+.dropdownToggle {
+    width: 23px;
+    height: 11px;
+}
+
+.filterBtn img {
+    vertical-align: middle;
+}
+
+.filterBtn.active {
+    background-color: #d8a8ab;
+    color: white;
+}
+
+.tabBoxWrapper {
+    border: 1px solid #99a99b;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    /*max-width: 390px;*/
+    width: 100%;
+    height: 610px;
+    /*max-height: 610px;*/
+    margin: 20px 0 0 0;
+}
+
+.tabSelector {
+    display: flex;
+    background-color: #f5f3ea;
+    border-bottom: 1px solid #99a99b;
+}
+
+.tabBtn {
+    flex: 1;
+    background-color: #f5f3ea;
+    border: none;
+    font-size: 20px;
+    color: #99a99b;
+    cursor: pointer;
+}
+
+.tabBtn.active {
+    background-color: #99a99b;
+    color: #fff;
+}
+
+.productWrapper {
+    padding: 16px 12px;
+    background-color: #F5F3EA;
+}
+
+.productList {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* ← 자식들을 수직 방향 중앙 정렬 */
+    gap: 16px;
+}
+
+.productCard {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 16px;
+    width: 100%;
+    max-width: 355px;
+}
+
+.cardImage {
+    position: relative;
+    width: 100%;
+    height: 93px;
+}
+
+.cardImage img {
+    width: 100%;
+    height: 93px;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px 10px 0 0;
+}
+
+/* 오버레이 텍스트 */
+.cardLabel {
+    position: absolute;
+    bottom: 8px;
+    left: 12px;
+    color: white;
+    font-family: "nanumesquareneo_d", sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+}
+
+.cardInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.productTexts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.productName {
+    font-family: "nanumesquareneo_d", sans-serif;
+    font-size: 25px;
+    color: #535353;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "NanumSquare Neo-Regular", sans-serif;
+    font-weight: 400;
+    background-color: #8b6d5c;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 15px;
+
+    line-height: 1; /* 줄간격 제거하기 */
+}
+
+.productDesc,
+.productDetail,
+.pickupTime {
+    margin: 0;
+    font-family: "nanumesquareneo_b", sans-serif;
+    font-size: 13px;
+    color: #333;
+}
+
+.pickupTime strong {
+    color: #8b6d5c;
+}
+
+.priceBox {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+    text-align: right;
+    white-space: nowrap;
+    font-family: "nanumesquareneo_d", sans-serif;
+    align-self: flex-end; /* 아래 방향으로 정렬한다. */
+}
+
+.originalPrice {
+    font-size: 12px;
+    color: #999;
+}
+
+.salePrice {
+    font-family: "nanumesquareneo_d", sans-serif;
+    font-size: 18px;
+    color: #333;
+}
+
+.storeImage soldout{
+    opacity: 40%;
+}
+
+/* 기본이미지..이름이 잘 안보여서 고민중이다. */
+.storeImage{
+    opacity: 80%;
+}
+
+.filterDropdown {
+    position: relative; /* 기준점 */
+    display: inline-block;
+}
+
+.dropdownModal {
+    width: 100%;
+    position: absolute; /* 문서 흐름에서 제외되게끔 한다. */
+    box-sizing: border-box;
+
+    top: 100%; /* 버튼 아래쪽에 표시 */
+    background-color: white;
+    border: 1px solid #8B6D5C;
+    border-radius: 8px;
+    z-index: 100;
+}
+
+.dropdownModal ul {
+    list-style-type: none; /* 기본 불릿 제거 */
+    padding: 0;
+    margin: 0;             /* 위아래 여백 제거 */
+}
+
+.dropdownModal li {
+    width: 100%;
+    padding: 6px 0;
+    text-align: center;
+}
+
+.dropdownModal .item {
+    display: block;
+    padding: 6px 12px;
+    margin: 0 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: black;
+    font-family: "nanumesquareneo_b", sans-serif;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.dropdownModal .item.active {
+    background-color: #D8A8AB;
+    color: white;
+}

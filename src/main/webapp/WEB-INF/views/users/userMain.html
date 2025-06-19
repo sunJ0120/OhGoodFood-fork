@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../../css/layout.css">
+    <link rel="stylesheet" href="../../../css/usermain.css">
+</head>
+<body>
+<div id="wrapper">
+    <header>
+        <div class="header-container">
+            <img src="../../../img/ohgoodfood_logo.png" alt="Logo Image">
+            <div class="icon-container">
+                <img src="../../../img/alarm_active.png" alt="알람" class="icon">
+                <img src="../../../img/bookmark.png" alt="즐겨찾기" class="icon">
+                <img src="../../../img/logout.png" alt="로그아웃" class="icon">
+            </div>
+        </div>
+    </header>
+    <main>
+        <!-- 검색바 -->
+        <section class="searchBar">
+            <!-- input, 검색 필드 -->
+            <div class="searchWrapper">
+                <input type="text" placeholder="검색어를 입력하세요." class="searchInput">
+                <button class="searchBtn">
+                    <img src="../../../img/search_icon.png" alt="검색">
+                </button>
+            </div>
+        </section>
+
+        <!-- 필터 버튼 -->
+        <section class="filterButtons">
+            <div class="filterDropdown">
+                <button class="categoryFilterBtn">
+                    <span id="btnText">음식 종류</span>
+                    <img src="../../../img/arrow_down_icon.png" alt="드롭다운" class="dropdownToggle">
+                </button>
+                <div class="dropdownModal" id="dropdownModal" style="display: none;">
+                    <ul>
+                        <li><div class="item">빵 & 디저트</div></li>
+                        <li><div class="item">샐러드</div></li>
+                        <li><div class="item">과일</div></li>
+                        <li><div class="item">그 외</div></li>
+                    </ul>
+                </div>
+            </div>
+            <button class="filterBtn">예약 가능만</button>
+            <button class="filterBtn active">오늘 픽업</button>
+            <button class="filterBtn">내일 픽업</button>
+        </section>
+
+        <!-- 상품 리스트 -->
+        <div class="tabBoxWrapper">
+            <div class="tabSelector">
+                <button class="tabBtn active">리스트</button>
+                <button class="tabBtn">지도</button>
+            </div>
+            <div class="productWrapper">
+                <section class="productList">
+                    <article class="productCard">
+                        <div class="cardImage">
+                            <img src="../../../img/usermain_img.png" alt="상품 이미지" class="storeImage">
+                            <div class="cardLabel">
+                                <div class="productName">
+                                    store_name
+                                    <div class="badge">
+                                        <span class="statusText">store_status</span>
+                                        <span class="timeText">(reservation_end)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="cardInfo">
+                            <div class="productTexts">
+                                <p class="productDesc">category_bakery</p>
+                                <p class="productDesc">store_menu</p>
+                                <p class="pickupTime">픽업 시간 |
+                                    <strong>
+                                        <span class="todayPickupText">today_fickup</span>
+                                        <span class="pickupStartText">pickup_start</span> ~ <span class="pickupEndText">pickup_end</span>
+                                    </strong>
+                                </p>
+                            </div>
+
+                            <div class="priceBox">
+                                <del class="originalPrice">origin_price₩</del>
+                                <span class="salePrice">sale_price₩</span>
+                            </div>
+                        </div>
+                    </article>
+                </section>
+            </div>
+
+            <!-- 지도 탭 내용 (active 전에는 숨긴다.) -->
+            <div class="mapWrapper" style="display: none;">
+                <p>여기에 지도 들어갈 예정입니다~</p>
+            </div>
+
+        </div>
+
+    </main>
+    <footer>
+        <div class="footer-container">
+            <div class="menu-container">
+                <div class="menu-item">
+                    <img src="../../../img/home.png" data-name="home" alt="홈" class="menu-icon">
+                </div>
+                <div class="menu-item">
+                    <img src="../../../img/review.png" data-name="review" alt="리뷰" class="menu-icon">
+                </div>
+                <div class="menu-item">
+                    <img src="../../../img/order.png" data-name="order" alt="주문" class="menu-icon">
+                </div>
+                <div class="menu-item">
+                    <img src="../../../img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+</body>
+<!-- JQuery CDN -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- [layout] bottom navigation js -->
+<script>
+    $(document).ready(function () {
+        $('.menu-item').on('click', function () {
+            $('.menu-item').each(function () {
+                $(this).removeClass('active');
+                const $img = $(this).find('img');
+                // 기본 이미지로 복원
+                const name = $img.data('name');
+                $img.attr('src', `../../../img/${name}.png`);
+            });
+            $(this).addClass('active');
+            const $img = $(this).find('img');
+            // active 이미지로 변경
+            const name = $img.data('name');
+            $img.attr('src', `../../../img/${name}_active.png`);
+        });
+    });
+</script>
+<!-- [filter] category filter modal toggle js -->
+<script>
+    $(document).ready(function () {
+        const $dropdownToggle = $(".dropdownToggle");
+        const $dropdownModal = $("#dropdownModal");
+        const $btnText = $("#btnText");
+        const $categoryFilterBtn = $(".categoryFilterBtn");
+
+        $dropdownToggle.on("click", function (e) {
+            e.stopPropagation(); // 부모 클릭 방지
+            const isVisible = $dropdownModal.css("display") === "block";
+            $dropdownModal.css("display", isVisible ? "none" : "block");
+        });
+
+        // 항목 클릭 시 버튼 텍스트 바꾸고 닫기
+        $dropdownModal.find('.item').each(function () {
+            $(this).on("click", function () {
+                $dropdownModal.find('.item').removeClass("active");
+                $(this).addClass("active");
+
+                $categoryFilterBtn.addClass("active");
+                $dropdownToggle.attr("src", "../../../img/arrow_down_icon_active.png"); //이미지 흰색 토글로 변경
+                console.log("클릭됨:", $(this).text());
+                $btnText.text($(this).text());
+            });
+        });
+
+        //이벤트 전이 방지
+        $dropdownModal.on("click", function (e) {
+            e.stopPropagation();
+        });
+
+        // document 클릭하면 모달 닫기
+        // 필터 선택 상태는 그대로 유지하게끔 .active는 남게 구성
+        $(document).on("click", function () {
+            $dropdownModal.css("display", "none");
+        });
+    });
+</script>
+<!-- [filter] atc filter js -->
+<script>
+    $(document).ready(function () {
+        const $filterButtons = $(".filterBtn");
+
+        $filterButtons.each(function () {
+            $(this).on("click", function () {
+                //현재 클릭된 버튼 active 추가, toggle 방식으로 두번 누르면 active 없게끔 한다.
+                $(this).toggleClass("active");
+            });
+        });
+    });
+</script>
+<!-- [main] main map 화면 전환 js -->
+<script>
+    $(document).ready(function () {
+        const $tabBtn = $(".tabBtn");
+        const $productWrapper = $(".productWrapper");
+        const $mapWrapper = $(".mapWrapper");
+
+        $tabBtn.each(function () {
+            $(this).on("click", function () {
+                $tabBtn.removeClass("active");
+                $(this).addClass("active");
+
+                // 어떤 버튼이 눌렸느냐에 따라 화면을 전환한다.
+                if ($(this).text() === "리스트") {
+                    $productWrapper.show();
+                    $mapWrapper.hide();
+                } else if ($(this).text() === "지도") {
+                    $productWrapper.hide();
+                    $mapWrapper.show();
+                }
+            });
+        });
+    });
+</script>
+</html>
