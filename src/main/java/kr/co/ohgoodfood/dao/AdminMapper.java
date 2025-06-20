@@ -13,6 +13,7 @@ import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
 
+// AdminMapper.java
 @Mapper
 public interface AdminMapper {
     public List<Account> getAccountList();
