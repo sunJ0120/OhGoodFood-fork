@@ -20,4 +20,3 @@ public class Orders {
     private Date s_ordered_at;
     private String s_order_status;
 }   
-

@@ -29,7 +29,7 @@
         <div class="reviewBox"></div>
         <div class="reviewerName">크롱</div>
         <div class="reviewedDate">2025.06.11</div>
-        <img class="reviewImage" src="../img/pain.png" alt="리뷰 이미지" />
+        <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
         <hr class="line" />
         <p class="reviewContent">
           무려 성수에서 자리를 지키고 있을만큼
@@ -37,7 +37,7 @@
         </p>
         <div class="storeBox"></div>
         <div class="storeName">러프도우</div>
-        <img class="storeImage" src="../img/painstore.jpg" alt="리뷰 이미지" />
+        <img class="storeImage" src="../../../img/user_store1.jpg" alt="리뷰 이미지" />
 
         <p class="storeMenu">
           <span class="span">깜파뉴 | 바게뜨 | 치아바타 </span>
@@ -80,12 +80,12 @@
             i.classList.remove('active');
             const img = i.querySelector('img');
             // 기본 이미지로 복원
-            img.src = `../img/${img.dataset.name}.png`;
+            img.src = `../../../img/${img.dataset.name}.png`;
           });
           this.classList.add('active');
           const img = this.querySelector('img');
           // active 이미지로 변경
-          img.src = `../img/${img.dataset.name}_active.png`;
+          img.src = `../../../img/${img.dataset.name}_active.png`;
         });
       });
     });

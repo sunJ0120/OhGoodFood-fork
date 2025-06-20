@@ -26,11 +26,11 @@
             <div class="storeDetailImg">
                 <div class="storeImgSlider">
                     <div class="sliderTrack">
-                        <img src="../img/user_store1.jpg" alt="Store Image 1" class="sliderImg">
-                        <img src="../img/user_store2.jpg" alt="Store Image 2" class="sliderImg">
-                        <img src="../img/user_store3.jpg" alt="Store Image 3" class="sliderImg">
-                        <img src="../img/user_store1.jpg" alt="Store Image 1" class="sliderImg">
-                        <img src="../img/user_store2.jpg" alt="Store Image 2" class="sliderImg">
+                        <img src="../../../img/user_store1.jpg" alt="Store Image 1" class="sliderImg">
+                        <img src="../../../img/user_store2.jpg" alt="Store Image 2" class="sliderImg">
+                        <img src="../../../img/user_store3.jpg" alt="Store Image 3" class="sliderImg">
+                        <img src="../../../img/user_store1.jpg" alt="Store Image 1" class="sliderImg">
+                        <img src="../../../img/user_store2.jpg" alt="Store Image 2" class="sliderImg">
                     </div>
                     <div class="sliderIndicators"></div>
                 </div>
@@ -117,7 +117,7 @@
                     <div class="reviewBox"></div>
                     <div class="reviewerName">크롱</div>
                     <div class="reviewedDate">2025.06.11</div>
-                    <img class="reviewImage" src="../img/pain.png" alt="리뷰 이미지" />
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
                     <hr class="line" />
                     <p class="reviewContent">
                         성수동 최고의 빵집!<br>
@@ -128,7 +128,7 @@
                     <div class="reviewBox"></div>
                     <div class="reviewerName">크롱</div>
                     <div class="reviewedDate">2025.06.11</div>
-                    <img class="reviewImage" src="../img/pain.png" alt="리뷰 이미지" />
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
                     <hr class="line" />
                     <p class="reviewContent">
                         성수동 최고의 빵집!<br>
@@ -139,7 +139,7 @@
                     <div class="reviewBox"></div>
                     <div class="reviewerName">크롱</div>
                     <div class="reviewedDate">2025.06.11</div>
-                    <img class="reviewImage" src="../img/pain.png" alt="리뷰 이미지" />
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
                     <hr class="line" />
                     <p class="reviewContent">
                         성수동 최고의 빵집!<br>
@@ -150,7 +150,7 @@
                     <div class="reviewBox"></div>
                     <div class="reviewerName">크롱</div>
                     <div class="reviewedDate">2025.06.11</div>
-                    <img class="reviewImage" src="../img/pain.png" alt="리뷰 이미지" />
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
                     <hr class="line" />
                     <p class="reviewContent">
                         성수동 최고의 빵집!<br>
@@ -200,7 +200,7 @@
                 item.addEventListener('click', function () {
                     document.querySelectorAll('.menu-item').forEach(i => {
                         i.classList.remove('active');
-                        i.querySelector('img').src = `../img/${i.querySelector('img').dataset.name}.png`;
+                        i.querySelector('img').src = `../../../img/${i.querySelector('img').dataset.name}.png`;
                     });
                     this.classList.add('active');
                     this.querySelector('img').src = `../img/${this.querySelector('img').dataset.name}_active.png`;
