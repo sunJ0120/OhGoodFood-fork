@@ -4,12 +4,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * OrderPayCheck.java
+ *
+ * - 결제 API 사용 전에 결제 가능한 상태인지 체크할 때 사용하기 위한 DTO
+ * - store_status로 현재 마감 상태인지를 체크하고
+ * - amount로 수량이 충분한지를 체크한다.
+ */
 @ToString
 @Data
 @NoArgsConstructor
 public class OrderPayCheck {
     private String store_id;
-    private String store_status; //이걸 String으로 그대로 받을지 아니면 boolean 처리 할지 고민중....입니다.
+    private String store_status;
     private int product_no;
     private int amount;
 }

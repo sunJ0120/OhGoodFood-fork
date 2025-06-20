@@ -2,6 +2,7 @@ main {
     padding: 0 20px;
     max-width: 440px;
     margin: 0 0;
+    min-height: 0;
     box-sizing: border-box;
 }
 
@@ -46,10 +47,10 @@ main {
 }
 
 .filterButtons {
-    display: flex;            /* 가로 정렬 */
-    gap: 8px;                 /* 버튼 사이 간격 */
-    padding: 1px 0px;       /* 여백 */
-    flex-wrap: wrap;          /* 버튼이 넘칠 경우 줄바꿈 허용 */
+    display: flex;
+    gap: 8px;
+    padding: 1px 0px;
+    flex-wrap: wrap;
 }
 
 .filterBtn, .categoryFilterBtn {
@@ -103,10 +104,7 @@ main {
     border: 1px solid #99a99b;
     border-radius: 0 0 10px 10px;
     overflow: hidden;
-    /*max-width: 390px;*/
     width: 100%;
-    height: 610px;
-    /*max-height: 610px;*/
     margin: 20px 0 0 0;
 }
 
@@ -130,6 +128,24 @@ main {
     color: #fff;
 }
 
+.topWrapper {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    height: 580px;
+
+    /* Firefox, IE & Edge용 스크롤 숨기기 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Chrome, Safari용 스크롤 숨기기 */
+.topWrapper::-webkit-scrollbar {
+    display: none;
+}
+
 .productWrapper {
     padding: 16px 12px;
     background-color: #F5F3EA;
@@ -138,7 +154,7 @@ main {
 .productList {
     display: flex;
     flex-direction: column;
-    align-items: center; /* ← 자식들을 수직 방향 중앙 정렬 */
+    align-items: center;
     gap: 16px;
 }
 
@@ -166,7 +182,6 @@ main {
     border-radius: 10px 10px 0 0;
 }
 
-/* 오버레이 텍스트 */
 .cardLabel {
     position: absolute;
     bottom: 8px;
@@ -193,14 +208,20 @@ main {
     gap: 10px;
 }
 
-.productName {
+.productNameWrapper {
     font-family: "nanumesquareneo_d", sans-serif;
-    font-size: 25px;
+    font-size: 20px;
     color: #535353;
     margin: 0;
     display: flex;
     align-items: center;
     gap: 6px;
+
+    flex-direction: row;
+}
+
+.productName{
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
 .badge {
@@ -216,7 +237,7 @@ main {
     border-radius: 10px;
     font-size: 15px;
 
-    line-height: 1; /* 줄간격 제거하기 */
+    line-height: 1;
 }
 
 .productDesc,
@@ -240,7 +261,7 @@ main {
     text-align: right;
     white-space: nowrap;
     font-family: "nanumesquareneo_d", sans-serif;
-    align-self: flex-end; /* 아래 방향으로 정렬한다. */
+    align-self: flex-end;
 }
 
 .originalPrice {
@@ -254,26 +275,26 @@ main {
     color: #333;
 }
 
-.storeImage soldout{
-    opacity: 40%;
+/* 📌 soldout 될 경우 이 속성을 추가하도록 변경해야 한다.*/
+.storeImage.soldout{
+    opacity: 0.6;
 }
 
-/* 기본이미지..이름이 잘 안보여서 고민중이다. */
 .storeImage{
-    opacity: 80%;
+    opacity: 1;
 }
 
 .filterDropdown {
-    position: relative; /* 기준점 */
+    position: relative;
     display: inline-block;
 }
 
 .dropdownModal {
     width: 100%;
-    position: absolute; /* 문서 흐름에서 제외되게끔 한다. */
+    position: absolute;
     box-sizing: border-box;
 
-    top: 100%; /* 버튼 아래쪽에 표시 */
+    top: 100%;
     background-color: white;
     border: 1px solid #8B6D5C;
     border-radius: 8px;
@@ -281,9 +302,9 @@ main {
 }
 
 .dropdownModal ul {
-    list-style-type: none; /* 기본 불릿 제거 */
+    list-style-type: none;
     padding: 0;
-    margin: 0;             /* 위아래 여백 제거 */
+    margin: 0;
 }
 
 .dropdownModal li {
