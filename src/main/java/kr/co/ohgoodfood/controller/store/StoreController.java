@@ -1,5 +1,7 @@
 package kr.co.ohgoodfood.controller.store;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,7 @@ import kr.co.ohgoodfood.service.store.StoreService;
 public class StoreController {
 
 	@Autowired
-	private StoreService Storeservice;
+	private StoreService storeService;
 
 	@GetMapping("/store/logout")
 	public String logout(HttpSession sess, Model model) {
@@ -32,14 +34,24 @@ public class StoreController {
 	}
 
 	@GetMapping("/store/review")
-	public String review(Store vo ) {
-		Review review= Storeservice.viewRiew(vo);
-		return null;
+	public String getReviews(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+		if (login == null) {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/store/login");
+			return "store/alert";
+		}
+		String storeId = login.getStore_id();
+		List<Review> lists = storeService.getReviews(storeId);
+		model.addAttribute("reviews", lists);
+		
+		return "store/review";
 	}
-	
+	/*
 	@PostMapping("/store/signup")
 	public String signup(Store vo, Model model) {
-		int res = Storeservice.insert(vo);
+		
+		int res = storeService.insert(vo);
 		String msg = "";
 		String url = "";
 		if (res > 0) {
@@ -52,7 +64,8 @@ public class StoreController {
 		model.addAttribute("msg", msg);
 		model.addAttribute("url", url);
 		return "store/alert";
-	}
+	
+	}*/
 
 	// 메인화면
 	@GetMapping("/store/main")

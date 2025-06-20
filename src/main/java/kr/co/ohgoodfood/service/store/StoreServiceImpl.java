@@ -1,5 +1,7 @@
 package kr.co.ohgoodfood.service.store;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +24,9 @@ public class StoreServiceImpl implements StoreService{
 	@Override
 	public Review viewRiew(Store vo) {
 		return mapper.viewReview(vo);
+	}
+	@Override
+	public List<Review> getReviews(String storeId) {
+		return mapper.getReviews(storeId);
 	}
 }

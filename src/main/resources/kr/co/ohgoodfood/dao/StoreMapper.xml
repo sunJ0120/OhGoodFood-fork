@@ -11,6 +11,19 @@
 		FROM Review WHERE store_id=#{store_id}
 	</select>
 	
-	
+	<select id="getReviews" resultType="kr.co.ohgoodfood.dto.Review">
+		SELECT 
+			review_no,
+			review_content,
+			writed_at,
+			is_blocked,
+			review_img,
+			user_id,
+			store_id,
+			order_no
+		FROM Review
+		WHERE store_id=#{storeId} AND is_blocked = 'N'
+		ORDER BY writed_at DESC
+	</select>
 	
 </mapper>
