@@ -90,7 +90,7 @@
                     <p class="productDesc">${mainStore.store_menu}</p>
                     <p class="pickupTime">픽업 시간 |
                       <strong>
-                        <!-- 이거 today_fickupe도 프론트단에서 처리 해야 해서 가장 나중에 하기로 한다. -->
+                        <!-- 이거 today_fickup도 프론트단에서 처리 해야 해서 가장 나중에 하기로 한다. -->
                         <span class="todayPickupText">${mainStore.pickup_date}</span>
                         <span class="pickupStartText">
                         <fmt:formatDate value="${mainStore.pickup_start}" pattern="HH:mm" />
