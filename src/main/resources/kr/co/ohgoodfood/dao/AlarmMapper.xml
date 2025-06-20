@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mapper의 이름은 Mapper 인터페이스와 맞춰준다. -->
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.ohgoodfood.dao.AlarmMapper">
+    <!-- selectAlarmList mapper -->
+    <select id="selectAlarmList" resultType="kr.co.ohgoodfood.dto.Alarm">
+        SELECT
+            alarm_title, alarm_contents, sended_at, alarm_displayed, alarm_read, alarm_no
+        FROM Alarm
+        WHERE receive_id = #{user_id};
+    </select>
+    <!-- updateAlarmRead mapper -->
+    <update id="updateAlarmRead">
+        UPDATE Alarm SET alarm_read = 'Y'
+        WHERE alarm_read = 'N'
+        AND receive_id = #{user_id};
+    </update>
+    <!-- updateAlarmHidden mapper -->
+    <update id="updateAlarmHidden" parameterType="map">
+        UPDATE Alarm SET alarm_displayed = 'N'
+        WHERE alarm_no = #{alarm_no}
+        AND receive_id = #{user_id};
+    </update>
+</mapper>
