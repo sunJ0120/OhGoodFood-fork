@@ -1,15 +1,17 @@
 package kr.co.ohgoodfood.dto;
 
-import java.sql.Date;
+
 import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
 
 import lombok.Data;
 
 @Data
 public class Orders {
     private int order_no;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime ordered_at;
     private int quantity;
@@ -24,6 +26,7 @@ public class Orders {
     private int s_order_no;
     private Date s_ordered_at;
     private String s_order_status;
+
     private String s_price;
 
     private String s_type;
