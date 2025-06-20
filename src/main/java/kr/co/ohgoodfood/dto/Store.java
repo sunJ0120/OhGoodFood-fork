@@ -1,6 +1,5 @@
 package kr.co.ohgoodfood.dto;
 
-import java.sql.Date;
 import java.sql.Time;
 
 import lombok.Data;
@@ -16,8 +15,10 @@ public class Store {
     private String store_explain;
     private String store_telnumber;
     private String store_status;
+
     private Time opened_at;
     private Time closed_at;
+
     private String store_pwd;
     private String owner_name;
     private String category_bakery;
@@ -26,6 +27,9 @@ public class Store {
     private String category_others;
 
     private String s_store_id;
+
+    private String s_confirmed;
+
     private String s_store_address;
     private String s_store_name;
     private String s_store_menu;
@@ -34,4 +38,20 @@ public class Store {
     private String s_category_fruit;
     private String s_category_salad;
     private String s_category_others;
+
+    private String s_type;
+    private String s_value;
+    private int page;
+    private int startIdx;
+
+    private long s_paid_price;
+
+    public Store(){
+        this.page = 1;
+    }
+
+    public int getStartIdx(){
+        return (page - 1) * 7;
+    }
+
 }
