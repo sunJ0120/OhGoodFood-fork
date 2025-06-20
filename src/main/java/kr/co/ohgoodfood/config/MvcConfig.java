@@ -71,6 +71,12 @@ public class MvcConfig implements WebMvcConfigurer {
 		dataSource.setJdbcUrl(url); // ip는 바뀌어야함
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
+
+		// 한글 인코딩 설정
+		dataSource.addDataSourceProperty("useUnicode", "true");
+		dataSource.addDataSourceProperty("characterEncoding", "UTF-8");
+		dataSource.addDataSourceProperty("serverTimezone", "Asia/Seoul");
+
 		return dataSource;
 	}
 
@@ -79,8 +85,6 @@ public class MvcConfig implements WebMvcConfigurer {
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean ssf = new SqlSessionFactoryBean();
 		ssf.setDataSource(dataSource()); // 의존성 주입
-		//mapper 인터페이스를 내부에세 연결하기 위함이다.
-		ssf.setTypeAliasesPackage("kr.co.ohgoodfood");
 		return ssf.getObject();
 	}
 

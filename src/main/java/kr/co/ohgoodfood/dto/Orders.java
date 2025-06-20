@@ -14,7 +14,7 @@ public class Orders {
     private String user_id;
     private String store_id;
     private String order_code;
-    private String cancled_from; //db에 있는 오타 그대로 반영
+    private String cancled_from;
 
     private int s_order_no;
     private Date s_ordered_at;

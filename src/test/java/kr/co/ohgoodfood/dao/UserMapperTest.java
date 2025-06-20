@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 
 /**
@@ -20,6 +21,21 @@ import java.util.List;
  * - 테스트용으로 Orders, Bookmark 객체를 생성하여 사용한다.
  *
  * - 맞는 로직 검증의 경우, @@CorrectTest로 명명한다.
+ */
+
+/**
+ * 테스트 로직 설명
+ * 📌 모든 Test는 JUnit5로 구성했습니다.
+ *
+ * [@BeforeEach] {@link #createTestOrders}
+ * - test에서 공통으로 사용할 임시 order를 하나 생성합니다.
+ * [@BeforeEach] {@link #createTestBookMark}
+ * - test에서 공통으로 사용할 임시 bookmark를 하나 생성합니다.
+ *
+ * 🔨 [추가 사항] 테스트용 객체 제거하는 [@AfterEach] 두개 생성 예정
+ *
+ * ② {@link #selectAllStoreCorrectTest} : selectAllStore mapper test
+ *
  */
 
 @Slf4j
@@ -202,5 +218,55 @@ public class UserMapperTest {
         log.info("orderPayCheck 찍어보기 : {}", orderPayCheck);
         Assertions.assertEquals(orderPayCheck.getAmount(), 3); //저장되어 있는 그대로의 amount가 있는지 검사
         Assertions.assertEquals(orderPayCheck.getStore_status(), "Y");
+    }
+
+    @Test
+    @DisplayName("✅ [Correct] selectAlarmListCorrect 테스트")
+    public void selectAlarmListCorrectTest() throws Exception {
+        //given
+        String user_id = "u01";
+
+        //when
+        List<Alarm> alarmList = userMapper.selectAlarmList(user_id);
+
+        //then
+        log.info("alarmList 결과 반환 : {}", alarmList);
+        Assertions.assertEquals(1, alarmList.size());
+    }
+
+    @Test
+    @DisplayName("✅ [Correct] updateAlarmReadCorrect 테스트")
+    public void updateAlarmReadCorrectTest() throws Exception {
+        //given
+        String user_id = "u01";
+
+        //when
+        userMapper.updateAlarmRead(user_id);
+        List<Alarm> alarmList = userMapper.selectAlarmList(user_id);
+
+        //then
+        //전부 읽음 처리 되었는지 확인한다.
+        log.info("alarmList 결과 반환 : {}", alarmList);
+        for(Alarm alarm : alarmList){
+            Assertions.assertEquals(alarm.getAlarm_read(), "Y");
+        }
+    }
+
+    @Test
+    @DisplayName("✅ [Correct] updateAlarmHiddenCorrect 테스트")
+    public void updateAlarmHiddenCorrectTest() throws Exception {
+        //given
+        //임시로 사용할 알람 번호를 하나 지정한다.
+        int alarm_no = 1;
+        String user_id = "u01";
+
+        //when
+        //alarm_displayed : Y -> N
+        userMapper.updateAlarmHidden(user_id, alarm_no);
+        Alarm alarm = testMapper.selectOneAlarm(alarm_no);
+
+        //then
+        log.info("alarm 결과 반환 : {}", alarm);
+        Assertions.assertEquals(alarm.getAlarm_displayed(), "N"); //알람이 숨김 처리 되었는지 확인
     }
 }

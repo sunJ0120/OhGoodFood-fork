@@ -2,6 +2,7 @@ package kr.co.ohgoodfood.dao;
 
 import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Bookmark;
+import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.Orders;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

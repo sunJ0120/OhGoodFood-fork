@@ -4,14 +4,22 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.ohgoodfood.dao.UserMapper">
+    <!--
+    User용 Mapper 객체
+        - user가 사용하는 매퍼 정리
+    📌 고민점
+        - 어느 페이지에서 사용하는지에 따라 main과 같은 구분자를 붙여서 사용해야 할지 고민입니다.
+    -->
+
     <!-- selectAllStore mapper -->
     <!-- selectAllStore mapper, main과 BookMark의 카드에서 동시에 이용한다. -->
     <select id="selectAllStore" resultType="kr.co.ohgoodfood.dto.MainStore">
         SELECT
-            s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery, s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others AS category_others,
-            p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.origin_price AS origin_price, p.sale_price AS sale_price, p.reservation_end AS reservation_end, p.amount AS amount,
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery, s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others AS category_others, s.closed_at AS closed_at,
+            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.origin_price AS origin_price, p.sale_price AS sale_price, p.reservation_end AS reservation_end, p.amount AS amount,
             MIN(i.store_img) AS store_img,
-            b.bookmark_no AS bookmark_no
+            b.bookmark_no AS bookmark_no,
+        CASE WHEN b.bookmark_no IS NOT NULL THEN true ELSE false END AS bookmark
         FROM Store s
             JOIN Product p ON s.store_id = p.store_id
             JOIN Image i ON i.store_id = s.store_id
@@ -79,6 +87,7 @@
         WHERE order_no = #{order_no}
         AND user_id = #{user_id};
     </update>
+
     <!-- selectUserOrderPay mapper-->
     <select id="selectUserOrderPay" resultType="kr.co.ohgoodfood.dto.UserOrder">
         SELECT  s.store_id AS store_id, s.store_name AS store_name,
@@ -90,12 +99,35 @@
         WHERE p.product_no = #{product_no}
         GROUP BY s.store_id, s.store_name;
     </select>
+
     <!-- selectUserOrderPayCheck mapper -->
-    <select id="selectUserOrderPayCheck" resultType="OrderPayCheck">
+    <select id="selectUserOrderPayCheck" resultType="kr.co.ohgoodfood.dto.OrderPayCheck">
         SELECT s.store_id AS store_id, s.store_status AS store_status,
             p.product_no AS `product_no`, p.amount AS amount
         FROM Store s JOIN Product p
         ON s.store_id = p.store_id
         WHERE product_no = #{product_no};
     </select>
+
+    <!-- selectAlarmList mapper -->
+    <select id="selectAlarmList" resultType="kr.co.ohgoodfood.dto.Alarm">
+        SELECT
+        alarm_title, alarm_contents, sended_at, alarm_displayed, alarm_read, alarm_no
+        FROM Alarm
+        WHERE receive_id = #{user_id};
+    </select>
+
+    <!-- updateAlarmRead mapper -->
+    <update id="updateAlarmRead">
+        UPDATE Alarm SET alarm_read = 'Y'
+        WHERE alarm_read = 'N'
+        AND receive_id = #{user_id};
+    </update>
+
+    <!-- updateAlarmHidden mapper -->
+    <update id="updateAlarmHidden" parameterType="map">
+        UPDATE Alarm SET alarm_displayed = 'N'
+        WHERE alarm_no = #{alarm_no}
+        AND receive_id = #{user_id};
+    </update>
 </mapper>

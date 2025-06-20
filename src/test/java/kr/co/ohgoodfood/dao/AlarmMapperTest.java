@@ -19,7 +19,8 @@ import java.util.List;
  * - AlarmMapper의 메서드들을 테스트한다.
  *
  * - 맞는 로직 검증의 경우, @@CorrectTest로 명명한다.
- * - 예외 로직 검증의 경우, @@ExceptionTest로 명명한다.
+ *
+ *
  */
 
 @Slf4j
