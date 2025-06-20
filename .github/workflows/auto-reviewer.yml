@@ -4,6 +4,8 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
+
+
 jobs:
   assign-reviewers:
     runs-on: ubuntu-latest
@@ -24,8 +26,11 @@ jobs:
               reviewers = ['minsss0726', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
             } else if (branch === 'dev') {
               reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
-            }
+            } 
 
+            console.log(`Reviewers: ${reviewers}`);
+            console.log(`Author: ${author}`);
+            
             if (reviewers.length > 0) {
               await github.rest.pulls.requestReviewers({
                 owner: context.repo.owner,
