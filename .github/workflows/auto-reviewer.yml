@@ -18,11 +18,11 @@ jobs:
             let reviewers = [];
 
             if (branch === 'store') {
-              reviewers = ['minsss0726', 'window101', 'parkeunhyo'];
+              reviewers = ['minsss0726', 'window101', 'parkeunhyo'].filter(u => u !== author);
             } else if (branch === 'users') {
-              reviewers = ['minsss0726', 'gaaaani', 'sunJ0120'];
+              reviewers = ['minsss0726', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
             } else if (branch === 'dev') {
-              reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'];
+              reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
             }
 
             if (reviewers.length > 0) {

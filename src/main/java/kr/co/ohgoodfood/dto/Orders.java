@@ -24,7 +24,8 @@ public class Orders {
     private String canceld_from;
 
     private int s_order_no;
-    private Date s_ordered_at;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime s_ordered_at;
     private String s_order_status;
 
     private String s_price;
