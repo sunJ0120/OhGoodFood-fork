@@ -85,6 +85,13 @@ public class MvcConfig implements WebMvcConfigurer {
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean ssf = new SqlSessionFactoryBean();
 		ssf.setDataSource(dataSource()); // 의존성 주입
+		
+		// MyBatis 설정
+		// org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
+		// config.setMapUnderscoreToCamelCase(true);
+		// config.setCallSettersOnNulls(true);
+		// ssf.setConfiguration(config);
+		
 		return ssf.getObject();
 	}
 

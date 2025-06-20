@@ -1,6 +1,9 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -9,14 +12,30 @@ public class Paid {
     private int paid_no;
     private String paid_type;
     private String paid_price;
-    private Date paid_time;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime paid_time;
     private String paid_status;
     private String fail_reason;
     private String refund_request;
     private String user_id;
-    private String order_no;
+    private int order_no;
 
     private int s_paid_no;
     private int s_paid_time;
     private int s_user_id;
+    private String s_store_id;
+
+    private String s_type;
+    private String s_value;
+
+    private int page;
+    private int startIdx;
+
+    public Paid() {
+        this.page = 1;
+    }
+
+    public int getStartIdx() {
+        return (page - 1) * 7;
+    }
 }

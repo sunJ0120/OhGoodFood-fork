@@ -7,12 +7,12 @@
     src: url('font/NANUMSQUARENEO-BRG.ttf');
 }
 
+
 /* 사용을 위해 font 추가 */
 @font-face {
     font-family: 'nanumesquareneo_d';
     src: url('font/NanumSquareNeo-dEb.ttf');
 }
-
 
 body{
     font-family: 'nanumesquareneo';
@@ -48,6 +48,7 @@ header{
     width: 23px;
 }
 main{
+
 }
 footer{
     height: 120px;

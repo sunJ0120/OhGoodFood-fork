@@ -1,6 +1,9 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -8,7 +11,8 @@ import lombok.Data;
 public class Review {
     private int review_no;
     private String review_content;
-    private Date writed_at;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime writed_at;
     private String is_blocked;
     private String review_img;
     private String user_id;
@@ -30,4 +34,18 @@ public class Review {
 
     // 대표 이미지 (Image 서브쿼리)
     private String store_img;
+
+    private String s_type;
+    private String s_value;
+
+    private int page;
+    private int startIdx;
+
+    public Review() {
+        this.page = 1;
+    }
+
+    public void setStartIdx() {
+        this.startIdx = (this.page - 1) * 7;
+    }
 }
