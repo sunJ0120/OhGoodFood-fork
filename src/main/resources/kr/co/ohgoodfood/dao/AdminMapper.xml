@@ -371,4 +371,5 @@
 		FROM Admin
 		WHERE admin_id = #{admin_id} AND admin_pwd = #{admin_pwd}
 	</select>
+
 </mapper>
