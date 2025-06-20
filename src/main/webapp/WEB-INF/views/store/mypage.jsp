@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -11,20 +13,9 @@
     <title>Ohgoodfood</title>
 </head>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 <body>
     <div id="wrapper">
-        <header>
-            <div class="header-container">
-                <img src="../../../img/store_ohgoodfood_logo.png" alt="Logo Image">
-                <div class="icon-container">
-                    <img src="../../../img/store_alarm_active.png" alt="알람" class="icon">
-                    <img src="../../../img/store_logout.png" alt="로그아웃" class="icon">
-                </div>
-            </div>
-        </header>
+        <%@ include file="/WEB-INF/views/store/header.jsp" %>
         <main>
             <div class="myInfo-header">
                 <div class="myInfo-group">
@@ -120,39 +111,10 @@
 
 
         </main>
-        <footer>
-            <div class="footer-container">
-                <div class="menu-container">
-                    <div class="menu-item active">
-                        <img src="../../../img/store_home_active.png" data-name="home" alt="홈" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_review.png" data-name="review" alt="리뷰" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_order.png" data-name="order" alt="주문" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <%@ include file="/WEB-INF/views/store/footer.jsp" %>
     </div>
 </body>
 <script>
-    $(function () {
-        // 메뉴바
-        $('.menu-item').click(function () {
-            $('.menu-item').removeClass('active').each(function () {
-                const img = $(this).find('img');
-                img.attr('src', `../../../img/store_${img.data('name')}.png`);
-            });
-            $(this).addClass('active');
-            const img = $(this).find('img');
-            img.attr('src', `../../../img/store_${img.data('name')}_active.png`);
-        });
-    });
     // 슬라이더 초기화 함수
     function initSlider() {
         var $track = $('.slider-track');
@@ -284,37 +246,63 @@
         initSlider();
 
         $(document).on('click', '.updateBtn', function () {
-            $('.main-content').load('update.html .main-content > *', function () {
+            $('.main-content').load('/store/updatemypage .main-content > *', function () {
                 $('#wrapper').addClass('update-page');
                 initSlider();
             });
         });
 
         $(document).on('click', '.cancleBtn', function () {
-            $('.main-content').load('mypage.html .main-content > *', function () {
+            $('.main-content').load('/store/mypage .main-content > *', function () {
                 $('#wrapper').removeClass('update-page');
                 initSlider();
             });
         });
-        $(document).on('click', '#timer-icon', function () {
-            $('#time-modal').css('display', 'block');
-        });
-        $(document).on('click', '#close-modal', function () {
-            $('#time-modal').css('display', 'none');
-        });
-        $(document).on('click', '#pickup-time-confirm', function () {
-            const start = $('#pickup-time').val();
-            if (start) {
-                const [h, m] = start.split(':').map(Number);
-                let endH = h + 1;
-                let endM = m;
-                if (endH > 23) endH = endH - 24;
-                const end = `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
-                $('#pickup-time-input').val(`${start} ~ ${end}`);
-            }
-            $('#time-modal').css('display', 'none');
-        });
 
+    });
+    /*updatemypage.jsp 체크박스*/
+    $(document).on('change', '.category-checkbox', function () {
+        const img = $(this).next('.checkbox-img')[0];
+        const label = $(this).parent()[0];
+        if (this.checked) {
+            img.src = '../../../img/store_checkbox_active.png';
+            label.style.fontWeight = "bold";
+        } else {
+            img.src = '../../../img/store_checkbox.png';
+            label.style.fontWeight = "normal";
+        }
+    });
+    // 알람 모달
+    // 시계 아이콘 클릭 시 모달 열기 (이벤트 위임)
+    $(document).on('click', '#timer-icon', function () {
+        $('#time-modal').css('display', 'flex');
+    });
+
+    // 모달 닫기 버튼 클릭 시 모달 닫기 (이벤트 위임)
+    $(document).on('click', '#close-modal', function () {
+        $('#time-modal').css('display', 'none');
+    });
+
+    // 모달 바깥 클릭 시 모달 닫기 (이벤트 위임)
+    $(document).on('click', '#time-modal', function (e) {
+        if (e.target === this) {
+            $(this).css('display', 'none');
+        }
+    });
+    // 픽업 시간 모달 확인 버튼 (이벤트 위임)
+    $(document).on('click', '#pickup-time-confirm', function () {
+        const start = $('#pickup-time').val(); // 예: "09:30"
+        if (start) {
+            // 시간 계산
+            const [h, m] = start.split(':').map(Number);
+            let endH = h + 1;
+            let endM = m;
+            if (endH > 23) endH = endH - 24; // 24시 넘어가면 0시로
+            // 두 자리수로 포맷
+            const end = `\${String(endH).padStart(2, '0')}:\${String(endM).padStart(2, '0')}`;
+            $('#pickup-time-input').val(`${start} ~ ${end}`);
+        }
+        $('#time-modal').css('display', 'none');
     });
 
 </script>

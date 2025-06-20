@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -12,15 +14,7 @@
 
 <body>
     <div id="wrapper">
-        <header>
-            <div class="header-container">
-                <img src="../../../img/store_ohgoodfood_logo.png" alt="Logo Image">
-                <div class="icon-container">
-                    <img src="../../../img/store_alarm_active.png" alt="알람" class="icon">
-                    <img src="../../../img/store_logout.png" alt="로그아웃" class="icon">
-                </div>
-            </div>
-        </header>
+        <%@ include file="/WEB-INF/views/store/header.jsp" %>
         <main>
             <div class="main-header">
                 <div class="storeName">러프도우</div>
@@ -72,7 +66,8 @@
                         <div class="form-group">
                             <label class="label">픽업 시간</label>
                             <span class="divider">|</span>
-                            <input type="text" id="pickup-time-input" class="time-input" placeholder="픽업시간을 선택하세요" readonly>
+                            <input type="text" id="pickup-time-input" class="time-input" placeholder="픽업시간을 선택하세요"
+                                readonly>
                             <img src="../../../img/store_time.png" alt="시계 아이콘" class="timer-icon" id="timer-icon">
 
                             <!-- 모달 -->
@@ -141,39 +136,11 @@
             </div>
 
         </main>
-        <footer>
-            <div class="footer-container">
-                <div class="menu-container">
-                    <div class="menu-item active">
-                        <img src="../../../img/store_home_active.png" data-name="home" alt="홈" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_review.png" data-name="review" alt="리뷰" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_order.png" data-name="order" alt="주문" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <%@ include file="/WEB-INF/views/store/footer.jsp" %>
     </div>
 </body>
 <script>
     $(function () {
-        // 메뉴바
-        $('.menu-item').click(function () {
-            $('.menu-item').removeClass('active').each(function () {
-                const img = $(this).find('img');
-                img.attr('src', `../../../img/store_${img.data('name')}.png`);
-            });
-            $(this).addClass('active');
-            const img = $(this).find('img');
-            img.attr('src', `../../../img/store_${img.data('name')}_active.png`);
-        });
-
         // 슬라이더
         const $track = $('.slider-track');
         let $images = $('.slider-img');
@@ -240,7 +207,9 @@
             if (diff < -50) {
                 $track.css('transition', 'transform 0.3s');
                 $track.css('transform', `translateX(-${imgWidth}px)`);
-                $track.one('transitionend', rotateLeft);
+                setTimeout(function () {
+                    rotateLeft();
+                }, 310); 
             } else if (diff > 50) {
                 rotateRight();
                 $track.css('transition', 'none');
@@ -276,7 +245,9 @@
             if (diff < -50) {
                 $track.css('transition', 'transform 0.3s');
                 $track.css('transform', `translateX(-${imgWidth}px)`);
-                $track.one('transitionend', rotateLeft);
+                setTimeout(function () {
+                    rotateLeft();
+                }, 310); 
             } else if (diff > 50) {
                 rotateRight();
                 $track.css('transition', 'none');
@@ -347,7 +318,8 @@
                 let endM = m;
                 if (endH > 23) endH = endH - 24; // 24시 넘어가면 0시로
                 // 두 자리수로 포맷
-                const end = `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
+                const end = `\${String(endH).padStart(2, '0')}:\${String(endM).padStart(2, '0')}`;
+                
                 $('#pickup-time-input').val(`${start} ~ ${end}`);
             }
             $('#time-modal').css('display', 'none');

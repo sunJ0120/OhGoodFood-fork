@@ -105,18 +105,18 @@
 </body>
 <script>
     document.querySelectorAll('.category-checkbox').forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-        const img = this.nextElementSibling;
-        const label = this.parentElement;
-        if (this.checked) {
-            img.src = '../../../img/store_checkbox_active.png';    
-            label.style.fontWeight = "bold";   
-        } else {
-            img.src = '../../../img/store_checkbox.png';
-            label.style.fontWeight = "normal"; 
-        }
+        checkbox.addEventListener('change', function () {
+            const img = this.nextElementSibling;
+            const label = this.parentElement;
+            if (this.checked) {
+                img.src = '../../../img/store_checkbox_active.png';
+                label.style.fontWeight = "bold";
+            } else {
+                img.src = '../../../img/store_checkbox.png';
+                label.style.fontWeight = "normal";
+            }
+        });
     });
-});
 </script>
 
 </html>

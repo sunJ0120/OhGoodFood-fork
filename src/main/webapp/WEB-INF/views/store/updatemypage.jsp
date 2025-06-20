@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -61,7 +63,6 @@
                     <span class="divider">|</span>
                     <input type="text" id="pickup-time-input" class="time-input" placeholder="픽업시간을 선택하세요" readonly>
                     <img src="../../../img/store_time.png" alt="시계 아이콘" class="timer-icon" id="timer-icon">
-
                     <!-- 모달 -->
                     <div id="time-modal" class="modal">
                         <div class="modal-content">
@@ -106,14 +107,37 @@
                 <div class="form-group">
                     <label class="label">카테고리</label>
                     <span class="divider">|</span>
-                    <div class="details-content">빵 & 디저트</div>
+                    <div class="input-box">
+                        <div class="category-group">
+                            <label>
+                                <input type="checkbox" class="category-checkbox" style="display:none;">
+                                <img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+                                빵 & 디저트
+                            </label>
+                            <label>
+                                <input type="checkbox" class="category-checkbox" style="display:none;">
+                                <img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+                                샐러드
+                            </label>
+                            <label>
+                                <input type="checkbox" class="category-checkbox" style="display:none;">
+                                <img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+                                과일
+                            </label>
+                            <label>
+                                <input type="checkbox" class="category-checkbox" style="display:none;">
+                                <img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+                                그외
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </form>
             <form>
                 <div class="form-group">
                     <label class="label">대표 메뉴</label>
                     <span class="divider">|</span>
-                    <div class="details-content">깜파뉴 | 바게뜨 | 치아바타</div>
+                    <input type="text" placeholder="대표메뉴를 작성해주세요">
                 </div>
             </form>
             <form>
@@ -121,39 +145,15 @@
                     <img src="../../../img/store_bag.png" alt="오굿백" class="bagIcon">
                     <label class="label">오굿백</label>
                     <span class="divider">|</span>
-                    <div class="details-content" style="line-height: 1.3;">러프도우의 직접만든 바게뜨, 소금빵 등이 들어 러프도우의...
-                    </div>
+                    <textarea id="bag-desc" placeholder="오굿백 설명을 작성해주세요"></textarea>
                 </div>
-            </form>
-
-
         </div>
+        </form>
+    </div>
     </div>
 </body>
 <script>
-    // 동적으로 불러와도 동작하도록 이벤트 위임 사용
-    $(document).on('click', '#timer-icon', function () {
-        $('#time-modal').css('display', 'block');
-    });
 
-    // 모달 닫기 버튼
-    $(document).on('click', '#close-modal', function () {
-        $('#time-modal').css('display', 'none');
-    });
-
-    // 픽업 시간 확인 버튼
-    $(document).on('click', '#pickup-time-confirm', function () {
-        const start = $('#pickup-time').val();
-        if (start) {
-            const [h, m] = start.split(':').map(Number);
-            let endH = h + 1;
-            let endM = m;
-            if (endH > 23) endH = endH - 24;
-            const end = `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
-            $('#pickup-time-input').val(`${start} ~ ${end}`);
-        }
-        $('#time-modal').css('display', 'none');
-    });
 </script>
 
 </html>

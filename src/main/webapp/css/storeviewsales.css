@@ -1,0 +1,74 @@
+@font-face {
+    font-family: 'nanumesquareneo';
+    src: url('font/NanumSquareNeo-aLt.ttf');
+}
+@font-face {
+    font-family: 'nanumesquareneo_b';
+    src: url('font/NanumSquareNeo-bRg.ttf');
+}
+
+
+/*메인*/
+main{
+    display: flex;
+    flex-direction: column;
+    padding:20px;
+    
+}
+.storeInfoHeader{
+    display: flex;
+    flex-direction: column;
+}
+.storeInfoGroup{
+    display: flex;
+    gap:10px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 17px;
+}
+.myStoreIcon{
+    width: 22px;
+    height: 22px;
+}
+.storeName{
+    font-size: 20px;
+    font-weight: bold;
+    color: #535353;
+    margin-bottom: 10px;
+}
+.storeInfoContent{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    width: 380px;
+    height: 30px;
+    border-radius: 10px;
+    background-color: #8B6D5C;
+}
+.storeInfoContent{
+    color: white;
+    font-family: 'nanumesquareneo_b';
+}
+.contentGroup{
+    display:flex;
+    align-items: center;
+    gap: 10px;
+}
+.whiteBagIcon{
+    width: 20px;
+    height: 20px;
+}
+.calendarContainer{
+    margin-top : 20px;
+    border: 1px solid  #99A99B;
+    height: 380px;
+    border-radius: 10px;
+}
+.salesContainer{
+    margin-top : 20px;
+    border: 1px solid  #99A99B;
+    height: 174px;
+    border-radius: 10px;
+}
+
