@@ -26,18 +26,22 @@ jobs:
               reviewers = ['minsss0726', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
             } else if (branch === 'dev') {
               reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
-            } 
-
-            console.log(`Reviewers: ${reviewers}`);
-            console.log(`Author: ${author}`);
+            } else if (branch === 'main') {
+              reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
+            }
             
             if (reviewers.length > 0) {
-              await github.rest.pulls.requestReviewers({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                reviewers: reviewers
-              });
+              try{
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  reviewers: reviewers
+                });
+                console.log('Reviewers assigned successfully');
+              } catch (error) {
+                console.log('Error assigning reviewers:', error);
+              }
             } else {
               console.log(`No reviewers to assign. PR author (${author}) is the only candidate.`);
             }
