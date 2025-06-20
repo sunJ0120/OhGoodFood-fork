@@ -312,11 +312,10 @@ public class AdminTest {
     // 수신자 유효성 검사
     @Test
     public void checkReceiver() {
-        Alarm alarm = new Alarm();
-        alarm.setReceive_id("u01");
-        int result = adminMapper.checkReceiverAccount(alarm);
+        String receiveId = "u01";
+        int result = adminMapper.checkReceiverAccount(receiveId);
         System.out.println(result);
-        result = adminMapper.checkReceiverStore(alarm);
+        result = adminMapper.checkReceiverStore(receiveId);
         System.out.println(result);
     }
 
