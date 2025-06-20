@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -8,13 +10,13 @@
     <link rel="stylesheet" href="../../../css/storealarm.css" />
     <title>Ohgoodfood</title>
 </head>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
 <body>
     <div id="wrapper">
         <header>
             <div class="header-container">
+                <a href="/store/main" id="alarm-icon">
                 <img src="../../../img/store_alarm_active.png" alt="알람" class="icon">
+            </a>  
             </div>
         </header>
         <main>
@@ -103,27 +105,7 @@
 
             </div>
         </main>
-        <footer>
-            <div class="footer-container">
-                <div class="menu-container">
-                    <div class="menu-item active">
-                        <img src="../../../img/store_home_active.png" data-name="home" alt="홈" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_review.png" data-name="review" alt="리뷰" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_order.png" data-name="order" alt="주문" class="menu-icon">
-                    </div>
-                    <div class="menu-item">
-                        <img src="../../../img/store_mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <%@ include file="/WEB-INF/views/store/footer.jsp" %>
     </div>
 </body>
-<script>
-</script>
-
 </html>

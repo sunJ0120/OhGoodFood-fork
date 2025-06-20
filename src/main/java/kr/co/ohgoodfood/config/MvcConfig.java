@@ -70,6 +70,12 @@ public class MvcConfig implements WebMvcConfigurer {
 		dataSource.setJdbcUrl(url); // ip는 바뀌어야함
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
+		
+		// 한글 인코딩 설정
+		dataSource.addDataSourceProperty("useUnicode", "true");
+		dataSource.addDataSourceProperty("characterEncoding", "UTF-8");
+		dataSource.addDataSourceProperty("serverTimezone", "Asia/Seoul");
+		
 		return dataSource;
 	}
 
@@ -78,6 +84,13 @@ public class MvcConfig implements WebMvcConfigurer {
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean ssf = new SqlSessionFactoryBean();
 		ssf.setDataSource(dataSource()); // 의존성 주입
+		
+		// MyBatis 설정
+		// org.apache.ibatis.session.Configuration config = new org.apache.ibatis.session.Configuration();
+		// config.setMapUnderscoreToCamelCase(true);
+		// config.setCallSettersOnNulls(true);
+		// ssf.setConfiguration(config);
+		
 		return ssf.getObject();
 	}
 

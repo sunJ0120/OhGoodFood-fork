@@ -7,40 +7,7 @@
     src: url('font/NanumSquareNeo-bRg.ttf');
 }
 
-body{
-    font-family: 'nanumesquareneo';
-    margin: 0;
-    padding: 0;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-}
-#wrapper{
-    width: 440px;
-    height: 956px;
-    background-color: #F5F3EA;   
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-header{
-    height: 30px;
-    padding: 20px 15px 20px 15px;;
-    border-bottom: solid 1px #717171;
-}
-.headerContainer{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.iconContainer{
-    display: flex;
-    gap:15px;
-    align-items: center;
-}
-.icon{
-    width: 23px;
-}
+
 /*메인*/
 main{
     display: flex;
@@ -104,47 +71,4 @@ main{
     height: 174px;
     border-radius: 10px;
 }
-footer{
-        position: absolute;
-    left: 0;
-    bottom: 0;
-    border-top: solid 1px #717171;
-    margin-top: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding:20px;
-    background-color: #F5F3EA;
-    box-sizing: border-box;
-    width: 100%;
-}
-.footer-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 390px;
-    height: 74px;
-    background-color: #99A99B;
-    border-radius: 10px;
-    
-}
-.menu-container{
-    display: flex;
-    align-items: center;
-    justify-self: center;
-    gap:25px;
-}
-.menu-item {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 55px;
-    width: 68px;
-    border-radius: 8px;
-    cursor: pointer;
-}
-.menu-item.active {
-    background-color: #F5F3EA; 
-}
-
 
