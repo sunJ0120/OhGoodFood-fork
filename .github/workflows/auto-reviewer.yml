@@ -14,6 +14,7 @@ jobs:
         with:
           github-token: ${{ secrets.GH_TOKEN }}
           script: |
+            const author = context.payload.pull_request.user.login;
             const branch = context.payload.pull_request.base.ref;
             let reviewers = [];
 
@@ -33,5 +34,5 @@ jobs:
                 reviewers: reviewers
               });
             } else {
-              console.log('No reviewers assigned for branch:', branch);
+              console.log(`No reviewers to assign. PR author (${author}) is the only candidate.`);
             }
