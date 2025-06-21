@@ -52,7 +52,7 @@
         </div>
       </div>
       <button class="filterBtn">예약 가능만</button>
-      <button class="filterBtn active">오늘 픽업</button>
+      <button class="filterBtn">오늘 픽업</button>
       <button class="filterBtn">내일 픽업</button>
     </section>
 
@@ -246,6 +246,10 @@
 <!--[main] 픽업 상태에 따라 뱃지 색상 변경 & 카드 오퍼시티 변경 -->
 <script>
   $(document).ready(function () {
+    applyBadgeStyles(); // 페이지 처음 로드 시 적용
+  });
+
+  function applyBadgeStyles() {
     $(".statusText").each(function () {
       const text = $(this).text().trim();
       const badge = $(this).closest(".badge");
@@ -262,6 +266,100 @@
         storeImage.addClass("soldout");
       }
     });
+  }
+</script>
+<!--[main] filterBtn에 따라 필터링 적용, ajax 적용 -->
+<script>
+  let filterParams = {}; // 최종적으로 전송할 JSON 객체
+
+  $(document).ready(function() {
+    // 카테고리 클릭 시
+    $('.dropdownModal .item').on('click', function() {
+      const selectedCategory = $(this).text().trim();
+
+      // 카테고리 키
+      const categoryMap = {
+        '빵 & 디저트': 'category_bakery',
+        '샐러드': 'category_salad',
+        '과일': 'category_fruit',
+        '그 외': 'category_etc'
+      };
+
+      //선택된 것을 Y로 매칭
+      const key = categoryMap[selectedCategory];
+
+      // 기존 category_* 키 제거
+      Object.keys(filterParams).forEach(k => {
+        if (k.startsWith('category_')) delete filterParams[k];
+      });
+
+      // 새 카테고리 설정
+      filterParams[key] = 'Y';
+      $('#btnText').text(selectedCategory);
+
+      sendFilterRequest(); // AJAX 호출
+    });
+
+    // 필터 버튼 클릭 시
+    $('.filterBtn').on('click', function () {
+      const $this = $(this);
+      const filterText = $this.text().trim();
+
+      if (filterText === '예약 가능만') {
+        const key = 'store_status';
+        const value = 'Y';
+
+        if (filterParams[key] === value) {
+          delete filterParams[key];
+          $this.removeClass('active');
+        } else {
+          filterParams[key] = value;
+          $this.addClass('active');
+        }
+      } else if (filterText === '오늘 픽업' || filterText === '내일 픽업') {
+        const key = 'pickup_start';
+        const date = new Date();
+
+        if (filterText === '내일 픽업') date.setDate(date.getDate() + 1);
+        const formatted = date.toISOString().slice(0, 10);
+
+        // 토글
+        if (filterParams[key] === formatted) {
+          // 이미 존재할 경우 삭제한다.
+          delete filterParams[key];
+          $this.removeClass('active');
+        } else {
+          filterParams[key] = formatted;
+          $('.filterBtn.pickup').removeClass('active'); // 오늘/내일 둘 다 해제
+          $this.addClass('active');
+        }
+      }
+      sendFilterRequest(); // AJAX 요청
+    });
+
+    // 공통 AJAX 요청 함수
+    function sendFilterRequest() {
+      $.ajax({
+        url: '${pageContext.request.contextPath}/user/filter/store',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(filterParams),
+        //fragment 방식 사용, DOM을 다시 그리자니 너무 노가다라...
+        success: function (responseHtml) {
+          //로그 찍기
+          console.log("[AJAX 응답] 서버에서 받은 HTML:", responseHtml);
+          $('.productWrapper').html(responseHtml);
+          applyBadgeStyles(); //오퍼시티 적용
+        },
+        error: function (xhr, status, error) {
+          console.error("[AJAX 오류 발생]");
+          console.error("status:", status);
+          console.error("HTTP 상태 코드:", xhr.status);
+          console.error("응답 텍스트:", xhr.responseText);
+          console.error("error 객체:", error);
+        }
+      });
+    }
   });
 </script>
 </html>

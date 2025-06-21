@@ -49,4 +49,16 @@
         AND o.user_id = #{user_id};
     </select>
 
+    <!-- [test 용] Order deleteOrder -->
+    <delete id="deleteOrder" parameterType="kr.co.ohgoodfood.dto.Orders">
+        DELETE FROM Orders
+        WHERE order_no = #{order_no}
+    </delete>
+
+    <!-- [test 용] Bookmark deleteBookmark -->
+    <delete id="deleteBookmark" parameterType="kr.co.ohgoodfood.dto.Bookmark">
+        DELETE FROM Bookmark
+        WHERE bookmark_no = #{bookmark_no}
+    </delete>
+
 </mapper>

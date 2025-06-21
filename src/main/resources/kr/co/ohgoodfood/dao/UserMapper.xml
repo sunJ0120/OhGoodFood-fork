@@ -4,16 +4,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.ohgoodfood.dao.UserMapper">
-    <!--
-    User용 Mapper 객체
-        - user가 사용하는 매퍼 정리
-    📌 고민점
-        - 어느 페이지에서 사용하는지에 따라 main과 같은 구분자를 붙여서 사용해야 할지 고민입니다.
-    -->
-
     <!-- selectAllStore mapper -->
     <!-- selectAllStore mapper, main과 BookMark의 카드에서 동시에 이용한다. -->
-    <select id="selectAllStore" resultType="kr.co.ohgoodfood.dto.MainStore">
+    <select id="selectAllStore" parameterType="map" resultType="kr.co.ohgoodfood.dto.MainStore">
         SELECT
             s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery, s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others AS category_others, s.closed_at AS closed_at,
             p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.origin_price AS origin_price, p.sale_price AS sale_price, p.reservation_end AS reservation_end, p.amount AS amount,
@@ -24,6 +17,28 @@
             JOIN Product p ON s.store_id = p.store_id
             JOIN Image i ON i.store_id = s.store_id
             LEFT JOIN Bookmark b ON b.store_id = s.store_id AND b.user_id = #{user_id}
+
+        <where>
+            <if test="filter.store_status != null">
+                AND s.store_status = #{filter.store_status}
+            </if>
+            <if test="filter.pickup_start != null">
+                AND DATE(p.pickup_start) = #{filter.pickup_start}
+            </if>
+            <if test="filter.category_bakery != null">
+                AND s.category_bakery = #{filter.category_bakery}
+            </if>
+            <if test="filter.category_fruit != null">
+                AND s.category_fruit = #{filter.category_fruit}
+            </if>
+            <if test="filter.category_salad != null">
+                AND s.category_salad = #{filter.category_salad}
+            </if>
+            <if test="filter.category_others != null">
+                AND s.category_others = #{filter.category_others}
+            </if>
+        </where>
+
         GROUP BY s.store_id, s.store_name;
     </select>
 

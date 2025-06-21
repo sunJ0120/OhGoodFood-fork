@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * User가 사용하는 Mapper Interface
@@ -13,7 +14,8 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     //[user] user main 화면 & 북마크에서 보이는 가게 리스트
-    List<MainStore> selectAllStore(String user_id);
+    List<MainStore> selectAllStore(@Param("user_id") String user_id,
+                                   @Param("filter") Map<String, String> filterParams);
 
     //[user] user 북마크 삭제
     int deleteBookmark(@Param("user_id") String user_id,

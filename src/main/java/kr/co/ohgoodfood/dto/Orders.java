@@ -21,10 +21,10 @@ public class Orders {
     private String user_id;
     private String store_id;
     private String order_code;
-    private String canceld_from;
+    private String cancled_from ; //이거 db랑 맞춰야 합니다,,!
 
     private int s_order_no;
-    private Date s_ordered_at;
+    private LocalDateTime s_ordered_at;
     private String s_order_status;
 
     private String s_price;

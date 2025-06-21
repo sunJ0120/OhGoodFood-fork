@@ -17,6 +17,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.awt.print.Book;
 import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -48,11 +49,11 @@ public class UserExceptionTest {
         //주문 정보 생성, 모든 정보들은 test에서 사용하는 것이므로 임의로 한다.
         orders = new Orders();
 
-        orders.setOrdered_at(new Date(System.currentTimeMillis()));
+        orders.setOrdered_at(LocalDateTime.now());
         orders.setQuantity(2);
         orders.setOrder_status("reservation");
 
-        orders.setPicked_at(new Date(System.currentTimeMillis()));
+        orders.setPicked_at(LocalDateTime.now());
         orders.setUser_id("u02");
         orders.setStore_id("st01");
 

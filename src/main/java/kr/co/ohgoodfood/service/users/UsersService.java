@@ -5,6 +5,7 @@ import kr.co.ohgoodfood.dto.MainStore;
 import java.sql.Time;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UsersService interface
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public interface UsersService {
     //[Controller 로직] UsersController.userMain 연결 로직
-    List<MainStore> getMainStoreList(String user_id);
+    List<MainStore> getMainStoreList(String user_id, Map<String, String> filterParams);
 
     //[판별 로직] 오늘 픽업, 내일 픽업, 마감 판별 연결 로직
     String getPickupDateStatus(Date pickup_start, String store_status, int amount);

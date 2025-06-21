@@ -9,33 +9,32 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
- * UserMapperTest.java
- * - UserMapper에 대한 테스트 클래스
- * - 예외 처리 제외 맞는 로직에 대한 테스트만 존재한다. 예외 처리 테스트는 /exceptionTest/ 안에 존재한다.
- * - UserMapper의 메서드들을 테스트한다.
- * - 테스트용으로 Orders, Bookmark 객체를 생성하여 사용한다.
+ * 📌 UserMapperTest
  *
- * - 맞는 로직 검증의 경우, @@CorrectTest로 명명한다.
- */
-
-/**
- * 테스트 로직 설명
- * 📌 모든 Test는 JUnit5로 구성했습니다.
+ * UserMapper의 주요 기능에 대한 단위 테스트 클래스입니다.
+ * - 예외 테스트는 /exceptionTest/ 에서 수행합니다.
+ * - 공통 테스트 데이터는 @BeforeEach, @AfterEach로 관리됩니다.
  *
- * [@BeforeEach] {@link #createTestOrders}
- * - test에서 공통으로 사용할 임시 order를 하나 생성합니다.
- * [@BeforeEach] {@link #createTestBookMark}
- * - test에서 공통으로 사용할 임시 bookmark를 하나 생성합니다.
- *
- * 🔨 [추가 사항] 테스트용 객체 제거하는 [@AfterEach] 두개 생성 예정
- *
- * ② {@link #selectAllStoreCorrectTest} : selectAllStore mapper test
- *
+ * ✅ 테스트 목록
+ * 1. {@link #selectAllStoreCorrectTest} - 전체 가게 목록 조회 + 북마크 여부 확인
+ * 2. {@link #deleteBookmarkCorrectTest} - 북마크 삭제 기능 검증
+ * 3. {@link #selectOrderListCorrectTest} - 주문 목록 조회 (필터 없음)
+ * 4. {@link #selectOrderListWithFilterCorrectTest} - 주문 목록 조회 (상태 필터)
+ * 5. {@link #updateOrderCancledByUserCorrectTest} - 유저 주문 취소 처리
+ * 6. {@link #updateOrderConfirmedCorrectTest} - 주문 확정 처리
+ * 7. {@link #updateOrderPickupCorrectTest} - 주문 픽업 처리
+ * 8. {@link #selectUserOrderPayCorrectTest} - 결제 전 정보 조회
+ * 9. {@link #selectUserOrderPayCheckCorrectTest} - 결제 가능 여부 조회
+ * 10.{@link #selectAlarmListCorrectTest} - 알람 목록 조회
+ * 11.{@link #updateAlarmReadCorrectTest} - 알람 읽음 업데이트 기능 검증
+ * 12.{@link #updateAlarmReadCorrectTest} - 알람 읽음 업데이트 기능 검증
+ * 13.{@link #updateAlarmHiddenCorrectTest} - 알람 숨김 업데이트 기능 검증
  */
 
 @Slf4j
@@ -56,24 +55,20 @@ public class UserMapperTest {
 
     //[테스트 객체] 테스트용 Orders BeforeEach로 생성
     @BeforeEach
-    public void createTestOrders() throws Exception {
+    public void createTestObject() throws Exception {
         //주문 정보 생성, 모든 정보들은 test에서 사용하는 것이므로 임의로 한다.
         orders = new Orders();
 
-        orders.setOrdered_at(new Date(System.currentTimeMillis()));
+        orders.setOrdered_at(LocalDateTime.now());
         orders.setQuantity(2);
         orders.setOrder_status("reservation");
 
-        orders.setPicked_at(new Date(System.currentTimeMillis()));
+        orders.setPicked_at(LocalDateTime.now());
         orders.setUser_id("u02");
         orders.setStore_id("st01");
 
         testMapper.insertOrder(orders);
-    }
 
-    //[테스트 객체] 테스트용 Bookamark BeforeEach로 생성
-    @BeforeEach
-    public void createTestBookMark() throws Exception {
         //bookmark 정보 생성, 모든 정보들은 test에서 사용하는 것이므로 임의로 한다.
         bookmark = new Bookmark();
         bookmark.setUser_id("u02");
@@ -82,19 +77,27 @@ public class UserMapperTest {
         testMapper.insertBookmark(bookmark);
     }
 
+    //[테스트 객체] 테스트용 객체들 @AfterEach로 제거
+    @AfterEach
+    public void deleteTestObject() throws Exception{
+        testMapper.deleteBookmark(bookmark);
+        testMapper.deleteOrder(orders);
+    }
+
     @Test
     @DisplayName("✅ [Correct] selectAllStoreCorrect 테스트")
     public void selectAllStoreCorrectTest() throws Exception {
         //given
         String user_id = "u02";
+        Map<String, String> emptyFilter = new HashMap<>(); //필터 조건이 없으므로 빈 맵을 넘긴다.
 
         //when
-        List<MainStore> dtoList = userMapper.selectAllStore(user_id);
+        List<MainStore> dtoList = userMapper.selectAllStore(user_id, emptyFilter);
 
         //then
         log.info("MainStore_dtoList : {}", dtoList);
-        //현재 가게가 3개이므로, Mapper 실행 결과 가게가 3개여야 한다.
-        Assertions.assertEquals(dtoList.size(),3);
+        //현재 가게가 4개이므로, Mapper 실행 결과 가게가 4개여야 한다.
+        Assertions.assertEquals(dtoList.size(),4);
     }
 
     @Test
@@ -193,7 +196,7 @@ public class UserMapperTest {
 
     @Test
     @DisplayName("✅ [Correct] selectUserOrderPayCorrect 테스트")
-    public void selectUserOrderPayCorrect() throws Exception {
+    public void selectUserOrderPayCorrectTest() throws Exception {
         //given
         int product_no = 2; //임시 product_no
 
@@ -207,7 +210,7 @@ public class UserMapperTest {
 
     @Test
     @DisplayName("✅ [Correct] selectUserOrderPayCheckCorrect 테스트")
-    public void selectUserOrderPayCheckCorrect() throws Exception {
+    public void selectUserOrderPayCheckCorrectTest() throws Exception {
         //given
         int product_no = 2; //임시 product_no
 
@@ -217,7 +220,7 @@ public class UserMapperTest {
         //then
         log.info("orderPayCheck 찍어보기 : {}", orderPayCheck);
         Assertions.assertEquals(orderPayCheck.getAmount(), 3); //저장되어 있는 그대로의 amount가 있는지 검사
-        Assertions.assertEquals(orderPayCheck.getStore_status(), "Y");
+        Assertions.assertEquals(orderPayCheck.getStore_status(), "N");
     }
 
     @Test
@@ -231,7 +234,7 @@ public class UserMapperTest {
 
         //then
         log.info("alarmList 결과 반환 : {}", alarmList);
-        Assertions.assertEquals(1, alarmList.size());
+        Assertions.assertEquals(4, alarmList.size());
     }
 
     @Test

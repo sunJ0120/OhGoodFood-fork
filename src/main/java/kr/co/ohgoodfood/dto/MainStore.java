@@ -39,7 +39,7 @@ public class MainStore {
     private String store_img;
 
     //Bookmark table에서 가져오는 정보들
-    private int bookmark_no;
+    private Integer bookmark_no;
 
     //Bookmark 여부를 판단하기 위한 정보
     private Boolean bookmark;

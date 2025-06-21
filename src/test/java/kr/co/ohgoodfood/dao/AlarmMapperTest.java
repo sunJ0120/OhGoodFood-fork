@@ -14,13 +14,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import java.util.List;
 
 /**
- * AlarmMapperTest.java
- * - AlarmMapper의 테스트 클래스
- * - AlarmMapper의 메서드들을 테스트한다.
- *
- * - 맞는 로직 검증의 경우, @@CorrectTest로 명명한다.
- *
- *
+ * UserMapper에 통합 완료, 삭제 예정입니다.
  */
 
 @Slf4j

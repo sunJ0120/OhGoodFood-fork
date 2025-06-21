@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UsersServiceImpl.java
@@ -49,8 +50,8 @@ public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
 
     @Override
-    public List<MainStore> getMainStoreList(String user_id) {
-        List<MainStore> mainStoreList = userMapper.selectAllStore(user_id);
+    public List<MainStore> getMainStoreList(String user_id, Map<String, String> filterParams) {
+        List<MainStore> mainStoreList = userMapper.selectAllStore(user_id, filterParams);
 
         // 여기에 카테고리 이름과 pickup 상태를 저장
         for(MainStore mainStore : mainStoreList){
