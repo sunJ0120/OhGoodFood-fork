@@ -50,4 +50,6 @@ public class MainStore {
     private String amount_time_tag; //수량이나 time 넣는 tag
 
     //차후 필요하다면 검색을 위한 컬럼들 추가 필요
+    private String product_explain; //검색용, 상품 상세
+    private String store_address; //검색용, 가게 주소
 }

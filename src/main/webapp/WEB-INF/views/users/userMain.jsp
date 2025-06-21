@@ -273,6 +273,15 @@
   let filterParams = {}; // 최종적으로 전송할 JSON 객체
 
   $(document).ready(function() {
+    //검색바 입력시
+    $('.searchBtn').on('click', function () {
+      const keyword = $('.searchInput').val().trim(); // 검색어 가져오기
+      const key = 'search';
+      filterParams[key] = keyword; //search : 라는 이름으로 저장
+
+      sendFilterRequest(); // AJAX 호출
+    });
+
     // 카테고리 클릭 시
     $('.dropdownModal .item').on('click', function() {
       const selectedCategory = $(this).text().trim();
