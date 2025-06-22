@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=440, initial-scale=1.0">
+    <title>미확정 주문내역</title>
+    <link rel="stylesheet" href="/src/main/webapp/css/storeviewsales.css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <header>
+            <div class="header-container">
+                <img src="/src/main/webapp/img/storeohgoodfood_logo.png" alt="Logo Image">
+                <div class="icon-container">
+                    <img src="/src/main/webapp/img/storealarm_active.png" alt="알람" class="icon">
+                    <img src="/src/main/webapp/img/storelogout.png" alt="로그아웃" class="icon">
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="storeInfoHeader">
+                <div class="storeInfoGroup">
+                    <img src="/src/main/webapp/img/store_mystore.png" alt="마이페이지" class="myStoreIcon">
+                    <div class="storeInfo">매출 확인</div>
+                </div>
+                <div class="storeName">러프도우</div>
+                <div class="storeInfoContent">
+                    <div class="monthlySales">
+                        <p>6월 오굿백 매출</p>
+                    </div>
+                    <div class="contentGroup">
+                        <img src="/src/main/webapp/img/store_bag_white.png" alt="오굿백" class="whiteBagIcon">
+                        <div class="monthlySalesCount">
+                            <p>45개</p>
+                        </div>
+                        <div class="monthlySalesAccount">
+                            <p>310,500원</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="calendarContainer"></div>
+                <div class="salesContainer"></div>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-container">
+                <div class="menu-container">
+                    <div class="menu-item">
+                        <img src="/src/main/webapp/img/storehome.png" data-name="home" alt="홈" class="menu-icon">
+                    </div>
+                    <div class="menu-item">
+                        <img src="/src/main/webapp/img/storereview.png" data-name="review" alt="리뷰" class="menu-icon">
+                    </div>
+                    <div class="menu-item">
+                        <img src="/src/main/webapp/img/storeorder.png" data-name="order" alt="주문" class="menu-icon">
+                    </div>
+                    <div class="menu-item">
+                        <img src="/src/main/webapp/img/storemypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        // 하단 메뉴 active 처리
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function () {
+                menuItems.forEach(i => {
+                    i.classList.remove('active');
+                    const img = i.querySelector('img');
+                    img.src = `/src/main/webapp/img/${img.dataset.name}.png`;
+                });
+                this.classList.add('active');
+                const img = this.querySelector('img');
+                img.src = `/src/main/webapp/img/${img.dataset.name}_active.png`;
+            });
+        });
+
+        // 드롭다운 메뉴
+        const statusBtn = document.querySelector('.order-status-btn');
+        const statusList = document.querySelector('.order-status-list');
+        const statusText = document.querySelector('.section-title');
+        const statusSubText = document.querySelector('.section-desc')
+        if (statusBtn) {
+            statusBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                statusList.classList.toggle('show');
+            });
+            document.body.addEventListener('click', function () {
+                statusList.classList.remove('show');
+            });
+            statusList.querySelectorAll('li').forEach(li => {
+                li.addEventListener('click', function (e) {
+                    statusList.querySelectorAll('li').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    if (this.textContent === '미확정 주문') {
+                        statusText.textContent = '미확정 주문내역';
+                        statusSubText.textContent = '| 주문을 확정해 주세요';
+                    } else if (this.textContent === '확정 주문') {
+                        statusText.textContent = '확정 주문내역';
+                        statusSubText.textContent = '| 픽업 확정 표시를 꼭 해주세요';
+                    } else if (this.textContent === '취소한 주문') {
+                        statusText.textContent = '취소한 주문내역';
+                        statusSubText.textContent = '| 취소한 주문기록';
+                    }
+                    statusBtn.innerHTML = `${this.textContent} <img src="/src/main/webapp/img/storearrow.png" class="dropdown-arrow" alt="아래화살표">`;
+                    statusList.classList.remove('show');
+                    e.stopPropagation();
+                });
+            });
+        }
+        
+
+    </script>
+    
+</body>
+
+</html>

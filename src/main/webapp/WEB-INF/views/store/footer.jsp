@@ -21,7 +21,7 @@
             	</a>     
             </div>
             <div class="menu-item">
-            	<a href="/store/order">
+            	<a href="/store/reservation">
             		<img src="../../../img/store_order.png" data-name="order" alt="주문" class="menu-icon">
             	</a>
             </div>

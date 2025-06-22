@@ -9,6 +9,8 @@ public class StoreSales {
     private int sales;
     private String start_date;
     private String end_date;
+    
+    private int count; 
     private String s_type;
     private String s_value;
 

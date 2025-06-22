@@ -197,7 +197,14 @@ main {
     height:100%;
     margin-top: 40px;
 }
-
+.empty-img {
+    width: 340px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+    
+}
 
 
 footer{

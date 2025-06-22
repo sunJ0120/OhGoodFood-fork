@@ -1,0 +1,196 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=440, initial-scale=1.0">
+    <title>미확정 주문내역</title>
+    <link rel="stylesheet" href="/css/storeunconfirmedorder2.css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <header>
+            <div class="header-container">
+                <img src="/img/storeohgoodfood_logo.png" alt="Logo Image">
+                <div class="icon-container">
+                    <img src="/img/storealarm_active.png" alt="알람" class="icon">
+                    <img src="/img/storelogout.png" alt="로그아웃" class="icon">
+                </div>
+            </div>
+        </header>
+        <main>
+            <div class="order-page-container">
+                <div class="order-header">
+                    <div class="order-title">
+                        <span class="shop-name">러프도우</span>&nbsp;&nbsp;
+                        <span class="order-desc">| 주문내역을 확인하세요</span>
+                    </div>
+                    <div class="order-status-dropdown">
+                        <button class="order-status-btn">미확정 주문 <img src="../../../img/storearrow.png"
+                                class="dropdown-arrow"></button>
+                        <ul class="order-status-list">
+                            <li class="active">미확정 주문</li>
+                            <li>확정 주문</li>
+                            <li>취소한 주문</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="order-section-title">
+                    <span class="section-title">미확정 주문내역</span>&nbsp;
+                    <span class="section-desc">| 주문을 확정해 주세요</span>
+                </div>
+                <div class="order-list-area">
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <span class="order-card-title">오굿백 2개 예약</span>
+                            <span class="order-card-date">2025.06.11</span>
+                        </div>
+                        <hr class="order-card-divider">
+                        <div class="order-card-body">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
+                            <div class="order-card-info">
+                                <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
+                                <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 17:30 ~ 18:30</div>
+                                <div class="order-card-btns">
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <span class="order-card-title">오굿백 2개 예약</span>
+                            <span class="order-card-date">2025.06.11</span>
+                        </div>
+                        <hr class="order-card-divider">
+                        <div class="order-card-body">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
+                            <div class="order-card-info">
+                                <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
+                                <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 16:30 ~ 17:30</div>
+                                <div class="order-card-btns">
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <span class="order-card-title">오굿백 2개 예약</span>
+                            <span class="order-card-date">2025.06.11</span>
+                        </div>
+                        <hr class="order-card-divider">
+                        <div class="order-card-body">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
+                            <div class="order-card-info">
+                                <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
+                                <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 16:30 ~ 17:30</div>
+                                <div class="order-card-btns">
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <span class="order-card-title">오굿백 2개 예약</span>
+                            <span class="order-card-date">2025.06.11</span>
+                        </div>
+                        <hr class="order-card-divider">
+                        <div class="order-card-body">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
+                            <div class="order-card-info">
+                                <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
+                                <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 16:30 ~ 17:30</div>
+                                <div class="order-card-btns">
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div class="footer-container">
+                <div class="menu-container">
+                    <div class="menu-item">
+                        <img src="../../../img/storehome.png" data-name="home" alt="홈" class="menu-icon">
+                    </div>
+                    <div class="menu-item">
+                        <img src="../../../img/storereview.png" data-name="review" alt="리뷰" class="menu-icon">
+                    </div>
+                    <div class="menu-item">
+                        <img src="../../../img/storeorder.png" data-name="order" alt="주문" class="menu-icon">
+                    </div>
+                    <div class="menu-item">
+                        <img src="../../../img/storemypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <script>
+        // 하단 메뉴 active 처리
+        const menuItems = document.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            item.addEventListener('click', function () {
+                menuItems.forEach(i => {
+                    i.classList.remove('active');
+                    const img = i.querySelector('img');
+                    img.src = `../../../img/store${img.dataset.name}.png`;
+                });
+                this.classList.add('active');
+                const img = this.querySelector('img');
+                img.src = `../../../img/store${img.dataset.name}_active.png`;
+            });
+        });
+
+        // 드롭다운 메뉴
+        const statusBtn = document.querySelector('.order-status-btn');
+        const statusList = document.querySelector('.order-status-list');
+        const statusText = document.querySelector('.section-title');
+        const statusSubText = document.querySelector('.section-desc')
+        if (statusBtn) {
+            statusBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                statusList.classList.toggle('show');
+            });
+            document.body.addEventListener('click', function () {
+                statusList.classList.remove('show');
+            });
+            statusList.querySelectorAll('li').forEach(li => {
+                li.addEventListener('click', function (e) {
+                    statusList.querySelectorAll('li').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    if (this.textContent === '미확정 주문') {
+                        statusText.textContent = '미확정 주문내역';
+                        statusSubText.textContent = '| 주문을 확정해 주세요';
+                    } else if (this.textContent === '확정 주문') {
+                        statusText.textContent = '확정 주문내역';
+                        statusSubText.textContent = '| 픽업 확정 표시를 꼭 해주세요';
+                    } else if (this.textContent === '취소한 주문') {
+                        statusText.textContent = '취소한 주문내역';
+                        statusSubText.textContent = '| 취소한 주문기록';
+                    }
+                    statusBtn.innerHTML = `${this.textContent} <img src="../../../img/storearrow.png" class="dropdown-arrow" alt="아래화살표">`;
+                    statusList.classList.remove('show');
+                    e.stopPropagation();
+                });
+            });
+        }
+    </script>
+</body>
+
+</html>
