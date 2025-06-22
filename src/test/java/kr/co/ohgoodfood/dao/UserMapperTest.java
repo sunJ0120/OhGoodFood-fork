@@ -10,31 +10,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * 📌 UserMapperTest
- *
- * UserMapper의 주요 기능에 대한 단위 테스트 클래스입니다.
- * - 예외 테스트는 /exceptionTest/ 에서 수행합니다.
- * - 공통 테스트 데이터는 @BeforeEach, @AfterEach로 관리됩니다.
- *
- * ✅ 테스트 목록
- * 1. {@link #selectAllStoreCorrectTest} - 전체 가게 목록 조회 + 북마크 여부 확인
- * 2. {@link #deleteBookmarkCorrectTest} - 북마크 삭제 기능 검증
- * 3. {@link #selectOrderListCorrectTest} - 주문 목록 조회 (필터 없음)
- * 4. {@link #selectOrderListWithFilterCorrectTest} - 주문 목록 조회 (상태 필터)
- * 5. {@link #updateOrderCancledByUserCorrectTest} - 유저 주문 취소 처리
- * 6. {@link #updateOrderConfirmedCorrectTest} - 주문 확정 처리
- * 7. {@link #updateOrderPickupCorrectTest} - 주문 픽업 처리
- * 8. {@link #selectUserOrderPayCorrectTest} - 결제 전 정보 조회
- * 9. {@link #selectUserOrderPayCheckCorrectTest} - 결제 가능 여부 조회
- * 10.{@link #selectAlarmListCorrectTest} - 알람 목록 조회
- * 11.{@link #updateAlarmReadCorrectTest} - 알람 읽음 업데이트 기능 검증
- * 12.{@link #updateAlarmReadCorrectTest} - 알람 읽음 업데이트 기능 검증
- * 13.{@link #updateAlarmHiddenCorrectTest} - 알람 숨김 업데이트 기능 검증
+ * UserMapper의 핵심 매퍼 메서드들을 검증하는 단위 테스트 클래스.
  */
 
 @Slf4j
@@ -85,14 +64,14 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] selectAllStoreCorrect 테스트")
+    @DisplayName("✅ [Correct] 전체 가게 목록 조회: 필터 없이 4건 확인")
     public void selectAllStoreCorrectTest() throws Exception {
         //given
         String user_id = "u02";
-        Map<String, String> emptyFilter = new HashMap<>(); //필터 조건이 없으므로 빈 맵을 넘긴다.
+        UserMainFilter userMainFilter = new UserMainFilter();
 
         //when
-        List<MainStore> dtoList = userMapper.selectAllStore(user_id, emptyFilter);
+        List<MainStore> dtoList = userMapper.selectAllStore(user_id, userMainFilter);
 
         //then
         log.info("MainStore_dtoList : {}", dtoList);
@@ -101,7 +80,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] deleteBookmarkCorrect 테스트")
+    @DisplayName("✅ [Correct] 북마크 삭제 기능 검증")
     public void deleteBookmarkCorrectTest() throws Exception {
         //given
 
@@ -114,7 +93,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] selectOrderListCorrect 테스트")
+    @DisplayName("✅ [Correct] 주문 목록 조회: 전체 내역 확인")
     public void selectOrderListCorrectTest() throws Exception {
         //given
         //임시로 사용할 유저 아이디를 가져온다.
@@ -130,7 +109,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] selectOrderListWithFilterCorrect 테스트")
+    @DisplayName("✅ [Correct] 주문 목록 조회: 상태 필터 적용")
     public void selectOrderListWithFilterCorrectTest() throws Exception {
         //given
         String user_id = "u02";
@@ -146,7 +125,7 @@ public class UserMapperTest {
 
 
     @Test
-    @DisplayName("✅ [Correct] updateOrderCancledByUserCorrect 테스트")
+    @DisplayName("✅ [Correct] 주문 취소 처리 검증")
     public void updateOrderCancledByUserCorrectTest() throws Exception {
         //given
 
@@ -163,7 +142,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] updateOrderConfirmedCorrect 테스트")
+    @DisplayName("✅ [Correct] 주문 확정 처리 검증")
     public void updateOrderConfirmedCorrectTest() throws Exception {
         //given
         String order_code = "123456";
@@ -180,7 +159,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] updateOrderPickupCorrect 테스트")
+    @DisplayName("✅ [Correct] 주문 픽업 처리 검증")
     public void updateOrderPickupCorrectTest() throws Exception {
         //given
         //when
@@ -195,7 +174,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] selectUserOrderPayCorrect 테스트")
+    @DisplayName("✅ [Correct] 결제 전 주문 정보 조회 검증")
     public void selectUserOrderPayCorrectTest() throws Exception {
         //given
         int product_no = 2; //임시 product_no
@@ -209,7 +188,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] selectUserOrderPayCheckCorrect 테스트")
+    @DisplayName("✅ [Correct] 결제 가능 여부 조회 검증")
     public void selectUserOrderPayCheckCorrectTest() throws Exception {
         //given
         int product_no = 2; //임시 product_no
@@ -224,7 +203,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] selectAlarmListCorrect 테스트")
+    @DisplayName("✅ [Correct] 알람 목록 조회 검증")
     public void selectAlarmListCorrectTest() throws Exception {
         //given
         String user_id = "u01";
@@ -238,7 +217,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] updateAlarmReadCorrect 테스트")
+    @DisplayName("✅ [Correct] 알람 읽음 처리 검증")
     public void updateAlarmReadCorrectTest() throws Exception {
         //given
         String user_id = "u01";
@@ -256,7 +235,7 @@ public class UserMapperTest {
     }
 
     @Test
-    @DisplayName("✅ [Correct] updateAlarmHiddenCorrect 테스트")
+    @DisplayName("✅ [Correct] 알람 숨김 처리 검증")
     public void updateAlarmHiddenCorrectTest() throws Exception {
         //given
         //임시로 사용할 알람 번호를 하나 지정한다.

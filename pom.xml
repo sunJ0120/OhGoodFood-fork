@@ -244,6 +244,14 @@
 			<version>3.1.0</version>
 			<scope>provided</scope>
 		</dependency>
+
+		<!-- localDateTime을 바인딩 하기 위한 의존성 추가 -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.19.1</version>
+		</dependency>
+
 	</dependencies>
     <build>
         <plugins>

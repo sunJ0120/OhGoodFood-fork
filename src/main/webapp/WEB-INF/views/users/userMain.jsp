@@ -76,7 +76,6 @@
                           ${mainStore.store_name}
                       </div>
                       <div class="badge">
-                        <!-- 이거 store_status, reservation_end는 프론트단에서 처리 해야 해서 가장 나중에 하기로 한다. -->
                         <span class="statusText">${mainStore.pickup_date}</span>
                         <span class="timeText">(${mainStore.amount_time_tag})</span>
                       </div>
@@ -90,15 +89,16 @@
                     <p class="productDesc">${mainStore.store_menu}</p>
                     <p class="pickupTime">픽업 시간 |
                       <strong>
-                        <!-- 이거 today_fickup도 프론트단에서 처리 해야 해서 가장 나중에 하기로 한다. -->
                         <span class="todayPickupText">${mainStore.pickup_date}</span>
                         <span class="pickupStartText">
-                        <fmt:formatDate value="${mainStore.pickup_start}" pattern="HH:mm" />
-                      </span>
+                          <fmt:parseDate value="${mainStore.pickup_start}" var="pickup_start" pattern="yyyy-MM-dd'T'HH:mm"/>
+                          <fmt:formatDate value="${pickup_start}" pattern="HH:mm"/>
+                        </span>
                         ~
                         <span class="pickupEndText">
-                        <fmt:formatDate value="${mainStore.pickup_end}" pattern="HH:mm" />
-                      </span>
+                          <fmt:parseDate value="${mainStore.pickup_end}" var="pickup_end" pattern="yyyy-MM-dd'T'HH:mm"/>
+                          <fmt:formatDate value="${pickup_end}" pattern="HH:mm"/>
+                        </span>
                       </strong>
                     </p>
                   </div>
@@ -154,7 +154,7 @@
         const $img = $(this).find('img');
         // 기본 이미지로 복원
         const name = $img.attr('data-name');
-        $img.attr('src', `../../../img/${"${name}"}.png`); //jsp 랑 js 문법이 겹쳐서 이렇게 두번 감싸야 한다.
+        $img.attr('src', `../../../img/${"${name}"}.png`);
       });
       $(this).addClass('active');
       const $img = $(this).find('img');

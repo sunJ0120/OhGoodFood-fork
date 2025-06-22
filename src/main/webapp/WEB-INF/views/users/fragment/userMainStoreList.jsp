@@ -14,7 +14,6 @@
                   ${mainStore.store_name}
               </div>
               <div class="badge">
-                <!-- 이거 store_status, reservation_end는 프론트단에서 처리 해야 해서 가장 나중에 하기로 한다. -->
                 <span class="statusText">${mainStore.pickup_date}</span>
                 <span class="timeText">(${mainStore.amount_time_tag})</span>
               </div>
@@ -28,15 +27,15 @@
             <p class="productDesc">${mainStore.store_menu}</p>
             <p class="pickupTime">픽업 시간 |
               <strong>
-                <!-- 이거 today_fickup도 프론트단에서 처리 해야 해서 가장 나중에 하기로 한다. -->
-                <span class="todayPickupText">${mainStore.pickup_date}</span>
                 <span class="pickupStartText">
-                        <fmt:formatDate value="${mainStore.pickup_start}" pattern="HH:mm" />
-                      </span>
+                  <fmt:parseDate value="${mainStore.pickup_start}" var="pickup_start" pattern="yyyy-MM-dd'T'HH:mm"/>
+                  <fmt:formatDate value="${pickup_start}" pattern="HH:mm"/>
+                </span>
                 ~
                 <span class="pickupEndText">
-                        <fmt:formatDate value="${mainStore.pickup_end}" pattern="HH:mm" />
-                      </span>
+                  <fmt:parseDate value="${mainStore.pickup_end}" var="pickup_end" pattern="yyyy-MM-dd'T'HH:mm"/>
+                  <fmt:formatDate value="${pickup_end}" pattern="HH:mm"/>
+                </span>
               </strong>
             </p>
           </div>
@@ -45,8 +44,8 @@
               <fmt:formatNumber value="${mainStore.origin_price}" pattern="#,###" />₩
             </del>
             <span class="salePrice">
-                    <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
-                  </span>
+              <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
+            </span>
           </div>
         </div>
       </article>
