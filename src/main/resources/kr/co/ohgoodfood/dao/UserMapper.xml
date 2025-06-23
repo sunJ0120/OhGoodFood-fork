@@ -52,7 +52,7 @@
     <!-- deleteBookmark mapper -->
     <delete id="deleteBookmark" parameterType="map">
         DELETE FROM Bookmark
-        WHERE bookmark_no = #{bookmark_no}
+        WHERE bookmark_no = #{bookmark_no}'
         AND user_id = #{user_id};
     </delete>
 

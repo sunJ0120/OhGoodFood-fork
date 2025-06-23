@@ -123,7 +123,6 @@ public class UserMapperTest {
         Assertions.assertEquals(orderList.size(), 2);
     }
 
-
     @Test
     @DisplayName("✅ [Correct] 주문 취소 처리 검증")
     public void updateOrderCancledByUserCorrectTest() throws Exception {

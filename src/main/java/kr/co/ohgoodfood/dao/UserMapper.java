@@ -22,7 +22,7 @@ public interface UserMapper {
      *
      * @param user_id          조회 대상 user_id
      * @param userMainFilter   필터 DTO
-     * @return                 필터 적용된 MainStore 리스트
+     * @return                 필터 적용된 MainStore 리스트w
      */
     List<MainStore> selectAllStore(@Param("user_id") String user_id,
                                    @Param("filter") UserMainFilter userMainFilter);
