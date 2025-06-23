@@ -14,6 +14,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+import org.springframework.scheduling.config.ScheduledTaskRegistrar;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -29,6 +32,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @EnableWebMvc
 @EnableTransactionManagement
+@EnableScheduling
 @ComponentScan(basePackages = "kr.co.ohgoodfood")
 @MapperScan(basePackages = "kr.co.ohgoodfood", annotationClass = Mapper.class)
 public class MvcConfig implements WebMvcConfigurer {
@@ -142,4 +146,14 @@ public class MvcConfig implements WebMvcConfigurer {
 		config.setLocations(new ClassPathResource("db.properties"));
 		return config;
 	}
+
+	@Bean
+    public ThreadPoolTaskScheduler taskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(5); // 원하는 스레드 수
+        scheduler.setThreadNamePrefix("my-scheduler-");
+        scheduler.setWaitForTasksToCompleteOnShutdown(true); // 종료 대기 여부
+        scheduler.setAwaitTerminationSeconds(30); // 대기 시간
+        return scheduler;
+    }
 }
