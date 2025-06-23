@@ -1,14 +1,12 @@
 package kr.co.ohgoodfood.dao;
 
-import kr.co.ohgoodfood.dto.Alarm;
-import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.Orders;
+import kr.co.ohgoodfood.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 /**
- *
+ * Test에서만 사용하는 Mapper interface
+ * - user 화면에서 사용하는 mapper가 아닌, test code에서만 사용한다.
  */
 
 //test code에서만 사용하는 mapper 인터페이스
@@ -27,5 +25,16 @@ public interface TestMapper {
     void insertOrder(Orders orders);
 
     //[test 용] Order selectOne mapper
-    Orders selectOneOrder(@Param("order_no") int order_no, @Param("user_id") String user_id);
+    Orders selectOneOrder(@Param("order_no") int order_no,
+                          @Param("user_id") String user_id);
+
+    //[test 용] Order deleteOrder mapper
+    void deleteOrder(Orders orders);
+
+    //[test 용] Bookmark deleteBookmark mapper
+    void deleteBookmark(Bookmark bookmark);
+
+    //[test 용] MainStore selectOneStore mapper
+    MainStore selectOneStore(@Param("user_id") String user_id,
+                             @Param("store_id") String store_id);
 }

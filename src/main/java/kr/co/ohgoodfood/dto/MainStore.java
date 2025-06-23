@@ -3,10 +3,11 @@ package kr.co.ohgoodfood.dto;
 import lombok.*;
 
 import java.sql.Time;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
- * MainStore.java
+ * [DTO] MainStore
  *
  * - Main과 Bookmark에서 가게 정보를 사용하기 위한 DTO 클래스
  * - 카드 안에 들어가는 모든 정보들을 한 번에 저장해서 사용한다.
@@ -29,8 +30,8 @@ public class MainStore {
 
     //Product table에서 가져오는 정보들
     private int product_no;
-    private Date pickup_start;
-    private Date pickup_end;
+    private LocalDateTime pickup_start;
+    private LocalDateTime pickup_end;
     int origin_price;
     int sale_price;
     int amount;
@@ -39,7 +40,7 @@ public class MainStore {
     private String store_img;
 
     //Bookmark table에서 가져오는 정보들
-    private int bookmark_no;
+    private Integer bookmark_no;
 
     //Bookmark 여부를 판단하기 위한 정보
     private Boolean bookmark;
@@ -50,4 +51,6 @@ public class MainStore {
     private String amount_time_tag; //수량이나 time 넣는 tag
 
     //차후 필요하다면 검색을 위한 컬럼들 추가 필요
+    private String product_explain; //검색용, 상품 상세
+    private String store_address; //검색용, 가게 주소
 }
