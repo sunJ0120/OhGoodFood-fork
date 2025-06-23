@@ -34,6 +34,7 @@ public class MainStore {
     private LocalDateTime pickup_end;
     int origin_price;
     int sale_price;
+    //LocalDateTime reservation_end <- 이거 사용 안했는데 어디에 사용해야 할지 생각을 좀 해봐야 할듯..
     int amount;
 
     //Image table에서 가져오는 정보들
@@ -42,7 +43,7 @@ public class MainStore {
     //Bookmark table에서 가져오는 정보들
     private Integer bookmark_no;
 
-    //Bookmark 여부를 판단하기 위한 정보
+    //[추가 정보] Bookmark 여부를 판단하기 위한 정보
     private Boolean bookmark;
 
     //[추가 정보] DB에는 없는 추가 정보
