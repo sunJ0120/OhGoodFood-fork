@@ -3,6 +3,7 @@ package kr.co.ohgoodfood.controller.store;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
 import kr.co.ohgoodfood.service.store.StoreService;
+import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
 public class StoreController {
@@ -30,7 +32,7 @@ public class StoreController {
 		sess.invalidate();
 		model.addAttribute("msg", "로그아웃 성공");
 		model.addAttribute("url", "/store/login");
-		return "store/alert";
+		return "store/alert"; 
 	}
 
 	@GetMapping("/store/signup")
@@ -54,18 +56,49 @@ public class StoreController {
 	}
 	@GetMapping("/store/reservation") // main에서 order 탭을 눌렀을때 기본 미확정 주문 조회
 	public String getReservationOrders(HttpSession sess, Model model) {
+		
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			model.addAttribute("url", "/store/login");
 			return "store/alert";
 		}
-		List<Orders> lists = storeService.getOrders(login.getStore_id(), "reservation");
-		System.out.println("lists 사이즈" + lists.size());
-		model.addAttribute("order", lists);
-		return "/store/unconfirmedorder2";
+		//List<Orders> lists = storeService.getOrders(login.getStore_id(), "reservation");
+		//System.out.println("lists 사이즈" + lists.size());
+		//model.addAttribute("order", lists);
+		return "/store/order";
 		
 	}
+	// 이 밑에가 ajax 동적 처리 컨트롤러
+	@PostMapping("/store/order/{status}")
+	public String loadOrderByStatus(@PathVariable("status") String status, HttpSession session, Model model) {
+	    
+	    Store store = (Store) session.getAttribute("store");
+	    if (store == null) {
+	        return "store/alert"; 
+	    }
+	    List<Orders> orders = storeService.getOrders(store.getStore_id(), status);
+	    
+	    model.addAttribute("order", orders); 
+	    System.out.println("서버 들어옴" + status);
+	    System.out.println("컨트롤러에서 order 사이즈" + orders.size());
+	    switch (status) {
+	        case "reservation":
+	        	System.out.println("reservation 컨트롤러 들어옴");
+	            return "/store/fragments/reservation";
+	        case "confirmed":
+	        	System.out.println("confirm 컨트롤러 들어옴");
+	            return "/store/fragments/confirmed";
+	        case "cancel":
+	        	System.out.println("cancel 컨트롤러 들어옴");
+	            return "/store/fragments/cancel";
+	        default:
+	            return "/store/fragments/reservation"; 
+	    }
+	}
+	
+	
+	
 	@PostMapping("/store/reservation/{id}/confirm") // 미확정 탭에서 확정 버튼 클릭시
 	@ResponseBody
 	public String confirmOrders(@PathVariable("id") int id ,HttpSession sess, Model model) {
@@ -79,7 +112,9 @@ public class StoreController {
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "confirmed");
 			int b = storeService.createStoreAlarm(id, "confirmed");
-			if(a > 0 && b > 0) {
+			int c = storeService.createOrderCode(id, "confirmed");
+			
+			if(a > 0 && b > 0 && c > 0) {
 				return "success";
 			}
 			return "failed";

@@ -103,6 +103,10 @@ main {
     box-shadow: none !important;
     
 }
+.order-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 .dropdown-arrow {
     font-size: 13px;

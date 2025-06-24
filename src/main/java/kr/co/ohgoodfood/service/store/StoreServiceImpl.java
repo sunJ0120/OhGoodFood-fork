@@ -3,6 +3,7 @@ package kr.co.ohgoodfood.service.store;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,7 +72,7 @@ public class StoreServiceImpl implements StoreService{
 		Alarm alarm = new Alarm();
 		alarm.setAlarm_title(title);
 		alarm.setAlarm_contents(content);
-		alarm.setSended_at(new Date());
+		alarm.setSended_at(new java.sql.Timestamp(System.currentTimeMillis()));
 		alarm.setAlarm_displayed("Y");
 		alarm.setReceive_id(userId);
 		alarm.setAlarm_read("N");
@@ -102,7 +103,7 @@ public class StoreServiceImpl implements StoreService{
 		Alarm alarm = new Alarm();
 		alarm.setAlarm_title(title);
 		alarm.setAlarm_contents(content);
-		alarm.setSended_at(new Date());
+		alarm.setSended_at(new java.sql.Timestamp(System.currentTimeMillis()));
 		alarm.setAlarm_displayed("Y");
 		alarm.setReceive_id(storeId);
 		alarm.setAlarm_read("N");
@@ -129,7 +130,12 @@ public class StoreServiceImpl implements StoreService{
 	}
 	
 	
-	
+	@Override
+	public int createOrderCode(int id, String type) {
+		Random rand = new Random();
+	    int randomCode = rand.nextInt(900000) + 100000;
+		return mapper.createOrderCode(id, type, randomCode);
+	}
 	
 	
 }

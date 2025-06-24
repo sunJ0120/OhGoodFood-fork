@@ -1,6 +1,7 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import lombok.Data;
 
@@ -8,9 +9,9 @@ import lombok.Data;
 public class Product {
     private int product_no;
     private String store_id;
-    private Date pickup_start;
-    private Date pickup_end;
-    private Date reservation_end;
+    private Timestamp pickup_start;
+    private Timestamp pickup_end;
+    private Timestamp reservation_end;
     private int origin_price;
     private int sale_price;
     private String product_explain;

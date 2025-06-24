@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <c:forEach var="vo" items="${order}">
 	<div class="order-card">
 	       <div class="order-card-header">
@@ -18,9 +20,17 @@
 	           </div>
 	           <div class="order-group">
 	               <label>
-	                   <input type="checkbox" class="order-checkbox" data-order-no="${vo.order_no}" data-pickup-end="${vo.pickup_end}" <c:if test="${vo.order_status eq 'pickup'}">checked</c:if> style="display:none;">
+	                   <input type="checkbox" class="order-checkbox" 
+	                   <c:if test="${not empty vo.pickup_start}">
+  										data-pickup-start="<fmt:formatDate value='${vo.pickup_start}' pattern='yyyy-MM-dd\'T\'HH:mm:ss' />"
+									</c:if>
+	                    			data-order-no="${vo.order_no}" 
+	                    			<c:if test="${not empty vo.pickup_end}">
+  										data-pickup-end="<fmt:formatDate value='${vo.pickup_end}' pattern='yyyy-MM-dd\'T\'HH:mm:ss' />"
+									</c:if>
+	                    			<c:if test="${vo.order_status eq 'pickup'}">checked</c:if> style="display:none; disabled">
 	                     <img class="checkbox-img" 
-								src="${pageContext.request.contextPath}/img/${vo.order_status eq 'pickup' ? 'storerealnoncheck' : 'storenoncheck'}.png" />
+								src="${pageContext.request.contextPath}/img/${vo.order_status eq 'pickup' ? 'storerealnoncheck' : 'storenoncheck'}.png" disabled/>
 	
 	               </label>
 	           </div>
@@ -48,9 +58,7 @@
 	       </div>
 	   </div>
 </c:forEach>
-    <script>
-    	const contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
-	</script>
+    
     <script>
         
         document.querySelectorAll('.order-checkbox').forEach(function (checkbox) {
@@ -111,21 +119,38 @@
         //db 연계시 '픽업완료' 상태이면 데이터를 불러올때 체크박스가 되어있어야 함 
         //그렇지 않으면 '오늘픽업' 이면 체크박스에 체크가 안되어 있는데 
         // '픽업완료' 상태일때 기본적으로 체크박스에 체크가 안되어 있는것과 로직이 꼬임
-
+		
         $(document).ready(function() {
 		    $('.order-checkbox').click(function() {
+		        const pickupStartStr = $(this).data('pickup-start');
+		        const pickupEndStr = $(this).data('pickup-end'); 
+		        let pickupStart = new Date(pickupStartStr);
+		        let pickupEnd = new Date(pickupEndStr);
+		        console.log("pickupStart : " + pickupStart);
+		        console.log("pickupEnd : " + pickupEnd);
+		        
+		        const now = new Date();
+		        console.log("now : " + now);
+		        /*
+		        if(now >= pickupStart && now <= pickupEnd) {
+		        	$(this).find('.checkbox-img').prop('disabled', false);
+		        	$(this).prop('disabled', false);
+		        	
+		        }else {
+		        	$(this).find('.checkbox-img').prop('disabled', true);
+		        	$(this).prop('disabled', true);
+		        }*/
 		        const orderNo = $(this).data('order-no');
 		        const isChecked = $(this).is(':checked');
-		        const pickupEnd = $(this).data('pickup-end'); 
-		        const now = new Date();
-		        const nowMinutes = now.getHours() * 60 + now.getMinutes();
-		        const [hour, min] = pickupEnd.split(':').map(Number);
-		        const pickupEndMinutes = hour * 60 + min;
-		
 		        const $parentCard = $(this).closest('.order-card');
 		        const $btn = $parentCard.find('.order-card-btn');
 		
-		        if (isChecked) {
+		        if (isChecked && now >= pickupStart && now <= pickupEnd) {
+		        	$(this).siblings('.checkbox-img').css({
+		        	    'pointer-events': 'auto',
+		        	    'opacity': 1
+		        	});
+		        	$(this).prop('disabled', false);
 		            if (confirm('픽업 완료로 바꾸시겠습니까?')) {
 		                const url = contextPath + "/store/confirmed/" + orderNo + "/pickup";
 		                $.post(url, function (res) {
@@ -148,9 +173,13 @@
 		            } else {
 		                $(this).prop('checked', false);
 		            }
-		        } else {
-		            
-		            if (nowMinutes < pickupEndMinutes) {
+		        } else if(!isChecked && now >= pickupStart && now <= pickupEnd){
+		        	$(this).siblings('.checkbox-img').css({
+		        	    'pointer-events': 'auto',
+		        	    'opacity': 1
+		        	});
+		        	$(this).prop('disabled', false);
+		            if (now >= pickupStart && now <= pickupEnd) {
 		                if (confirm('오늘 픽업으로 바꾸시겠습니까?')) {
 		                    const url = contextPath + "/store/confirmed/" + orderNo + "/confirmed";
 		                    $.post(url, function (res) {
@@ -174,9 +203,22 @@
 		                    $(this).prop('checked', true);
 		                }
 		            } else {
-		                alert("픽업 마감 시간이 지나서 되돌릴 수 없습니다.");
+		                alert("픽업 시간이 초과되었습니다.");
 		                $(this).prop('checked', true);
 		            }
+		        }else {
+		        	if(isChecked) {
+		        		$(this).prop('checked', false);
+		        	}else {
+		        		$(this).prop('checked', true);
+		        	}
+		        	$(this).siblings('.checkbox-img').css({
+		        	    'pointer-events': 'none',
+		        	    'opacity': 1
+		        	});
+		        	$(this).prop('disabled', true);
+		        	
+		        	alert('픽업 시간이 아닙니다.');
 		        }
 		    });
 		});

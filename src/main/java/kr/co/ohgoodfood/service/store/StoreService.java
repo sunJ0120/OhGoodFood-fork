@@ -34,6 +34,8 @@ public interface StoreService {
 
 	public StoreSales getSales(String store_id, String start, String end);
 
+	public int createOrderCode(int id, String string);
+
 	
 	
 

@@ -30,8 +30,7 @@
 			o.*, p.*, i.store_img
 		FROM Orders o
 		JOIN Product p 
-			ON o.store_id = p.store_id
-			AND DATE(o.ordered_at) = DATE(p.pickup_start)
+			ON o.product_no = p.product_no
 		LEFT JOIN (
 			SELECT store_id, store_img
 			FROM Image
@@ -39,11 +38,22 @@
 				SELECT MIN(img_no)
 				FROM Image
 				GROUP BY store_id
-			)
-			
+			)			
 		)i ON o.store_id = i.store_id
-		WHERE o.store_id=#{storeId} AND
-		o.order_status=#{type}
+		<where>
+			o.store_id=#{storeId} 
+			<choose>
+				<when test="type == 'confirmed'">
+					AND o.order_status IN ('confirmed', 'pickup')
+					
+				</when>
+				<otherwise>
+					AND o.order_status=#{type}
+				</otherwise>
+			</choose>
+			AND MONTH(o.ordered_at) = MONTH(CURDATE())
+			AND YEAR(o.ordered_at) = YEAR(CURDATE())
+		</where>
 		ORDER BY o.ordered_at DESC
 			
 	
@@ -55,9 +65,16 @@
 		WHERE order_no=#{id}
 	</update>
 	
+	<update id="createOrderCode">
+		UPDATE Orders 
+		SET order_code=#{randomCode}
+		WHERE order_no=#{id} AND order_status=#{type}
+	
+	</update>
+	
 	<update id="cancleOrders">
 		UPDATE Orders
-		SET order_status=#{type}, cancled_from="store"
+		SET order_status=#{type}, canceld_from="store"
 		WHERE order_no=#{id}
 	
 	</update>

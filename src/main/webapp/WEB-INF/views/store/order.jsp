@@ -2,6 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -35,9 +37,9 @@
                         <button class="order-status-btn">미확정 주문 <img src="${pageContext.request.contextPath}/img/storearrow.png"
                                 class="dropdown-arrow"></button>
                         <ul class="order-status-list">
-                            <li class="active">미확정 주문</li>
-                            <li><a href="${pageContext.request.contextPath}/store/confirmed">확정 주문</a></li>
-                            <li><a href="${pageContext.request.contextPath}/store/cancled">취소한 주문</a></li>
+                            <li class="active" data-status="reservation">미확정 주문</li>
+                            <li data-status="confirmed">확정 주문</li>
+                            <li data-status="cancel">취소한 주문</li>
                         </ul>
                     </div>
                 </div>
@@ -94,6 +96,10 @@
         const statusList = document.querySelector('.order-status-list');
         const statusText = document.querySelector('.section-title');
         const statusSubText = document.querySelector('.section-desc')
+        
+        let sectionTitle = document.querySelector('.section-title');
+        let sectionDesc = document.querySelector('.section-desc');
+        
         if (statusBtn) {
             statusBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -106,52 +112,71 @@
                 li.addEventListener('click', function (e) {
                     statusList.querySelectorAll('li').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
-                    if (this.textContent === '미확정 주문') {
+                    
+                    const status = this.getAttribute('data-status'); // 추가
+                    if (status === 'reservation') {
                         statusText.textContent = '미확정 주문내역';
                         statusSubText.textContent = '| 주문을 확정해 주세요';
-                    } else if (this.textContent === '확정 주문') {
+                    } else if (status === 'confirm') {
                         statusText.textContent = '확정 주문내역';
                         statusSubText.textContent = '| 픽업 확정 표시를 꼭 해주세요';
-                    } else if (this.textContent === '취소한 주문') {
+                    } else if (status === 'cancel') {
                         statusText.textContent = '취소한 주문내역';
                         statusSubText.textContent = '| 취소한 주문기록';
                     }
                     statusBtn.innerHTML = this.textContent+`<img src="${contextPath}/img/storearrow.png" class="dropdown-arrow" alt="아래화살표">`;
                     statusList.classList.remove('show');
+                    loadOrders(status); // data-status 클릭시 ajax 연동
                     e.stopPropagation();
                 });
             });
         }
-        
-        $(function () {
-            $('.order-btn.confirm').on('click', function () {
-                const orderNo = $(this).closest('.order-card').data('order-no');
-                console.log("확정 주문번호:", orderNo);
-                console.log("contextPath :", contextPath);
-                var url = contextPath + "/store/reservation/" + orderNo + "/confirm";
-                console.log("최종 요청 url:", url);
-                
-                $.post(url, function (res) {
-                    if (res === 'success') {
-                    	alert('확정 완료');
-                    	location.reload();
-                    }
-                    else alert('확정 실패');
-                });
-            });
+    
+        function loadOrders(status) {
+            let url = contextPath + "/store/order/" + status;
+            
+            const now = new Date();
+            const month = now.getMonth() + 1;
+            $.post(url, function (html) {
+            	//console.log(html);
+                $('.order-list-area').html(html);
+                $('#dynamic-css').remove();
+                let cssPath = '';
+                if (status === 'reservation') {
+                	console.log('order.jsp 에서 reservation 들어옴');
+                    cssPath = contextPath + '/css/storeunconfirmedorder2.css';
+                	
+                	statusText.textContent = month + "월 미확정 주문내역";
+                	sectionDesc.textContent = '| 주문을 확정해 주세요';
+                } else if (status === 'confirmed') {
+                	console.log('order.jsp 에서 confirm 들어옴');
+                    cssPath = contextPath + '/css/storeconfirmedorder.css';
+                    
+                    statusText.textContent = month + "월 확정 주문내역";
+                	sectionDesc.textContent = '| 픽업 확정 표시를 꼭 해주세요';
+                } else if (status === 'cancel') {
+                	console.log('order.jsp 에서 cancel 들어옴');
+                    cssPath = contextPath + '/css/storecancledorder.css';
+                    
+                    statusText.textContent = month + "월 취소한 주문내역";
+                	sectionDesc.textContent = '| 취소한 주문기록';
+                }
 
-            $('.order-btn.cancel').on('click', function () {
-                const orderNo = $(this).closest('.order-card').data('order-no');
-                var url = contextPath + "/store/reservation/" + orderNo + "/cancle";
-                $.post(url, function (res) {
-                    if (res === 'success'){
-                    	alert('취소 완료');
-                    	location.reload();
-                    }
-                    else alert('취소 실패');
-                });
+                if (cssPath !== '') {
+                    $('head').append('<link id="dynamic-css" rel="stylesheet" type="text/css" href="' + cssPath + '">');
+                }
+            }).fail(function (xhr, status, error) {
+                console.error("❌ AJAX 실패");
+                console.error("Status:", status);
+                console.error("Error:", error);
+                console.error("Response Text:", xhr.responseText);
             });
+        }
+        $(document).ready(function () {
+            loadOrders('reservation'); 
+
         });
+        
     </script>
 </body>
 

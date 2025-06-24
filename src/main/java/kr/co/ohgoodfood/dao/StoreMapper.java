@@ -34,6 +34,8 @@ public interface StoreMapper {
 	public List<Orders> getConfirmedOrPickupOrders(@Param("id") String id);
 
 	public StoreSales getSales(@Param("store_id") String store_id, @Param("start") String start, @Param("end") String end);
+
+	public int createOrderCode(@Param("id") int id, @Param("type") String type, @Param("randomCode") int randomCode);
 	
 	
 	

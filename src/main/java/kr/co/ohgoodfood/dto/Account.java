@@ -1,6 +1,7 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 
 import lombok.Data;
 
@@ -11,7 +12,7 @@ public class Account {
     private String user_name;
     private String user_pwd;
     private String phone_number;
-    private Date join_date;
+    private Timestamp join_date;
     private String user_status;
     private String location_agreement;
 

@@ -14,7 +14,7 @@ public class Orders {
     private String user_id;
     private String store_id;
     private String order_code;
-    private String cancled_from;
+    private String canceld_from;
 
     private int s_order_no;
     private Date s_ordered_at;
