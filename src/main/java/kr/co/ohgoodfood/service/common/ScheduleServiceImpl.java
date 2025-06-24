@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.co.ohgoodfood.dao.AdminMapper;
 import kr.co.ohgoodfood.dao.ScheduleMapper;
 import kr.co.ohgoodfood.dto.Alarm;
-import kr.co.ohgoodfood.dto.Orders;
 import kr.co.ohgoodfood.dto.ReservationConfirmed;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +26,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     // 예약 확정 스케쥴드
 	@Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
+    @Override
 	public void reservationCheck() {
 		Date currentDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
@@ -52,6 +52,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 		// 금일 예약 가게 주문 상태 업데이트 ( reservation --> confirmed )
         // 유저에게 확정 알람 보내기
 		for (ReservationConfirmed order : reservationOrderList) {
+            order.setOrder_code((int)(Math.random() * 900000) + 100000);
 			scheduleMapper.updateOrderStatus(order);
             Alarm alarm = new Alarm();
             alarm.setAlarm_title("예약 확정");  
@@ -66,6 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     // 예약 확정 1시간 전 알림 스케쥴드
     @Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
+    @Override
 	public void reservationCheckBeforeOneHour() {
         // 현재 시간 + 1시간
         Date currentDate = new Date();
@@ -93,6 +95,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     // 픽업 시간 종료 스케쥴드
     @Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
+    @Override
 	public void pickupCheck() {
 		Date currentDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
@@ -118,6 +121,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     //픽업 시작 알람 스케줄드
     @Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
+    @Override
 	public void pickupStartCheck() {
 		Date currentDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");

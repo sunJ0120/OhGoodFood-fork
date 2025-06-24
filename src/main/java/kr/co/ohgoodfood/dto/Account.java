@@ -1,5 +1,6 @@
 package kr.co.ohgoodfood.dto;
 
+import java.sql.Timestamp;
 import java.sql.Date;
 import java.time.LocalDateTime;
 
@@ -14,8 +15,7 @@ public class Account {
     private String user_name;
     private String user_pwd;
     private String phone_number;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime join_date;
+    private Timestamp join_date;
     private String user_status;
     private String location_agreement;
 

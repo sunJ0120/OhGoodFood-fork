@@ -76,7 +76,8 @@ public class AdminController {
 
 	// 유저 관리 이동
 	@GetMapping("/admin/managedusers")
-	public String manageUsers(Model model) {
+	public String manageUsers(Model model, @ModelAttribute Account account) {
+		model.addAttribute("map", adminService.usersList(account));
 		return "admin/managedusers";
 	}
 

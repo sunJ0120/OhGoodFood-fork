@@ -1,8 +1,6 @@
 package kr.co.ohgoodfood.dto;
 
-import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
+import java.sql.Timestamp;
 
 import lombok.Data;
 
@@ -15,10 +13,9 @@ public class ReservationConfirmed {
 	private String user_id;
 	private String order_status;
 	private String store_status;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime reservation_end;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime pickup_end;
-	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	private LocalDateTime pickup_start;
+	private int order_code;
+
+	private Timestamp reservation_end;
+	private Timestamp pickup_end;
+	private Timestamp pickup_start;
 }

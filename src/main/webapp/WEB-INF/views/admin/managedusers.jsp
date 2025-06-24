@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="../../../css/reset.css" />
     <link rel="stylesheet" href="../../../css/adminlayout.css" />
     <link rel="stylesheet" href="../../../css/adminsearchlayout.css" />
-    <link rel="stylesheet" href="../../../css/adminsearchusers.css" />
+    <link rel="stylesheet" href="../../../css/adminmanagedusers.css" />
 </head>
 <body>
     <div class="wrapper">
@@ -105,15 +105,19 @@
                 </div>
                 <div class="content">
                     <p class="menuName">회원 정보 수정</p>
+                    <form method="get" action="<c:url value='/admin/managedusers'/>">
                     <div class="usersFilter">
-                        <select class="selectBox" name="filterOption">
-                            <option>ID</option>
+                        <select class="selectBox" name="s_type">
+                            <option value="user_id">ID</option>
                         </select>
                     </div>
                     <div class="filterValue">
-                        <input class="searchBox" type="text" name="searchValue">
-                        <div class="magnifying"></div>
+                        <input class="searchBox" type="text" name="s_value">
+                        <div class="magnifying">
+                            <input class="magnifyingButton" type="submit" value=""> 
+                        </div>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
