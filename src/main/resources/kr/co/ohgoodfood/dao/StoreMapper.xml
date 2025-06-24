@@ -5,15 +5,35 @@
 	<select id="login" parameterType="kr.co.ohgoodfood.dto.Store" resultType="kr.co.ohgoodfood.dto.Store">
 		SELECT * FROM Store WHERE store_id=#{store_id} AND store_pwd=#{store_pwd}
 	</select>
+		
+	<!-- 아이디 중복확인 -->
+	<select id="findById" parameterType="String"
+		resultType="kr.co.ohgoodfood.dto.Store">
+		SELECT * FROM Store WHERE store_id = #{store_id}
+	</select>
 	
+	<!--회원가입-->
 	<insert id="insert" parameterType="kr.co.ohgoodfood.dto.Store">
-		INSERT INTO Store(
-			store_id, store_pwd, owner_name, store_telnumber, store_name, 
-			store_address, business_number, 
-		)VALUES (
-		
+		INSERT INTO Store (
+		store_id, confirmed, business_number, store_address, store_name,
+		store_menu,
+		store_explain, store_telnumber, store_status, opened_at, closed_at,
+		store_pwd,
+		owner_name, category_bakery, category_fruit, category_salad,
+		category_others, latitude, longitude
+		) VALUES (
+		#{store_id}, #{confirmed}, #{business_number}, #{store_address},
+		#{store_name},
+		#{store_menu}, #{store_explain}, #{store_telnumber}, #{store_status},
+		#{opened_at}, #{closed_at}, #{store_pwd}, #{owner_name},
+		#{category_bakery}, #{category_fruit}, #{category_salad},
+		#{category_others}, #{latitude}, #{longitude}
 		)
-		
+	</insert>
 	
+	<!--이미지-->
+	<insert id="insertImage">
+		INSERT INTO Image (store_id, store_img)
+		VALUES (#{store_id}, #{store_img})
 	</insert>
 </mapper>

@@ -86,7 +86,7 @@ main{
     gap:10px;
 }
 /*중복확인 버튼*/
-#checkIdButton {
+.check-button {
     width: 80px;
     height: 50px;
     background-color: #8B6D5C;
