@@ -1,15 +1,22 @@
 package kr.co.ohgoodfood.controller.users;
 
 import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.UserMainFilter;
+import kr.co.ohgoodfood.dto.UserMypage;
+import kr.co.ohgoodfood.dto.UserSignup;
 import kr.co.ohgoodfood.service.users.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -79,4 +86,83 @@ public class UsersController {
         // JSP fragment만 리턴
         return "users/fragment/userMainStoreList";
     }
+    /**
+     *  사용자 회원가입
+     */
+    // 가입 화면
+    @GetMapping("/userSignup")
+    public String showSignup() {
+        return "users/userSignup"; // JSP 경로
+    }
+    // 실제 가입 처리
+    @PostMapping("/userSignup")
+    public String doSignup(@ModelAttribute UserSignup dto, Model m) {
+        // 비밀번호 확인 로직은 이미 JSP(JS)에서 했으니, 여기선 ID 중복만 체크
+        if (!usersService.isIdAvailable(dto.getUser_id())) {
+            m.addAttribute("idDup", true);
+            return "users/userSignup";
+        }
+        usersService.signup(dto);
+        return "redirect:/user/login";
+    }
+
+    /**
+     *  사용자 마이페이지 조회
+     *
+     */
+    
+    @GetMapping("/userMypage")
+    public String userMypage(Model model, HttpSession session) {
+        String userId = (String) session.getAttribute("user_id");
+        if (userId == null) userId = "u10";
+
+        UserMypage page = usersService.getMypage(userId);
+        model.addAttribute("userMypage", page);
+        return "users/userMypage";
+        
+    }
+    /**
+     * 제품 상세보기
+     * URL: /user/productdetail?product_no=123
+     */
+    @GetMapping("/productDetail")
+    public String productDetail(
+            @RequestParam("product_no") int product_no,
+            Model model
+    ) {
+        // productService → usersService 로 교체
+        ProductDetail detail = usersService.getProductDetail(product_no);       
+        model.addAttribute("productDetail", detail);
+        return "users/productDetail";
+        
+        
+    }
+
+    /**
+     * POST /user/productdetail
+     * (GET과 같은 URL, HTTP 메서드만 POST로 분기)
+     */
+    @PostMapping("/productDetail")
+    public String reserve(
+            @RequestParam("product_no") int product_no,
+            HttpSession session,
+            RedirectAttributes redirectAttrs
+    ) {
+        String userId = (String) session.getAttribute("user_id");
+        if (userId == null) {
+            redirectAttrs.addFlashAttribute("error", "로그인이 필요합니다.");
+            return "redirect:/login";
+        }
+
+        // 여기 역시 productService → usersService 로
+        boolean success = usersService.reserveProduct(userId, product_no);
+        if (success) {
+            redirectAttrs.addFlashAttribute("msg", "예약이 완료되었습니다.");
+        } else {
+            redirectAttrs.addFlashAttribute("error", "예약에 실패했습니다.");
+        }
+        return "redirect:/user/productDetail?product_no=" + product_no;
+    }
+    
+    
 }

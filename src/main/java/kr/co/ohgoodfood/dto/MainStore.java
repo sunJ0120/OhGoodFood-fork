@@ -1,10 +1,12 @@
 package kr.co.ohgoodfood.dto;
 
-import lombok.*;
-
 import java.sql.Time;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.sql.Timestamp;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * [DTO] MainStore
@@ -30,8 +32,8 @@ public class MainStore {
 
     //Product table에서 가져오는 정보들
     private int product_no;
-    private LocalDateTime pickup_start;
-    private LocalDateTime pickup_end;
+    private Timestamp pickup_start;
+    private Timestamp pickup_end;
     int origin_price;
     int sale_price;
     int amount;

@@ -1,19 +1,20 @@
 package kr.co.ohgoodfood.service.users;
 
-import kr.co.ohgoodfood.dao.UserMapper;
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.UserMainFilter;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import kr.co.ohgoodfood.dao.UserMapper;
+import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.ProductDetail;
+import kr.co.ohgoodfood.dto.Review;
+import kr.co.ohgoodfood.dto.UserMainFilter;
+import kr.co.ohgoodfood.dto.UserMypage;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * UsersServiceImpl.java
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UsersService{
 
         // 여기에 카테고리 이름과 pickup 상태를 저장
         for(MainStore mainStore : mainStoreList){
-            mainStore.setPickup_date(getPickupDateStatus(mainStore));
+//            mainStore.setPickup_date(getPickupDateStatus(mainStore));
             mainStore.setCategory_name(getCategoryName(mainStore));
             mainStore.setAmount_time_tag(getAmountOrEndTime(mainStore));
         }
@@ -51,30 +52,30 @@ public class UserServiceImpl implements UsersService{
      * @return "오늘픽업", "내일픽업", "매진", "마감" 중 하나
      * @see #getAmountOrEndTime(MainStore)
      */
-    @Override
-    public String getPickupDateStatus(MainStore mainStore) {
+//    @Override
+//    public String getPickupDateStatus(MainStore mainStore) {
 
-        LocalDate today = LocalDate.now();
+//        LocalDate today = LocalDate.now();
 
-        //store_status = false, 수량 0이면 매진
-        if(mainStore.getAmount() <= 0 && mainStore.getStore_status().equals("N")){
-            return "매진";
-        }
-        
-        if(mainStore.getStore_status().equals("N")){ //status가 false이면 현재 마감
-            return "마감";
-        }
-
-        if (mainStore.getPickup_start().toLocalDate().isEqual(today)) {
-            return "오늘픽업";
-        } else if (mainStore.getPickup_start().toLocalDate().isEqual(today.plusDays(1))) {
-            return "내일픽업";
-        } else if (mainStore.getPickup_start().toLocalDate().isBefore(today)) {
-            return "마감";
-        } else {
-            return "error"; // 예외 상황 처리가 필요하다.
-        }
-    }
+//        //store_status = false, 수량 0이면 매진
+//        if(mainStore.getAmount() <= 0 && mainStore.getStore_status().equals("N")){
+//            return "매진";
+//        }
+//        
+//        if(mainStore.getStore_status().equals("N")){ //status가 false이면 현재 마감
+//            return "마감";
+//        }
+//
+//        if (mainStore.getPickup_start().toLocalDate().isEqual(today)) {
+//            return "오늘픽업";
+//        } else if (mainStore.getPickup_start().toLocalDate().isEqual(today.plusDays(1))) {
+//            return "내일픽업";
+//        } else if (mainStore.getPickup_start().toLocalDate().isBefore(today)) {
+//            return "마감";
+//        } else {
+//            return "error"; // 예외 상황 처리가 필요하다.
+//        }
+//    }
 
     /**
      * 내부적으로 {@link StringBuilder}를 사용하여 문자열을 누적하고,
@@ -140,4 +141,48 @@ public class UserServiceImpl implements UsersService{
 
         return amount_time_tag.toString();
     }
+    
+    /** 유저 정보 한 건 조회 */
+    @Override
+    public UserMypage getUserInfo(String userId) {
+        UserMypage info = userMapper.selectUserInfo(userId);
+        return (info != null ? info : new UserMypage());
+    }
+
+    /** 리뷰 리스트 여러 건 조회 */
+    @Override
+    public List<Review> getUserReviews(String userId) {
+        return userMapper.selectUserReviews(userId);
+    }
+
+    /** 마이페이지 전체 조립 (유저정보+리뷰리스트) */
+    @Override
+    public UserMypage getMypage(String userId) {
+        UserMypage page = getUserInfo(userId);
+        page.setReviews(getUserReviews(userId));
+        return page;
+    }
+    
+    
+    /** 제품 상세 보기 */
+    @Override
+    @Transactional(readOnly = true)
+    public ProductDetail getProductDetail(int product_no) {
+        // 1) 기본 상품·매장·계정 정보
+        ProductDetail detail = userMapper.selectProductInfo(product_no);
+        // 2) 이미지 리스트
+        detail.setImages(userMapper.selectProductImages(product_no));
+        // 3) 리뷰 리스트
+        detail.setReviews(userMapper.selectProductReviews(product_no));
+        detail.setReviewCount(detail.getReviews().size());
+        return detail;
+    }
+
+    @Override
+    @Transactional
+    public boolean reserveProduct(String userId, int product_no) {
+        // 간단 insert 결과로 성공 여부 판단
+        return userMapper.insertReservation(userId, product_no) > 0;
+    }
+    
 }
