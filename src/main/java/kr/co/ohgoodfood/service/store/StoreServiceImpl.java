@@ -2,19 +2,13 @@ package kr.co.ohgoodfood.service.store;
 
 import java.io.File;
 import java.security.MessageDigest;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import kr.co.ohgoodfood.dao.StoreMapper;
 import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.Store;
-
 
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -24,15 +18,14 @@ public class StoreServiceImpl implements StoreService {
 
 	@Override
 	public Store login(Store vo) {
+		vo.setStore_pwd(md5(vo.getStore_pwd()));
 		return mapper.login(vo);
 	}
 
 	// 아이디 중복확인
 	@Override
 	public boolean isDuplicateId(String store_id) {
-		Map<String, Object> paramMap = new HashMap<>();
-		paramMap.put("store_id", store_id);
-		Store store = mapper.findById(paramMap);
+		Store store = mapper.findById(store_id); // paramMap 없이 바로 전달
 		return store != null;
 	}
 
@@ -77,29 +70,27 @@ public class StoreServiceImpl implements StoreService {
 		}
 	}
 
-
 	// 이미지 저장
 	public void saveImage(String storeId, MultipartFile file, HttpServletRequest request) throws Exception {
-	    String uploadDir = request.getRealPath("/resources/upload/");
-	    
-	    // 폴더가 없으면 생성
-	    File folder = new File(uploadDir);
-	    if (!folder.exists()) {
-	        folder.mkdirs();
-	    }
+		String uploadDir = request.getRealPath("/resources/upload/");
 
-	    String filename_org = file.getOriginalFilename();
-	    String filename_real = System.nanoTime() + filename_org.substring(filename_org.lastIndexOf("."));
-	    File saveFile = new File(uploadDir + filename_real);
-	    file.transferTo(saveFile);
+		// 폴더가 없으면 생성
+		File folder = new File(uploadDir);
+		if (!folder.exists()) {
+			folder.mkdirs();
+		}
 
-	    Image image = new Image();
-	    image.setStore_id(storeId);
-	    image.setStore_img(filename_real);
-	    mapper.insertImage(image);
+		String filename_org = file.getOriginalFilename();
+		String filename_real = System.nanoTime() + filename_org.substring(filename_org.lastIndexOf("."));
+		File saveFile = new File(uploadDir + filename_real);
+		file.transferTo(saveFile);
+
+		Image image = new Image();
+		image.setStore_id(storeId);
+		image.setStore_img(filename_real);
+		mapper.insertImage(image);
 	}
 
-	
 	// MD5 암호화 메서드 추가
 	private String md5(String input) {
 		try {
@@ -113,5 +104,24 @@ public class StoreServiceImpl implements StoreService {
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	// 마이페이지
+	// store_i로 마이페이지 조회
+	@Override
+	public Store getStoreDetail(String store_id) {
+		return mapper.findById(store_id);
+	}
+
+	@Override
+	public void updateStoreCategory(Store store) {
+		// 1. 카테고리 체크박스 null 처리 (체크 안되면 null로 넘어옴)
+		store.setCategory_bakery(store.getCategory_bakery() != null ? "Y" : "N");
+		store.setCategory_salad(store.getCategory_salad() != null ? "Y" : "N");
+		store.setCategory_fruit(store.getCategory_fruit() != null ? "Y" : "N");
+		store.setCategory_others(store.getCategory_others() != null ? "Y" : "N");
+
+		// 2. DB 업데이트
+		mapper.updateStore(store);
 	}
 }

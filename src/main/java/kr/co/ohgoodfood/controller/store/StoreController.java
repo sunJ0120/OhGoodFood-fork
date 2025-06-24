@@ -2,6 +2,9 @@ package kr.co.ohgoodfood.controller.store;
 
 import java.beans.PropertyEditorSupport;
 import java.sql.Time;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -10,9 +13,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestParam; 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -171,12 +175,31 @@ public class StoreController {
 	public String showMypage(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 
-		if (login == null) {
-			// 로그인 안 되어 있으면 로그인 페이지로
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
+		Store store = storeService.getStoreDetail(login.getStore_id());
+		model.addAttribute("store", store);
+
+		// 오픈시간, 마감시간(시,분)
+		Time openedTime = store.getOpened_at();
+		Time closedTime = store.getClosed_at();
+
+		String openedStr = openedTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+		String closedStr = closedTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+
+		model.addAttribute("openedTime", openedStr);
+		model.addAttribute("closedTime", closedStr);
+
+		// 카테고리
+		List<String> categories = new ArrayList<>();
+		if ("Y".equals(store.getCategory_bakery()))
+			categories.add("빵 & 디저트");
+		if ("Y".equals(store.getCategory_salad()))
+			categories.add("샐러드");
+		if ("Y".equals(store.getCategory_fruit()))
+			categories.add("과일");
+		if ("Y".equals(store.getCategory_others()))
+			categories.add("그 외");
+
+		model.addAttribute("categories", categories);
 
 		// 로그인 되어 있으면 mypage.jsp로
 		return "store/mypage";
@@ -193,9 +216,41 @@ public class StoreController {
 			model.addAttribute("url", "/store/login");
 			return "store/alert";
 		}
+		Store store = storeService.getStoreDetail(login.getStore_id());
+		model.addAttribute("store", store);
+
+		// 오픈시간, 마감시간(시,분)
+		Time openedTime = store.getOpened_at();
+		Time closedTime = store.getClosed_at();
+
+		String openedStr = openedTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+		String closedStr = closedTime.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
+
+		model.addAttribute("openedTime", openedStr);
+		model.addAttribute("closedTime", closedStr);
 
 		// 로그인 되어 있으면 updatemypage.jsp로
 		return "store/updatemypage";
+	}
+
+	@PostMapping("/updatemypage")
+	public String updateMyPagePost(HttpSession sess,
+			@ModelAttribute Store store,
+			Model model) {
+
+		Store login = (Store) sess.getAttribute("store");
+		if (login == null) {
+			model.addAttribute("msg", "로그인이 필요합니다.");
+			model.addAttribute("url", "/store/login");
+			return "store/alert";
+		}
+
+		store.setStore_id(login.getStore_id());
+		storeService.updateStoreCategory(store);
+
+		model.addAttribute("msg", "정보가 수정되었습니다.");
+		model.addAttribute("url", "/store/mypage");
+		return "store/alert";
 	}
 
 }

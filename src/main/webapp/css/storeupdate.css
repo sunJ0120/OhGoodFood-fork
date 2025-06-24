@@ -1,9 +1,10 @@
 .details-container{
     background-color: #F5F3EA;
-    max-height: 242px;
+    max-height: 222px;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
+    padding: 20px;
 }
 .details-container form{
     gap:10px;

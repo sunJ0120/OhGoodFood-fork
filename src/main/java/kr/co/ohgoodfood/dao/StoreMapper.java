@@ -1,9 +1,6 @@
 package kr.co.ohgoodfood.dao;
 
-import java.util.Map;
-
 import org.apache.ibatis.annotations.Mapper;
-
 import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.Store;
 
@@ -13,8 +10,10 @@ public interface StoreMapper {
 
 	public int insert(Store vo);
 
-	public Store findById(Map<String, Object> paramMap);
+	public Store findById(String store_id);
 
 	public void insertImage(Image image);
+
+	public void updateStore(Store vo);
 	
 }

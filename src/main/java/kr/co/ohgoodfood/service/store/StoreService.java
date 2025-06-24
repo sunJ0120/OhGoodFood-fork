@@ -16,5 +16,7 @@ public interface StoreService {
 	
 	public void saveImage(String storeId, MultipartFile file, HttpServletRequest request) throws Exception;
 	
-	
+	public Store getStoreDetail(String store_id);
+
+	public void updateStoreCategory(Store vo);
 }

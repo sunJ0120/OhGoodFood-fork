@@ -7,9 +7,8 @@
 	</select>
 		
 	<!-- 아이디 중복확인 -->
-	<select id="findById" parameterType="String"
-		resultType="kr.co.ohgoodfood.dto.Store">
-		SELECT * FROM Store WHERE store_id = #{store_id}
+	<select id="findById" parameterType="String" resultType="kr.co.ohgoodfood.dto.Store">
+		SELECT * FROM Store WHERE store_id = #{value}
 	</select>
 	
 	<!--회원가입-->
@@ -32,8 +31,23 @@
 	</insert>
 	
 	<!--이미지-->
-	<insert id="insertImage">
+	<insert id="insertImage" parameterType="kr.co.ohgoodfood.dto.Image">
 		INSERT INTO Image (store_id, store_img)
 		VALUES (#{store_id}, #{store_img})
 	</insert>
+
+	<!--마이페이지 수정-->
+	<update id="updateStore" parameterType="kr.co.ohgoodfood.dto.Store">
+		UPDATE Store
+		SET
+		opened_at = #{opened_at},
+		closed_at = #{closed_at},
+		category_bakery = #{category_bakery},
+		category_salad = #{category_salad},
+		category_fruit = #{category_fruit},
+		category_others = #{category_others},
+		store_menu = #{store_menu},
+		store_explain = #{store_explain}
+		WHERE store_id = #{store_id}
+	</update>
 </mapper>
