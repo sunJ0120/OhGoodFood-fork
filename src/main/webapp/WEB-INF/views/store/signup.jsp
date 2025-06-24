@@ -6,7 +6,7 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Document</title>
-		<link rel="stylesheet" href="../../../css/storesignup.css">
+		<link rel="stylesheet" href="${pageContext.request.contextPath}/css/storesignup.css">
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 		<!-- 카카오 주소검색 (우편번호) -->
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
@@ -16,9 +16,11 @@
 		<div id="wrapper">
 			<header>
 				<div class="header-container">
-					<img src="../../../img/store_ohgoodfood_logo.png" alt="Logo Image">
+					<img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
 					<div class="icon-container">
-						<img src="../../../img/store_login.png" alt="로그인" class="icon">
+						<a href="${pageContext.request.contextPath}/store/login">
+							<img src="${pageContext.request.contextPath}/img/store_login.png" alt="로그인" class="icon">
+						</a>
 					</div>
 				</div>
 			</header>
@@ -58,7 +60,7 @@
 
 							<p>가게주소</p>
 							<p style="font-size:13px; margin-top:-10px;">(가게 주소를 정확하게 작성해주세요!)</p>
-							
+
 							<div class="inputGroup">
 								<div class="idGroup" style="display:flex">
 									<input type="text" id="store_address" name="store_address" placeholder="주소검색을 입력하세요"
@@ -67,7 +69,8 @@
 								</div>
 								<input type="text" id="storeAddressDetail" name="storeAddressDetail"
 									placeholder="상세주소를 입력하세요" maxlength="100" required readonly>
-
+								<input type="hidden" id="latitude" name="latitude" readonly>
+								<input type="hidden" id="longitude" name="longitude" readonly>
 							</div>
 							<div class="mb-2 row">
 							</div>
@@ -89,13 +92,13 @@
 									<label>
 										<input type="checkbox" class="category-checkbox" name="category_bakery"
 											value="Y" style="display:none;">
-										<img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+										<img src="${pageContext.request.contextPath}/img/store_checkbox.png" class="checkbox-img" alt="체크박스">
 										빵 & 디저트
 									</label>
 									<label>
 										<input type="checkbox" class="category-checkbox" name="category_salad" value="Y"
 											style="display:none;">
-										<img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+										<img src="${pageContext.request.contextPath}/img/store_checkbox.png" class="checkbox-img" alt="체크박스">
 										샐러드
 									</label>
 									<label>
@@ -107,7 +110,7 @@
 									<label>
 										<input type="checkbox" class="category-checkbox" name="category_others"
 											value="Y" style="display:none;">
-										<img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+										<img src="${pageContext.request.contextPath}/img/store_checkbox.png" class="checkbox-img" alt="체크박스">
 										그외
 									</label>
 								</div>
@@ -146,10 +149,10 @@
 					const $img = $(this).next('img');
 					const $label = $(this).parent();
 					if ($(this).is(':checked')) {
-						$img.attr('src', '../../../img/store_checkbox_active.png');
+						$img.attr('src', '${pageContext.request.contextPath}/img/store_checkbox_active.png');
 						$label.css('font-weight', 'bold');
 					} else {
-						$img.attr('src', '../../../img/store_checkbox.png');
+						$img.attr('src', '${pageContext.request.contextPath}/img/store_checkbox.png');
 						$label.css('font-weight', 'normal');
 					}
 				});
@@ -236,14 +239,27 @@
 					}
 				});
 
-				// 파일 선택시 최대 5개 제한
+				// 이미지 선택시 최대 5개 제한
 				$("#storeImage").on("change", function () {
 					if (this.files.length > 5) {
-						alert("최대 5개의 파일만 선택할 수 있습니다.");
+						alert("최대 5개의 이미지만 선택할 수 있습니다.");
 						this.value = "";
 					}
 				});
 
+				// 사업자 등록번호 유효성 검사
+				$("#business_number").on("input", function () {
+					// 숫자만 입력되게 처리
+					let value = $(this).val().replace(/[^0-9]/g, "");
+					if (value.length > 10) value = value.slice(0, 10); // 10자리 제한
+					$(this).val(value);
+
+					if (value.length !== 10) {
+						$(this).css("border-color", "red");
+					} else {
+						$(this).css("border-color", "");
+					}
+				});
 
 				// 전화번호 하이픈 자동포맷
 				$("#store_telnumber").on("input", function () {
@@ -286,36 +302,115 @@
 					$.ajax({
 						url: "https://dapi.kakao.com/v2/local/search/address.json",
 						type: "GET",
-						data: {
-							query: fullAddress
-						},
+						data: { query: fullAddress },
 						headers: {
 							Authorization: "KakaoAK 0f1a7e3a49ac979863779a853f2033d7"
 						},
 						success: function (res) {
-							isSearching = false;
-
 							if (res.documents.length > 0) {
 								const x = res.documents[0].x;
 								const y = res.documents[0].y;
-								console.log("경도(lon):", x);
-								console.log("위도(lat):", y);
+								// input에 값 넣기
+								$("#longitude").val(x);
+								$("#latitude").val(y);
 							} else {
-								alert("해당 주소로 검색된 결과가 없습니다.");
-								setTimeout(function () {
-									$("#storeAddressDetail").focus();
-								}, 100);
+								$("#longitude").val("");
+								$("#latitude").val("");
 							}
 						},
-						error: function (xhr, status, error) {
-							isSearching = false;
-							console.error("에러 발생:", status, error);
-
+						error: function () {
+							$("#longitude").val("");
+							$("#latitude").val("");
 						}
 					});
 				}
-			});
+				// 파일 선택시 최대 5개 제한
+				$("#storeImage").on("change", function () {
+					if (this.files.length > 5) {
+						alert("최대 5개의 파일만 선택할 수 있습니다.");
+						this.value = "";
+					}
+				});
 
+				// 최종 submit 시 확인(아이디, 비밀번호, 이미지, 체크박스, 사업자 등록번호)
+				$("#signupForm").submit(function (e) {
+					// 아이디 유효성 검사
+					const storeId = $("#store_id").val();
+					const idRegex = /^[a-z0-9]{8,15}$/;
+					if (storeId === "") {
+						$("#idCheckMessage").css("color", "red").text("* 아이디를 입력하세요.");
+						$("#store_id").focus();
+						e.preventDefault();
+						return;
+					}
+					if (!idRegex.test(storeId)) {
+						$("#idCheckMessage").css("color", "red").text("* 영어 소문자, 숫자 8~15자만 가능합니다.");
+						$("#store_id").focus();
+						e.preventDefault();
+						return;
+					}
+
+					// 비밀번호 유효성 검사
+					const pw = $("#store_pwd").val();
+					const pwRegex = /^[a-zA-Z0-9?!@.]+$/;
+					if (pw === "") {
+						$("#pwCheckMessage").css("color", "red").text("* 비밀번호를 입력하세요.");
+						$("#store_pwd").focus();
+						e.preventDefault();
+						return;
+					}
+					if (!pwRegex.test(pw)) {
+						$("#pwCheckMessage").css("color", "red").text("* 영어, 숫자, ?, !, @, .만 사용 가능합니다.");
+						$("#store_pwd").focus();
+						e.preventDefault();
+						return;
+					}
+
+					// 비밀번호 확인 검사
+					const pwConfirm = $("#confirmPassword").val();
+					if (pw !== pwConfirm) {
+						$("#pwCheckMessage").css("color", "red").text("* 비밀번호가 일치하지 않습니다.");
+						$("#confirmPassword").focus();
+						e.preventDefault();
+						return;
+					}
+
+					// 기존 검사(중복확인, 이미지, 카테고리, 사업자등록번호 등)
+					if (!isIdChecked) {
+						alert("아이디 중복확인을 진행해주세요.");
+						e.preventDefault();
+						$("#store_id").focus();
+						return;
+					}
+					if (!isPwMatched) {
+						alert("비밀번호가 일치하지 않습니다.");
+						e.preventDefault();
+						$("#confirmPassword").focus();
+						return;
+					}
+					const files = $("#storeImage")[0].files;
+					if (files.length === 0) {
+						alert("가게 이미지를 업로드해주세요.");
+						$("#storeImage").focus();
+						e.preventDefault();
+						return;
+					}
+					let checkedCount = $(".category-checkbox:checked").length;
+					if (checkedCount === 0) {
+						alert("카테고리를 선택하세요.");
+						e.preventDefault();
+						$(".category-checkbox").first().next('img')[0].scrollIntoView({ behavior: "smooth", block: "center" });
+						return;
+					}
+					const businessNumber = $("#business_number").val();
+					if (businessNumber.length !== 10) {
+						alert("사업자 등록번호는 숫자 10자리여야 합니다.");
+						$("#business_number").focus();
+						e.preventDefault();
+						return;
+					}
+				});
+			});
 
 		</script>
 	</body>

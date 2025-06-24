@@ -11,9 +11,10 @@ public interface StoreService {
 	public Store login(Store vo);
 
 	public boolean isDuplicateId(String store_id);
-
-    public void signup(Store vo);
 	
 	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, HttpServletRequest request) throws Exception;
-
+	
+	public void saveImage(String storeId, MultipartFile file, HttpServletRequest request) throws Exception;
+	
+	
 }
