@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <!-- 레이아웃(header/footer) 전용 CSS -->
+    <link rel="stylesheet" href="../../css/layout.css" />
+    <!-- 리뷰 리스트 전용 CSS -->
+    <link rel="stylesheet" href="../../../css/productDetail.css" />
+
+    <title>productDetail</title>
+</head>
+
+<body>
+    <!-- 레이아웃 템플릿-->
+    <div id="wrapper"></div>
+    <script type="text/template" id="productDetail-template">
+    <main>
+            <!-- 이미지 영역 -->
+            <div class="storeDetailImg">
+                <div class="storeImgSlider">
+                    <div class="sliderTrack">
+                        <img src="../../../img/user_store1.jpg" alt="Store Image 1" class="sliderImg">
+                        <img src="../../../img/user_store2.jpg" alt="Store Image 2" class="sliderImg">
+                        <img src="../../../img/user_store3.jpg" alt="Store Image 3" class="sliderImg">
+                        <img src="../../../img/user_store1.jpg" alt="Store Image 1" class="sliderImg">
+                        <img src="../../../img/user_store2.jpg" alt="Store Image 2" class="sliderImg">
+                    </div>
+                    <div class="sliderIndicators"></div>
+                </div>
+
+                <!-- 제품명/가격 헤더 -->
+                <div class="storeHeader">
+                    <div class="storeName">러프도우</div>
+                    <div class="statusBadge" data-status="soldout">매진(17:30)</div> <!--상태 업데이트-->
+                    <div class="productPrice">
+                        <span class="original">5,500 ₩</span>
+                        <span class="discounted">2,650 ₩</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 상세 정보 영역 -->
+            <div class="storeDetailInfo">
+            <div class="productInfo">
+
+                <!-- 탭 메뉴 -->
+                <div class="tabs">
+                <button class="tab active">오굿백 정보</button>
+                <button class="tab">리뷰(73개)</button>
+                </div>
+
+                <div class="infoContent">
+                <!-- 매장 정보 -->
+                <div class="storeInfo">
+                    <div class="infoRow">
+                    <span class="pickup">픽업 시간</span>
+                    <span class="pickupdiv">|</span>
+                    <span class="pickupTime">19:00 ~ 19:30</span>
+                    <span class="confirm">확정 시간</span>
+                    <span class="confirmdiv">|</span>
+                    <span class="confirmTime">18:30</span>
+                    </div>
+                    <div class="note">
+                    * 픽업시간 이전/이후에 방문하는 건 사장님을 힘들게해요<br>
+                    * 확정시간 전에는 가게 상황에 따라, 예약이 취소될 수 있어요.<br>
+                    * 취소시, 100% 환불이 가능해요
+                    </div>
+                </div>
+
+                <!-- 카테고리 정보 -->
+                <div class="categorySection">
+                    <li class="infoRow">
+                    <span class="infoLabel">카테고리</span>
+                    <span class="pickupdiv">|</span>
+                    <span class="infoValue">빵 & 디저트</span>
+                    </li>
+                    <li class="infoRow">
+                    <span class="infoLabel">대표메뉴</span>
+                    <span class="pickupdiv">|</span>
+                    <span class="infoValue">컵케이크, 바게트, 치아바타</span>
+                    </li>
+                    <li class="infoRow">
+                    <span class="infoLabel">영업시간</span>
+                    <span class="pickupdiv">|</span>
+                    <span class="infoValue">09:00 ~ 20:00</span>
+                    </li>
+                    <div class="addRow">
+                    <span class="addLabel">📍</span>
+                    <span class="addValue">노원구 공릉동 470</span>
+                    <span class="addLabel">📞</span>
+                    <span class="addValue">102-1234-5678</span>
+                    </div>
+                    <div class="note2">
+                    다음 사안 해당시 이용이 제한될 수 있어요.<br>
+                    1. 확정 시간 전 취소에 대한 항의 2. 픽업 시간 외 방문 요구<br>
+                    </div>
+                </div>
+
+                <!-- 주문 버튼 -->
+                <div id="orderArea"></div>
+                </div>
+                <!-- /infoContent 끝 -->
+
+                <!--  리뷰 리스트 (기본 숨김) -->
+                <div class="reviewSection" >
+                <div class="reviewList">
+                    <!-- 실제로는 AJAX 로딩 후 append 될 부분 -->
+                    <!-- 예시 하드코딩  -->
+                    <div class="overlap">
+                    <div class="reviewBox"></div>
+                    <div class="reviewerName">크롱</div>
+                    <div class="reviewedDate">2025.06.11</div>
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
+                    <hr class="line" />
+                    <p class="reviewContent">
+                        성수동 최고의 빵집!<br>
+                        휘낭시에와 쿠키가 정말 맛있어요.<br>
+                    </p>
+                    </div>
+                    <div class="overlap">
+                    <div class="reviewBox"></div>
+                    <div class="reviewerName">크롱</div>
+                    <div class="reviewedDate">2025.06.11</div>
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
+                    <hr class="line" />
+                    <p class="reviewContent">
+                        성수동 최고의 빵집!<br>
+                        휘낭시에와 쿠키가 정말 맛있어요.
+                    </p>
+                    </div>
+                    <div class="overlap">
+                    <div class="reviewBox"></div>
+                    <div class="reviewerName">크롱</div>
+                    <div class="reviewedDate">2025.06.11</div>
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
+                    <hr class="line" />
+                    <p class="reviewContent">
+                        성수동 최고의 빵집!<br>
+                        휘낭시에와 쿠키가 정말 맛있어요.
+                    </p>
+                    </div>                    
+                    <div class="overlap">
+                    <div class="reviewBox"></div>
+                    <div class="reviewerName">크롱</div>
+                    <div class="reviewedDate">2025.06.11</div>
+                    <img class="reviewImage" src="../../../img/user_pain.png" alt="리뷰 이미지" />
+                    <hr class="line" />
+                    <p class="reviewContent">
+                        성수동 최고의 빵집!<br>
+                        휘낭시에와 쿠키가 정말 맛있어요.
+                    </p>
+                    </div>
+                </div>
+                <div id="reviewLoader" style="text-align:center;padding:12px;display:none;">
+                    로딩 중…
+                </div>
+                </div>
+
+            </div>
+            </div>
+
+        </main>
+    </script>
+
+</body>
+<!-- 레이아웃 로드 + 템플릿 삽입 스크립트 -->
+<script>
+    $(function () {
+        $("#wrapper").load("layout.html #wrapper", function () {
+            // 1) main 초기화 & 템플릿 삽입
+            var $main = $("#wrapper").find("main")
+                .addClass("productDetail storeDetailInfo")
+                .empty()
+                .append($("#productDetail-template").html());
+
+            // 2) 주문 영역 플레이스홀더 변수
+            var $orderArea = $main.find("#orderArea");
+
+            // 3) 상태 배지 셋업
+            var $badge = $main.find(".statusBadge");
+            var status = $badge.data("status"); // "soldout" or "available"
+
+            if (status === "soldout") {
+                $badge.removeClass("available").addClass("soldout").text("매진(17:30)");
+                $orderArea.html('<div class="orderSoldout">마감</div>');
+            } else {
+                $badge.removeClass("soldout").addClass("available").text("판매중");
+                $orderArea.html('<button class="orderButton">구매하기(3개 남음)</button>');
+            }
+
+            // 4) 메뉴바 활성화
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    document.querySelectorAll('.menu-item').forEach(i => {
+                        i.classList.remove('active');
+                        i.querySelector('img').src = `../../../img/${i.querySelector('img').dataset.name}.png`;
+                    });
+                    this.classList.add('active');
+                    this.querySelector('img').src = `../img/${this.querySelector('img').dataset.name}_active.png`;
+                });
+            });
+
+            // 4-1) 탭 클릭 이벤트
+            $main.find('.tabs .tab').click(function () {
+                var idx = $(this).index();
+                $main.find('.tabs .tab').removeClass('active').eq(idx).addClass('active');
+
+                if (idx === 0) {
+                    // 정보 탭
+                    $main.find('.infoContent').show();
+                    $main.find('.reviewSection').hide();
+                } else {
+                    // 리뷰 탭
+                    $main.find('.infoContent').hide();
+                    $main.find('.reviewSection').show();
+                }
+            });
+
+
+
+            // 슬라이더 설정
+            initSlider();
+
+            // 리뷰 무한 스크롤 설정
+            setupReviewInfiniteScroll();
+        });
+
+        // --- 슬라이더 로직 ---
+        // 전역 변수
+        let track, images, indicators, currentIndex = 0;
+
+        function initSlider() {
+            track = document.querySelector('.sliderTrack');
+            images = document.querySelectorAll('.sliderTrack .sliderImg');
+            indicators = document.querySelector('.sliderIndicators');
+            currentIndex = 0;
+            createIndicators();
+            showSlide(0);
+        }
+
+        function createIndicators() {
+            indicators.innerHTML = '';
+            images.forEach((_, i) => {
+                const dot = document.createElement('div');
+                dot.className = 'sliderIndicator';
+                dot.addEventListener('click', () => showSlide(i));
+                indicators.appendChild(dot);
+            });
+        }
+
+        function showSlide(idx) {
+            currentIndex = (idx + images.length) % images.length;
+            track.style.transition = 'transform 0.3s ease';
+            track.style.transform = `translateX(-${currentIndex * 100}%)`;
+            // active indicator
+            indicators.querySelectorAll('.sliderIndicator').forEach((d, i) => {
+                d.classList.toggle('active', i === currentIndex);
+            });
+        }
+
+        // 리뷰 무한 스크롤
+        function setupReviewInfiniteScroll() {
+            var reviewPage = 1;
+            var reviewLoading = false;
+            var reviewEnd = false;
+            var $reviewSec = $("#wrapper").find(".reviewSection");
+            var $reviewList = $reviewSec.find(".reviewList");
+            var $loader = $('<div id="reviewLoader" style="text-align:center;padding:12px;display:none;">로딩 중…</div>')
+                .appendTo($reviewSec);
+
+            // 탭 클릭 시 첫 로드
+            $("#wrapper").find('.tabs .tab').click(function () {
+                if ($(this).index() === 1 && reviewPage === 1) {
+                    loadReviews();
+                }
+            });
+
+            // 스크롤 끝 감지
+            $reviewSec.on('scroll', function () {
+                if (!reviewLoading && !reviewEnd
+                    && $reviewSec.scrollTop() + $reviewSec.innerHeight() >= $reviewSec[0].scrollHeight - 50) {
+                    loadReviews();
+                }
+            });
+
+            // 리뷰 로드 함수
+            function loadReviews() {
+                reviewLoading = true;
+                $loader.show();
+
+                $.ajax({
+                    url: '/api/reviews',       // 실제 API 엔드포인트
+                    data: { page: reviewPage },
+                    success: function (res) {
+                        if (res.reviews && res.reviews.length) {
+                            res.reviews.forEach(function (r) {
+                                var item =
+                                    '<div class="overlap">' +
+                                    '<div class="reviewBox"></div>' +
+                                    '<div class="reviewerName">' + r.author + '</div>' +
+                                    '<div class="reviewedDate">' + r.date + '</div>' +
+                                    '<img class="reviewImage" src="' + r.image + '" alt="리뷰 이미지" />' +
+                                    '<hr class="line" />' +
+                                    '<p class="reviewContent">' + r.text + '</p>' +
+                                    '<div class="storeBox"></div>' +
+                                    '<div class="storeName">' + r.storeName + '</div>' +
+                                    '<img class="storeImage" src="' + r.storeImage + '" alt="매장 이미지" />' +
+                                    '<p class="storeMenu"><span class="span">' + r.menu + '</span></p>' +
+                                    '<div class="price">' +
+                                    '<span class="originPrice">' + r.originalPrice + ' ₩</span>' +
+                                    '<span class="salePrice">' + r.salePrice + ' ₩</span>' +
+                                    '</div>' +
+                                    '</div>';
+                                $reviewList.append(item);
+                            });
+                            reviewPage++;
+                        } else {
+                            reviewEnd = true;
+                            $loader.text('더 이상 리뷰가 없습니다');
+                        }
+                    },
+                    error: function () {
+                        $loader.text('리뷰 로드 실패');
+                    },
+                    complete: function () {
+                        reviewLoading = false;
+                        if (!reviewEnd) $loader.hide();
+                    }
+                });
+            }
+        }
+    });
+</script>
+
+
+</html>
