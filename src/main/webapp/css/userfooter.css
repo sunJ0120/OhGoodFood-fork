@@ -12,7 +12,7 @@ footer{
     box-sizing: border-box;
     width: 100%;
 }
-.footer-container{
+.footerContainer{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,13 +22,13 @@ footer{
     border-radius: 10px;
     
 }
-.menu-container{
+.menuContainer{
     display: flex;
     align-items: center;
     justify-self: center;
     gap:25px;
 }
-.menu-item {
+.menuItem {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -37,6 +37,6 @@ footer{
     border-radius: 8px;
     cursor: pointer;
 }
-.menu-item.active {
+.menuItem.active {
     background-color: #F5F3EA; 
 }
