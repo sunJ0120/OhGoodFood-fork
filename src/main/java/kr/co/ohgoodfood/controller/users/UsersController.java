@@ -184,6 +184,8 @@ public class UsersController {
         model.addAttribute("userOrderList",userOrderList);
         // JSP fragment만 리턴
         return "users/fragment/userOrderList";
+    }
+    
     /**
      *  사용자 회원가입
      */
