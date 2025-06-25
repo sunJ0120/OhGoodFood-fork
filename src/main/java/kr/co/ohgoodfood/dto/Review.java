@@ -31,6 +31,9 @@ public class Review {
     // 대표 이미지 (Image 서브쿼리)
     private String store_img;
 
+    // 유저 닉네임
+    private String user_nickname;
+    
     private String s_type;
     private String s_value;
 
