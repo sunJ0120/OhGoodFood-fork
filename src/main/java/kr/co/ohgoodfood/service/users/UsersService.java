@@ -2,12 +2,12 @@ package kr.co.ohgoodfood.service.users;
 
 import java.util.List;
 
+import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.UserMainFilter;
 import kr.co.ohgoodfood.dto.UserMypage;
-import kr.co.ohgoodfood.dto.UserSignup;
 
 /**
  * UsersService interface
@@ -19,7 +19,7 @@ public interface UsersService {
     List<MainStore> getMainStoreList(String user_id, UserMainFilter userMainFilter);
 
     //[판별 로직] 오늘 픽업, 내일 픽업, 마감 판별 연결 로직
-//    String getPickupDateStatus(MainStore mainStore);
+    String getPickupDateStatus(MainStore mainStore);
 
     //[판별 로직] 카테고리 String 판별 연결 로직
     String getCategoryName(MainStore mainStore);
@@ -43,9 +43,12 @@ public interface UsersService {
     boolean reserveProduct(String userId, int productId);
     
     /* 아이디 중복 체크 */
-    boolean isIdAvailable(String user_id);
+    boolean isDuplicateId(String user_id);
+    
     /* 회원가입 처리 */
-    void signup(UserSignup dto);
+	void registerUser(Account account);
+
+
     
     
 }

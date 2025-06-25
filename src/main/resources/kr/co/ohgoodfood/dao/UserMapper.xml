@@ -249,5 +249,31 @@
         VALUES (#{user_id}, #{product_no}, NOW())
     </insert>
 	-->
-	
+	<!-- 아이디 중복 조회 -->
+	 <select id="countByUserId" parameterType="string" resultType="int">
+	 	 SELECT COUNT(*)  
+	 	 FROM Account
+	  	 WHERE user_id = #{user_id}
+	   </select>
+
+  	<!-- 신규 회원 INSERT -->
+	  <insert id="insertUser" parameterType="kr.co.ohgoodfood.dto.UserSignup">
+	    INSERT INTO Account
+	      (user_id,
+	       user_pwd,
+	       user_nickname,
+	       user_name,
+	       phone_number,
+	       join_date,
+	       user_status,
+	       location_agreement)
+	    VALUES
+	      (#{user_id},
+	       #{user_pwd},
+	       #{user_nickname},
+	       #{user_name},
+	       #{phone_number},
+	       SYSDATE(),
+	       "Y", "Y")
+	  </insert>
 </mapper>

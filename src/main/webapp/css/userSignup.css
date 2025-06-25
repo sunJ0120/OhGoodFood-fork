@@ -110,68 +110,20 @@ input {
     flex-direction: column;
     gap: 10px;
 }
-.input-box {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    background-color: white; 
-    padding: 10px;
-    border-radius: 10px;
-    font-size:18px;
-    color:#5C5C5C ;
-    height:40px;
-    line-height:40px;
-}
-.file-list {
-    max-height: 200px;  
-    overflow-y: auto;
-    background: #f8f8f8;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-top: 8px;
-    padding: 8px;
-    font-size: 14px;
-}
-.file-list-item {
-    margin-bottom: 4px;
-    white-space: nowrap;
-}
-.category-group {
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-    height: 40px;
-}
-.business-hours-group {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 16px;
-}
-.time-divider {
-    font-size: 18px;
-    color: #888;
-}
-input[type="time"] {
-    padding: 6px 10px;
-    border: none;
-    border-radius: 6px;
-    font-size: 20px;
-    font-family: 'nanumesquareneo';
-    background: #fff;
-}
-.signup-buttons{
+
+
+.signupButtons{
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-.signup-buttons p{
+.signupButtons{
     font-family: 'nanumesquareneo';
     font-size: 16px;
     color: #FF8888;
     margin-bottom: -10px;
 }
-.submit-button{
+.submitButton{
     margin-top: 30px;
     width: 100%;
     height: 55px;
@@ -179,5 +131,20 @@ input[type="time"] {
     border: none;
     border-radius: 10px;
     color: white;
-    font-size: 22px;;
+    font-size: 22px;
+}
+
+.location_agreement {
+  display: flex;
+  align-items: center;
+  gap: 8px;               /* 체크박스와 텍스트 간격 */
+  margin: 20px 0;         /* 위아래 여백 */
+  font-size: 16px;        /* 텍스트 크기 */
+  color: #5C5C5C;         /* 텍스트 색상 */
+}
+
+.location_agreement input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
 }

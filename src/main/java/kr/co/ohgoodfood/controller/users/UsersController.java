@@ -1,5 +1,6 @@
 package kr.co.ohgoodfood.controller.users;
 
+import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.UserMainFilter;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UsersController
@@ -89,21 +91,40 @@ public class UsersController {
     /**
      *  사용자 회원가입
      */
-    // 가입 화면
-    @GetMapping("/userSignup")
-    public String showSignup() {
-        return "users/userSignup"; // JSP 경로
+    /**  회원가입 폼 보여주기 */
+    @GetMapping("/signup")
+    public String showSignupForm() {
+        return "users/userSignup";  // /WEB-INF/views/users/userSignup.jsp
     }
-    // 실제 가입 처리
-    @PostMapping("/userSignup")
-    public String doSignup(@ModelAttribute UserSignup dto, Model m) {
-        // 비밀번호 확인 로직은 이미 JSP(JS)에서 했으니, 여기선 ID 중복만 체크
-        if (!usersService.isIdAvailable(dto.getUser_id())) {
-            m.addAttribute("idDup", true);
-            return "users/userSignup";
+
+    /** AJAX 아이디 중복 확인 */
+    @GetMapping("/checkId")
+    @ResponseBody
+    public boolean checkId(@RequestParam("user_id") String userId) {
+        return usersService.isDuplicateId(userId);
+    }
+    /**  실제 회원가입 처리 */
+    @PostMapping("/signup")
+    public String signup(
+            @ModelAttribute Account account,
+            Model model
+    ) {
+        // 서버 측 중복 재검증
+        if (usersService.isDuplicateId(account.getUser_id())) {
+            model.addAttribute("msg", "이미 사용 중인 아이디입니다.");
+            model.addAttribute("url", "/user/signup");
+            return "users/alert";
         }
-        usersService.signup(dto);
-        return "redirect:/user/login";
+
+        try {
+        	usersService.registerUser(account);
+            model.addAttribute("msg", "회원가입이 성공적으로 완료되었습니다.");
+            model.addAttribute("url", "/user/login");
+        } catch (Exception e) {
+            model.addAttribute("msg", "회원가입 중 오류가 발생했습니다.");
+            model.addAttribute("url", "/user/signup");
+        }
+        return "users/alert";
     }
 
     /**
@@ -111,7 +132,7 @@ public class UsersController {
      *
      */
     
-    @GetMapping("/userMypage")
+    @GetMapping("/mypage")
     public String userMypage(Model model, HttpSession session) {
         String userId = (String) session.getAttribute("user_id");
         if (userId == null) userId = "u10";

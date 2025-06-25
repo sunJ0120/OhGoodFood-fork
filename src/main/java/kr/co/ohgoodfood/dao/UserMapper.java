@@ -160,7 +160,11 @@ public interface UserMapper {
     int insertReservation( @Param("user_id") String user_id, @Param("product_no") int product_no);
     
     /** 사용자 회원가입*/
-    int countByUserId(@Param("user_id") String user_id);
-    void insertUser(UserSignup dto);
-    
+	int insertUser(Account account);    
+    /** 아이디 중복 체크 */
+	int countByUserId(@Param("user_id") String user_id);
+
+
+	
+
 }
