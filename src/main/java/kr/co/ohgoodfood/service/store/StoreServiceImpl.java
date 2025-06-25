@@ -1,17 +1,33 @@
 package kr.co.ohgoodfood.service.store;
 
-import java.io.File;
 import java.security.MessageDigest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.StoreMapper;
 import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.Product;
 import kr.co.ohgoodfood.dto.Store;
 
 @Service
 public class StoreServiceImpl implements StoreService {
+
+	@Autowired
+	private AwsS3Config awsS3Config;
 
 	@Autowired
 	private StoreMapper mapper;
@@ -72,24 +88,22 @@ public class StoreServiceImpl implements StoreService {
 
 	// 이미지 저장
 	public void saveImage(String storeId, MultipartFile file, HttpServletRequest request) throws Exception {
-		String uploadDir = request.getRealPath("/resources/upload/");
+		String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentType(file.getContentType());
+		metadata.setContentLength(file.getSize());
 
-		// 폴더가 없으면 생성
-		File folder = new File(uploadDir);
-		if (!folder.exists()) {
-			folder.mkdirs();
-		}
-
-		String filename_org = file.getOriginalFilename();
-		String filename_real = System.nanoTime() + filename_org.substring(filename_org.lastIndexOf("."));
-		File saveFile = new File(uploadDir + filename_real);
-		file.transferTo(saveFile);
+		amazonS3().putObject(new PutObjectRequest(awsS3Config.getBucket(), fileName, file.getInputStream(), metadata)); // 공개 읽기 설정
 
 		Image image = new Image();
 		image.setStore_id(storeId);
-		image.setStore_img(filename_real);
+		image.setStore_img(fileName);
 		mapper.insertImage(image);
 	}
+	
+	private AmazonS3 amazonS3() {
+        return awsS3Config.amazonS3();
+    }
 
 	// MD5 암호화 메서드 추가
 	private String md5(String input) {
@@ -106,6 +120,28 @@ public class StoreServiceImpl implements StoreService {
 		}
 	}
 
+	// 이미지 가져오기
+	@Override
+	public List<Image> getImagesByStoreId(String store_id) {
+	    return mapper.findImagesByStoreId(store_id);
+	}
+	
+	
+	//메인 
+	@Override
+	public Product getProductByStoreId(String store_id) {
+	    return mapper.findProductByStoreId(store_id);
+	}
+	
+	@Override
+	public void updateStoreStatus(String store_id, String status) {
+	    Map<String, Object> param = new HashMap<>();
+	    param.put("store_id", store_id);
+	    param.put("status", status);
+	    
+	    mapper.updateStoreStatus(param);
+	}
+	
 	// 마이페이지
 	// store_i로 마이페이지 조회
 	@Override

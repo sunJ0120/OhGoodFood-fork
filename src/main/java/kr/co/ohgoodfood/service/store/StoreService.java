@@ -1,5 +1,9 @@
 package kr.co.ohgoodfood.service.store;
 
+import java.util.List;
+import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.Product;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.web.multipart.MultipartFile;
@@ -19,4 +23,11 @@ public interface StoreService {
 	public Store getStoreDetail(String store_id);
 
 	public void updateStoreCategory(Store vo);
+	
+	public List<Image> getImagesByStoreId(String store_id);
+	
+	public Product getProductByStoreId(String store_id);
+	
+	public void updateStoreStatus(String store_id, String status);
+
 }

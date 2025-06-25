@@ -30,11 +30,28 @@
 		)
 	</insert>
 	
-	<!--이미지-->
+	<!--회원가입 시 이미지 넣기-->
 	<insert id="insertImage" parameterType="kr.co.ohgoodfood.dto.Image">
 		INSERT INTO Image (store_id, store_img)
 		VALUES (#{store_id}, #{store_img})
 	</insert>
+	
+	<!--이미지 가져오기 -->
+	<select id="findImagesByStoreId" parameterType="string" resultType="kr.co.ohgoodfood.dto.Image">
+    	SELECT * FROM Image WHERE store_id = #{store_id}
+	</select>
+
+
+	<select id="findProductByStoreId" parameterType="string" resultType="kr.co.ohgoodfood.dto.Product">
+	    SELECT * FROM Product WHERE store_id = #{store_id} LIMIT 1
+	</select>
+	
+	<!-- 오픈/마감 상태 변경 -->
+	<update id="updateStoreStatus">
+	    UPDATE Store
+	    SET store_status = #{status}
+	    WHERE store_id = #{store_id}
+	</update>
 
 	<!--마이페이지 수정-->
 	<update id="updateStore" parameterType="kr.co.ohgoodfood.dto.Store">

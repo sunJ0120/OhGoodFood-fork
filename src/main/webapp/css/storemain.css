@@ -22,6 +22,7 @@ body{
     display: flex;
     flex-direction: column;
     position: relative;
+
 }
 main{
     display: flex;
@@ -46,6 +47,14 @@ main{
     gap:10px;
     font-size: 13px;
     font-family: 'nanumesquareneo_b';
+    align-items: center;
+}
+.storeAddress {
+  display: inline-block;
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .store-image-slider {
     width: 400px; /* 이미지 한 장의 너비 */
@@ -247,10 +256,111 @@ input[type="text"], input[type="number"] {
   text-align: center;
   position: relative;
 }
-.close-modal {
+.modal-content .close-modal {
   position: absolute;
   right: 16px;
   top: 10px;
   font-size: 24px;
   cursor: pointer;
 }
+/*주소 모달*/
+.address-modal {
+  display: none;
+  position: absolute;  /* fixed → absolute로 변경 */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+}
+
+.address-modal-content {
+  background: #fff;
+  border-radius: 12px;
+  width: 300px;
+  max-width: 80%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  overflow: hidden;
+  animation: fadeIn 0.3s ease;
+  margin: 25px auto;
+}
+
+.address-modal-header {
+  background: #8B6D5C;
+  color: white;
+  padding: 15px;
+  font-family: 'nanumesquareneo_b';
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 18px;
+}
+
+.address-modal-body {
+  padding: 20px;
+  font-family: 'nanumesquareneo';
+  color: #333;
+  font-size: 15px;
+  word-break: break-all;
+}
+
+.address-modal .close-modal {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from {opacity: 0; transform: scale(0.95);}
+  to {opacity: 1; transform: scale(1);}
+}
+
+
+.confirm-modal-container {
+  position: fixed;
+  z-index: 9999;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.confirm-modal-content {
+  background: #fff;
+  padding: 30px 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  font-family: 'nanumesquareneo';
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.confirm-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.confirm-buttons button {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 5px;
+  font-family: 'nanumesquareneo_b';
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#confirmYes { background-color: #8B6D5C; color: #fff; }
+#confirmNo { background-color: #ccc; color: #333; }

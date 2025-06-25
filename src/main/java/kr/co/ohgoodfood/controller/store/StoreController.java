@@ -2,6 +2,7 @@ package kr.co.ohgoodfood.controller.store;
 
 import java.beans.PropertyEditorSupport;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.Product;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
@@ -39,21 +42,25 @@ public class StoreController {
 		return "store/login";
 	}
 
-	// 로그인 처리
+	//로그인 처리
 	@PostMapping("/login")
 	public String login(HttpSession sess, Store vo, Model model) {
-		Store login = storeService.login(vo);
-		if (login != null) {
-			sess.setAttribute("store", login);
-			model.addAttribute("msg", "로그인 성공");
-			model.addAttribute("url", "/store/main");
-			return "store/alert";
-		} else {
-			model.addAttribute("msg", "로그인 실패");
-			model.addAttribute("url", "/store/login");
-			return "store/login";
-		}
+	    Store login = storeService.login(vo);
+	    if (login != null) {
+	        if ("N".equals(login.getConfirmed())) {
+	            return "store/loginconfirmed";
+	        }
+	        sess.setAttribute("store", login);
+	        model.addAttribute("msg", "로그인 성공");
+	        model.addAttribute("url", "/store/main");
+	        return "store/alert";
+	    } else {
+	        model.addAttribute("msg", "로그인 실패");
+	        model.addAttribute("url", "/store/login");
+	        return "store/alert";
+	    }
 	}
+
 
 	// 로그아웃
 	@GetMapping
@@ -85,11 +92,12 @@ public class StoreController {
 		} catch (Exception e) {
 			model.addAttribute("msg", "회원가입 중 오류가 발생했습니다.");
 			model.addAttribute("url", "/store/signup");
+			e.printStackTrace();			
 			return "store/alert";
 		}
 	}
 
-	// 영업 시간
+	// Time 타입 변환용 바인딩(영업 시간)
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Time.class, new PropertyEditorSupport() {
@@ -125,17 +133,57 @@ public class StoreController {
 	// 메인화면
 	@GetMapping("/main")
 	public String showMain(HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
+	    Store login = (Store) sess.getAttribute("store");
 
-		if (login == null) {
-			// 로그인 안 되어 있으면 로그인 페이지로
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
+	    if (login == null) {
+	        model.addAttribute("msg", "로그인이 필요합니다.");
+	        model.addAttribute("url", "/store/login");
+	        return "store/alert";
+	    }
 
-		// 로그인 되어 있으면 viewsales.jsp로
-		return "store/main";
+	    List<Image> images = storeService.getImagesByStoreId(login.getStore_id());
+	    model.addAttribute("images", images);
+
+	    Store store = storeService.getStoreDetail(login.getStore_id());
+	    model.addAttribute("store", store);
+
+	    Product product = storeService.getProductByStoreId(login.getStore_id());
+	    model.addAttribute("product", product);
+
+	    boolean isToday = false;
+	    if (product != null && product.getPickup_start() != null) {
+	        LocalDate pickupDate = product.getPickup_start().toLocalDate();
+	        LocalDate today = LocalDate.now();
+	        isToday = pickupDate.equals(today);
+	    }
+	    model.addAttribute("isToday", isToday);
+
+	    return "store/main";
+	}
+
+	@PostMapping("/updateStatus")
+	@ResponseBody
+	public String updateStatus(HttpSession session, @RequestParam("status") String status) {
+	    Store store = (Store) session.getAttribute("store");
+	    String store_id = store.getStore_id();
+
+	    storeService.updateStoreStatus(store_id, status);
+
+	    store.setStore_status(status);
+	    session.setAttribute("store", store);
+	    
+	    return "success";
+	}
+
+	// 상품
+	@GetMapping("/product")
+	@ResponseBody
+	public Product getProduct(HttpSession sess) {
+	    Store login = (Store) sess.getAttribute("store");
+	    if (login == null) {
+	        return null;
+	    }
+	    return storeService.getProductByStoreId(login.getStore_id());
 	}
 
 	// 매출확인
