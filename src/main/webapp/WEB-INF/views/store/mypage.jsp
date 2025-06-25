@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+	
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -28,8 +30,8 @@
                 </div>
             </div>
             <div class="myInfo-content">
-                <input type="text" id="id" name="id" value="ohgoodfood123" readonly>
-                <input type="password" id="pwd" name="pwd" value="12345678" readonly>
+                <input type="text" id="id" name="id" value="${store.store_id}" readonly>
+                <input type="password" id="pwd" name="pwd" value="${store.store_pwd}" readonly>
             </div>
             <div class="main-content">
                 <div class="storeInfo-header">
@@ -44,12 +46,12 @@
                 </div>
                 <div class="name-group">
                     <div class="name-container">
-                        <div class="storeName">러프도우</div>
+                        <div class="storeName">${store.store_name}</div>
                         <div class="info-container">
                             <img src="../../../img/store_loaction.png" alt="위치" class="storeIcon">
-                            <div class="address">서울 노원구 공릉동 670-20</div>
+                            <div class="address">${store.store_address}</div>
                             <img src="../../../img/store_number.png" alt="전화" class="storeIcon">
-                            <div class="number">02-1234-5678</div>
+                            <div class="number">${store.store_telnumber}</div>
                         </div>
                     </div>
                     <button class="updateBtn">수정</button>
@@ -70,29 +72,28 @@
                         <div class="form-group">
                             <label class="label">영업 시간</label>
                             <span class="divider">|</span>
-                            <div class="details-content" style="color:#8B6D5C; font-weight:bold">11:00 ~ 21:00</div>
+							<div class="details-content" style="color:#8B6D5C; font-weight:bold">
+							    ${openedTime} ~ ${closedTime}
+							</div>
 
-                        </div>
-                    </form>
-                    <form>
-                        <div class="form-group">
-                            <label class="label">픽업 시간</label>
-                            <span class="divider">|</span>
-                            <div class="details-content " style="color:#8B6D5C; font-weight:bold">19:30 ~ 20:30</div>
                         </div>
                     </form>
                     <form>
                         <div class="form-group">
                             <label class="label">카테고리</label>
                             <span class="divider">|</span>
-                            <div class="details-content">빵 & 디저트</div>
+							<div class="details-content">
+							  <c:forEach var="category" items="${categories}">
+							    ${category}
+							  </c:forEach>
+							</div>
                         </div>
                     </form>
                     <form>
                         <div class="form-group">
                             <label class="label">대표 메뉴</label>
                             <span class="divider">|</span>
-                            <div class="details-content">깜파뉴 | 바게뜨 | 치아바타</div>
+                            <div class="details-content">${store.store_menu}</div>
                         </div>
                     </form>
                     <form>
@@ -100,7 +101,7 @@
                             <img src="../../../img/store_bag.png" alt="오굿백" class="bagIcon">
                             <label class="label">오굿백</label>
                             <span class="divider">|</span>
-                            <div class="details-content" style="line-height: 1.3;">러프도우의 직접만든 바게뜨, 소금빵 등이 들어 러프도우의...
+                            <div class="details-content" style="line-height: 1.5; font-size:15px;">${store.store_explain}
                             </div>
                         </div>
                     </form>
@@ -260,7 +261,7 @@
         });
 
     });
-    /*updatemypage.jsp 체크박스*/
+    /* updatemypage.jsp 체크박스 */
     $(document).on('change', '.category-checkbox', function () {
         const img = $(this).next('.checkbox-img')[0];
         const label = $(this).parent()[0];
@@ -272,39 +273,7 @@
             label.style.fontWeight = "normal";
         }
     });
-    // 알람 모달
-    // 시계 아이콘 클릭 시 모달 열기 (이벤트 위임)
-    $(document).on('click', '#timer-icon', function () {
-        $('#time-modal').css('display', 'flex');
-    });
-
-    // 모달 닫기 버튼 클릭 시 모달 닫기 (이벤트 위임)
-    $(document).on('click', '#close-modal', function () {
-        $('#time-modal').css('display', 'none');
-    });
-
-    // 모달 바깥 클릭 시 모달 닫기 (이벤트 위임)
-    $(document).on('click', '#time-modal', function (e) {
-        if (e.target === this) {
-            $(this).css('display', 'none');
-        }
-    });
-    // 픽업 시간 모달 확인 버튼 (이벤트 위임)
-    $(document).on('click', '#pickup-time-confirm', function () {
-        const start = $('#pickup-time').val(); // 예: "09:30"
-        if (start) {
-            // 시간 계산
-            const [h, m] = start.split(':').map(Number);
-            let endH = h + 1;
-            let endM = m;
-            if (endH > 23) endH = endH - 24; // 24시 넘어가면 0시로
-            // 두 자리수로 포맷
-            const end = `\${String(endH).padStart(2, '0')}:\${String(endM).padStart(2, '0')}`;
-            $('#pickup-time-input').val(`${start} ~ ${end}`);
-        }
-        $('#time-modal').css('display', 'none');
-    });
-
+    
 </script>
 
 </html>

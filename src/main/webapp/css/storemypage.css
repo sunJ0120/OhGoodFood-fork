@@ -204,10 +204,11 @@ input[type="password"][readonly] {
     margin-top:10px;
     border:1px solid #99A99B;
     border-radius: 10px;
-    height:240px;
-    padding-left:20px;
+    height:220px;
+    padding-left:20px; 
     display:flex;
     flex-direction: column;
+	gap:10px; 
 }
 /*폼 데이터*/
 .details-container form{
@@ -215,7 +216,6 @@ input[type="password"][readonly] {
     font-family: 'nanumesquareneo_b';
     display:flex;
     flex-direction: column;
-    gap:15px;
     
 }
 .form-group{

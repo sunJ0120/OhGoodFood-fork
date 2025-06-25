@@ -23,6 +23,8 @@ public class Store {
     private String category_fruit;
     private String category_salad;
     private String category_others;
+    private double latitude;
+    private double longitude;
 
     private String s_store_id;
 
