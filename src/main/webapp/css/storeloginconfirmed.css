@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'nanumesquareneo';
+    src: url('font/NanumSquareNeo-aLt.ttf');
+}
+body {
+    font-family: 'nanumesquareneo';
+    text-align: center;
+    margin-top: 100px;
+}
+.container {
+    display: inline-block;
+    padding: 40px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+h2 {
+    color: #333;
+}
+p {
+	line-height: 28.5px;
+    font-size: 18px;
+    color: #666;
+    margin: 20px 0;
+}
+button {
+	font-family: 'nanumesquareneo';
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background: #99A99B;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
