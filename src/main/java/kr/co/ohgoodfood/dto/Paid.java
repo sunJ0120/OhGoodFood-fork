@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import java.sql.Timestamp;
 
 import lombok.Data;
 
@@ -13,7 +14,6 @@ public class Paid {
     private int paid_no;
     private String paid_type;
     private String paid_price;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp paid_time;
     private String paid_status;
     private String fail_reason;

@@ -197,4 +197,141 @@
         WHERE alarm_no = #{alarm_no}
         AND receive_id = #{user_id};
     </update>
+
+    <!-- selectMypage mapper -->
+    <select id="selectUserInfo" parameterType="string" resultType="kr.co.ohgoodfood.dto.UserMypage">
+	    SELECT
+	      user_id       AS user_id,
+	      user_nickname AS user_nickname
+	    FROM Account
+	    WHERE user_id = #{user_id}
+  	</select>
+	<select id="selectUserReviews" parameterType="string"  resultType="kr.co.ohgoodfood.dto.Review">
+	    SELECT
+	      r.review_no        AS review_no,
+	      r.review_content   AS review_content,
+	      r.writed_at        AS writed_at,
+	      r.review_img       AS review_img,
+	      r.is_blocked       AS is_blocked,
+	      r.order_no         AS order_no,
+	      p.origin_price     AS origin_price,
+	      p.sale_price       AS sale_price,
+	      s.store_id         AS store_id,
+	      s.store_name       AS store_name,
+	      s.store_menu       AS store_menu,
+	      (
+	        SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = s.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      ) AS store_img
+	    FROM Review  r
+	    JOIN Store   s ON r.store_id = s.store_id
+	    JOIN Product p ON p.store_id = s.store_id
+	    WHERE r.user_id    = #{user_id}
+	      AND r.is_blocked = 'N'
+	    ORDER BY r.writed_at DESC
+  	</select>
+  	
+  	<!--  selectProductDetail mapper -->
+  	<select id="selectProductInfo" parameterType="int" resultType="kr.co.ohgoodfood.dto.ProductDetail">
+        SELECT
+            s.store_id         AS store_id,
+            s.store_name       AS store_name,
+            s.store_menu       AS store_menu,
+            s.opened_at        AS opened_at,
+            s.closed_at        AS closed_at,
+            s.category_bakery  AS category_bakery,
+            s.category_fruit   AS category_fruit,
+            s.category_salad   AS category_salad,
+            s.category_others  AS category_others,
+            s.store_address    AS store_address,
+            s.store_telnumber  AS store_telnumber,
+            p.product_no       AS product_no,
+            p.pickup_start     AS pickup_start,
+            p.pickup_end       AS pickup_end,
+            p.origin_price     AS origin_price,
+            p.sale_price       AS sale_price,
+            p.reservation_end  AS reservation_end
+        FROM Store s
+        JOIN Product p ON s.store_id = p.store_id
+        WHERE p.product_no = #{product_no}
+    </select>
+
+    <!-- 제품 이미지 전체 목록 조회: 해당 상품의 모든 이미지 URL 리스트 -->
+    <select id="selectProductImages" parameterType="int" resultType="string">
+		  SELECT i.store_img
+		    FROM Image i
+		    JOIN Product p ON i.store_id = p.store_id
+		   WHERE p.product_no = #{product_no}
+		   ORDER BY i.img_no
+    </select>
+
+    <!-- 제품 리뷰 리스트 조회: 해당 매장(store_id) 기준으로 모든 리뷰 조회 --> 
+    <select id="selectProductReviews" parameterType="int" resultType="kr.co.ohgoodfood.dto.Review"> 
+        SELECT
+            a.user_nickname  AS user_nickname,
+            r.review_no      AS review_no,
+            r.review_content AS review_content,
+            r.writed_at      AS writed_at,
+            r.review_img     AS reviewImg
+        FROM Review r
+        JOIN Account a ON r.user_id = a.user_id
+        WHERE r.store_id = (
+            SELECT p.store_id
+              FROM Product p
+             WHERE p.product_no = #{product_no}
+        )
+          AND r.is_blocked = 'N'
+        ORDER BY r.writed_at DESC
+    </select>
+
+	 
+    <!-- 사용자 예약 정보 등록 
+    <insert id="insertReservation" parameterType="map">
+        INSERT INTO reservation (user_id, product_no, reserved_at)
+        VALUES (#{user_id}, #{product_no}, NOW())
+    </insert>
+	-->
+	<!-- 아이디 중복 조회 -->
+	 <select id="countByUserId" parameterType="string" resultType="int">
+	 	 SELECT COUNT(*)  
+	 	 FROM Account
+	  	 WHERE user_id = #{user_id}
+	   </select>
+
+  	<!-- 신규 회원 INSERT -->
+	  <insert id="insertUser" parameterType="kr.co.ohgoodfood.dto.UserSignup">
+	    INSERT INTO Account
+	      (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement)
+	    VALUES
+	      (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y")
+	  </insert>
+	  
+	<!-- 모든 리뷰 모아보기 -->
+	<select id="findAllReviews" parameterType="string" resultType="kr.co.ohgoodfood.dto.Review">
+    SELECT
+      r.review_no          AS review_no,
+      r.review_content     AS review_content,
+      r.writed_at          AS writed_at,
+      r.review_img         AS review_img,
+      a.user_nickname      AS user_nickname,
+      p.origin_price       AS origin_price,
+      p.sale_price         AS sale_price,
+      s.store_id           AS store_id,
+      s.store_name         AS store_name,
+      s.store_menu         AS store_menu,
+      ( SELECT i.store_img
+          FROM Image i
+         WHERE i.store_id = s.store_id
+         ORDER BY i.img_no
+         LIMIT 1
+      )                    AS storeImg
+    FROM Review r
+    JOIN Account a ON r.user_id = a.user_id
+    JOIN Store   s ON r.store_id = s.store_id
+    JOIN Product p ON p.store_id = s.store_id
+
+  </select>
 </mapper>

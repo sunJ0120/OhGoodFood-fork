@@ -1,5 +1,15 @@
 package kr.co.ohgoodfood.service.users;
 
+import java.security.MessageDigest;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import kr.co.ohgoodfood.dao.UserMapper;
 import kr.co.ohgoodfood.dto.*;
 import kr.co.ohgoodfood.util.StringSplitUtils;
@@ -15,13 +25,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.ProductDetail;
+import kr.co.ohgoodfood.dto.Review;
+import kr.co.ohgoodfood.dto.UserMainFilter;
+import kr.co.ohgoodfood.dto.UserMypage;
+import lombok.RequiredArgsConstructor;
 
 /**
- * UsersServiceImpl.java
- * - UsersService interface 구현체
- * @see UsersService
- * - 세부 기능은 해당 클래스인 UsersServiceImpl에 구현한다.
- * - 의존성 주입은 생성자 주입으로 구현
+ * UsersServiceImpl.java - UsersService interface 구현체
+ * 
+ * @see UsersService - 세부 기능은 해당 클래스인 UsersServiceImpl에 구현한다. - 의존성 주입은 생성자 주입으로
+ *      구현
  */
 
 @Slf4j
@@ -159,5 +175,101 @@ public class UserServiceImpl implements UsersService{
             return true;
         }
         return false; //delete 실패!
+
+	/** 유저 정보 한 건 조회 */
+	@Override
+	public UserMypage getUserInfo(String userId) {
+		UserMypage info = userMapper.selectUserInfo(userId);
+		return (info != null ? info : new UserMypage());
+	}
+
+	/** 리뷰 리스트 여러 건 조회 */
+	@Override
+	public List<Review> getUserReviews(String userId) {
+		return userMapper.selectUserReviews(userId);
+	}
+
+	/** 마이페이지 전체 조립 (유저정보+리뷰리스트) */
+	@Override
+	public UserMypage getMypage(String userId) {
+		UserMypage page = getUserInfo(userId);
+		page.setReviews(getUserReviews(userId));
+		return page;
+	}
+
+	/** 제품 상세 보기 */
+	@Override
+	@Transactional(readOnly = true)
+	public ProductDetail getProductDetail(int product_no) {
+		// 기본 상품·매장·계정 정보
+		ProductDetail detail = userMapper.selectProductInfo(product_no);
+		// 이미지 리스트
+		detail.setImages(userMapper.selectProductImages(product_no));
+		// 리뷰 리스트
+		detail.setReviews(userMapper.selectProductReviews(product_no));
+		detail.setReviewCount(detail.getReviews().size());
+		return detail;
+	}
+
+    @Override
+    @Transactional
+    public boolean reserveProduct(String userId, int product_no) {
+        // 간단 insert 결과로 성공 여부 판단
+        return userMapper.insertReservation(userId, product_no) > 0;
     }
+
+	/** 사용자 회원가입 */
+	/** 아이디 중복 체크 */
+	@Override
+	public boolean isDuplicateId(String user_id) {
+		return userMapper.countByUserId(user_id) > 0;
+	}
+
+	@Override
+	public void registerUser(Account account) {
+	    // 비밀번호 MD5 해시
+	    String rawPwd = account.getUser_pwd();
+	    if (rawPwd != null && !rawPwd.isEmpty()) {
+	        account.setUser_pwd(md5(rawPwd));
+	    }
+
+	    // 가입일, 상태 기본값 세팅
+	    account.setJoin_date(new Timestamp(System.currentTimeMillis()));
+	    account.setUser_status("ACTIVE");
+
+	    // *디버그: 최종 저장될 Account 객체 내용 확인
+	    System.out.println("최종 저장 정보: " + account);
+
+	    // DB 저장 (한 번만)
+	    int cnt = userMapper.insertUser(account);
+	    System.out.println("insertUser 반환값: " + cnt);
+	    if (cnt != 1) {
+	        throw new RuntimeException("회원가입 실패 (insertUser 반환값=" + cnt + ")");
+	    }
+	}
+
+	/** MD5 해시 유틸 */
+	private String md5(String input) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] digest = md.digest(input.getBytes());
+			StringBuilder sb = new StringBuilder();
+			for (byte b : digest) {
+				sb.append(String.format("%02x", b));
+			}
+			return sb.toString();
+		} catch (Exception e) {
+			throw new RuntimeException("MD5 암호화 오류", e);
+		}
+	}
+	
+	/**
+	 * 메뉴바 review
+	 * */
+
+    @Override
+    public List<Review> getAllReviews() {
+        return userMapper.findAllReviews();
+    }
+
 }

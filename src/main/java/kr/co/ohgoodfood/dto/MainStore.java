@@ -1,10 +1,13 @@
 package kr.co.ohgoodfood.dto;
 
-import lombok.*;
-
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * [DTO] MainStore
