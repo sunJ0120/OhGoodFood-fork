@@ -26,7 +26,7 @@
                                 <div class="storeImgSlider">
                                     <div class="sliderTrack">
                                         <c:forEach var="imgUrl" items="${productDetail.images}">
-                                            <img src="${pageContext.request.contextPath}/upload/store/${imgUrl}"
+                                            <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/init.jpg"
                                                 alt="상품 이미지" class="sliderImg" />
                                         </c:forEach>
                                     </div>
@@ -240,7 +240,7 @@
                                                 var html = '<div class="overlap">' +
                                                     '  <div class="reviewerName">' + r.author + '</div>' +
                                                     '  <div class="reviewedDate">' + r.date + '</div>' +
-                                                    '  <img class="reviewImage" src="' + r.image + '" alt="리뷰 이미지" />' +
+                                                    '  <https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/upload/' + r.image + '" alt="리뷰 이미지" />' +
                                                     '  <p class="reviewContent">' + r.text + '</p>' +
                                                     '</div>';
                                                 $list.append(html);

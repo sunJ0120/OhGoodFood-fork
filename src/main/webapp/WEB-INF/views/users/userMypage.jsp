@@ -57,7 +57,7 @@
                 <!-- 리뷰 이미지 -->
                 <div class="reviewImageArea">
                   <img class="reviewImage"
-                       src="${review.review_img}"
+                       src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/init.jpg"
                        alt="리뷰 이미지" />
                 </div>
                 <div class="reviewHeaderBox">
@@ -75,7 +75,7 @@
                 <!-- 매장 정보 -->
                 <div class="storeInfo">
                   <img class="storeImage"
-                       src="${review.store_img}"
+                       src = "https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/init.jpg"
                        alt="매장 이미지" />
                   <div class="storeDetail">
                     <span class="storeName">${review.store_name}</span>
