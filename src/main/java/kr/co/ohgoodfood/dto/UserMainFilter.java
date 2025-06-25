@@ -13,7 +13,7 @@ import java.time.LocalDate;
  */
 
 @Data
-@NoArgsConstructor //MyBatis가 리플렉션으로 패킷을 바인딩할 때는 인자가 없는 생성자가 반드시 필요하다.
+@NoArgsConstructor
 public class UserMainFilter {
     //카테고리 modal 토글
     private String category_bakery;

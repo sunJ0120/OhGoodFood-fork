@@ -34,7 +34,6 @@ public interface UsersService {
     //[Controller 로직] UsersController.userOrders 연결 로직
     List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter);
 
-    //[Controller 로직] UsersController.userMain 연결 로직
     /* 사용자 기본 정보 한 건 조회*/
     UserMypage getUserInfo(String userId);
     /* 리뷰 리스트 여러 건 조회 */

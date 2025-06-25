@@ -2,11 +2,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-
 <section class="productList">
     <c:forEach var="userOrder" items = "${userOrderList}" >
-        <article class="productCard">
-            <!-- 1줄: 상단 정보 -->
+        <article class="productCard"
+                 data-order-no="${userOrder.order_no}"
+                 data-order-status="${userOrder.order_status}"
+                 data-canceld-from="${userOrder.canceld_from}">
             <div class="orderTop">
                 <div class="storeName">${userOrder.store_name}</div>
                 <div class="headerLeftWrapper">
@@ -48,7 +49,7 @@
                 </div>
             </div>
             <hr>
-            <!-- 2줄: 이미지 + 주문 정보 -->
+
             <div class="orderMiddle">
                 <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
                 <div class="orderInfoWrapper">
@@ -56,31 +57,44 @@
                         <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.quantity}개</span></div>
                         <div class="orderInfoSub"><div class="orderTime">픽업 시간 : </div>
                             <span class="orderTimeValue">
-                      <span class="pickupStartText">
-                      <c:if test="${not empty userOrder.pickup_start}">
-                          <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
-                          ~
-                      </c:if>
-                    </span>
-                    <span class="pickupEndText">
-                      <c:if test="${not empty userOrder.pickup_end}">
-                          <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
-                      </c:if>
-                    </span>
-                    </span>
+                          <span class="pickupStartText">
+                          <c:if test="${not empty userOrder.pickup_start}">
+                              <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
+                              ~
+                          </c:if>
+                        </span>
+                        <span class="pickupEndText">
+                          <c:if test="${not empty userOrder.pickup_end}">
+                              <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
+                          </c:if>
+                        </span>
+                        </span>
                         </div>
                         <div class="orderInfoSub"><div class="orderPaid">결제 금액 : </div>
                             <span class="orderPaidValue">
-                      <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
-                    </span>
+                          <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
+                        </span>
                         </div>
                     </div>
                 </div>
             </div>
+                <%-- 버튼 --%>
+            <div class="orderNoticeWrapper">
+                <div class="orderNoticeBlockCancel hidden">
+                    * 확정 한 시간 전부터 주문 취소가 불가능합니다.
+                </div>
 
-            <!-- 이 부분 상태에 따라 처리 필요 -->
-            <div class="orderNotice">
-                * 확정 한 시간 전부터 주문 취소가 불가능합니다.
+                <button type="button" class="orderBrown hidden orderReview" data-order-no="${userOrder.order_no}">
+                    리뷰 쓰기
+                </button>
+
+                <div type="button" class="orderWhite hidden orderPickupCode">
+                    픽업 코드 : ${userOrder.order_code}
+                </div>
+
+                <button type="button" class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
+                    주문 취소
+                </button>
             </div>
         </article>
 
