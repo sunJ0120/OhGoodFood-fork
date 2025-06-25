@@ -1,10 +1,7 @@
 package kr.co.ohgoodfood.dto;
 
 
-import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
+import java.sql.Timestamp;
 
 import lombok.Data;
 
@@ -14,8 +11,7 @@ public class Alarm {
     private String alarm_title;
     private String alarm_contents;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime sended_at;
+    private Timestamp sended_at;
 
     private String alarm_displayed;
     private String receive_id;

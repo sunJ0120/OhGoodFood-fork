@@ -152,7 +152,7 @@
                                             <option value="reservation" ${vo.order_status == 'reservation' ? 'selected' : ''}>예약</option>
                                             <option value="confirmed" ${vo.order_status == 'confirmed' ? 'selected' : ''}>확정</option>
                                             <option value="pickup" ${vo.order_status == 'pickup' ? 'selected' : ''}>픽업</option>
-                                            <option value="cancle" ${vo.order_status == 'cancle' ? 'selected' : ''}>취소</option>
+                                            <option value="cancel" ${vo.order_status == 'cancel' ? 'selected' : ''}>취소</option>
                                         </select>
                                     </td>
                                 </tr>
