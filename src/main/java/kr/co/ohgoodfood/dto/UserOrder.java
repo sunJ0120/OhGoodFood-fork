@@ -1,6 +1,5 @@
 package kr.co.ohgoodfood.dto;
 
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

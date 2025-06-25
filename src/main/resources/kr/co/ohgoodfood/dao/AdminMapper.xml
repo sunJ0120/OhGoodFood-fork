@@ -70,6 +70,20 @@
 		WHERE confirmed = 'N'
 	</select>
 
+	<!-- 단일 회원 목록 조회 -->
+	<select id="getUser" parameterType="kr.co.ohgoodfood.dto.Account" resultType="kr.co.ohgoodfood.dto.Account">
+		SELECT *
+		FROM Account
+		WHERE user_id = #{s_value}
+	</select>
+
+	<!-- 단일 회원 정보 업데이트 -->
+	<update id="updateUser" parameterType="kr.co.ohgoodfood.dto.Account">
+		UPDATE Account
+		SET user_name = #{user_name}, phone_number = #{phone_number}, location_agreement = #{location_agreement}
+		WHERE user_id = #{user_id}
+	</update>
+
 	<!-- Account 검색 -->
 	<select id="searchAccounts" parameterType="kr.co.ohgoodfood.dto.Account" resultType="kr.co.ohgoodfood.dto.Account">
 		SELECT *

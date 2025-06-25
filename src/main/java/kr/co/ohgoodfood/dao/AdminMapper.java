@@ -37,6 +37,10 @@ public interface AdminMapper {
     public int getThisMonthOrderCountTotal();
     // 미승인 가게 수 조회 
     public int getUnapprovedStoreCountTotal();
+    // 단일 회원 목록 조회 
+    public Account getUser(Account account);
+    // 단일 회원 정보 업데이트 
+    public int updateUser(Account account);
     // 회원 목록 조회 
     public List<Account> searchAccounts(Account account);
     // 회원 수 조회 
