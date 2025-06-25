@@ -11,9 +11,9 @@
 .reviewList {
   position: relative;
   width: 440px;
-  margin: auto;
   background-color: #f5f3ea;
   font-family: 'nanumesquareneo', sans-serif;
+  margin-top: 30px;
 }
 
 /* 전체 박스 */

@@ -6,9 +6,29 @@
 
 @font-face {
   font-family: 'nanumesquareneo_b';
-  src: url('font/NANUMSQUARENEO-BRG.ttf');
+  src: url('font/NanumSquareNeo-bRg.ttf');
 }
 
+body{
+    font-family: 'nanumesquareneo';
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+#wrapper{
+    width: 440px;
+    height: 956px;
+    background-color: #F5F3EA;   
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.reviewHeaderBox{
+  display: flex;
+  flex-direction: column;
+}
 /* infoSection 기본 */
 .infoSection {
   padding: 10px 20px;
@@ -170,15 +190,14 @@
     "img content"
     "store store";
   gap: 8px 12px;
-  width: 100%;
+  width: 90%;
   max-width: 357px;
   height: 195px;
-  box-sizing: border-box;
   padding: 16px;
   background: #F5F3EA;
   border: 1px solid #E5DFD5;
   border-radius: 10px;
-  margin: 0 auto;
+
 }
 .reviewCard .line {
   grid-area: line;
@@ -227,7 +246,7 @@
   font-size: 11px;
   line-height: 17px;
   color: #000;
-  margin: 0;
+  margin-top: 5px;
 }
 
 /* 매장 정보 + 가격 */
@@ -240,7 +259,7 @@
   border: 1px solid #8B6D5C;
   border-radius: 10px;
   padding: 8px 12px;
-  margin-top: 20px;
+  margin-top: 0px;
   /* 위치를 아래로 내림 */
 }
 

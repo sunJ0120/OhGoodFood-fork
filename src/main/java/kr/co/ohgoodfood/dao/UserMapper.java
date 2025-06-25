@@ -14,6 +14,7 @@ import java.util.List;
  * - 주문 내역 조회 및 상태 변경
  * - 결제 전 처리
  * - 알림 조회 및 상태 변경
+ * - 마이페이지 조회
  */
 @Mapper
 public interface UserMapper {
@@ -131,4 +132,39 @@ public interface UserMapper {
      */
     void updateAlarmHidden(@Param("user_id") String user_id,
                            @Param("alarm_no") int alarm_no);
+
+    /**
+    * 세션의 user_id 로 MyPage DTO 전체를 조회 
+    * @param user_id  사용자 ID
+    */
+    
+    /** 유저 정보만 조회 */
+    UserMypage selectUserInfo(@Param("user_id") String userId);
+
+    /** 리뷰 리스트만 조회 (기존 Review DTO 재사용) */
+    List<Review> selectUserReviews(@Param("user_id") String userId);
+    
+    /**
+     * 메인에서 제품 클릭 후 제품 상세 정보 및 리뷰 조회
+     */
+    /** 제품 상세 조회 (Account, Store, Product 조인) */
+    ProductDetail selectProductInfo(@Param("product_no") int product_no);
+
+    /** 제품 이미지 목록 조회 */
+    List<String> selectProductImages(@Param("product_no") int product_no);
+
+    /** 제품 리뷰 리스트 조회 */
+    List<Review> selectProductReviews(@Param("product_no") int product_no);
+
+    /** 사용자 예약 정보 insert */
+    int insertReservation( @Param("user_id") String user_id, @Param("product_no") int product_no);
+    
+    /** 사용자 회원가입*/
+	int insertUser(Account account);    
+    /** 아이디 중복 체크 */
+	int countByUserId(@Param("user_id") String user_id);
+
+
+	/** 모든 리뷰 모아보기*/
+	 List<Review> findAllReviews();
 }
