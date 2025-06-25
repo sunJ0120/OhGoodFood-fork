@@ -175,7 +175,8 @@ public class UserServiceImpl implements UsersService{
             return true;
         }
         return false; //delete 실패!
-
+    }
+    
 	/** 유저 정보 한 건 조회 */
 	@Override
 	public UserMypage getUserInfo(String userId) {
