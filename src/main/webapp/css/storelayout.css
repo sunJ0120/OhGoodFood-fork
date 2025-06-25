@@ -1,6 +1,6 @@
-@font-face {
-    font-family: 'nanumesquareneo';
-    src: url('font/NanumSquareNeo-aLt.ttf');
+.div-wrapper {
+  width: 440px;
+  height: 1356px;
 }
 @font-face {
     font-family: 'nanumesquareneo_b';
@@ -95,4 +95,16 @@ footer{
 
 .menu-item.active {
     background-color: #F5F3EA;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }

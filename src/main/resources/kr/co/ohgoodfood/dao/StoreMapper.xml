@@ -5,15 +5,193 @@
 	<select id="login" parameterType="kr.co.ohgoodfood.dto.Store" resultType="kr.co.ohgoodfood.dto.Store">
 		SELECT * FROM Store WHERE store_id=#{store_id} AND store_pwd=#{store_pwd}
 	</select>
-	
-	<insert id="insert" parameterType="kr.co.ohgoodfood.dto.Store">
-		INSERT INTO Store(
-			store_id, store_pwd, owner_name, store_telnumber, store_name, 
-			store_address, business_number, 
-		)VALUES (
 		
+	<!-- 아이디 중복확인 -->
+	<select id="findById" parameterType="String" resultType="kr.co.ohgoodfood.dto.Store">
+		SELECT * FROM Store WHERE store_id = #{value}
+	</select>
+	
+	<select id="viewReview" parameterType="kr.co.ohgoodfood.dto.Store" resultType="kr.co.ohgoodfood.dto.Review">
+		SELECT user_id, writed_at, review_content 
+		FROM Review WHERE store_id=#{store_id}
+	</select>
+	
+	<select id="getReviews" resultType="kr.co.ohgoodfood.dto.Review">
+		SELECT 
+			review_no,
+			review_content,
+			writed_at,
+			is_blocked,
+			review_img,
+			user_id,
+			store_id,
+			order_no
+		FROM Review
+		WHERE store_id=#{storeId} AND is_blocked = 'N'
+		ORDER BY writed_at DESC
+	</select>
+	<select id="getOrders" resultType="kr.co.ohgoodfood.dto.Orders">
+		SELECT 
+			o.*, p.*, i.store_img
+		FROM Orders o
+		JOIN Product p 
+			ON o.product_no = p.product_no
+		LEFT JOIN (
+			SELECT store_id, store_img
+			FROM Image
+			WHERE img_no IN (
+				SELECT MIN(img_no)
+				FROM Image
+				GROUP BY store_id
+			)			
+		)i ON o.store_id = i.store_id
+		<where>
+			o.store_id=#{storeId} 
+			<choose>
+				<when test="type == 'confirmed'">
+					AND o.order_status IN ('confirmed', 'pickup')
+					
+				</when>
+				<otherwise>
+					AND o.order_status=#{type}
+				</otherwise>
+			</choose>
+			AND MONTH(o.ordered_at) = MONTH(CURDATE())
+			AND YEAR(o.ordered_at) = YEAR(CURDATE())
+		</where>
+		ORDER BY o.ordered_at DESC
+	</select>
+	
+	<update id="confirmOrders">
+		UPDATE Orders
+		SET order_status=#{type}
+		WHERE order_no=#{id}
+	</update>
+	
+	<update id="createOrderCode">
+		UPDATE Orders 
+		SET order_code=#{randomCode}
+		WHERE order_no=#{id} AND order_status=#{type}
+	
+	</update>
+	
+	<update id="cancleOrders">
+		UPDATE Orders
+		SET order_status=#{type}, canceld_from="store"
+		WHERE order_no=#{id}
+	
+	</update>
+	
+	<select id="getOrderById" parameterType="int" resultType="kr.co.ohgoodfood.dto.Orders">
+		SELECT * 
+		FROM Orders
+		WHERE order_no=#{no}
+			
+	</select>
+	
+	<insert id="insertAlarm">
+		INSERT INTO Alarm(
+			alarm_title, alarm_contents, sended_at, alarm_displayed, receive_id, alarm_read
+		) VALUES (
+			#{alarm_title}, #{alarm_contents}, #{sended_at}, #{alarm_displayed}, #{receive_id}, #{alarm_read}
 		)
 		
-	
 	</insert>
+	
+	<update id="pickupOrders">
+		UPDATE Orders
+		SET order_status=#{type}, picked_at=NOW()
+		WHERE order_no=#{id}
+	</update>
+	
+	<select id="getConfirmedOrPickupOrders" parameterType="String" resultType="kr.co.ohgoodfood.dto.Orders">
+	    SELECT o.*, p.*, i.store_img
+	    FROM Orders o
+	    JOIN Product p ON o.store_id = p.store_id
+	    LEFT JOIN (
+	        SELECT store_id, store_img
+	        FROM Image
+	        WHERE img_no IN (
+	            SELECT MIN(img_no)
+	            FROM Image
+	            GROUP BY store_id
+	        )
+	    ) i ON o.store_id = i.store_id
+	    WHERE o.store_id = #{id}
+	      AND o.order_status IN ('confirmed', 'pickup')
+	    ORDER BY o.ordered_at DESC
+	</select>
+	
+	<select id="getSales" resultType="kr.co.ohgoodfood.dto.StoreSales">
+		SELECT
+			o.store_id AS store_id,
+			SUM(o.quantity * p.sale_price) AS sales,
+			#{start} AS start_date,
+			#{end} AS end_date,
+			COUNT(*) as count
+		FROM Orders o
+		JOIN Product p
+		ON o.store_id = p.store_id
+		WHERE o.store_id=#{store_id}
+		AND o.order_status='pickup'
+		AND DATE(o.ordered_at) BETWEEN #{start} AND #{end}
+	</select>
+
+	<!--회원가입-->
+	<insert id="insert" parameterType="kr.co.ohgoodfood.dto.Store">
+		INSERT INTO Store (
+		store_id, confirmed, business_number, store_address, store_name,
+		store_menu,
+		store_explain, store_telnumber, store_status, opened_at, closed_at,
+		store_pwd,
+		owner_name, category_bakery, category_fruit, category_salad,
+		category_others, latitude, longitude
+		) VALUES (
+		#{store_id}, #{confirmed}, #{business_number}, #{store_address},
+		#{store_name},
+		#{store_menu}, #{store_explain}, #{store_telnumber}, #{store_status},
+		#{opened_at}, #{closed_at}, #{store_pwd}, #{owner_name},
+		#{category_bakery}, #{category_fruit}, #{category_salad},
+		#{category_others}, #{latitude}, #{longitude}
+		)
+	</insert>
+	
+	<!--회원가입 시 이미지 넣기-->
+	<insert id="insertImage" parameterType="kr.co.ohgoodfood.dto.Image">
+		INSERT INTO Image (store_id, store_img)
+		VALUES (#{store_id}, #{store_img})
+	</insert>
+	
+	<!--이미지 가져오기 -->
+	<select id="findImagesByStoreId" parameterType="string" resultType="kr.co.ohgoodfood.dto.Image">
+    	SELECT * FROM Image WHERE store_id = #{store_id}
+	</select>
+
+
+	<select id="findProductByStoreId" parameterType="string" resultType="kr.co.ohgoodfood.dto.Product">
+	    SELECT * FROM Product WHERE store_id = #{store_id} LIMIT 1
+	</select>
+	
+	<!-- 오픈/마감 상태 변경 -->
+	<update id="updateStoreStatus">
+	    UPDATE Store
+	    SET store_status = #{status}
+	    WHERE store_id = #{store_id}
+	</update>
+
+	<!--마이페이지 수정-->
+	<update id="updateStore" parameterType="kr.co.ohgoodfood.dto.Store">
+		UPDATE Store
+		SET
+		opened_at = #{opened_at},
+		closed_at = #{closed_at},
+		category_bakery = #{category_bakery},
+		category_salad = #{category_salad},
+		category_fruit = #{category_fruit},
+		category_others = #{category_others},
+		store_menu = #{store_menu},
+		store_explain = #{store_explain}
+		WHERE store_id = #{store_id}
+	</update>
+
 </mapper>
