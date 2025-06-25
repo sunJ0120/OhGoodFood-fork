@@ -21,7 +21,7 @@ public class CommonController {
 	
 	@GetMapping("/login")
 	public String login() {
-		return "store/login";
+		return "common/login";
 	}
 	@PostMapping("/login")
 	public String login(HttpServletRequest request, HttpSession sess, Model model) {
@@ -30,19 +30,22 @@ public class CommonController {
 		Account account = commonService.loginAccount(id, pwd);
 		if(account != null) {
 			sess.setAttribute("user", account);
-			model.addAttribute("msg", "사용자 로그인 성공");
-	        model.addAttribute("url", "/user/main");
-	        return "store/alert";
+			//model.addAttribute("msg", "사용자 로그인 성공");
+	        //model.addAttribute("url", "/common/intro"); 
+			model.addAttribute("user", account);
+	        
+			return "/common/intro";
 		}
 		Store store = commonService.loginStore(id, pwd);
 		if(store != null) {
 			sess.setAttribute("store", store);
-			model.addAttribute("msg", "사장님 로그인 성공");
-			model.addAttribute("url", "/store/main");
-			return "store/alert";
+			//model.addAttribute("msg", "사장님 로그인 성공");
+			//model.addAttribute("url", "/common/intro");
+			model.addAttribute("store", store);
+			return "/common/intro";
 		}
 		model.addAttribute("msg", "로그인 실패");
-		model.addAttribute("url", "/store/login");
+		model.addAttribute("url", "/common/login");
 		return "store/alert";
 	}
 }

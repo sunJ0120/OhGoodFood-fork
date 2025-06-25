@@ -27,6 +27,15 @@ public class StoreController {
 	@Autowired
 	private StoreService storeService;
 
+	@GetMapping("/jointype")
+	public String jointype() {
+		return "/common/jointype";
+	}
+	
+	@GetMapping("/intro")
+	public String intro() {
+		return "/common/intro";
+	}
 	@GetMapping("/store/logout")
 	public String logout(HttpSession sess, Model model) {
 		sess.invalidate();

@@ -38,5 +38,4 @@ public interface StoreMapper {
 	public int createOrderCode(@Param("id") int id, @Param("type") String type, @Param("randomCode") int randomCode);
 	
 	
-	
 }
