@@ -10,9 +10,7 @@ public class Alarm {
     private int alarm_no;
     private String alarm_title;
     private String alarm_contents;
-
     private Timestamp sended_at;
-
     private String alarm_displayed;
     private String receive_id;
     private String alarm_read;
