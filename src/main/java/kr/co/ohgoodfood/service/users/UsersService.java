@@ -47,7 +47,9 @@ public interface UsersService {
     
     /* 회원가입 처리 */
 	void registerUser(Account account);
-
+	
+	/* 모든 리뷰를 조회 */
+    List<Review> getAllReviews();
 
     
     

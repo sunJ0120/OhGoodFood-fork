@@ -3,6 +3,7 @@ package kr.co.ohgoodfood.controller.users;
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.ProductDetail;
+import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.UserMainFilter;
 import kr.co.ohgoodfood.dto.UserMypage;
 import kr.co.ohgoodfood.dto.UserSignup;
@@ -184,6 +185,13 @@ public class UsersController {
         }
         return "redirect:/user/productDetail?product_no=" + product_no;
     }
-    
-    
+    /**
+     * 하단 메뉴바 Review 페이지
+     */
+    @GetMapping("/reviewList")
+    public String listReviews(Model model) {
+    	List<Review> review = usersService.getAllReviews();
+    	model.addAttribute("review", review);
+        return "users/reviewList";  // reviewList
+    }
 }

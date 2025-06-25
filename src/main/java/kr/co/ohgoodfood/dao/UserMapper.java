@@ -165,6 +165,6 @@ public interface UserMapper {
 	int countByUserId(@Param("user_id") String user_id);
 
 
-	
-
+	/** 모든 리뷰 모아보기*/
+	 List<Review> findAllReviews();
 }

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -228,5 +229,14 @@ public class UserServiceImpl implements UsersService {
 			throw new RuntimeException("MD5 암호화 오류", e);
 		}
 	}
+	
+	/**
+	 * 메뉴바 review
+	 * */
+
+    @Override
+    public List<Review> getAllReviews() {
+        return userMapper.findAllReviews();
+    }
 
 }
