@@ -12,7 +12,7 @@
 <body>
      <div id="wrapper">
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-            <img src="${pageContext.request.contextPath}/img/intro.png" alt="Intro Image">
+            <img src="${pageContext.request.contextPath}/img/storeintro.png" alt="Intro Image">
         </div>
      </div>
      
