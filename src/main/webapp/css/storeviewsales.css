@@ -65,6 +65,24 @@ main{
     height: 380px;
     border-radius: 10px;
 }
+.calendarContainer {
+    background-color: #F5F3EA;
+    padding: 10px;           
+    width: 100%;            
+    box-sizing: border-box;  
+}
+#datepicker {
+    width: 100%;
+    height: auto;            
+}
+.litepicker {
+    background-color: transparent !important;
+}
+
+.litepicker .container {
+    background-color: #F5F3EA !important;
+    width: 100% !important;
+}
 .salesContainer{
     margin-top : 20px;
     border: 1px solid  #99A99B;

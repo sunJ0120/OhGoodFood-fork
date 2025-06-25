@@ -103,6 +103,10 @@ main {
     box-shadow: none !important;
     
 }
+.order-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 .dropdown-arrow {
     font-size: 13px;
@@ -197,7 +201,14 @@ main {
     height:100%;
     margin-top: 40px;
 }
-
+.empty-img {
+    width: 340px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    
+    
+}
 
 
 footer{

@@ -11,6 +11,132 @@
 		SELECT * FROM Store WHERE store_id = #{value}
 	</select>
 	
+	<select id="viewReview" parameterType="kr.co.ohgoodfood.dto.Store" resultType="kr.co.ohgoodfood.dto.Review">
+		SELECT user_id, writed_at, review_content 
+		FROM Review WHERE store_id=#{store_id}
+	</select>
+	
+	<select id="getReviews" resultType="kr.co.ohgoodfood.dto.Review">
+		SELECT 
+			review_no,
+			review_content,
+			writed_at,
+			is_blocked,
+			review_img,
+			user_id,
+			store_id,
+			order_no
+		FROM Review
+		WHERE store_id=#{storeId} AND is_blocked = 'N'
+		ORDER BY writed_at DESC
+	</select>
+	<select id="getOrders" resultType="kr.co.ohgoodfood.dto.Orders">
+		SELECT 
+			o.*, p.*, i.store_img
+		FROM Orders o
+		JOIN Product p 
+			ON o.product_no = p.product_no
+		LEFT JOIN (
+			SELECT store_id, store_img
+			FROM Image
+			WHERE img_no IN (
+				SELECT MIN(img_no)
+				FROM Image
+				GROUP BY store_id
+			)			
+		)i ON o.store_id = i.store_id
+		<where>
+			o.store_id=#{storeId} 
+			<choose>
+				<when test="type == 'confirmed'">
+					AND o.order_status IN ('confirmed', 'pickup')
+					
+				</when>
+				<otherwise>
+					AND o.order_status=#{type}
+				</otherwise>
+			</choose>
+			AND MONTH(o.ordered_at) = MONTH(CURDATE())
+			AND YEAR(o.ordered_at) = YEAR(CURDATE())
+		</where>
+		ORDER BY o.ordered_at DESC
+	</select>
+	
+	<update id="confirmOrders">
+		UPDATE Orders
+		SET order_status=#{type}
+		WHERE order_no=#{id}
+	</update>
+	
+	<update id="createOrderCode">
+		UPDATE Orders 
+		SET order_code=#{randomCode}
+		WHERE order_no=#{id} AND order_status=#{type}
+	
+	</update>
+	
+	<update id="cancleOrders">
+		UPDATE Orders
+		SET order_status=#{type}, canceld_from="store"
+		WHERE order_no=#{id}
+	
+	</update>
+	
+	<select id="getOrderById" parameterType="int" resultType="kr.co.ohgoodfood.dto.Orders">
+		SELECT * 
+		FROM Orders
+		WHERE order_no=#{no}
+			
+	</select>
+	
+	<insert id="insertAlarm">
+		INSERT INTO Alarm(
+			alarm_title, alarm_contents, sended_at, alarm_displayed, receive_id, alarm_read
+		) VALUES (
+			#{alarm_title}, #{alarm_contents}, #{sended_at}, #{alarm_displayed}, #{receive_id}, #{alarm_read}
+		)
+		
+	</insert>
+	
+	<update id="pickupOrders">
+		UPDATE Orders
+		SET order_status=#{type}, picked_at=NOW()
+		WHERE order_no=#{id}
+	</update>
+	
+	<select id="getConfirmedOrPickupOrders" parameterType="String" resultType="kr.co.ohgoodfood.dto.Orders">
+	    SELECT o.*, p.*, i.store_img
+	    FROM Orders o
+	    JOIN Product p ON o.store_id = p.store_id
+	    LEFT JOIN (
+	        SELECT store_id, store_img
+	        FROM Image
+	        WHERE img_no IN (
+	            SELECT MIN(img_no)
+	            FROM Image
+	            GROUP BY store_id
+	        )
+	    ) i ON o.store_id = i.store_id
+	    WHERE o.store_id = #{id}
+	      AND o.order_status IN ('confirmed', 'pickup')
+	    ORDER BY o.ordered_at DESC
+	</select>
+	
+	<select id="getSales" resultType="kr.co.ohgoodfood.dto.StoreSales">
+		SELECT
+			o.store_id AS store_id,
+			SUM(o.quantity * p.sale_price) AS sales,
+			#{start} AS start_date,
+			#{end} AS end_date,
+			COUNT(*) as count
+		FROM Orders o
+		JOIN Product p
+		ON o.store_id = p.store_id
+		WHERE o.store_id=#{store_id}
+		AND o.order_status='pickup'
+		AND DATE(o.ordered_at) BETWEEN #{start} AND #{end}
+	</select>
+
 	<!--회원가입-->
 	<insert id="insert" parameterType="kr.co.ohgoodfood.dto.Store">
 		INSERT INTO Store (
@@ -67,4 +193,5 @@
 		store_explain = #{store_explain}
 		WHERE store_id = #{store_id}
 	</update>
+
 </mapper>

@@ -27,6 +27,13 @@ public class Orders {
     private int page;
     private int startIdx;
 
+    private String store_img;
+    private Date pickup_start;
+    private Date pickup_end;
+    private Date reservation_end;
+    private String pickup_status; 
+    private int sale_price;
+    
     public Orders() {
         this.page = 1;
     }

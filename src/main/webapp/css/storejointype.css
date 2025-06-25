@@ -14,7 +14,7 @@ body {
   height: 100vh;            
   display: flex;
   justify-content: center;
-  background-color: #F5F3EA;
+  
 }
 
 #wrapper {
@@ -22,6 +22,7 @@ body {
   height: 100vh;            
   display: flex;
   flex-direction: column;
+  background-color: #F5F3EA;
 }
 
 header {

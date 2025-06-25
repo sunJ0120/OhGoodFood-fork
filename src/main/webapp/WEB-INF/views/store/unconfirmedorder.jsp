@@ -1,22 +1,23 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 
 <head>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=440, initial-scale=1.0">
     <title>미확정 주문내역</title>
-    <link rel="stylesheet" href="../../../css/confirmedorder.css">
+    <link rel="stylesheet" href="/css/storeunconfirmedorder2.css">
 </head>
 
 <body>
     <div id="wrapper">
         <header>
             <div class="header-container">
-                <img src="../../../img/ohgoodfood_logo.png" alt="Logo Image">
+                <img src="/img/storeohgoodfood_logo.png" alt="Logo Image">
                 <div class="icon-container">
-                    <img src="../../../img/alarm_active.png" alt="알람" class="icon">
-                    <img src="../../../img/logout.png" alt="로그아웃" class="icon">
+                    <img src="/img/storealarm_active.png" alt="알람" class="icon">
+                    <img src="/img/storelogout.png" alt="로그아웃" class="icon">
                 </div>
             </div>
         </header>
@@ -28,7 +29,7 @@
                         <span class="order-desc">| 주문내역을 확인하세요</span>
                     </div>
                     <div class="order-status-dropdown">
-                        <button class="order-status-btn">미확정 주문 <img src="../../../img/arrow.png"
+                        <button class="order-status-btn">미확정 주문 <img src="../../../img/storearrow.png"
                                 class="dropdown-arrow"></button>
                         <ul class="order-status-list">
                             <li class="active">미확정 주문</li>
@@ -45,30 +46,18 @@
                     <div class="order-card">
                         <div class="order-card-header">
                             <span class="order-card-title">오굿백 2개 예약</span>
-                            <div class="order-card-button">
-                                <button class="order-card-btn" data-status="today">오늘 픽업</button>
-                                
-                            </div>
-                            <div class="order-group">
-                                <label>
-                                    <input type="checkbox" class="order-checkbox" style="display:none;">
-                                    <img src="../../../img/noncheck.png" class="checkbox-img" alt="체크박스">
-                                    
-                                </label>
-                            </div>
-                            
                             <span class="order-card-date">2025.06.11</span>
                         </div>
                         <hr class="order-card-divider">
                         <div class="order-card-body">
-                            <img src="../../../img/bread.png" alt="오굿백" class="order-card-img">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
                             <div class="order-card-info">
                                 <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
                                 <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
-                                <div class="order-card-info-ctime"><b>결제 금액 :</b> 6900₩</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 17:30 ~ 18:30</div>
                                 <div class="order-card-btns">
-                                    <button class="order-btn-pickup">픽업코드 : 010523</button>
-                                    
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
                                 </div>
                             </div>
                         </div>
@@ -76,29 +65,18 @@
                     <div class="order-card">
                         <div class="order-card-header">
                             <span class="order-card-title">오굿백 2개 예약</span>
-                            <div class="order-card-button">
-                                <button class="order-card-btn" data-status="complete">픽업 완료</button>
-                                
-                            </div>
-                            <div class="order-group">
-                                <label>
-                                    <input type="checkbox" class="order-checkbox" style="display:none;">
-                                    <img src="../../../img/noncheck.png" class="checkbox-img" alt="체크박스">
-                                    
-                                </label>
-                            </div>
                             <span class="order-card-date">2025.06.11</span>
                         </div>
                         <hr class="order-card-divider">
                         <div class="order-card-body">
-                            <img src="../../../img/bread.png" alt="오굿백" class="order-card-img">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
                             <div class="order-card-info">
                                 <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
                                 <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
-                                <div class="order-card-info-ctime"><b>결제 금액 :</b> 6900₩</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 16:30 ~ 17:30</div>
                                 <div class="order-card-btns">
-                                    <button class="order-btn-pickup">픽업코드 : 0000120</button>
-                                    
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
                                 </div>
                             </div>
                         </div>
@@ -106,29 +84,18 @@
                     <div class="order-card">
                         <div class="order-card-header">
                             <span class="order-card-title">오굿백 2개 예약</span>
-                            <div class="order-card-button">
-                                <button class="order-card-btn" data-status="complete">픽업 완료</button>
-                                
-                            </div>
-                            <div class="order-group">
-                                <label>
-                                    <input type="checkbox" class="order-checkbox" style="display:none;">
-                                    <img src="../../../img/noncheck.png" class="checkbox-img" alt="체크박스">
-                                    
-                                </label>
-                            </div>
                             <span class="order-card-date">2025.06.11</span>
                         </div>
                         <hr class="order-card-divider">
                         <div class="order-card-body">
-                            <img src="../../../img/bread.png" alt="오굿백" class="order-card-img">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
                             <div class="order-card-info">
                                 <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
                                 <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
-                                <div class="order-card-info-ctime"><b>결제 금액 :</b> 6900₩</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 16:30 ~ 17:30</div>
                                 <div class="order-card-btns">
-                                    <button class="order-btn-pickup">픽업코드 : 000726</button>
-                                    
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
                                 </div>
                             </div>
                         </div>
@@ -136,29 +103,18 @@
                     <div class="order-card">
                         <div class="order-card-header">
                             <span class="order-card-title">오굿백 2개 예약</span>
-                            <div class="order-card-button">
-                                <button class="order-card-btn" data-status="complete">픽업 완료</button>
-                                
-                            </div>
-                            <div class="order-group">
-                                <label>
-                                    <input type="checkbox" class="order-checkbox" style="display:none;">
-                                    <img src="../../../img/noncheck.png" class="checkbox-img" alt="체크박스">
-                                    
-                                </label>
-                            </div>
                             <span class="order-card-date">2025.06.11</span>
                         </div>
                         <hr class="order-card-divider">
                         <div class="order-card-body">
-                            <img src="../../../img/bread.png" alt="오굿백" class="order-card-img">
+                            <img src="../../../img/storebread.png" alt="오굿백" class="order-card-img">
                             <div class="order-card-info">
                                 <div class="order-card-info-person"><b>예약자 :</b> 오목킹</div>
                                 <div class="order-card-info-time"><b>픽업 시간 :</b> 18:30 ~ 19:30</div>
-                                <div class="order-card-info-ctime"><b>결제 금액 :</b> 6900₩</div>
+                                <div class="order-card-info-ctime"><b>확정 시간 :</b> 16:30 ~ 17:30</div>
                                 <div class="order-card-btns">
-                                    <button class="order-btn-pickup">픽업코드 : pochako</button>
-                                    
+                                    <button class="order-btn confirm">확정</button>
+                                    <button class="order-btn cancel">취소</button>
                                 </div>
                             </div>
                         </div>
@@ -170,16 +126,16 @@
             <div class="footer-container">
                 <div class="menu-container">
                     <div class="menu-item">
-                        <img src="../../../img/home.png" data-name="home" alt="홈" class="menu-icon">
+                        <img src="../../../img/storehome.png" data-name="home" alt="홈" class="menu-icon">
                     </div>
                     <div class="menu-item">
-                        <img src="../../../img/review.png" data-name="review" alt="리뷰" class="menu-icon">
+                        <img src="../../../img/storereview.png" data-name="review" alt="리뷰" class="menu-icon">
                     </div>
                     <div class="menu-item">
-                        <img src="../../../img/order.png" data-name="order" alt="주문" class="menu-icon">
+                        <img src="../../../img/storeorder.png" data-name="order" alt="주문" class="menu-icon">
                     </div>
                     <div class="menu-item">
-                        <img src="../../../img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+                        <img src="../../../img/storemypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
                     </div>
                 </div>
             </div>
@@ -193,11 +149,11 @@
                 menuItems.forEach(i => {
                     i.classList.remove('active');
                     const img = i.querySelector('img');
-                    img.src = `../../../img/${img.dataset.name}.png`;
+                    img.src = `../../../img/store${img.dataset.name}.png`;
                 });
                 this.classList.add('active');
                 const img = this.querySelector('img');
-                img.src = `../../../img/${img.dataset.name}_active.png`;
+                img.src = `../../../img/store${img.dataset.name}_active.png`;
             });
         });
 
@@ -228,66 +184,12 @@
                         statusText.textContent = '취소한 주문내역';
                         statusSubText.textContent = '| 취소한 주문기록';
                     }
-                    statusBtn.innerHTML = `${this.textContent} <img src="../../../img/arrow.png" class="dropdown-arrow" alt="아래화살표">`;
+                    statusBtn.innerHTML = `${this.textContent} <img src="../../../img/storearrow.png" class="dropdown-arrow" alt="아래화살표">`;
                     statusList.classList.remove('show');
                     e.stopPropagation();
                 });
             });
         }
-        document.querySelectorAll('.order-checkbox').forEach(function (checkbox) {
-        checkbox.addEventListener('change', function () {
-            const img = this.nextElementSibling;
-            const label = this.parentElement;
-            if (this.checked) {
-                img.src = '../../../img/realnoncheck.png';    
-                label.style.fontWeight = "normal";   
-            } else {
-                img.src = '../../../img/noncheck.png';
-                label.style.fontWeight = "normal"; 
-            }
-                });
-            });
-        $(document).ready(function () {
-            $('.order-card').each(function () {
-                const $orderBtn =$(this).find('.order-card-btn');
-                const status = $orderBtn.data('status');
-                const $pickupBtn = $(this).find('.order-btn-pickup');
-
-                if (status === 'complete') {
-                    
-                    $pickupBtn.css({
-                        'text-decoration': 'line-through',
-                        'color': '#8B6D5C'
-                    });
-                    $orderBtn.css({
-                        'background-color': '#8B6D5C',
-                        'color': '#FFFFFF',
-                        'border': '1px solid #8B6D5C'
-                    });
-                } else if (status === 'today') {
-                    
-                    $orderBtn.css({
-                        'background-color': '#D8A8AB',
-                        'color': '#FFFFFF',
-                        'border': '1px solid #D8A8AB'
-                    });
-                }
-            });
-        });
-
-        $(document).ready(function () {
-            $('.order-card').each(function () {
-                const status = $(this).find('.order-card-btn').data('status');
-                const $pickupBtn = $(this).find('.order-btn-pickup');
-
-                if (status === 'complete') {
-                    $pickupBtn.css({
-                        'text-decoration': 'line-through',
-                        'color': '#8B6D5C' 
-                    });
-                }
-            });
-        });
     </script>
 </body>
 
