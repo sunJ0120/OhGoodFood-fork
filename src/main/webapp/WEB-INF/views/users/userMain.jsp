@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -7,34 +7,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OhGoodFood</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">
+<%--  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">--%>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/usermain.css">
 </head>
 <body>
 <div id="wrapper">
-
-  <header>
-    <div class="header-container">
-      <img src="${pageContext.request.contextPath}/img/ohgoodfood_logo.png" alt="Logo Image">
-      <div class="icon-container">
-        <!-- 알람 이동 -->
-        <a href="${pageContext.request.contextPath}/user/alarm">
-          <img src="${pageContext.request.contextPath}/img/alarm_active.png" alt="알람" class="icon">
-        </a>
-        <!-- 즐겨찾기 적용 -->
-        <a href="${pageContext.request.contextPath}/user/bookmark">
-          <img src="${pageContext.request.contextPath}/img/bookmark.png" alt="즐겨찾기" class="icon">
-        </a>
-        <!-- 로그아웃 이동 -->
-        <a href="${pageContext.request.contextPath}/logout">
-          <img src="${pageContext.request.contextPath}/img/logout.png" alt="로그아웃" class="icon">
-        </a>
-      </div>
-    </div>
-  </header>
+  <%-- header include --%>
+  <%@ include file="/WEB-INF/views/users/header.jsp" %>
 
   <main>
-    <!-- 검색바 -->
+    <%-- 검색바 --%>
     <section class="searchBar">
       <div class="searchWrapper">
         <input type="text" placeholder="검색어를 입력하세요." class="searchInput">
@@ -44,7 +26,7 @@
       </div>
     </section>
 
-    <!-- 필터 버튼 -->
+    <%-- 필터 버튼 --%>
     <section class="filterButtons">
       <div class="filterDropdown">
         <button class="categoryFilterBtn">
@@ -65,13 +47,13 @@
       <button class="filterBtn pickup">내일 픽업</button>
     </section>
 
-    <!-- 상품 리스트 -->
+    <%-- 상품 리스트 --%>
     <div class="tabBoxWrapper">
       <div class="tabSelector">
         <button class="tabBtn active">리스트</button>
         <button class="tabBtn">지도</button>
       </div>
-      <!-- topWrapper로 한 번더 감싸서 스크롤 적용 -->
+      <%-- topWrapper로 한 번더 감싸서 스크롤 적용 --%>
       <div class="topWrapper">
         <div class="productWrapper">
           <section class="productList">
@@ -164,7 +146,7 @@
             </c:forEach>
           </section>
         </div>
-          <!-- 지도 api 영역 -->
+          <%-- 지도 api 영역 --%>
           <div class="mapWrapper" style="display: none;">
             <p>여기에 지도 들어갈 예정입니다~</p>
           </div>
@@ -172,79 +154,12 @@
     </div>
   </main>
 
-  <footer>
-    <div class="footer-container">
-      <div class="menu-container">
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/main">
-            <img src="${pageContext.request.contextPath}/img/home.png" data-name="home" alt="홈" class="menu-icon">
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/reviewList">
-            <img src="${pageContext.request.contextPath}/img/review.png" data-name="review" alt="리뷰" class="menu-icon">
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/orderList">
-            <img src="${pageContext.request.contextPath}/img/order.png" data-name="order" alt="주문" class="menu-icon">
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/mypage">
-            <img src="${pageContext.request.contextPath}/img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
+  <%-- footer include --%>
+  <%@ include file="/WEB-INF/views/users/footer.jsp" %>
 
 </div>
-<!-- JQuery CDN -->
+<%-- JQuery CDN --%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- [layout] bottom navigation js -->
-<script>
-  // ⭐ 해당 페이지면 켜져 있어야 하므로 로직 추가
-  // ⭐  1) 로드 시: 현재 페이지와 링크 비교해서 active 세팅
-  const contextPath = '${pageContext.request.contextPath}';
-
-  const curr = window.location.pathname.replace(contextPath, '').replace(/\/$/, '');
-  $('.menu-item').each(function(){
-    const $a = $(this).find('a');
-    if (!$a.length) return;  // <a> 없는 아이템 패스 (링크 없으므로)
-    // a 태그의 pathname 만 뽑아서 비교
-    const link = this.querySelector('a').pathname
-            .replace(contextPath, '').replace(/\/$/, '');
-    if (link === curr) {
-      $(this).addClass('active');
-      const $img = $(this).find('img');
-      const name = $img.data('name');
-      $img.attr('src', `${contextPath}/img/${"${name}"}_active.png`);
-    }
-  });
-
-  // 2) 클릭시에는 기존 로직
-  $(document).ready(function () {
-    $('.menu-item').on('click', function () {
-      $('.menu-item').each(function () {
-        $(this).removeClass('active');
-        const $img = $(this).find('img');
-        // 기본 이미지로 복원
-        const name = $img.attr('data-name');
-        $img.attr('src', `${contextPath}/img/${"${name}"}.png`);
-      });
-      $(this).addClass('active');
-      const $img = $(this).find('img');
-      // active 이미지로 변경
-      const name = $img.attr('data-name');
-      // log 찍어보기
-      console.log("data-name:", $img.attr('data-name'));
-
-      $img.attr('src', `${contextPath}/img/${"${name}"}_active.png`);
-    });
-  });
-</script>
-<!-- [filter] category filter modal toggle js -->
 <script>
   $(document).ready(function () {
     const $dropdownToggle = $(".dropdownToggle");
@@ -283,7 +198,7 @@
     });
   });
 </script>
-<!-- [filter] atc filter js -->
+<%-- [filter] atc filter js --%>
 <script>
   $(document).ready(function () {
     const $filterButtons = $(".filterBtn");
@@ -296,7 +211,7 @@
     });
   });
 </script>
-<!-- [main] main map 화면 전환 js -->
+<%-- [main] main map 화면 전환 js --%>
 <script>
   $(document).ready(function () {
     const $tabBtn = $(".tabBtn");
@@ -320,7 +235,7 @@
     });
   });
 </script>
-<!--[main] 픽업 상태에 따라 뱃지 색상 변경 & 카드 오퍼시티 변경 -->
+<%--[main] 픽업 상태에 따라 뱃지 색상 변경 & 카드 오퍼시티 변경 --%>
 <script>
   $(document).ready(function () {
     applyBadgeStyles(); // 페이지 처음 로드 시 적용
@@ -345,7 +260,7 @@
     });
   }
 </script>
-<!--[main] filterBtn에 따라 필터링 적용, ajax 적용 -->
+<%--[main] filterBtn에 따라 필터링 적용, ajax 적용 --%>
 <script>
   let filterParams = {}; // 최종적으로 전송할 JSON 객체
 
@@ -479,7 +394,7 @@
     }
   });
 </script>
-<!-- Product card 누르면 상세 이동 -->
+<%-- Product card 누르면 상세 이동 --%>
 <script>
   $(function(){
     $('.productCard').on('click', function(){
@@ -487,30 +402,8 @@
 
       console.log("product-no : " + no);
       const ctx = '${pageContext.request.contextPath}';
-      window.location.href = ctx + '/user/productdetail?product_no=' + no;
+      window.location.href = ctx + '/user/productDetail?product_no=' + no;
     });
-  });
-</script>
-<!-- navigation 클릭시, 현재 페이지면 이동 방지 -->
-<script>
-  $(function(){
-    const currentPath = window.location.pathname.replace(/\/$/, '');  // 끝의 / 제거
-    $('.menu-item a').on('click', function(e){
-      const linkPath = this.pathname.replace(/\/$/, '');               // 끝의 / 제거
-      console.log({ linkPath, currentPath });
-      if (linkPath === currentPath) {
-        e.preventDefault();
-      }
-    });
-  });
-
-  //헤더에 있는 요소들 같은 경우도 현재 위치면 클릭 방지
-  $('.icon-container a').on('click', function(e){
-    const linkPath = this.pathname.replace(/\/$/, '');               // 끝의 / 제거
-    console.log({ linkPath, currentPath });
-    if (linkPath === currentPath) {
-      e.preventDefault();
-    }
   });
 </script>
 </body>
