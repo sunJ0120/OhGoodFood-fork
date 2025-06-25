@@ -2,9 +2,6 @@ package kr.co.ohgoodfood.dto;
 
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
 import lombok.Data;
 
 @Data
@@ -32,6 +29,13 @@ public class Orders {
     private int page;
     private int startIdx;
 
+    private String store_img;
+    private Timestamp pickup_start;
+    private Timestamp pickup_end;
+    private Timestamp reservation_end;
+    private String pickup_status; 
+    private int sale_price;
+    
     public Orders() {
         this.page = 1;
     }

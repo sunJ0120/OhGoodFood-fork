@@ -4,6 +4,8 @@ on:
   pull_request:
     types: [opened, reopened, synchronize]
 
+
+
 jobs:
   assign-reviewers:
     runs-on: ubuntu-latest
@@ -14,24 +16,32 @@ jobs:
         with:
           github-token: ${{ secrets.GH_TOKEN }}
           script: |
+            const author = context.payload.pull_request.user.login;
             const branch = context.payload.pull_request.base.ref;
             let reviewers = [];
 
             if (branch === 'store') {
-              reviewers = ['minsss0726', 'window101', 'parkeunhyo'];
+              reviewers = ['minsss0726', 'window101', 'parkeunhyo'].filter(u => u !== author);
             } else if (branch === 'users') {
-              reviewers = ['minsss0726', 'gaaaani', 'sunJ0120'];
+              reviewers = ['minsss0726', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
             } else if (branch === 'dev') {
-              reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'];
+              reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
+            } else if (branch === 'main') {
+              reviewers = ['minsss0726', 'window101', 'parkeunhyo', 'gaaaani', 'sunJ0120'].filter(u => u !== author);
             }
-
+            
             if (reviewers.length > 0) {
-              await github.rest.pulls.requestReviewers({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                reviewers: reviewers
-              });
+              try{
+                await github.rest.pulls.requestReviewers({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: context.payload.pull_request.number,
+                  reviewers: reviewers
+                });
+                console.log('Reviewers assigned successfully');
+              } catch (error) {
+                console.log('Error assigning reviewers:', error);
+              }
             } else {
-              console.log('No reviewers assigned for branch:', branch);
+              console.log(`No reviewers to assign. PR author (${author}) is the only candidate.`);
             }
