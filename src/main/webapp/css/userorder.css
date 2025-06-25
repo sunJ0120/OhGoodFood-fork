@@ -1,0 +1,363 @@
+main {
+    padding: 0 20px;
+    max-width: 440px;
+    margin: 0 0;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+.orderHeaderWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #99a99b;
+    background-color: #F5F3EA;
+    padding: 0 12px;
+    height: 48px;
+}
+
+.filterDropdown{
+    position: relative;
+    display: inline-block;
+}
+
+.categoryFilterBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*min-width: 120px;*/
+
+    padding: 6px 10px;
+    background-color: #F5F3EA;
+    color: #8b6d5c;
+    border: 1px solid #8b6d5c;
+    border-radius: 10px;
+    font-family: "NanumSquare Neo-Bold", sans-serif;
+    font-size: 14px;
+
+    gap: 4px;
+}
+
+.categoryFilterBtn.active{
+    background-color: #D8A8AB;
+    color: white;
+}
+
+.categoryFilterBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 6px;
+    box-sizing: border-box;
+
+    width: 125px;
+}
+
+.dropdownToggle {
+    width: 23px;
+    height: 11px;
+}
+
+.filterBtn img {
+    vertical-align: middle;
+}
+
+.filterBtn.active {
+    background-color: #d8a8ab;
+    color: white;
+}
+
+.tabBoxWrapper {
+    border: 1px solid #99a99b;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    max-height: 665px;
+    width: 100%;
+    padding: 10px;
+
+    box-sizing: border-box;
+}
+
+.topWrapper {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    height: 665px;
+
+    /* Firefox, IE & Edge용 스크롤 숨기기 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Chrome, Safari용 스크롤 숨기기 */
+.topWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.productWrapper {
+    padding-top: 16px;
+    background-color: #F5F3EA;
+    box-sizing: border-box;
+}
+
+.productList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.productCard {
+    border: 1px solid #99A99B;
+    background-color: #E5DFD5;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 340px;
+
+    padding: 10px 15px;
+
+    /*cursor: pointer;*/
+}
+
+.productCard.blockCancel {
+    background-color: #F5F3EA;
+}
+
+.productCard * {
+    cursor: inherit;       /* 부모의 pointer 상속 */
+    user-select: none;
+}
+
+.salePrice {
+    font-family: "nanumesquareneo_d", sans-serif;
+    font-size: 18px;
+    color: #333;
+}
+
+.dropdownModal {
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
+
+    top: 100%;
+    background-color: white;
+    border: 1px solid #8B6D5C;
+    border-radius: 8px;
+    z-index: 100;
+}
+
+.dropdownModal ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdownModal li {
+    width: 100%;
+    padding: 6px 0;
+    text-align: center;
+}
+
+.dropdownModal .item {
+    display: block;
+    padding: 6px 12px;
+    margin: 0 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: black;
+    font-family: "nanumesquareneo_b", sans-serif;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.dropdownModal .item.active {
+    background-color: #D8A8AB;
+    color: white;
+}
+
+.orderHeaderText{
+    padding-right: 12pt;
+}
+
+.orderHeaderWrapper{
+    border: none;
+    justify-content: center;
+    align-items: center;
+    padding: 10pt 0;
+}
+
+.title {
+    display: inline-flex;
+    align-items: center;
+    gap : 3pt;
+}
+
+.orderHeaderText .title {
+    font-size: 15pt;
+    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: bold;
+}
+
+.orderHeaderText .subtitle {
+    font-size: 13pt;
+    color: #99A99B;
+    font-family: "nanumesquareneo_b", sans-serif;
+}
+
+/*orderCard 관련*/
+.orderCard {
+    border: 1px solid #ccc;
+    border-radius: 16px;
+    padding: 16px;
+    background-color: #fdfdf5;
+    margin-bottom: 20px;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.orderTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+.orderTop .storeName{
+    font-size: 18px;
+    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: bold;
+}
+
+.orderStatus {
+    background-color: #d9c2c2;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: white;
+}
+
+.orderStatus.brownBadge{
+    background-color: #8B6D5C;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: white;
+}
+
+/* 이거 container 넘는거 해결 필요. */
+.orderMiddle {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    margin-top: 16px;
+    gap: 16px;
+}
+
+.productImg {
+    width: 120px;
+    height: 90px;
+    border-radius: 12px;
+    object-fit: cover;
+}
+
+.orderInfo {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    font-size: 16px;
+}
+
+.orderNoticeWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+}
+
+.orderNoticeBlockCancel{
+    color: #dd8888;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.orderBrown{
+    color: #F5F3EA;
+    background-color: #8B6D5C;
+    border-radius: 10pt;
+
+    height: 29pt;
+    border: none;
+
+    float: right;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.orderWhite{
+    color: #8B6D5C;
+    background-color: white;
+    border-radius: 10pt;
+
+    width: 183pt;
+    height: 29pt;
+    border: none;
+
+    float: right;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.headerLeftWrapper {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: bold;
+}
+
+.orderInfo {
+    width: 100%;
+    flex: 1;
+}
+
+.orderInfo > div {
+    display: flex;
+    align-items: center; /* 수직 가운데 정렬 */
+    width: 100%;
+}
+
+.orderInfo .orderAmount, .orderInfo .orderTime, .orderInfo .orderPaid{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.orderInfo .orderAmountValue, .orderInfo .orderTimeValue, .orderInfo .orderPaidValue{
+    font-size: 14px;
+    justify-content: space-between; /* 왼쪽: label / 오른쪽: value */
+    font-weight: normal;
+}
+
+.orderInfo .orderInfoSub{
+    margin-bottom: 4pt;
+}
+
+.orderInfoSub{
+    display: flex;
+    justify-content: space-between; /* 왼쪽: label / 오른쪽: value */
+    align-items: center;
+}
+
+.orderInfoWrapper{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
+}

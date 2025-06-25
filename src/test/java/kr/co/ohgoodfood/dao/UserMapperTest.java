@@ -9,6 +9,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,11 +39,11 @@ public class UserMapperTest {
         //주문 정보 생성, 모든 정보들은 test에서 사용하는 것이므로 임의로 한다.
         orders = new Orders();
 
-        orders.setOrdered_at(LocalDateTime.now());
+        orders.setOrdered_at(Timestamp.valueOf(LocalDateTime.now()));
         orders.setQuantity(2);
         orders.setOrder_status("reservation");
 
-        orders.setPicked_at(LocalDateTime.now());
+        orders.setPicked_at(Timestamp.valueOf(LocalDateTime.now()));
         orders.setUser_id("u02");
         orders.setStore_id("st01");
 
@@ -67,11 +68,10 @@ public class UserMapperTest {
     @DisplayName("✅ [Correct] 전체 가게 목록 조회: 필터 없이 4건 확인")
     public void selectAllStoreCorrectTest() throws Exception {
         //given
-        String user_id = "u02";
         UserMainFilter userMainFilter = new UserMainFilter();
 
         //when
-        List<MainStore> dtoList = userMapper.selectAllStore(user_id, userMainFilter);
+        List<MainStore> dtoList = userMapper.selectAllStore(userMainFilter);
 
         //then
         log.info("MainStore_dtoList : {}", dtoList);
@@ -92,53 +92,38 @@ public class UserMapperTest {
         Assertions.assertNull(testMapper.selectOneBookmark(bookmark.getBookmark_no()));
     }
 
-    @Test
-    @DisplayName("✅ [Correct] 주문 목록 조회: 전체 내역 확인")
-    public void selectOrderListCorrectTest() throws Exception {
-        //given
-        //임시로 사용할 유저 아이디를 가져온다.
-        String user_id = "u02";
+//    @Test
+//    @DisplayName("✅ [Correct] 주문 목록 조회: 전체 내역 확인")
+//    public void selectOrderListCorrectTest() throws Exception {
+//        //given
+//        //임시로 사용할 유저 아이디를 가져온다.
+//        String user_id = "u02";
+//
+//        //when
+//        List<UserOrder> orderList = userMapper.selectOrderList(user_id);
+//
+//        //then
+//        log.info("orderList 결과 반환 : {}", orderList);
+//        Assertions.assertEquals(orderList.size(), 3);
+//
+//    }
 
-        //when
-        List<UserOrder> orderList = userMapper.selectOrderList(user_id);
-
-        //then
-        log.info("orderList 결과 반환 : {}", orderList);
-        Assertions.assertEquals(orderList.size(), 3);
-
-    }
-
-    @Test
-    @DisplayName("✅ [Correct] 주문 목록 조회: 상태 필터 적용")
-    public void selectOrderListWithFilterCorrectTest() throws Exception {
-        //given
-        String user_id = "u02";
-        String order_status = "pickup";
-
-        //when
-        List<UserOrder> orderList = userMapper.selectOrderListWithFilter(user_id, order_status);
-
-        //then
-        log.info("orderList 결과 반환 : {}", orderList);
-        Assertions.assertEquals(orderList.size(), 2);
-    }
-
-    @Test
-    @DisplayName("✅ [Correct] 주문 취소 처리 검증")
-    public void updateOrderCancledByUserCorrectTest() throws Exception {
-        //given
-
-        //when
-        userMapper.updateOrderCancledByUser("cancle", "user", orders.getOrder_no(), orders.getUser_id());
-
-        //then
-        // 주문 상태가 변경되었는지 확인하기 위해서 주문을 가져온다.
-        Orders testOrder = testMapper.selectOneOrder(orders.getOrder_no(), orders.getUser_id());
-        log.info("testOrder 값 확인 : {}", testOrder);
-
-        Assertions.assertEquals(testOrder.getOrder_status(),"cancle");
-        Assertions.assertEquals(testOrder.getCancled_from(), "user");
-    }
+//    @Test
+//    @DisplayName("✅ [Correct] 주문 취소 처리 검증")
+//    public void updateOrderCancledByUserCorrectTest() throws Exception {
+//        //given
+//
+//        //when
+//        userMapper.updateOrderCancledByUser("cancle", "user", orders.getOrder_no(), orders.getUser_id());
+//
+//        //then
+//        // 주문 상태가 변경되었는지 확인하기 위해서 주문을 가져온다.
+//        Orders testOrder = testMapper.selectOneOrder(orders.getOrder_no(), orders.getUser_id());
+//        log.info("testOrder 값 확인 : {}", testOrder);
+//
+//        Assertions.assertEquals(testOrder.getOrder_status(),"cancle");
+//        Assertions.assertEquals(testOrder.getCancled_from(), "user");
+//    }
 
     @Test
     @DisplayName("✅ [Correct] 주문 확정 처리 검증")

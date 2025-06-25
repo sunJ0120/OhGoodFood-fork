@@ -5,17 +5,37 @@
 <div class="productWrapper">
   <section class="productList">
     <c:forEach var="mainStore" items = "${mainStoreList}" >
-      <article class="productCard">
+      <article class="productCard" data-product-no="${mainStore.product_no}">
         <div class="cardImage">
-          <img src="${pageContext.request.contextPath}/img/user_usermain_img.png" alt="상품 이미지" class="storeImage">
+          <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${mainStore.store_img}" alt="상품 이미지" class="storeImage" />
           <div class="cardLabel">
             <div class="productNameWrapper">
               <div class="productName">
                   ${mainStore.store_name}
               </div>
               <div class="badge">
-                <span class="statusText">${mainStore.pickup_date}</span>
-                <span class="timeText">(${mainStore.amount_time_tag})</span>
+                <span class="statusText">${mainStore.pickup_status.displayName}</span>
+                <span class="timeText">
+                  <c:choose>
+                    <c:when test="${mainStore.pickup_status.name() == 'SOLD_OUT'}">
+                      (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
+                    </c:when>
+
+                    <c:when test="${mainStore.pickup_status.name() == 'CLOSED'}">
+                      (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
+                    </c:when>
+
+                    <c:when test="${mainStore.pickup_status.name() == 'TOMORROW'}">
+                      <c:if test="${mainStore.amount > 5}">(+5)</c:if>
+                      <c:if test="${mainStore.amount <= 5}">(${mainStore.amount})</c:if>
+                    </c:when>
+
+                    <c:when test="${mainStore.pickup_status.name() == 'TODAY'}">
+                      <c:if test="${mainStore.amount > 5}">(+5)</c:if>
+                      <c:if test="${mainStore.amount <= 5}">(${mainStore.amount})</c:if>
+                    </c:when>
+                  </c:choose>
+                </span>
               </div>
             </div>
           </div>
@@ -23,29 +43,50 @@
 
         <div class="cardInfo">
           <div class="productTexts">
-            <p class="productDesc">${mainStore.category_name}</p>
-            <p class="productDesc">${mainStore.store_menu}</p>
+
+            <p class="productDesc">
+              <c:forEach var="category" items="${mainStore.category_list}" varStatus="status">
+                ${category}<c:if test="${!status.last}"> | </c:if>
+              </c:forEach>
+            </p>
+
+            <p class="productDesc">
+              <c:if test="${not empty mainStore.mainmenu_list}">
+                <c:forEach var="mainmenu" items="${mainStore.mainmenu_list}" varStatus="status">
+                  ${mainmenu}<c:if test="${!status.last}"> | </c:if>
+                </c:forEach>
+              </c:if>
+            </p>
+
             <p class="pickupTime">픽업 시간 |
               <strong>
+                <span class="todayPickupText">${mainStore.pickup_status.displayName}</span>
                 <span class="pickupStartText">
-                  <fmt:parseDate value="${mainStore.pickup_start}" var="pickup_start" pattern="yyyy-MM-dd'T'HH:mm"/>
-                  <fmt:formatDate value="${pickup_start}" pattern="HH:mm"/>
+                  <c:if test="${not empty mainStore.pickup_start}">
+                    <fmt:formatDate value="${mainStore.pickup_start}" pattern="HH:mm"/>
+                    ~
+                  </c:if>
                 </span>
-                ~
                 <span class="pickupEndText">
-                  <fmt:parseDate value="${mainStore.pickup_end}" var="pickup_end" pattern="yyyy-MM-dd'T'HH:mm"/>
-                  <fmt:formatDate value="${pickup_end}" pattern="HH:mm"/>
+                  <c:if test="${not empty mainStore.pickup_end}">
+                    <fmt:formatDate value="${mainStore.pickup_end}" pattern="HH:mm"/>
+                  </c:if>
                 </span>
               </strong>
             </p>
           </div>
           <div class="priceBox">
-            <del class="originalPrice">
-              <fmt:formatNumber value="${mainStore.origin_price}" pattern="#,###" />₩
-            </del>
-            <span class="salePrice">
-              <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
-            </span>
+            <c:if test="${mainStore.origin_price != null}">
+              <del class="originalPrice">
+                <fmt:formatNumber value="${mainStore.origin_price}" pattern="#,###" />₩
+              </del>
+            </c:if>
+
+            <c:if test="${mainStore.sale_price != null}">
+              <span class="salePrice">
+                <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
+              </span>
+            </c:if>
           </div>
         </div>
       </article>
