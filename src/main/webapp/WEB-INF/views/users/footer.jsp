@@ -12,22 +12,22 @@
         <div class="menuContainer">
             <div class="menuItem">
                 <a href="${pageContext.request.contextPath}/user/main">
-                    <img src="${pageContext.request.contextPath}/img/user_home.png" data-name="home" alt="홈" class="menu-icon">
+                    <img src="${pageContext.request.contextPath}/img/user_home.png" data-name="user_home" alt="홈" class="menu-icon">
                 </a>
             </div>
             <div class="menuItem">
                 <a href="${pageContext.request.contextPath}/user/reviewList">
-                    <img src="${pageContext.request.contextPath}/img/user_review.png" data-name="review" alt="리뷰" class="menu-icon">
+                    <img src="${pageContext.request.contextPath}/img/user_review.png" data-name="user_review" alt="리뷰" class="menu-icon">
                 </a>
             </div>
             <div class="menuItem">
                 <a href="${pageContext.request.contextPath}/user/orderList">
-                    <img src="${pageContext.request.contextPath}/img/user_order.png" data-name="order" alt="주문" class="menu-icon">
+                    <img src="${pageContext.request.contextPath}/img/user_order.png" data-name="user_order" alt="주문" class="menu-icon">
                 </a>
             </div>
             <div class="menuItem">
                 <a href="${pageContext.request.contextPath}/user/mypage">
-                    <img src="${pageContext.request.contextPath}/img/user_mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+                    <img src="${pageContext.request.contextPath}/img/user_mypage.png" data-name="user_mypage" alt="마이페이지" class="menu-icon">
                 </a>
             </div>
         </div>

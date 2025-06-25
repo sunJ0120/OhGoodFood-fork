@@ -7,34 +7,35 @@
   src: url('font/NANUMSQUARENEO-BRG.ttf');
 }
 
-/* 리스트 전체 설정 */
-.reviewList {
-  position: relative;
-  width: 440px;
-  background-color: #f5f3ea;
-  font-family: 'nanumesquareneo', sans-serif;
-  margin-top: 30px;
-}
-
 /* 전체 박스 */
-.reviewList .overlap .reviewBox {
+.reviewList .overlap {
   position: relative;
   width: 386px;
-  height: 705px;
+  height: 685px;
+  padding: 12px 11px; 
   background-color: #f5f3ea;
   border: 1px solid #99a99b;
   margin: 0 auto;
+  margin-top: 30px;
+  overflow-y: auto;      
+  scrollbar-width: none;        /* 스크롤바 폭 0 */
+  -ms-overflow-style: none;     /* 스크롤바 없앰 */
+}
+
+/* WebKit 기반 브라우저 (Chrome, Safari) */
+.reviewList .overlap::-webkit-scrollbar {
+  display: none;
 }
 
 /* 상단 배경 박스 */
 .reviewList .reviewBox {
-  position: absolute;
-  top: 12px;
-  left: 11px;
-  width: 357px;
-  height: 195px;
+  position: relative;  /* 이제 이 박스가 flow에 따라 쌓임 */
+  width: 380px;
+  min-height: 200px;   /* 콘텐츠에 맞춰 높이 자동 (원하면 height 고정해도 됨) */
+  margin-bottom: 20px; /* 카드 사이 간격 */
   border: 2px solid #E5DFD5;
   border-radius: 10px;
+  box-sizing: border-box;
 }
 
 /* 리뷰어 이름 */
@@ -106,6 +107,7 @@
   background-color: #f5f3ea;
   border: 1px solid #8B6D5C;
   border-radius: 10px;
+  margin-top: -5px;
 }
 
 /* 가게 이름 */
