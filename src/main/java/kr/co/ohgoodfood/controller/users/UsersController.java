@@ -273,7 +273,7 @@ public class UsersController {
             return "redirect:/login";
         }
 
-        // 여기 역시 productService → usersService 로
+        // 
         boolean success = usersService.reserveProduct(userId, product_no);
         if (success) {
             redirectAttrs.addFlashAttribute("msg", "예약이 완료되었습니다.");
@@ -287,8 +287,10 @@ public class UsersController {
      */
     @GetMapping("/reviewList")
     public String listReviews(Model model) {
-    	List<Review> review = usersService.getAllReviews();
-    	model.addAttribute("review", review);
-        return "users/userReviewList";  // reviewList
+        // 페이지·사이즈 파라미터 없이 전체를 한 번에 가져온다고 가정
+        List<Review> reviews = usersService.getAllReviews(1, Integer.MAX_VALUE);
+        model.addAttribute("reviews", reviews);
+        return "users/userReviewList";  // /WEB-INF/views/users/userReviewList.jsp
     }
+
 }

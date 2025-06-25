@@ -56,5 +56,7 @@ public interface UsersService {
 	  void registerUser(Account account);
 	
 	/* 모든 리뷰를 조회 */
-    List<Review> getAllReviews();
+    List<Review> getAllReviews(int page, int size);
+    
+
 }

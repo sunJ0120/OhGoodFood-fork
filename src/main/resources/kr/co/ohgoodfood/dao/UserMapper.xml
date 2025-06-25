@@ -310,7 +310,7 @@
 	  </insert>
 	  
 	<!-- 모든 리뷰 모아보기 -->
-	<select id="findAllReviews" parameterType="string" resultType="kr.co.ohgoodfood.dto.Review">
+	<select id="getAllReviews" parameterType="string" resultType="kr.co.ohgoodfood.dto.Review">
     SELECT
       r.review_no          AS review_no,
       r.review_content     AS review_content,
