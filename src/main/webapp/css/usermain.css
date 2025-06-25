@@ -1,0 +1,338 @@
+main {
+    padding: 0 20px;
+    max-width: 440px;
+    margin: 0 0;
+    min-height: 0;
+    box-sizing: border-box;
+}
+
+.searchBar {
+    padding: 12px 0px;
+}
+
+.searchWrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #99a99b;
+    background-color: #F5F3EA;
+    padding: 0 12px;
+    height: 48px;
+}
+
+.searchInput {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-family: "nanumesquareneo_b", sans-serif;
+    background-color: transparent;
+    color: #7C7C7C;
+}
+
+.searchInput::placeholder {
+    color: #999;
+}
+
+.searchBtn {
+    background: none;
+    border: none;
+    padding: 0;
+    margin-left: 8px;
+    cursor: pointer;
+}
+
+.searchBtn img {
+    width: 18px;
+    height: 18px;
+}
+
+.filterButtons {
+    display: flex;
+    gap: 8px;
+    padding: 1px 0px;
+    flex-wrap: wrap;
+}
+
+.filterBtn, .categoryFilterBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /*min-width: 120px;*/
+
+    padding: 6px 10px;
+    background-color: #F5F3EA;
+    color: #8b6d5c;
+    border: 1px solid #8b6d5c;
+    border-radius: 10px;
+    font-family: "NanumSquare Neo-Bold", sans-serif;
+    font-size: 14px;
+
+    gap: 4px;
+}
+
+.categoryFilterBtn.active{
+    background-color: #D8A8AB;
+    color: white;
+}
+
+.categoryFilterBtn {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    gap: 6px;
+    box-sizing: border-box;
+
+    width: 125px;
+}
+
+.dropdownToggle {
+    width: 23px;
+    height: 11px;
+}
+
+.filterBtn img {
+    vertical-align: middle;
+}
+
+.filterBtn.active {
+    background-color: #d8a8ab;
+    color: white;
+}
+
+.tabBoxWrapper {
+    border: 1px solid #99a99b;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    width: 100%;
+    margin: 20px 0 0 0;
+}
+
+.tabSelector {
+    display: flex;
+    background-color: #f5f3ea;
+    border-bottom: 1px solid #99a99b;
+}
+
+.tabBtn {
+    flex: 1;
+    background-color: #f5f3ea;
+    border: none;
+    font-size: 20px;
+    color: #99a99b;
+    cursor: pointer;
+}
+
+.tabBtn.active {
+    background-color: #99a99b;
+    color: #fff;
+}
+
+.topWrapper {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    height: 580px;
+
+    /* Firefox, IE & Edge용 스크롤 숨기기 */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+/* Chrome, Safari용 스크롤 숨기기 */
+.topWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.productWrapper {
+    padding: 16px 12px;
+    background-color: #F5F3EA;
+}
+
+.productList {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.productCard {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin-bottom: 16px;
+    width: 100%;
+    max-width: 355px;
+
+    cursor: pointer;
+}
+
+.productCard * {
+    cursor: inherit;       /* 부모의 pointer 상속 */
+    user-select: none;
+}
+
+.cardImage {
+    position: relative;
+    width: 100%;
+    height: 93px;
+}
+
+.cardImage img {
+    width: 100%;
+    height: 93px;
+    object-fit: cover;
+    display: block;
+    border-radius: 10px 10px 0 0;
+}
+
+.cardLabel {
+    position: absolute;
+    bottom: 8px;
+    left: 12px;
+    color: white;
+    font-family: "nanumesquareneo_d", sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+}
+
+.cardInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.productTexts {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.productNameWrapper {
+    font-family: "nanumesquareneo_d", sans-serif;
+    font-size: 20px;
+    color: #535353;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    flex-direction: row;
+}
+
+.productName{
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+}
+
+.badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-family: "NanumSquare Neo-Regular", sans-serif;
+    font-weight: 400;
+    background-color: #8b6d5c;
+    color: #fff;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 15px;
+
+    line-height: 1;
+}
+
+.productDesc,
+.productDetail,
+.pickupTime {
+    margin: 0;
+    font-family: "nanumesquareneo_b", sans-serif;
+    font-size: 13px;
+    color: #333;
+}
+
+.pickupTime strong {
+    color: #8b6d5c;
+}
+
+.priceBox {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-end;
+    text-align: right;
+    white-space: nowrap;
+    font-family: "nanumesquareneo_d", sans-serif;
+    align-self: flex-end;
+}
+
+.originalPrice {
+    font-size: 12px;
+    color: #999;
+}
+
+.salePrice {
+    font-family: "nanumesquareneo_d", sans-serif;
+    font-size: 18px;
+    color: #333;
+}
+
+/* 📌 soldout 될 경우 이 속성을 추가하도록 변경해야 한다.*/
+.storeImage.soldout{
+    opacity: 0.6;
+}
+
+.storeImage{
+    opacity: 1;
+}
+
+.filterDropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdownModal {
+    width: 100%;
+    position: absolute;
+    box-sizing: border-box;
+
+    top: 100%;
+    background-color: white;
+    border: 1px solid #8B6D5C;
+    border-radius: 8px;
+    z-index: 100;
+}
+
+.dropdownModal ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.dropdownModal li {
+    width: 100%;
+    padding: 6px 0;
+    text-align: center;
+}
+
+.dropdownModal .item {
+    display: block;
+    padding: 6px 12px;
+    margin: 0 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: black;
+    font-family: "nanumesquareneo_b", sans-serif;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.dropdownModal .item.active {
+    background-color: #D8A8AB;
+    color: white;
+}

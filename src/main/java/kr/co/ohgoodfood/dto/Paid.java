@@ -1,6 +1,5 @@
 package kr.co.ohgoodfood.dto;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import lombok.Data;

@@ -47,8 +47,8 @@ import lombok.extern.slf4j.Slf4j;
 public class StoreController {
 
 
-	@Autowired
-	private StoreService storeService;
+
+	private final StoreService storeService;
 
 	@GetMapping("/jointype")
 	public String jointype() {
@@ -59,8 +59,6 @@ public class StoreController {
 	public String intro() {
 		return "/common/intro";
 	}
-
-
 
 	// 로그아웃
 	@GetMapping
@@ -78,7 +76,7 @@ public class StoreController {
 	}
 
 
-	@GetMapping("/store/review")
+	@GetMapping("/review")
 	public String getReviews(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
@@ -92,7 +90,8 @@ public class StoreController {
 		
 		return "store/review";
 	}
-	@GetMapping("/store/reservation") // main에서 order 탭을 눌렀을때 기본 미확정 주문 조회
+	
+	@GetMapping("/reservation") // main에서 order 탭을 눌렀을때 기본 미확정 주문 조회
 	public String getReservationOrders(HttpSession sess, Model model) {
 		
 		Store login = (Store) sess.getAttribute("store");
@@ -108,7 +107,7 @@ public class StoreController {
 		
 	}
 	// 이 밑에가 ajax 동적 처리 컨트롤러
-	@PostMapping("/store/order/{status}")
+	@PostMapping("/order/{status}")
 	public String loadOrderByStatus(@PathVariable("status") String status, HttpSession session, Model model) {
 	    
 	    Store store = (Store) session.getAttribute("store");
@@ -137,7 +136,7 @@ public class StoreController {
 	
 	
 	
-	@PostMapping("/store/reservation/{id}/confirm") // 미확정 탭에서 확정 버튼 클릭시
+	@PostMapping("/reservation/{id}/confirm") // 미확정 탭에서 확정 버튼 클릭시
 	@ResponseBody
 	public String confirmOrders(@PathVariable("id") int id ,HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -162,7 +161,7 @@ public class StoreController {
 		}
 		
 	}
-	@PostMapping("/store/reservation/{id}/cancle") // 미확정 탭에서 취소 버튼 클릭시
+	@PostMapping("/reservation/{id}/cancle") // 미확정 탭에서 취소 버튼 클릭시
 	@ResponseBody
 	public String cancleOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -185,7 +184,7 @@ public class StoreController {
 		}
 	}
 	
-	@GetMapping("/store/confirmed") // 토글에서 확정주문 클릭시
+	@GetMapping("/confirmed") // 토글에서 확정주문 클릭시
 	public String getConfirmedOrders(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
@@ -211,7 +210,7 @@ public class StoreController {
 		return "/store/confirmedorder";
 	}
 	
-	@GetMapping("/store/cancled") // 토글에서 취소한 주문클릭시
+	@GetMapping("/cancled") // 토글에서 취소한 주문클릭시
 	public String getCancledOrders(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
@@ -223,7 +222,7 @@ public class StoreController {
 		model.addAttribute("order", lists);
 		return "/store/cancledorder";
 	}
-	@PostMapping("/store/confirmed/{id}/pickup")
+	@PostMapping("/confirmed/{id}/pickup")
 	@ResponseBody
 	public String pickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -244,7 +243,7 @@ public class StoreController {
 			return "failed";
 		}
 	}
-	@PostMapping("/store/confirmed/{id}/confirmed")
+	@PostMapping("/confirmed/{id}/confirmed")
 	@ResponseBody
 	public String confirmPickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -356,7 +355,7 @@ public class StoreController {
 
 	    boolean isToday = false;
 	    if (product != null && product.getPickup_start() != null) {
-	        LocalDate pickupDate = product.getPickup_start().toLocalDate();
+	        LocalDate pickupDate = product.getPickup_start().toLocalDateTime().toLocalDate();
 	        LocalDate today = LocalDate.now();
 	        isToday = pickupDate.equals(today);
 	    }

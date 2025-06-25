@@ -7,6 +7,13 @@
     src: url('font/NANUMSQUARENEO-BRG.ttf');
 }
 
+
+/* 사용을 위해 font 추가 */
+@font-face {
+    font-family: 'nanumesquareneo_d';
+    src: url('font/NanumSquareNeo-dEb.ttf');
+}
+
 body{
     font-family: 'nanumesquareneo';
     margin: 0;
@@ -18,7 +25,7 @@ body{
 #wrapper{
     width: 440px;
     height: 956px;
-    background-color: #F5F3EA;   
+    background-color: #F5F3EA;
     display: flex;
     flex-direction: column;
 }
@@ -59,7 +66,6 @@ footer{
     height: 74px;
     background-color: #99A99B;
     border-radius: 10px;
-    
 }
 .menu-container{
     display: flex;
@@ -75,6 +81,20 @@ footer{
     width: 68px;
     border-radius: 8px;
     cursor: pointer;
+}
+.menu-item li {
+    padding: 10px 16px;
+    border: 1px solid #bca6a6;  /* 테두리 색 */
+    margin-bottom: 8px;
+    border-radius: 8px;
+    background-color: white;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+}
+
+.menu-item.active {
+    background-color: #F5F3EA;
 }
 
 .sr-only {

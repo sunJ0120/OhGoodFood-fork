@@ -1,7 +1,7 @@
 package kr.co.ohgoodfood.dto;
 
+
 import java.sql.Timestamp;
-import java.util.Date;
 
 import lombok.Data;
 
@@ -31,4 +31,5 @@ public class Alarm {
     public int getStartIdx() {
         return (page - 1) * 10;
     }
+
 }

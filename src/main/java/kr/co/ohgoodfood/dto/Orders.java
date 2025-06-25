@@ -1,24 +1,26 @@
 package kr.co.ohgoodfood.dto;
 
-import java.sql.Date;
 
+import java.sql.Timestamp;
 import lombok.Data;
 
 @Data
 public class Orders {
     private int order_no;
-    private Date ordered_at;
+
+    private Timestamp ordered_at;
     private int quantity;
     private String order_status;
-    private Date picked_at;
+    private Timestamp picked_at;
     private String user_id;
     private String store_id;
     private String order_code;
-    private String canceld_from;
+    private String cancled_from ; //이거 db랑 맞춰야 합니다,,!
 
     private int s_order_no;
-    private Date s_ordered_at;
+    private Timestamp s_ordered_at;
     private String s_order_status;
+
     private String s_price;
 
     private String s_type;
@@ -28,9 +30,9 @@ public class Orders {
     private int startIdx;
 
     private String store_img;
-    private Date pickup_start;
-    private Date pickup_end;
-    private Date reservation_end;
+    private Timestamp pickup_start;
+    private Timestamp pickup_end;
+    private Timestamp reservation_end;
     private String pickup_status; 
     private int sale_price;
     

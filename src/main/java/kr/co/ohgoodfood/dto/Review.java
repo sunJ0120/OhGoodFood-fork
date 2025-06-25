@@ -1,6 +1,5 @@
 package kr.co.ohgoodfood.dto;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 
 import lombok.Data;
@@ -19,6 +18,21 @@ public class Review {
     private int s_review_no;
     private int s_user_id;
     private int s_sotre_id;
+    
+    // --- 가격 정보 추가 필요 ---
+    // Product table
+    private int    origin_price;
+    private int    sale_price;
+
+    // Store table
+    private String store_name;
+    private String store_menu;
+
+    // 대표 이미지 (Image 서브쿼리)
+    private String store_img;
+
+    // 유저 닉네임
+    private String user_nickname;
     
     private String s_type;
     private String s_value;

@@ -26,15 +26,16 @@ import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.Product;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 
-	@Autowired
-	private AwsS3Config awsS3Config;
 
-	@Autowired
-	private StoreMapper mapper;
+	private final AwsS3Config awsS3Config;
+
+	private final StoreMapper mapper;
 
 	@Override
 	public Store login(Store vo) {
@@ -43,9 +44,14 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 	@Override
+	public int insert(Store vo) {
+		return mapper.insert(vo);
+	}
+
+	@Override
 	public Review viewRiew(Store vo) {
 		return mapper.viewReview(vo);
-
+	}
 
 	// 아이디 중복확인
 	@Override
