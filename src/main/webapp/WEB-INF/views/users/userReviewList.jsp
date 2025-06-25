@@ -12,7 +12,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <!-- 리뷰 리스트 전용 CSS -->
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reviewList.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userReviewList.css" />
 
     <title>Review List</title>
   </head>

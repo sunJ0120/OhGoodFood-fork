@@ -22,6 +22,7 @@ public interface StoreMapper {
 	
 	public List<Review> getReviews(String storeId);
 
+	public int insert(Store vo);
 
 	public List<Orders> getOrders(@Param("storeId") String storeId, @Param("type") String type);
 
