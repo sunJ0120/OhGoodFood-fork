@@ -77,6 +77,21 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.getUnapprovedStoreCountTotal();
 	}
 
+	// 단일 회원 목록 조회
+	@Override
+	public Account getUser(Account account) {
+		return adminMapper.getUser(account);
+	}
+
+	// 단일 회원 정보 업데이트
+	@Override
+	public boolean updateUser(Account account) {
+		if(adminMapper.updateUser(account) > 0) {
+			return true;
+		}
+		return false;
+	}
+
 	// 회원 목록 조회
 	@Override
 	public Map<String, Object> usersList(Account account) {

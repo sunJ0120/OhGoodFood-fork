@@ -112,10 +112,52 @@
                         </select>
                     </div>
                     <div class="filterValue">
-                        <input class="searchBox" type="text" name="s_value">
+                        <input class="searchBox" type="text" name="s_value" value="${account.s_value != null ? account.s_value : ''}">
                         <div class="magnifying">
                             <input class="magnifyingButton" type="submit" value=""> 
                         </div>
+                    </div>
+                    </form>
+                    <form method="post" action="<c:url value='/admin/updateuser'/>">
+                    <div class="userInfo">
+                        <div class="userId userInfoBox">
+                            ID : 
+                            <input id="updateUserId" class="userInputBox" type="text" name="user_id" value="${account.user_id}" disabled>
+                        </div>
+                        <div class="userName userInfoBox">
+                            이름 :
+                            <input class="userInputBox" type="text" name="user_name" value="${account.user_name}">
+                        </div>
+                        <div class="userNickname userInfoBox">
+                            닉네임 :
+                            <input class="userInputBox" type="text" name="user_nickname" value="${account.user_nickname}" disabled>
+                        </div>
+                        <div class="userPhoneNumber userInfoBox">
+                            전화번호 :
+                            <input class="userInputBox" type="text" name="phone_number" value="${account.phone_number}">
+                        </div>
+                        <div class="userJoindate userInfoBox">
+                            가입일 :
+                            <input class="userInputBox" type="text" name="join_date" value="${account.join_date}" disabled>
+                        </div>
+                        <div class="userStatus userInfoBox">
+                            계정 활성화 :
+                            <select name="user_status">
+                                <option value="Y" ${account.user_status == 'Y' ? 'selected' : ''}>Y</option>
+                                <option value="N" ${account.user_status == 'N' ? 'selected' : ''}>N</option>
+                            </select>
+                        </div>
+                        <div class="userLoaction userInfoBox">
+                            위치 정보 동의 : 
+                            <select name="location_agreement">
+                                <option value="Y" ${account.location_agreement == 'Y' ? 'selected' : ''}>Y</option>
+                                <option value="N" ${account.location_agreement == 'N' ? 'selected' : ''}>N</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="updateButtonDiv">
+                        <input type="hidden" name="user_id" value="${account.user_id}">
+                        <input id="updateButton" type="submit" value="저장" disabled>
                     </div>
                     </form>
                 </div>
@@ -152,6 +194,12 @@
                 $(this).find(".submenu").css("display", "none");
             }
         );
+
+        $(document).ready(function(){
+            if ($("#updateUserId").val() != null && $("#updateUserId").val() != ""){
+                $('#updateButton').prop('disabled', false);
+            }
+        });
     </script>
 </body>
 </html>

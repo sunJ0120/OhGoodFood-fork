@@ -74,11 +74,18 @@ public class AdminController {
 		return "admin/searchstores";
 	}
 
-	// 유저 관리 이동
+	// 회원 관리 이동
 	@GetMapping("/admin/managedusers")
 	public String manageUsers(Model model, @ModelAttribute Account account) {
-		model.addAttribute("map", adminService.usersList(account));
+		model.addAttribute("account", adminService.getUser(account));
 		return "admin/managedusers";
+	}
+
+	// 회원 정보 수정
+	@PostMapping("/admin/updateuser")
+	public String updateUser(@ModelAttribute Account account) {
+		adminService.updateUser(account);
+		return "redirect:/admin/managedusers";
 	}
 
 	// 가게 관리 이동

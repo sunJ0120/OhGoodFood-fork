@@ -102,10 +102,10 @@ public class ScheduleServiceImpl implements ScheduleService {
 		String formattedDate = sdf.format(currentDate);
         // 픽업 안 된 주문 가져오기
         List<ReservationConfirmed> pickupNotDoneList = scheduleMapper.pickupNotDone(formattedDate);
-        // 픽업 안 된 주문 상태 업데이트 ( reservation --> cancel )
+        // 픽업 안 된 주문 상태 업데이트 ( confirmed --> cancel )
         // 유저에게 픽업 안 된 주문 알람 보내기
         for (ReservationConfirmed order : pickupNotDoneList) {
-            // 픽업 안 된 주문 상태 업데이트 ( reservation --> cancel )
+            // 픽업 안 된 주문 상태 업데이트 ( confirmed --> cancel )
             scheduleMapper.updateOrderStatusCancel(order);
             // 유저에게 픽업 안 된 주문 알람 보내기
             Alarm alarm = new Alarm();
