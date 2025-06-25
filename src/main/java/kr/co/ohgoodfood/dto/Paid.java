@@ -1,6 +1,7 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -13,7 +14,7 @@ public class Paid {
     private String paid_type;
     private String paid_price;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime paid_time;
+    private Timestamp paid_time;
     private String paid_status;
     private String fail_reason;
     private String refund_request;

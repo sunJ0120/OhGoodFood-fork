@@ -18,14 +18,20 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     /**
-     * 사용자 메인 화면 및 북마크 영역에 표시할 가게 목록을 조회
+     * 사용자 메인 화면 영역에 표시할 가게 목록을 조회
+     *
+     * @param userMainFilter   필터 DTO
+     * @return                 필터 적용된 MainStore 리스트
+     */
+    List<MainStore> selectAllStore(@Param("filter") UserMainFilter userMainFilter);
+
+    /**
+     * 사용자 북마크 화면에서 표시할 가게 목록을 조회
      *
      * @param user_id          조회 대상 user_id
-     * @param userMainFilter   필터 DTO
-     * @return                 필터 적용된 MainStore 리스트w
+     * @return                 필터 적용된 MainStore 리스트
      */
-    List<MainStore> selectAllStore(@Param("user_id") String user_id,
-                                   @Param("filter") UserMainFilter userMainFilter);
+    List<Bookmark> selectAllBookmark(String user_id);
 
     /**
      * 사용자의 특정 북마크를 삭제 처리
@@ -40,31 +46,21 @@ public interface UserMapper {
     /**
      * 사용자의 모든 주문내역을 출력
      *
-     * @param user_id  user_id
+     * @param userOrderFilter  필터 DTO
      * @return         UserOrder 리스트
      */
-    List<UserOrder> selectOrderList(String user_id);
-
-    /**
-     * [📌 동적쿼리로 수정후 제거 예정.] 사용자의 필터링된 주문내역을 출력
-     *
-     * @param user_id       user_id
-     * @param order_status  주문 상태
-     * @return              필터된 UserOrder 리스트
-     */
-    List<UserOrder> selectOrderListWithFilter(@Param("user_id") String user_id,
-                                    @Param("order_status") String order_status);
+    List<UserOrder> selectOrderList(@Param("filter") UserOrderFilter userOrderFilter);
 
     /**
      * 사용자가 주문을 취소할 때 호출
      *
      * @param order_status  변경할 주문 상태
-     * @param cancled_from  취소한 사람
+     * @param canceld_from  취소한 사람
      * @param order_no      주문번호
      * @param user_id       user_id
      */
-    void updateOrderCancledByUser(@Param("order_status") String order_status,
-                                  @Param("cancled_from") String cancled_from,
+    void updateOrderCanceldByUser(@Param("order_status") String order_status,
+                                  @Param("canceld_from") String canceld_from,
                                   @Param("order_no") int order_no,
                                   @Param("user_id") String user_id);
 

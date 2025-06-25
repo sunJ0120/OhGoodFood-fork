@@ -25,7 +25,7 @@ public class AlarmMapperTest {
 
     //[Mapper] alarmMapper 주입
     @Autowired
-    AlarmMapper alarmMapper;
+    UserMapper alarmMapper;
 
     //[Mapper] testMapper 주입
     @Autowired

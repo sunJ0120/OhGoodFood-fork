@@ -1,12 +1,7 @@
 package kr.co.ohgoodfood.service.users;
 
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.UserMainFilter;
-
-import java.sql.Time;
-import java.util.Date;
+import kr.co.ohgoodfood.dto.*;
 import java.util.List;
-import java.util.Map;
 
 /**
  * UsersService interface
@@ -15,14 +10,21 @@ import java.util.Map;
  */
 public interface UsersService {
     //[Controller 로직] UsersController.userMain 연결 로직
-    List<MainStore> getMainStoreList(String user_id, UserMainFilter userMainFilter);
+    List<MainStore> getMainStoreList(UserMainFilter userMainFilter);
+
+    //[Controller 로직] UsersController.userBookmark 연결 로직
+    List<Bookmark> getBookmarkList(String user_id);
 
     //[판별 로직] 오늘 픽업, 내일 픽업, 마감 판별 연결 로직
-    String getPickupDateStatus(MainStore mainStore);
+    PickupStatus getPickupDateStatus(MainStore mainStore);
 
-    //[판별 로직] 카테고리 String 판별 연결 로직
-    String getCategoryName(MainStore mainStore);
+    //[판별 로직] 카테고리 List<String> 저장 로직
+    List<String> getCategoryList(MainStore mainStore);
 
-    //[판별 로직] 마감시간 & 수량 판별 연결 로직
-    String getAmountOrEndTime(MainStore mainStore);
+    //[Controller 로직] UsersController.userBookmarkDelete 연결 로직
+    boolean deleteUserBookMark(BookmarkDelete bookmarkDelete);
+
+    //[Controller 로직] UsersController.userOrders 연결 로직
+    List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter);
+
 }

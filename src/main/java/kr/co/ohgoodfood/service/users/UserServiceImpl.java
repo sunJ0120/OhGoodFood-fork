@@ -1,8 +1,8 @@
 package kr.co.ohgoodfood.service.users;
 
 import kr.co.ohgoodfood.dao.UserMapper;
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.UserMainFilter;
+import kr.co.ohgoodfood.dto.*;
+import kr.co.ohgoodfood.util.StringSplitUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +11,7 @@ import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -29,115 +30,134 @@ import java.util.Map;
 public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
 
+    /**
+     * 메인 화면에 뿌릴 DTO리스트를 가져오는 메서드
+     *
+     * @param userMainFilter 필터링을 위한 객체가 담겨있다. (필터링 대상 : Category, 가게 상세, 가게 이름)
+     * @return mainStoreList (MainStore DTO의 리스트 객체)
+     */
     @Override
-    public List<MainStore> getMainStoreList(String user_id, UserMainFilter userMainFilter) {
-        List<MainStore> mainStoreList = userMapper.selectAllStore(user_id, userMainFilter);
+    public List<MainStore> getMainStoreList(UserMainFilter userMainFilter) {
+        List<MainStore> mainStoreList = userMapper.selectAllStore(userMainFilter);
 
         // 여기에 카테고리 이름과 pickup 상태를 저장
         for(MainStore mainStore : mainStoreList){
-            mainStore.setPickup_date(getPickupDateStatus(mainStore));
-            mainStore.setCategory_name(getCategoryName(mainStore));
-            mainStore.setAmount_time_tag(getAmountOrEndTime(mainStore));
+            mainStore.setPickup_status(getPickupDateStatus(mainStore));
+            mainStore.setCategory_list(getCategoryList(mainStore));
+            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "/"));
         }
         log.info("[log/UserServiceImpl.getMainStoreList] mainStoreList 결과 log : {}", mainStoreList);
 
         return mainStoreList;
     }
 
+    @Override
+    public List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter){
+        List<UserOrder> orderList = userMapper.selectOrderList(userOrderFilter);
+
+        // userOrder에 pickup_status를 저장.
+        for(UserOrder userOrder : orderList){
+            userOrder.setPickup_status(getPickupDateStatus(userOrder));
+        }
+
+        return orderList;
+    }
+
+    /**
+     * 사용자가 가진 북마크 리스트를 가져오는 함수
+     *
+     * @param user_id user_id
+     * @return mainStoreList (MainStore DTO의 리스트 객체)
+     */
+    @Override
+    public List<Bookmark> getBookmarkList(String user_id){
+        List<Bookmark> bookmarkList = userMapper.selectAllBookmark(user_id);
+
+        // 여기에 카테고리 이름과 pickup 상태를 저장
+        for(Bookmark bookmark : bookmarkList){
+            bookmark.setPickup_status(getPickupDateStatus(bookmark));
+            bookmark.setCategory_list(getCategoryList(bookmark));
+            bookmark.setMainmenu_list(StringSplitUtils.splitMenu(bookmark.getStore_menu(), "/"));
+        }
+        log.info("[log/UserServiceImpl.getBookmarkList] mainStoreList 결과 log : {}", bookmarkList);
+
+        return bookmarkList;
+    }
+
     /**
      * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감을 판별합니다.
      *
      * @param mainStore 판별 데이터가 담긴 객체
-     * @return "오늘픽업", "내일픽업", "매진", "마감" 중 하나
-     * @see #getAmountOrEndTime(MainStore)
+     * @return PickupStatus enum 객체
      */
     @Override
-    public String getPickupDateStatus(MainStore mainStore) {
+    public PickupStatus getPickupDateStatus(MainStore mainStore) {
 
         LocalDate today = LocalDate.now();
 
-        //store_status = false, 수량 0이면 매진
-        if(mainStore.getAmount() <= 0 && mainStore.getStore_status().equals("N")){
-            return "매진";
+        // [마감] - store_status = N
+        if("N".equals(mainStore.getStore_status())){
+            return PickupStatus.CLOSED;
+        }else{
+            LocalDate pickupDate = mainStore.getPickup_start().toLocalDateTime().toLocalDate();
+            // [매진] - amount = 0
+            if(mainStore.getAmount() == 0){
+                return PickupStatus.SOLD_OUT;
+            }else{
+                // [오늘픽업] 현재 날짜와 같음
+                if (pickupDate.isEqual(today)) {
+                    return PickupStatus.TODAY;
+                }
+                // [내일픽업] 현재 날짜 + 1과 같음
+                if (pickupDate.isEqual(today.plusDays(1))) {
+                    return PickupStatus.TOMORROW;
+                }
+            }
         }
-        
-        if(mainStore.getStore_status().equals("N")){ //status가 false이면 현재 마감
-            return "마감";
-        }
-
-        if (mainStore.getPickup_start().toLocalDate().isEqual(today)) {
-            return "오늘픽업";
-        } else if (mainStore.getPickup_start().toLocalDate().isEqual(today.plusDays(1))) {
-            return "내일픽업";
-        } else if (mainStore.getPickup_start().toLocalDate().isBefore(today)) {
-            return "마감";
-        } else {
-            return "error"; // 예외 상황 처리가 필요하다.
-        }
+        throw new IllegalStateException();
     }
 
     /**
-     * 내부적으로 {@link StringBuilder}를 사용하여 문자열을 누적하고,
-     * 마지막에 남은 구분자("| ")를 제거하여 반환한다.
+     * 로직 변경, | 구분은 확장성을 위해 프론트 단에 위임
+     * 서버에서는 리스트에 담아서 보내도록 한다.
      *
      * @param mainStore
-     * @return '|' 구분자로 결합된 카테고리 이름 (예: "빵 & 디저트 | 과일")
+     * @return 카테고리 이름이 담긴 List
      */
 
     @Override
-    public String getCategoryName(MainStore mainStore) {
-        StringBuilder categoryName = new StringBuilder();
+    public List<String> getCategoryList(MainStore mainStore) {
+        List<String> category_list = new ArrayList<>();
 
         if(mainStore.getCategory_bakery().equals("Y")){
-            categoryName.append("빵 & 디저트 | ");
+            category_list.add("빵 & 디저트");
         }
 
         if(mainStore.getCategory_fruit().equals("Y")){
-            categoryName.append("과일 | ");
+            category_list.add("과일");
         }
 
         if(mainStore.getCategory_salad().equals("Y")){
-            categoryName.append("샐러드 | ");
+            category_list.add("샐러드");
         }
 
         if(mainStore.getCategory_others().equals("Y")){
-            categoryName.append("그 외 | ");
+            category_list.add("그 외");
         }
-        //끝에 3개 제외
-        categoryName.setLength(categoryName.length() - 3);
 
-        return categoryName.toString();
+        return category_list;
     }
 
-    /**
-     * - store_status.equals("N")일 경우 : closed_at을 return
-     * - amount > 5 일 경우, +5로 처리한다.
-     * - amount < 5 일 경우, amount를 그대로 내보낸다.
-     *
-     * @param mainStore
-     * @return 표시할 마감 시간 또는 수량 문자열
-     */
-
     @Override
-    public String getAmountOrEndTime(MainStore mainStore) {
-        StringBuilder amount_time_tag = new StringBuilder();
+    public boolean deleteUserBookMark(BookmarkDelete bookmarkDelete) {
+        String user_id = bookmarkDelete.getUser_id();
+        int bookmark_no = bookmarkDelete.getBookmark_no();
 
-        //매진이나 마감 상태
-        if(mainStore.getStore_status().equals("N")){
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            amount_time_tag.append(sdf.format(mainStore.getClosed_at()));
-            return amount_time_tag.toString();
+        int cnt = userMapper.deleteBookmark(user_id, bookmark_no);
+
+        if (cnt == 1) {
+            return true;
         }
-
-        if(mainStore.getAmount() > 5){ //5개 초과일 경우, +5로 설정
-            amount_time_tag.append("+");
-            amount_time_tag.append(mainStore.getAmount());
-            amount_time_tag.append(" 개"); //갯수 붙였는데..일단 보기
-        }else{
-            amount_time_tag.append(mainStore.getAmount());
-            amount_time_tag.append(" 개");
-        }
-
-        return amount_time_tag.toString();
+        return false; //delete 실패!
     }
 }

@@ -17,9 +17,18 @@
     <div class="header-container">
       <img src="${pageContext.request.contextPath}/img/ohgoodfood_logo.png" alt="Logo Image">
       <div class="icon-container">
-        <img src="${pageContext.request.contextPath}/img/alarm_active.png" alt="알람" class="icon">
-        <img src="${pageContext.request.contextPath}/img/bookmark.png" alt="즐겨찾기" class="icon">
-        <img src="${pageContext.request.contextPath}/img/logout.png" alt="로그아웃" class="icon">
+        <!-- 알람 이동 -->
+        <a href="${pageContext.request.contextPath}/user/alarm">
+          <img src="${pageContext.request.contextPath}/img/alarm_active.png" alt="알람" class="icon">
+        </a>
+        <!-- 즐겨찾기 적용 -->
+        <a href="${pageContext.request.contextPath}/user/bookmark">
+          <img src="${pageContext.request.contextPath}/img/bookmark.png" alt="즐겨찾기" class="icon">
+        </a>
+        <!-- 로그아웃 이동 -->
+        <a href="${pageContext.request.contextPath}/logout">
+          <img src="${pageContext.request.contextPath}/img/logout.png" alt="로그아웃" class="icon">
+        </a>
       </div>
     </div>
   </header>
@@ -52,8 +61,8 @@
         </div>
       </div>
       <button class="filterBtn">예약 가능만</button>
-      <button class="filterBtn">오늘 픽업</button>
-      <button class="filterBtn">내일 픽업</button>
+      <button class="filterBtn pickup">오늘 픽업</button>
+      <button class="filterBtn pickup">내일 픽업</button>
     </section>
 
     <!-- 상품 리스트 -->
@@ -67,17 +76,37 @@
         <div class="productWrapper">
           <section class="productList">
             <c:forEach var="mainStore" items = "${mainStoreList}" >
-              <article class="productCard">
+              <article class="productCard" data-product-no="${mainStore.product_no}">
                 <div class="cardImage">
-                  <img src="${pageContext.request.contextPath}/img/user_usermain_img.png" alt="상품 이미지" class="storeImage">
+                  <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${mainStore.store_img}" alt="상품 이미지" class="storeImage" />
                   <div class="cardLabel">
                     <div class="productNameWrapper">
                       <div class="productName">
                           ${mainStore.store_name}
                       </div>
                       <div class="badge">
-                        <span class="statusText">${mainStore.pickup_date}</span>
-                        <span class="timeText">(${mainStore.amount_time_tag})</span>
+                        <span class="statusText">${mainStore.pickup_status.displayName}</span>
+                        <span class="timeText">
+                          <c:choose>
+                            <c:when test="${mainStore.pickup_status.name() == 'SOLD_OUT'}">
+                              (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
+                            </c:when>
+
+                            <c:when test="${mainStore.pickup_status.name() == 'CLOSED'}">
+                              (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
+                            </c:when>
+
+                            <c:when test="${mainStore.pickup_status.name() == 'TOMORROW'}">
+                              <c:if test="${mainStore.amount > 5}">(+5)</c:if>
+                              <c:if test="${mainStore.amount <= 5}">(${mainStore.amount})</c:if>
+                            </c:when>
+
+                            <c:when test="${mainStore.pickup_status.name() == 'TODAY'}">
+                              <c:if test="${mainStore.amount > 5}">(+5)</c:if>
+                              <c:if test="${mainStore.amount <= 5}">(${mainStore.amount})</c:if>
+                            </c:when>
+                          </c:choose>
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -85,30 +114,50 @@
 
                 <div class="cardInfo">
                   <div class="productTexts">
-                    <p class="productDesc">${mainStore.category_name}</p>
-                    <p class="productDesc">${mainStore.store_menu}</p>
+
+                    <p class="productDesc">
+                      <c:forEach var="category" items="${mainStore.category_list}" varStatus="status">
+                        ${category}<c:if test="${!status.last}"> | </c:if>
+                      </c:forEach>
+                    </p>
+
+                    <p class="productDesc">
+                      <c:if test="${not empty mainStore.mainmenu_list}">
+                      <c:forEach var="mainmenu" items="${mainStore.mainmenu_list}" varStatus="status">
+                        ${mainmenu}<c:if test="${!status.last}"> | </c:if>
+                      </c:forEach>
+                    </c:if>
+                    </p>
+
                     <p class="pickupTime">픽업 시간 |
                       <strong>
-                        <span class="todayPickupText">${mainStore.pickup_date}</span>
+                        <span class="todayPickupText">${mainStore.pickup_status.displayName}</span>
                         <span class="pickupStartText">
-                          <fmt:parseDate value="${mainStore.pickup_start}" var="pickup_start" pattern="yyyy-MM-dd'T'HH:mm"/>
-                          <fmt:formatDate value="${pickup_start}" pattern="HH:mm"/>
+                          <c:if test="${not empty mainStore.pickup_start}">
+                              <fmt:formatDate value="${mainStore.pickup_start}" pattern="HH:mm"/>
+                            ~
+                          </c:if>
                         </span>
-                        ~
                         <span class="pickupEndText">
-                          <fmt:parseDate value="${mainStore.pickup_end}" var="pickup_end" pattern="yyyy-MM-dd'T'HH:mm"/>
-                          <fmt:formatDate value="${pickup_end}" pattern="HH:mm"/>
+                          <c:if test="${not empty mainStore.pickup_end}">
+                              <fmt:formatDate value="${mainStore.pickup_end}" pattern="HH:mm"/>
+                          </c:if>
                         </span>
                       </strong>
                     </p>
                   </div>
                   <div class="priceBox">
-                    <del class="originalPrice">
-                      <fmt:formatNumber value="${mainStore.origin_price}" pattern="#,###" />₩
-                    </del>
-                    <span class="salePrice">
-                    <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
-                  </span>
+                    <c:if test="${mainStore.origin_price != null}">
+                      <del class="originalPrice">
+                        <fmt:formatNumber value="${mainStore.origin_price}" pattern="#,###" />₩
+                      </del>
+                    </c:if>
+
+                    <c:if test="${mainStore.sale_price != null}">
+                      <span class="salePrice">
+                        <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
+                      </span>
+                    </c:if>
                   </div>
                 </div>
               </article>
@@ -117,7 +166,7 @@
         </div>
           <!-- 지도 api 영역 -->
           <div class="mapWrapper" style="display: none;">
-              <p>여기에 지도 들어갈 예정입니다~</p>
+            <p>여기에 지도 들어갈 예정입니다~</p>
           </div>
       </div>
     </div>
@@ -127,26 +176,54 @@
     <div class="footer-container">
       <div class="menu-container">
         <div class="menu-item">
-          <img src="${pageContext.request.contextPath}/img/home.png" data-name="home" alt="홈" class="menu-icon">
+          <a href="${pageContext.request.contextPath}/user/main">
+            <img src="${pageContext.request.contextPath}/img/home.png" data-name="home" alt="홈" class="menu-icon">
+          </a>
         </div>
         <div class="menu-item">
-          <img src="${pageContext.request.contextPath}/img/review.png" data-name="review" alt="리뷰" class="menu-icon">
+          <a href="${pageContext.request.contextPath}/user/reviewList">
+            <img src="${pageContext.request.contextPath}/img/review.png" data-name="review" alt="리뷰" class="menu-icon">
+          </a>
         </div>
         <div class="menu-item">
-          <img src="${pageContext.request.contextPath}/img/order.png" data-name="order" alt="주문" class="menu-icon">
+          <a href="${pageContext.request.contextPath}/user/orderList">
+            <img src="${pageContext.request.contextPath}/img/order.png" data-name="order" alt="주문" class="menu-icon">
+          </a>
         </div>
         <div class="menu-item">
-          <img src="${pageContext.request.contextPath}/img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+          <a href="${pageContext.request.contextPath}/user/mypage">
+            <img src="${pageContext.request.contextPath}/img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
+          </a>
         </div>
       </div>
     </div>
   </footer>
+
 </div>
-</body>
 <!-- JQuery CDN -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <!-- [layout] bottom navigation js -->
 <script>
+  // ⭐ 해당 페이지면 켜져 있어야 하므로 로직 추가
+  // ⭐  1) 로드 시: 현재 페이지와 링크 비교해서 active 세팅
+  const contextPath = '${pageContext.request.contextPath}';
+
+  const curr = window.location.pathname.replace(contextPath, '').replace(/\/$/, '');
+  $('.menu-item').each(function(){
+    const $a = $(this).find('a');
+    if (!$a.length) return;  // <a> 없는 아이템 패스 (링크 없으므로)
+    // a 태그의 pathname 만 뽑아서 비교
+    const link = this.querySelector('a').pathname
+            .replace(contextPath, '').replace(/\/$/, '');
+    if (link === curr) {
+      $(this).addClass('active');
+      const $img = $(this).find('img');
+      const name = $img.data('name');
+      $img.attr('src', `${contextPath}/img/${"${name}"}_active.png`);
+    }
+  });
+
+  // 2) 클릭시에는 기존 로직
   $(document).ready(function () {
     $('.menu-item').on('click', function () {
       $('.menu-item').each(function () {
@@ -154,7 +231,7 @@
         const $img = $(this).find('img');
         // 기본 이미지로 복원
         const name = $img.attr('data-name');
-        $img.attr('src', `../../../img/${"${name}"}.png`);
+        $img.attr('src', `${contextPath}/img/${"${name}"}.png`);
       });
       $(this).addClass('active');
       const $img = $(this).find('img');
@@ -163,7 +240,7 @@
       // log 찍어보기
       console.log("data-name:", $img.attr('data-name'));
 
-      $img.attr('src', `../../../img/${"${name}"}_active.png`);
+      $img.attr('src', `${contextPath}/img/${"${name}"}_active.png`);
     });
   });
 </script>
@@ -272,14 +349,35 @@
 <script>
   let filterParams = {}; // 최종적으로 전송할 JSON 객체
 
+  // 사용자 편의성을 위해, 검색시 enter도 가능하게 변경
   $(document).ready(function() {
-    //검색바 입력시
+    // 검색 버튼 클릭
     $('.searchBtn').on('click', function () {
-      const keyword = $('.searchInput').val().trim(); // 검색어 가져오기
-      const key = 'search';
-      filterParams[key] = keyword; //search : 라는 이름으로 저장
+      const keyword = $('.searchInput').val().trim();
+      // 이전에 filterParams.search 에 저장된 값(없으면 빈 문자열)
+      const prev = filterParams.search || '';
 
-      sendFilterRequest(); // AJAX 호출
+      // 변화가 없다면(둘 다 빈칸이거나, 둘 다 같은 키워드) 요청 차단
+      if (keyword === prev) {
+        return;
+      }
+
+      // 이전과 변화가 있을 경우에만 실행
+      if (keyword) {
+        // 키워드가 있으면 필터에 넣기
+        filterParams.search = keyword;
+      } else {
+        delete filterParams.search;
+      }
+      sendFilterRequest();
+    });
+
+    // 입력창에서 엔터 키 눌렀을 때
+    $('.searchInput').on('keydown', function(e) {
+      if (e.key === 'Enter' || e.keyCode === 13) {
+        e.preventDefault();            // 엔터로도 같은 로직
+        $('.searchBtn').click();       // 클릭 이벤트 트리거, sendFilterRequest();로 이동
+      }
     });
 
     // 카테고리 클릭 시
@@ -297,15 +395,24 @@
       //선택된 것을 Y로 매칭
       const key = categoryMap[selectedCategory];
 
-      // 기존 category_* 키 제거
-      Object.keys(filterParams).forEach(k => {
-        if (k.startsWith('category_')) delete filterParams[k];
-      });
+      if (filterParams[key] === 'Y') {
+        // 클릭한 걸 다시 누르면 전체 필터 해제 & 전체 보여주기 기능 추가
+        delete filterParams[key];
+        $('#btnText').text('음식 종류');       // 버튼 텍스트를 기본값인 음식 종류로 다시 변경
+        $('.dropdownModal .item').removeClass('active'); // 모든 active 해제 (색상 해제를 위해)
+        $('.categoryFilterBtn').removeClass('active'); // categoryFilterBtn (토글)의 active도 삭제
+        $('.dropdownToggle').attr('src', `${contextPath}/img/user_arrow_down_icon.png`); //toggle의 이미지 변경
 
-      // 새 카테고리 설정
-      filterParams[key] = 'Y';
-      $('#btnText').text(selectedCategory);
+      } else {
+        // 기존 category_* 키 제거
+        Object.keys(filterParams).forEach(k => {
+          if (k.startsWith('category_')) delete filterParams[k];
+        });
 
+        // 새 카테고리 설정
+        filterParams[key] = 'Y';
+        $('#btnText').text(selectedCategory);
+      }
       sendFilterRequest(); // AJAX 호출
     });
 
@@ -340,13 +447,14 @@
         } else {
           filterParams[key] = formatted;
           $('.filterBtn.pickup').removeClass('active'); // 오늘/내일 둘 다 해제
-          $this.addClass('active');
+          $this.addClass('active'); //현재 클릭한 버튼에 다시 active 추가
         }
       }
       sendFilterRequest(); // AJAX 요청
     });
 
     // 공통 AJAX 요청 함수
+    // JSON BODY가 들어가야 하기 때문에 POST로 요청한다.
     function sendFilterRequest() {
       $.ajax({
         url: '${pageContext.request.contextPath}/user/filter/store',
@@ -371,4 +479,39 @@
     }
   });
 </script>
+<!-- Product card 누르면 상세 이동 -->
+<script>
+  $(function(){
+    $('.productCard').on('click', function(){
+      const no = $(this).data('product-no');
+
+      console.log("product-no : " + no);
+      const ctx = '${pageContext.request.contextPath}';
+      window.location.href = ctx + '/user/productdetail?product_no=' + no;
+    });
+  });
+</script>
+<!-- navigation 클릭시, 현재 페이지면 이동 방지 -->
+<script>
+  $(function(){
+    const currentPath = window.location.pathname.replace(/\/$/, '');  // 끝의 / 제거
+    $('.menu-item a').on('click', function(e){
+      const linkPath = this.pathname.replace(/\/$/, '');               // 끝의 / 제거
+      console.log({ linkPath, currentPath });
+      if (linkPath === currentPath) {
+        e.preventDefault();
+      }
+    });
+  });
+
+  //헤더에 있는 요소들 같은 경우도 현재 위치면 클릭 방지
+  $('.icon-container a').on('click', function(e){
+    const linkPath = this.pathname.replace(/\/$/, '');               // 끝의 / 제거
+    console.log({ linkPath, currentPath });
+    if (linkPath === currentPath) {
+      e.preventDefault();
+    }
+  });
+</script>
+</body>
 </html>

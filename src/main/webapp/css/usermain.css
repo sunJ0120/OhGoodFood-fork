@@ -166,6 +166,13 @@ main {
     margin-bottom: 16px;
     width: 100%;
     max-width: 355px;
+
+    cursor: pointer;
+}
+
+.productCard * {
+    cursor: inherit;       /* 부모의 pointer 상속 */
+    user-select: none;
 }
 
 .cardImage {
