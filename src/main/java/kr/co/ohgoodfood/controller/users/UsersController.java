@@ -252,7 +252,7 @@ public class UsersController {
         // productService → usersService 로 교체
         ProductDetail detail = usersService.getProductDetail(product_no);       
         model.addAttribute("productDetail", detail);
-        return "users/productDetail";
+        return "users/userProductDetail";
         
         
     }
@@ -289,6 +289,6 @@ public class UsersController {
     public String listReviews(Model model) {
     	List<Review> review = usersService.getAllReviews();
     	model.addAttribute("review", review);
-        return "users/reviewList";  // reviewList
+        return "users/userReviewList";  // reviewList
     }
 }
