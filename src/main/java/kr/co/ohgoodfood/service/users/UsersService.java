@@ -41,10 +41,12 @@ public interface UsersService {
     /* 마이페이지 전체 조립 (유저정보+리뷰리스트) */
     UserMypage getMypage(String userId);
     
-    //[Controller 로직] UsersController.   제품 상세 보기    
+    //[Controller 로직]     
     /* 상품 상세 정보 조회 */
     ProductDetail getProductDetail(int productId);
-
+    /* 상품(가게)별 리뷰 조회 */
+	List<Review> getReviewsByProductNo(int productNo);
+	
     /* 예약 처리 메서드 (추후 개발) */
     boolean reserveProduct(String userId, int productId);
     
@@ -56,6 +58,8 @@ public interface UsersService {
 	
 	/* 모든 리뷰를 조회 */
     List<Review> getAllReviews(int page, int size);
+
+
     
 
 }

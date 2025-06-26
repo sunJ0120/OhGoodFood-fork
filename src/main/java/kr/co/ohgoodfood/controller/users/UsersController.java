@@ -265,8 +265,10 @@ public class UsersController {
     ) {
         ProductDetail detail = usersService.getProductDetail(product_no);       
         model.addAttribute("productDetail", detail);
-        return "users/userProductDetail";
         
+        List<Review> reviews = usersService.getReviewsByProductNo(product_no);
+        model.addAttribute("reviews", reviews);
+        return "users/userProductDetail";
         
     }
 

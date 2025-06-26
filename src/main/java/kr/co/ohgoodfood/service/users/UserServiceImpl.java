@@ -225,6 +225,13 @@ public class UserServiceImpl implements UsersService{
 		detail.setReviewCount(detail.getReviews().size());
 		return detail;
 	}
+	
+	@Override
+    @Transactional(readOnly = true)
+    public List<Review> getReviewsByProductNo(int productNo) {
+        return userMapper.selectProductReviews(productNo);
+    }
+	
 
     @Override
     @Transactional
