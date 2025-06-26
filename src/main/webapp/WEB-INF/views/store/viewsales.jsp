@@ -67,28 +67,27 @@
         parentEl: '#datepicker',
         setup: (picker) => {
         	 picker.on('render', () => {
-             	setTimeout(() => {
-             	    const monthElem = document.querySelector('.month-item-name');
-                     const yearElem = document.querySelector('.month-item-year');
-                     if (!monthElem || !yearElem) {
-                         console.warn("달력 요소를 찾지 못했습니다.");
-                         return;
-                     }
+        		 setTimeout(() => {
+       		        const monthElem = document.querySelector('.month-item-name');
+       		        const yearElem = document.querySelector('.month-item-year');
+       		        if (!monthElem || !yearElem) return;
+       		        if (yearElem.textContent.includes('.')) { // 날짜 클릭때마다 중복으로 00 붙는거 방지. 즉, 1번만 포맷변경
+       		            return; 
+       		        }
 
-                     let month = monthElem.textContent || '';
-                     let year = yearElem.textContent || '';
+       		        let year = yearElem.textContent || '';
+       		        let month = monthElem.textContent || '';
+       		        month = month.replace(/[^\d]/g, '');
 
-                     month = month.replace(/[^\d]/g, '');
-                     //year = year + '.';
+       		        monthElem.textContent = '';
+       		        yearElem.textContent = '';
+       		        yearElem.textContent = year + '.' + month.padStart(2, '0');
 
-                     monthElem.textContent = '';
-                     yearElem.textContent = year + '.' + month;
- 					
-                     forceChangeWeekdays(); // ✅ 요일도 강제 덮어쓰기
-                 }, 1);
+       		    }, 10);
              });
 
             picker.on('selected', (date) => {
+            	console.log("selected에서 getDate() 사용" + picker.getDate());
                 const selectedDate = date.format('YYYY-MM-DD');
                 $.ajax({
                     url: contextPath + '/store/viewsales/' + selectedDate,

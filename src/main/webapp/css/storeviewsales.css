@@ -11,7 +11,7 @@
 	width:100%;
 	
 }
-/*메인*/
+
 main{
     display: flex;
     flex-direction: column;
@@ -19,10 +19,12 @@ main{
     box-sizing: border-box;
     width : 100%;
 }
+
 .storeInfoHeader{
     display: flex;
     flex-direction: column;
 }
+
 .storeInfoGroup{
     display: flex;
     gap:10px;
@@ -30,16 +32,19 @@ main{
     font-weight: bold;
     margin-bottom: 17px;
 }
+
 .myStoreIcon{
     width: 22px;
     height: 22px;
 }
+
 .storeName{
     font-size: 20px;
     font-weight: bold;
     color: #535353;
     margin-bottom: 10px;
 }
+
 .storeInfoContent{
     display: flex;
     justify-content: space-between;
@@ -50,15 +55,18 @@ main{
     border-radius: 10px;
     background-color: #8B6D5C;
 }
+
 .storeInfoContent{
     color: white;
     font-family: 'nanumesquareneo_b';
 }
+
 .contentGroup{
     display:flex;
     align-items: center;
     gap: 10px;
 }
+
 .whiteBagIcon{
     width: 20px;
     height: 20px;
@@ -83,13 +91,18 @@ main{
     box-sizing: border-box;
     background-color: #F5F3EA !important;
 }
+
+#datepicker {
+	border-radius: 15px;
+}
+
 .salesContainer{
     margin-top : 20px;
     border: 1px solid  #99A99B;
     height: 174px;
     border-radius: 10px;
 }
-/* 전체 캘린더 배경 */
+
 .litepicker .container {
     background-color: #F5F3EA !important;
     color: #333;
@@ -97,54 +110,56 @@ main{
     padding: 10px;
 }
 
+.litepicker .container__months {
+    margin-left : -2px;
+}
 
-
-/* 년.월 상단 스타일 */
 .litepicker .month-item-header {
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 900 !important;
+    font-family : 'nanumesquareneo_b';
     color: #444;
 }
 
-/* 요일 헤더 (S M T W ...) */
 .litepicker .weekday {
     color: #999;
-    font-weight: normal;
+    font-weight: 900 !important;
+    font-family : 'nanumesquareneo_b';
 }
 
-/* 일자 스타일 */
 .litepicker .day-item {
     color: #333;
     border-radius: 50%;
     width: 36px;
     height: 36px;
     line-height: 36px;
-    font-weight: normal;
+    font-weight: 900 !important;
+    font-family : 'nanumesquareneo_b';
 }
 
-/* 오늘 날짜 강조 */
 .litepicker .day-item.is-today {
-    background-color: #e3dac9;
-    color: #000;
-    font-weight: bold;
+    color: #333 !important; 
 }
 
-/* 선택된 날짜 스타일 */
 .litepicker .day-item.is-selected {
-    background-color: #8B6D5C !important;
-    color: #fff !important;
-    font-weight: bold;
+    background-color: #99A99B !important;  
+    color: white !important;               
+    border-radius: 50% !important;         
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-weight: 900 !important;
+    font-family : 'nanumesquareneo_b';
 }
 
-/* 이전/다음 달 버튼 */
 .litepicker .button-next-month,
 .litepicker .button-previous-month {
-    color: #444;
+    color: #727272;
 }
 
-/* 폰트 적용 */
 .litepicker * {
-    font-family: 'nanumesquareneo';
+    font-weight: 900 !important;
+    font-family : 'nanumesquareneo_b';
 }
 
 .container__main{
@@ -153,3 +168,14 @@ main{
 	display: flex;
 	justify-content: left;
 }
+.litepicker .container__months .month-item-header {
+	font-weight: 900 !important;
+    font-family : 'nanumesquareneo_b';
+}
+
+.litepicker .month-item-weekdays-row > div[title] {
+    font-weight: 900 !important;
+    font-family : 'nanumesquareneo_b';
+}
+
+
