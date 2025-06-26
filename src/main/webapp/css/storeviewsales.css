@@ -7,13 +7,17 @@
     src: url('font/NanumSquareNeo-bRg.ttf');
 }
 
-
+#wrapper {
+	width:100%;
+	
+}
 /*메인*/
 main{
     display: flex;
     flex-direction: column;
     padding:20px;
-    
+    box-sizing: border-box;
+    width : 100%;
 }
 .storeInfoHeader{
     display: flex;
@@ -59,29 +63,25 @@ main{
     width: 20px;
     height: 20px;
 }
-.calendarContainer{
-    margin-top : 20px;
-    border: 1px solid  #99A99B;
-    height: 380px;
-    border-radius: 10px;
-}
+
 .calendarContainer {
+    margin-top: 20px;
+    border-radius: 10px;
     background-color: #F5F3EA;
-    padding: 10px;           
-    width: 100%;            
-    box-sizing: border-box;  
-}
-#datepicker {
+    padding: 10px;
     width: 100%;
-    height: auto;            
-}
-.litepicker {
-    background-color: transparent !important;
+    box-sizing: border-box;
+    display: block; 
 }
 
-.litepicker .container {
-    background-color: #F5F3EA !important;
+#datepicker,
+.litepicker,
+.litepicker .container,
+.litepicker .month-item {
     width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    background-color: #F5F3EA !important;
 }
 .salesContainer{
     margin-top : 20px;
@@ -89,4 +89,67 @@ main{
     height: 174px;
     border-radius: 10px;
 }
+/* 전체 캘린더 배경 */
+.litepicker .container {
+    background-color: #F5F3EA !important;
+    color: #333;
+    border-radius: 10px;
+    padding: 10px;
+}
 
+
+
+/* 년.월 상단 스타일 */
+.litepicker .month-item-header {
+    font-size: 18px;
+    font-weight: bold;
+    color: #444;
+}
+
+/* 요일 헤더 (S M T W ...) */
+.litepicker .weekday {
+    color: #999;
+    font-weight: normal;
+}
+
+/* 일자 스타일 */
+.litepicker .day-item {
+    color: #333;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-weight: normal;
+}
+
+/* 오늘 날짜 강조 */
+.litepicker .day-item.is-today {
+    background-color: #e3dac9;
+    color: #000;
+    font-weight: bold;
+}
+
+/* 선택된 날짜 스타일 */
+.litepicker .day-item.is-selected {
+    background-color: #8B6D5C !important;
+    color: #fff !important;
+    font-weight: bold;
+}
+
+/* 이전/다음 달 버튼 */
+.litepicker .button-next-month,
+.litepicker .button-previous-month {
+    color: #444;
+}
+
+/* 폰트 적용 */
+.litepicker * {
+    font-family: 'nanumesquareneo';
+}
+
+.container__main{
+	width: 380px;
+	background-color: white;
+	display: flex;
+	justify-content: left;
+}

@@ -131,7 +131,7 @@
 			COUNT(*) as count
 		FROM Orders o
 		JOIN Product p
-		ON o.store_id = p.store_id
+		ON o.product_no = p.product_no
 		WHERE o.store_id=#{store_id}
 		AND o.order_status='pickup'
 		AND DATE(o.ordered_at) BETWEEN #{start} AND #{end}

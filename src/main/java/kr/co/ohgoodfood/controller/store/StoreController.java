@@ -378,14 +378,16 @@ public class StoreController {
 	}
 	
 	//기간 매출 조회
-	@PostMapping("/store/viewsales/{date}")
+	@PostMapping("/viewsales/{date}")
 	@ResponseBody
 	public StoreSales getDailySales(@PathVariable("date") String date, HttpSession session) {
 	    Store login = (Store) session.getAttribute("store");
 	    if (login == null) {
 	        return null; 
 	    }
-	    return storeService.getSales(login.getStore_id(), date, date); 
+	    StoreSales vo = storeService.getSales(login.getStore_id(), date, date); 
+	    System.out.println("기간매출 vo : " + vo);
+	    return vo;
 	}
 
 	// 알람
