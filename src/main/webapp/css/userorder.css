@@ -272,7 +272,7 @@ main {
 .orderNoticeWrapper {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    /*justify-content: flex-end;*/
     align-items: center;
     gap: 8px;
 }
@@ -290,10 +290,16 @@ main {
 
     height: 29pt;
     border: none;
+    width: 100%;
 
-    float: right;
-    font-size: 14px;
+    /*float: right;*/
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    
+    font-size: 15px;
     margin-top: 12px;
+    font-weight: bold;
 }
 
 .orderWhite{
@@ -301,13 +307,19 @@ main {
     background-color: white;
     border-radius: 10pt;
 
-    width: 183pt;
+    /*width: 183pt;*/
     height: 29pt;
     border: none;
 
-    float: right;
-    font-size: 14px;
+    width: 100%;
+    /*float: right;*/
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+
+    font-size: 15px;
     margin-top: 12px;
+    font-weight: bold;
 }
 
 .hidden {
@@ -319,7 +331,6 @@ main {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: bold;
 }
 
 .orderInfo {
