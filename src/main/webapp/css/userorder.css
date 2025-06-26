@@ -297,8 +297,9 @@ main {
     justify-content: center;
     text-align: center;
     
-    font-size: 14px;
+    font-size: 15px;
     margin-top: 12px;
+    font-weight: bold;
 }
 
 .orderWhite{
@@ -315,8 +316,10 @@ main {
     align-content: center;
     justify-content: center;
     text-align: center;
-    font-size: 14px;
+
+    font-size: 15px;
     margin-top: 12px;
+    font-weight: bold;
 }
 
 .hidden {
@@ -328,7 +331,6 @@ main {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-weight: bold;
 }
 
 .orderInfo {

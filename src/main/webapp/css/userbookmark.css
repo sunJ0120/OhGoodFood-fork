@@ -98,8 +98,12 @@ main {
 
 .productName {
     font-size: 16pt;
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
     color: black;
+}
+
+.todayPickupText{
+    font-weight: bold;
 }
 
 /* 배지 (내일/오늘 텍스트) */
@@ -173,15 +177,15 @@ main {
 }
 
 .originalPrice {
-    font-size: 8px;
+    font-size: 10px;
     color: #8B6D5C;
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: normal;
 }
 
 .salePrice {
-    font-size: 13px;
+    font-size: 15px;
     color: #5A4632;
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
 }
 
 .productCard {
