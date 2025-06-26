@@ -45,7 +45,7 @@ public class CommonController {
 			return "/common/intro";
 		}
 		model.addAttribute("msg", "로그인 실패");
-		model.addAttribute("url", "/common/login");
+		model.addAttribute("url", "/login"); // [gaeun] 로그인 실패시 다시 로그인 창으로 이동
 		return "store/alert";
 	}
 }

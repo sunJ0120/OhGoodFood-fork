@@ -80,7 +80,8 @@
                                         <!-- 카테고리 정보 -->
                                         <div class="categorySection">
                                             <li class="infoRow">
-                                                <span class="infoLabel">카테고리</span><span>|</span>
+                                                <span class="infoLabel">카테고리</span>
+                                                <span class="pickupdiv">|</span>
                                                 <span class="infoValue">
                                                     <c:if test="${productDetail.category_bakery=='Y'}">베이커리 </c:if>
                                                     <c:if test="${productDetail.category_fruit=='Y'}">과일 </c:if>

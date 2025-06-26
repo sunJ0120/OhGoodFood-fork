@@ -26,13 +26,15 @@ import java.util.Map;
  * UsersController
  *
  * 사용자 페이지 전용 기능을 처리하는 컨트롤러입니다.
+ * - POST /user/signup	       : 사용자 회원가입 페이지
  * - GET  /user/main           : 사용자 메인 화면 조회
  * - POST /user/filter/store   : AJAX 기반 가게 목록 필터링
  * - GET  /user/bookmark       : 해당 user_id가 가진 bookmark 목록 조회
  * - POST /user/bookmark       : 해당하는 bookmark 삭제 -> 차후 북마크 다시 insert 하는 로직이 필요할 경우, endPoint 분기 예정
  * - GET  /user/main/orderList : 유저가 가진 orderList 목록 조회
  * - POST /user/filter/order   : AJAX 기반 오더 목록 필터링
- *
+ * - GET  /user/mypage         : 유저 mypage 이동
+ * - GET  /user/reviewList     : 하단 메뉴바 Review탭 이동시 전체 리뷰 목록 조회
  * @since 2025-06-22 : [sunJ] 필터에 Map이 아닌, DTO 필터 객체 적용
  * @since 2025-06-25 : [sunJ] 인터셉트로 로그인 정보 체크할 예정이라, 인터셉터에서 alert을 뿌려주는 방식이므로 따로 처리하지는 않은 상태
  */
@@ -201,16 +203,16 @@ public class UsersController {
     /**  회원가입 폼 보여주기 */
     @GetMapping("/signup")
     public String showSignupForm() {
-        return "users/userSignup";  // /WEB-INF/views/users/userSignup.jsp
+        return "users/userSignup"; 
     }
 
-    /** AJAX 아이디 중복 확인 */
+    /** 아이디 중복 확인 */
     @GetMapping("/checkId")
     @ResponseBody
     public boolean checkId(@RequestParam("user_id") String userId) {
         return usersService.isDuplicateId(userId);
     }
-    /**  실제 회원가입 처리 */
+    /** 회원가입 처리 */
     @PostMapping("/signup")
     public String signup(
             @ModelAttribute Account account,
@@ -226,7 +228,7 @@ public class UsersController {
         try {
         	usersService.registerUser(account);
             model.addAttribute("msg", "회원가입이 성공적으로 완료되었습니다.");
-            model.addAttribute("url", "/user/login");
+            model.addAttribute("url", "/login");
         } catch (Exception e) {
             model.addAttribute("msg", "회원가입 중 오류가 발생했습니다.");
             model.addAttribute("url", "/user/signup");
@@ -236,29 +238,31 @@ public class UsersController {
 
     /**
      *  사용자 마이페이지 조회
-     *
+     *  
      */
     
     @GetMapping("/mypage")
     public String userMypage(Model model, HttpSession session) {
-        String userId = (String) session.getAttribute("user_id");
-        if (userId == null) userId = "u10";
+    	
+        // String userId = (String) session.getAttribute("user_id");
+        // if (userId == null) userId = "u10"; // 임시 하드코딩값
+        // 세션에서 user_id 가져오기
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
 
-        UserMypage page = usersService.getMypage(userId);
+        UserMypage page = usersService.getMypage(user_id);
         model.addAttribute("userMypage", page);
         return "users/userMypage";
         
     }
     /**
      * 제품 상세보기
-     * URL: /user/productdetail?product_no=123
      */
     @GetMapping("/productDetail")
     public String productDetail(
             @RequestParam("product_no") int product_no,
             Model model
     ) {
-        // productService → usersService 로 교체
         ProductDetail detail = usersService.getProductDetail(product_no);       
         model.addAttribute("productDetail", detail);
         return "users/userProductDetail";
@@ -267,8 +271,8 @@ public class UsersController {
     }
 
     /**
-     * POST /user/productdetail
-     * (GET과 같은 URL, HTTP 메서드만 POST로 분기)
+     * 특정 가게 상세 정보로 리다이렉트
+     *
      */
     @PostMapping("/productDetail")
     public String reserve(
@@ -278,7 +282,7 @@ public class UsersController {
     ) {
         String userId = (String) session.getAttribute("user_id");
         if (userId == null) {
-            redirectAttrs.addFlashAttribute("error", "로그인이 필요합니다.");
+            redirectAttrs.addFlashAttribute("error", "로그인이 필요합니다."); // 추후 인터셉터 구현시 제거
             return "redirect:/login";
         }
 
@@ -296,10 +300,9 @@ public class UsersController {
      */
     @GetMapping("/reviewList")
     public String listReviews(Model model) {
-        // 페이지·사이즈 파라미터 없이 전체를 한 번에 가져온다고 가정
         List<Review> reviews = usersService.getAllReviews(1, Integer.MAX_VALUE);
         model.addAttribute("reviews", reviews);
-        return "users/userReviewList";  // /WEB-INF/views/users/userReviewList.jsp
+        return "users/userReviewList";  
     }
 
 }
