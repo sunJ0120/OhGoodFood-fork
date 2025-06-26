@@ -27,23 +27,19 @@ header{
     padding: 20px 15px 20px 15px;;
     border-bottom: solid 1px #717171;
 }
-.header-container{
+.headerContainer{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-.icon-container{
+.iconContainer {
     display: flex;
-    gap:10px;
+    gap: 15px;
     align-items: center;
 }
 .icon{
     width: 23px;
 }
-main{
-
-}
-/* wrapper, 공통 레이아웃은 layout.css에 */
 
 /* 페이지 제목 */
 .review {
@@ -59,7 +55,7 @@ main{
     border: 1px solid #99A99B;
     width: 370px;
     height: 665px;
-    margin: 20px;
+    margin: 15px;
     padding: 16px;
     display: flex;
     flex-direction: column;
@@ -68,95 +64,184 @@ main{
 }
 
 /* 1) 상품 카드 */
-.product-card {
+.productCard {
+  width: 350px;
   display: flex;
   background: #F5F3EA;
   border-radius: 8px;
   padding: 12px;
 }
-.product-card .thumb img {
-  width: 80px;
-  height: 80px;
+.productCard .storeImg {
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 4px;
 }
-.product-card .details {
-  margin-left: 12px;
-  font-size: 0.9rem;
+.productCard .details {
+  margin-left: 20px;
+  font-size: 12px;
+  margin-top: -13px;
 }
-.product-card .name {
+.productCard .name {
   font-family: 'nanumesquareneo_b';
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+  font-size: 15px;
+  font-weight: bold;
+}
+.productCard .storeName .productCount .productPrice {
+  font-family: 'nanumesquareneo_b';
+  margin-bottom: 2px;
+  font-size: 13px;
+  font-weight: bold;
 }
 
-/* 2) 리뷰 입력(form) */
-.review-form {
-  border-top: 1px solid #E5DFD5;
-  padding-top: 16px;
+.line {
+  border: none;
+  border-top: 1.5px solid #99A99B;
+  margin:  0;
+  margin-top: -15px;
+  width: 350px;
+}
+
+.reviewInfo{
+  margin-top: 15px;
+}
+
+
+.reviewInfo__title,
+.photoLabel__title {
+  font-size: 1rem;       
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+/* 리뷰 설명 & 사진 설명 (빨간색) */
+.reviewInfo__desc,
+.photoLabel__desc {
+  color: red;
+  margin-left: 4px;
+  font-size: 13px;    
+}
+.reviewForm {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 /* 리뷰 텍스트 */
-.review-text textarea {
-  width: 100%;
-  height: 120px;
-  border: 1px solid #E5DFD5;
+.reviewText {
+  width: 350px;
+  height: 200px;
   border-radius: 8px;
   padding: 12px;
   resize: none;
-  font-size: 0.95rem;
+  background: #F5F3EA;
+  border: 1px solid #99A99B;
+  font-size: 14px;
 }
-.review-text .char-count {
+.charCount {
   text-align: right;
   font-size: 0.75rem;
   color: #888;
   margin-top: -8px;
 }
-
-/* 3) 사진 업로드 */
-.review-photo .photo-label {
-  font-size: 0.9rem;
-  margin-bottom: 4px;
+.textarea{
+  width: 325px;
+  height: 150px;
+  border-radius: 8px;
+  padding: 12px;
+  resize: none;
+  background: #F5F3EA;
+  border: 1px solid #99A99B;
+  font-size: 0.95rem;
 }
-.photo-input {
-  width: 100%;
+/* 3) 사진 업로드 */
+.reviewPhoto .photoabKel {
+  margin-bottom: 4px;
+  width: 325px;
   height: 120px;
-  border: 1px dashed #CCC;
+  background: #F5F3EA;
+  border: 1px solid #99A99B;
+}
+.photoInput {
+  width: 100%;
+  height: 180px;
+  margin-top: 15px;
+  border: 1px solid #99A99B;
   border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
 }
-.btn-add-photo {
+.btnAddPhoto {
   background: none;
   border: none;
   font-size: 2rem;
   color: #888;
   cursor: pointer;
 }
-.photo-preview img {
+.photoPreview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 4px;
 }
 
-/* 4) 등록 버튼 */
-.btn-submit {
-  width: calc(100% - 32px);
-  margin: 0 16px;
-  padding: 12px;
-  background: #FFB6C1;
-  color: #fff;
-  font-size: 1rem;
-  border: none;
-  border-radius: 6px;
+/* 리뷰 등록하기 버튼 스타일 */
+.btnSubmit {
+  width: 408px;
+  height: 45px;
+  margin-left: 12px;
+  background-color: #FFFFFF;      
+  color: #D8A8AB;                
+  border: 1px solid #ffffff;     
+  font-size: 22px;               
+  border-radius: 8px;
+  margin-top: 15px;            
+}
+
+.modal-overlay { 
+  position: fixed;
+  top: 0; bottom: 0;
+  background: rgba(0,0,0,0.5);
+  display: none;           /* script 로 show/hide */
+  display: flex;
+  justify-content: center; /* x축 가운데 정렬 */
+  align-items: flex-end;   /* y축 아래쪽 정렬 */
+  z-index: 1000;
+  width: 440px;
+  
+}
+.modal-sheet {
+  background: #fff;
+  width: 100%;
+  max-width: 500px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+}
+.modal-sheet button {
+  width: 100%; padding: 12px; font-size: 16px;
+  border: none; background: none; text-align: left;
   cursor: pointer;
 }
-.btn-submit[disabled] {
-  background: #F5F3EA;
-  color: #CCC;
-  cursor: default;
+.modal-sheet button:hover { background: #f0f0f0; }
+
+/* 사진 미리보기 */
+.photoPreview-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-right: 8px;
+}
+.photoPreview-wrapper img {
+  width: 150px; height: 150px;
+  object-fit: cover; border-radius: 8px;
+}
+.photoPreview-wrapper .remove-btn {
+  position: absolute; top: -6px; right: -6px;
+  background: rgba(0,0,0,0.6); color: #fff;
+  border: none; border-radius: 50%; width: 20px; height: 20px;
+  line-height: 18px; text-align: center;
+  cursor: pointer;
 }
