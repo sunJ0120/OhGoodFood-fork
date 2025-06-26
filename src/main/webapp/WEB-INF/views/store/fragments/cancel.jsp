@@ -10,13 +10,12 @@
             <span class="order-card-title">오굿백 ${vo.quantity}개 예약</span>
             <div class="order-card-button">
             	<c:set var="btnStatus" value="${vo.canceld_from eq 'user' ? 'user' : 'store'}" />
-                <button class="order-card-btn" data-status="${btnStatus}">
+                <button class="order-card-btn" data-status="${btnStatus}" style="${vo.canceld_from eq 'user' ? 'background-color:#8B6D5C;' : ''}">
                  <c:choose>
                  	<c:when test="${vo.canceld_from eq 'user' }">구매자 취소</c:when>
                  	<c:otherwise>가게 취소</c:otherwise>
                  </c:choose>
-               </button>
-                
+               </button>   
             </div>
             <span class="order-card-date">
             	<fmt:formatDate value="${vo.ordered_at}" pattern="yyyy.MM.dd"/>
@@ -33,11 +32,7 @@
 					<fmt:formatDate value="${vo.pickup_end}" pattern="HH:mm" />
                 </div>
                 <div class="order-card-info-ctime"><b>결제 금액 :</b> ${vo.quantity * vo.sale_price}₩</div>
-                
             </div>
         </div>
     </div>
 </c:forEach>
-
-    
-    

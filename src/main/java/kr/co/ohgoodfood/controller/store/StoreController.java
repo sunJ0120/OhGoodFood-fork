@@ -46,19 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class StoreController {
 
-
-
 	private final StoreService storeService;
-
-	@GetMapping("/jointype")
-	public String jointype() {
-		return "/common/jointype";
-	}
-	
-	@GetMapping("/intro")
-	public String intro() {
-		return "/common/intro";
-	}
 
 	// 로그아웃
 	@GetMapping
@@ -75,7 +63,7 @@ public class StoreController {
 		return "store/signup";
 	}
 
-
+	// 내 가게 리뷰 페이지 보기
 	@GetMapping("/review")
 	public String getReviews(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -87,39 +75,33 @@ public class StoreController {
 		String storeId = login.getStore_id();
 		List<Review> lists = storeService.getReviews(storeId);
 		model.addAttribute("reviews", lists);
-		
 		return "store/review";
 	}
 	
-	@GetMapping("/reservation") // main에서 order 탭을 눌렀을때 기본 미확정 주문 조회
+	// main에서 order 탭을 눌렀을때 기본 미확정 주문 조회
+	@GetMapping("/reservation") 
 	public String getReservationOrders(HttpSession sess, Model model) {
-		
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
 			model.addAttribute("msg", "로그인이 필요합니다.");
 			model.addAttribute("url", "/store/login");
 			return "store/alert";
 		}
-		//List<Orders> lists = storeService.getOrders(login.getStore_id(), "reservation");
-		//System.out.println("lists 사이즈" + lists.size());
-		//model.addAttribute("order", lists);
 		return "/store/order";
-		
 	}
+	
 	// 이 밑에가 ajax 동적 처리 컨트롤러
 	@PostMapping("/order/{status}")
 	public String loadOrderByStatus(@PathVariable("status") String status, HttpSession session, Model model) {
-	    
 	    Store store = (Store) session.getAttribute("store");
 	    if (store == null) {
 	        return "store/alert"; 
 	    }
 	    List<Orders> orders = storeService.getOrders(store.getStore_id(), status);
-	    
 	    model.addAttribute("order", orders); 
 	    System.out.println("서버 들어옴" + status);
 	    System.out.println("컨트롤러에서 order 사이즈" + orders.size());
-	    switch (status) {
+	    switch (status) { // fragment 에서 ajax 로 div 붙이기
 	        case "reservation":
 	        	System.out.println("reservation 컨트롤러 들어옴");
 	            return "/store/fragments/reservation";
@@ -134,9 +116,8 @@ public class StoreController {
 	    }
 	}
 	
-	
-	
-	@PostMapping("/reservation/{id}/confirm") // 미확정 탭에서 확정 버튼 클릭시
+	// 미확정 탭에서 확정 버튼 클릭시 -> 확정으로 바꿈
+	@PostMapping("/reservation/{id}/confirm") 
 	@ResponseBody
 	public String confirmOrders(@PathVariable("id") int id ,HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -159,9 +140,10 @@ public class StoreController {
 		}else {
 			return "failed";
 		}
-		
 	}
-	@PostMapping("/reservation/{id}/cancle") // 미확정 탭에서 취소 버튼 클릭시
+	
+	// 미확정 탭에서 취소 버튼 클릭시 -> 취소 상태로 바꿈
+	@PostMapping("/reservation/{id}/cancle") 
 	@ResponseBody
 	public String cancleOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -184,7 +166,8 @@ public class StoreController {
 		}
 	}
 	
-	@GetMapping("/confirmed") // 토글에서 확정주문 클릭시
+	// 토글에서 확정주문 클릭시 -> 확정 주문 내역 조회
+	@GetMapping("/confirmed") 
 	public String getConfirmedOrders(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
@@ -192,9 +175,7 @@ public class StoreController {
 			model.addAttribute("url", "/store/login");
 			return "store/alert";
 		}
-		//List<Orders> lists = storeService.getOrders(login.getStore_id(), "confirmed"); pickup도 가져와야함
-		//List<Orders> lists = storeService.getOrders(login.getStore_id(), "confirmed");
-		
+
 		List<Orders> lists = storeService.getConfirmedOrPickupOrders(login.getStore_id());
 		
 		for(Orders order : lists) {
@@ -205,12 +186,11 @@ public class StoreController {
 			}
 		}
 		model.addAttribute("order", lists);
-		
-		
 		return "/store/confirmedorder";
 	}
 	
-	@GetMapping("/cancled") // 토글에서 취소한 주문클릭시
+	// 토글에서 취소한 주문클릭시 -> 취소 주문 내역 조회
+	@GetMapping("/cancled") 
 	public String getCancledOrders(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
@@ -222,6 +202,8 @@ public class StoreController {
 		model.addAttribute("order", lists);
 		return "/store/cancledorder";
 	}
+	
+	// 확정 주문 내역에서 체크 표시 클릭시 픽업 상태로 변경
 	@PostMapping("/confirmed/{id}/pickup")
 	@ResponseBody
 	public String pickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
@@ -243,6 +225,8 @@ public class StoreController {
 			return "failed";
 		}
 	}
+	
+	// 확정 주문내역에서 픽업완료로 상태 변경 후 다시 오늘픽업으로 변경
 	@PostMapping("/confirmed/{id}/confirmed")
 	@ResponseBody
 	public String confirmPickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
@@ -265,26 +249,6 @@ public class StoreController {
 		}
 	}
 	
-	
-	/*
-	@PostMapping("/store/signup")
-	public String signup(Store vo, Model model) {
-		
-		int res = storeService.insert(vo);
-		String msg = "";
-		String url = "";
-		if (res > 0) {
-			msg = "회원가입 성공";
-			url = "/store/mypage";
-		} else {
-			msg = "회원가입 실패";
-			url = "/store/signup";
-		}
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", url);
-		return "store/alert";
-	
-	}*/
 
 	// 회원가입 처리
 	@PostMapping("/signup")
@@ -306,7 +270,7 @@ public class StoreController {
 		}
 	}
 
-	// Time 타입 변환용 바인딩(영업 시간)
+	// Time 문자열 → Time 타입 변환 (HH:mm 또는 HH:mm:ss 지원)
 	@InitBinder
 	public void initBinder(WebDataBinder binder) {
 		binder.registerCustomEditor(Time.class, new PropertyEditorSupport() {
@@ -364,6 +328,7 @@ public class StoreController {
 	    return "store/main";
 	}
 
+	//가게 상태 변경
 	@PostMapping("/updateStatus")
 	@ResponseBody
 	public String updateStatus(HttpSession session, @RequestParam("status") String status) {
@@ -378,7 +343,7 @@ public class StoreController {
 	    return "success";
 	}
 
-	// 상품
+	// 상품 정보 조회
 	@GetMapping("/product")
 	@ResponseBody
 	public Product getProduct(HttpSession sess) {
@@ -389,11 +354,10 @@ public class StoreController {
 	    return storeService.getProductByStoreId(login.getStore_id());
 	}
 
-	// 매출확인
+	// 매출확인 -> 기간매출 조회
 	@GetMapping("/viewsales")
 	public String showViewSales(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-
 		if (login == null) {
 			// 로그인 안 되어 있으면 로그인 페이지로
 			model.addAttribute("msg", "로그인이 필요합니다.");
@@ -410,10 +374,10 @@ public class StoreController {
 	    model.addAttribute("month", month);
 	    model.addAttribute("vo", vo);
 	    model.addAttribute("store", login);
-		
 		return "store/viewsales";
 	}
 	
+	//기간 매출 조회
 	@PostMapping("/store/viewsales/{date}")
 	@ResponseBody
 	public StoreSales getDailySales(@PathVariable("date") String date, HttpSession session) {
@@ -421,9 +385,7 @@ public class StoreController {
 	    if (login == null) {
 	        return null; 
 	    }
-	    
 	    return storeService.getSales(login.getStore_id(), date, date); 
-	    
 	}
 
 	// 알람
@@ -442,7 +404,7 @@ public class StoreController {
 		return "store/alarm";
 	}
 
-	// 마이페이지
+	// 마이페이지 조회
 	@GetMapping("/mypage")
 	public String showMypage(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -505,7 +467,7 @@ public class StoreController {
 		return "store/updatemypage";
 	}
 
-
+	// 수정된 마이페이지 내용 반영
 	@PostMapping("/updatemypage")
 	public String updateMyPagePost(HttpSession sess,
 			@ModelAttribute Store store,
