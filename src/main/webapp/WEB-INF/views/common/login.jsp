@@ -41,6 +41,16 @@
 			    </div>
 			</form>
         </main>
+		<!-- 승인 대기 모달 -->
+		<c:if test="${showConfirmationModal}">
+			<div id="confirmationModal" class="modal">
+				<div class="modal-content">
+					<h2>사장님 계정 승인 대기중입니다.</h2>
+					<p>관리자의 승인이 완료되면 로그인 하실 수 있습니다.<br>조금만 기다려 주세요!</p>
+					<button onclick="closeModal()">확인</button>
+				</div>
+			</div>
+		</c:if>
      </div>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
      <script>
@@ -69,8 +79,11 @@
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
-	   	    });
+	   	    });			
 	     });
+		 $(document).on('click', '#confirmationModal button', function () {
+			$('#confirmationModal').hide();
+		});
      </script>
 </body>
 </html>

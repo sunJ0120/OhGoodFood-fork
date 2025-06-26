@@ -41,7 +41,8 @@ public class CommonController {
 		if (store != null) {
 			if ("N".equals(store.getConfirmed())) {
 				sess.setAttribute("store", store);
-				return "store/loginconfirmed";  // 승인 대기 중인 가게는 이 페이지로
+				model.addAttribute("showConfirmationModal", true);
+           		return "common/login";
 			}
 			sess.setAttribute("store", store);
 			model.addAttribute("store", store);
