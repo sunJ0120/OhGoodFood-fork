@@ -26,26 +26,21 @@ import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.Product;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class StoreServiceImpl implements StoreService {
 
-	@Autowired
-	private AwsS3Config awsS3Config;
+	private final AwsS3Config awsS3Config;
 
-	@Autowired
-	private StoreMapper mapper;
+	private final StoreMapper mapper;
 
+	// 회원가입(DB에 단순 insert)
 	@Override
-	public Store login(Store vo) {
-		vo.setStore_pwd(md5(vo.getStore_pwd()));
-		return mapper.login(vo);
+	public int insert(Store vo) {
+		return mapper.insert(vo);
 	}
-
-	@Override
-	public Review viewRiew(Store vo) {
-		return mapper.viewReview(vo);
-
 
 	// 아이디 중복확인
 	@Override
@@ -54,6 +49,7 @@ public class StoreServiceImpl implements StoreService {
 		return store != null;
 	}
 
+	// 회원가입 처리 (주소/이미지 포함)
 	@Override
 	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail,
 			HttpServletRequest request) throws Exception {
@@ -95,13 +91,14 @@ public class StoreServiceImpl implements StoreService {
 		}
 	}
 
-	// 이미지 저장
+	// 이미지 AWS S3에 업로드하고 DB에 기록
 	public void saveImage(String storeId, MultipartFile file, HttpServletRequest request) throws Exception {
 		String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 		ObjectMetadata metadata = new ObjectMetadata();
 		metadata.setContentType(file.getContentType());
 		metadata.setContentLength(file.getSize());
 
+		// 공개 읽기 설정
 		amazonS3().putObject(new PutObjectRequest(awsS3Config.getBucket(), fileName, file.getInputStream(), metadata)); // 공개 읽기 설정
 
 		Image image = new Image();
@@ -110,6 +107,7 @@ public class StoreServiceImpl implements StoreService {
 		mapper.insertImage(image);
 	}
 	
+	// AWS S3 인스턴스 반환
 	private AmazonS3 amazonS3() {
         return awsS3Config.amazonS3();
     }
@@ -129,19 +127,20 @@ public class StoreServiceImpl implements StoreService {
 		}
 	}
 
-	// 이미지 가져오기
+	// 가게별 이미지 리스트 조회
 	@Override
 	public List<Image> getImagesByStoreId(String store_id) {
 	    return mapper.findImagesByStoreId(store_id);
 	}
 	
 	
-	//메인 
+	// 매장 상품 조회 (메인화면용) 
 	@Override
 	public Product getProductByStoreId(String store_id) {
 	    return mapper.findProductByStoreId(store_id);
 	}
 	
+	// 가게 상태 업데이트
 	@Override
 	public void updateStoreStatus(String store_id, String status) {
 	    Map<String, Object> param = new HashMap<>();
@@ -158,6 +157,7 @@ public class StoreServiceImpl implements StoreService {
 		return mapper.findById(store_id);
 	}
 
+	// 마이페이지 카테고리 정보 수정
 	@Override
 	public void updateStoreCategory(Store store) {
 		// 1. 카테고리 체크박스 null 처리 (체크 안되면 null로 넘어옴)
@@ -170,22 +170,32 @@ public class StoreServiceImpl implements StoreService {
 		mapper.updateStore(store);
 
 	}
+	
+	//가게 리뷰조회
 	@Override
 	public List<Review> getReviews(String storeId) {
 		return mapper.getReviews(storeId);
 	}
+	
+	//가게 주문내역 조회(미확정, 확정, 취소)
 	@Override
 	public List<Orders> getOrders(String storeId, String type) {
 		return mapper.getOrders(storeId, type);
 	}
+	
+	//미확정 주문 -> 확정 주문으로 바꾸기
 	@Override
 	public int confirmOrders(int id, String type) {
 		return mapper.confirmOrders(id, type);
 	}
+	
+	//미확정 주문 -> 주문 취소
 	@Override
 	public int cancleOrders(int id, String type) {
 		return mapper.cancleOrders(id, type);
 	}
+	
+	//사용자에게 알림 보내는 로직
 	@Override
 	public int createUserAlarm(int no, String type) {
 		Orders order = mapper.getOrderById(no);
@@ -217,6 +227,8 @@ public class StoreServiceImpl implements StoreService {
 		alarm.setAlarm_read("N");
 		return mapper.insertAlarm(alarm);
 	}
+	
+	//가게 사장에게 알림 보내는 로직
 	@Override
 	public int createStoreAlarm(int no, String type) {
 		Orders order = mapper.getOrderById(no);
@@ -248,33 +260,36 @@ public class StoreServiceImpl implements StoreService {
 		alarm.setAlarm_read("N");
 		return mapper.insertAlarm(alarm);
 	}
+	
+	//확정 주문내역에서 주문건 픽업완료 처리
 	@Override
 	public int pickupOrders(int id, String type) {
 		return mapper.pickupOrders(id, type);
 	}
 	
+	// 확정 주문내역에서 주문을 다시 'confirmed'로 바꾸는 로직
 	@Override
 	public int confirmPickupOrders(int id, String type) {
 		return mapper.confirmOrders(id, type);
 	}
 	
+	// 'confirmed', 'pickup'인 주문 조회
 	@Override
 	public List<Orders> getConfirmedOrPickupOrders(String id) {
 		return mapper.getConfirmedOrPickupOrders(id);
 	}
 	
+	// 기간 매출 조회
 	@Override
 	public StoreSales getSales(String store_id, String start, String end) {
 		return mapper.getSales(store_id, start, end);
 	}
 	
-	
+	// 주문코드 랜덤으로 생성
 	@Override
 	public int createOrderCode(int id, String type) {
 		Random rand = new Random();
 	    int randomCode = rand.nextInt(900000) + 100000;
 		return mapper.createOrderCode(id, type, randomCode);
 	}
-	
-
 }

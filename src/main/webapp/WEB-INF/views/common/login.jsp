@@ -1,28 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/css/storelogin.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storelogin.css">
     
 </head>
 <body>
      <div id="wrapper">
         <header>
             <div class="header-container">
-                <img src="/img/ohgoodfood_logo.png" alt="Logo Image">
+                <img src="${pageContext.request.contextPath}/img/storeohgoodfood_logo.png" alt="Logo Image">
                 <div class="icon-container">
-                        <img src="/img/login.png" alt="로그인" class="icon">
+                        <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
                 </div>
             </div>
         </header>
         <main>
             <form id="loginForm" action="/login" method="post">
 			    <div class="main-head-container" id="main-image">
-			        <img src="/img/group.png" alt="Family" width="446px" height="317px">
+			        <img src="${pageContext.request.contextPath}/img/storegroup.png" alt="Family" width="446px" height="317px">
 			        <div class="main-body-container">
 			            <div class="main-middle-container">
 			                <input type="text" placeholder="id" id="userId" name="id">
@@ -31,12 +32,12 @@
 			                <div class="sub-links">
 			                    <a href="/findid">아이디 찾기</a> |
 			                    <a href="/findpwd">비밀번호 찾기</a> |
-			                    <a href="/signup">회원가입</a>
+			                    <a href="/jointype">회원가입</a>
 			                </div>
 			                <div class="main-line"></div>
 			                <div class="sns-login-box">
 			                    <div class="sns-login-title">SNS로그인</div>
-			                    <img src="/img/kakaologin.png" alt="카카오로그인" />
+			                    <img src="${pageContext.request.contextPath}/img/storekakaologin.png" alt="카카오로그인" />
 			                </div>
 			            </div>
 			        </div>
@@ -51,7 +52,6 @@
 	   	        const id = $('#userId').val().trim();
 	   	        const password = $('#userPwd').val().trim();
 	   	        console.log('logincheck 실행됨', id, password);
-	
 	   	        if(id === '') {
 	   	            alert('아이디 입력바람');
 	   	            e.preventDefault();
@@ -72,7 +72,6 @@
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
-	
 	   	    });
 	     });
      </script>

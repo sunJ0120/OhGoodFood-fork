@@ -12,7 +12,7 @@
 <body>
      <div id="wrapper">
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
-            <img src="${pageContext.request.contextPath}/img/intro.png" alt="Intro Image">
+            <img src="${pageContext.request.contextPath}/img/storeintro.png" alt="Intro Image">
         </div>
      </div>
      
@@ -20,7 +20,6 @@
         // 3초 뒤에 /user/main으로 이동
         //session 값에 ㄸ라서 /user/main 혹은 /store/main으로
         let url = "";
-
         <c:choose>
             <c:when test="${not empty user}">
                 url = "${pageContext.request.contextPath}/user/main";

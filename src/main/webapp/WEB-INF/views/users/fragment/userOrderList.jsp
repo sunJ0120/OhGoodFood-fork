@@ -1,0 +1,88 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+
+<section class="productList">
+    <c:forEach var="userOrder" items = "${userOrderList}" >
+        <article class="productCard">
+            <!-- 1줄: 상단 정보 -->
+            <div class="orderTop">
+                <div class="storeName">${userOrder.store_name}</div>
+                <div class="headerLeftWrapper">
+                    <div class="orderStatus">
+                        <c:choose>
+                            <c:when test="${userOrder.order_status eq 'reservation'}">
+                                확정 진행중
+                            </c:when>
+
+                            <c:when test="${userOrder.order_status eq 'cancel'}">
+                                <c:choose>
+                                    <c:when test="${userOrder.canceld_from eq 'user'}">
+                                        구매자 취소
+                                    </c:when>
+                                    <c:when test="${userOrder.canceld_from eq 'store'}">
+                                        가게 취소
+                                    </c:when>
+                                    <c:otherwise>
+                                        취소
+                                    </c:otherwise>
+                                </c:choose>
+                            </c:when>
+
+                            <c:when test="${userOrder.order_status eq 'pickup'}">
+                                픽업 완료
+                            </c:when>
+
+                            <c:when test="${userOrder.order_status eq 'confirmed'}">
+                                ${userOrder.pickup_status.displayName}
+                            </c:when>
+
+                        </c:choose>
+                    </div>
+                    <div class="orderDate">
+                        <c:if test="${not empty userOrder.ordered_at}">
+                            <fmt:formatDate value="${userOrder.ordered_at}" pattern="yyyy.MM.dd"/>
+                        </c:if>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- 2줄: 이미지 + 주문 정보 -->
+            <div class="orderMiddle">
+                <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
+                <div class="orderInfoWrapper">
+                    <div class="orderInfo">
+                        <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.quantity}개</span></div>
+                        <div class="orderInfoSub"><div class="orderTime">픽업 시간 : </div>
+                            <span class="orderTimeValue">
+                      <span class="pickupStartText">
+                      <c:if test="${not empty userOrder.pickup_start}">
+                          <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
+                          ~
+                      </c:if>
+                    </span>
+                    <span class="pickupEndText">
+                      <c:if test="${not empty userOrder.pickup_end}">
+                          <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
+                      </c:if>
+                    </span>
+                    </span>
+                        </div>
+                        <div class="orderInfoSub"><div class="orderPaid">결제 금액 : </div>
+                            <span class="orderPaidValue">
+                      <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
+                    </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 이 부분 상태에 따라 처리 필요 -->
+            <div class="orderNotice">
+                * 확정 한 시간 전부터 주문 취소가 불가능합니다.
+            </div>
+        </article>
+
+    </c:forEach>
+</section>

@@ -1,15 +1,16 @@
 package kr.co.ohgoodfood.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-//test 출력을 위해 ToString 추가
 @ToString
 @Data
-public class Bookmark {
-    private int bookmark_no;
+@AllArgsConstructor
+@NoArgsConstructor
+public class Bookmark extends MainStore{
+    //Bookmark table에서 가져오는 정보들
+    private Integer bookmark_no;
     private String user_id;
-    private String store_id;
-
-    private int s_bookmark_no;
 }
