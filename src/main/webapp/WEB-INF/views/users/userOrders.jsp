@@ -20,7 +20,7 @@
       <div class="orderHeaderText">
         <span class="title">
           <div class="orderStatusTitle">
-            미확정
+            전체
           </div>
            주문 내역
         </span>
@@ -31,7 +31,7 @@
       <%-- 필터 버튼 --%>
       <div class="filterDropdown">
         <button class="categoryFilterBtn">
-          <span id="btnText">미확정 주문</span>
+          <span id="btnText">전체 주문</span>
           <img src="${pageContext.request.contextPath}/img/user_arrow_down_icon.png" alt="드롭다운" class="dropdownToggle">
         </button>
         <div class="dropdownModal" id="dropdownModal" style="display: none;">
