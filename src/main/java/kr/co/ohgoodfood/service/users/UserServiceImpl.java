@@ -265,12 +265,13 @@ public class UserServiceImpl implements UsersService{
 	}
 	
 	/**
-	 * 메뉴바 review
+	 * 메뉴바 review 탭
 	 * */
 
-    @Override
-    public List<Review> getAllReviews() {
-        return userMapper.findAllReviews();
+	@Override
+    public List<Review> getAllReviews(int page, int size) {
+        int startIdx = (page - 1) * size;
+        return userMapper.getAllReviews(startIdx, size);
     }
 
 }

@@ -161,6 +161,13 @@ public interface UserMapper {
 	int countByUserId(@Param("user_id") String user_id);
 
 
-	/** 모든 리뷰 모아보기*/
-	 List<Review> findAllReviews();
+	/** 모든 리뷰 모아보기
+     * startIdx부터 size만큼 모든 리뷰를 조인 결과로 가져옵니다.
+     * @param startIdx  조회 시작 오프셋
+     * @param size      한 번에 조회할 건 수
+     */
+    List<Review> getAllReviews(
+        @Param("startIdx") int startIdx,
+        @Param("size")     int size
+    );
 }
