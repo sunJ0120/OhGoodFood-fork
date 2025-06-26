@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -52,8 +54,9 @@ public class StoreController {
 	@GetMapping
 	public String logout(HttpSession sess, Model model) {
 		sess.invalidate();
-		model.addAttribute("msg", "로그아웃 성공");
-		model.addAttribute("url", "/store/login");
+		model.addAttribute("msg", "로그아웃 성공")
+		;
+		model.addAttribute("url", "/login");
 		return "store/alert"; 
 	}
 
@@ -67,11 +70,6 @@ public class StoreController {
 	@GetMapping("/review")
 	public String getReviews(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		String storeId = login.getStore_id();
 		List<Review> lists = storeService.getReviews(storeId);
 		model.addAttribute("reviews", lists);
@@ -82,11 +80,6 @@ public class StoreController {
 	@GetMapping("/reservation") 
 	public String getReservationOrders(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		return "/store/order";
 	}
 	
@@ -121,11 +114,6 @@ public class StoreController {
 	@ResponseBody
 	public String confirmOrders(@PathVariable("id") int id ,HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		int r = storeService.confirmOrders(id, "confirmed");
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "confirmed");
@@ -147,11 +135,6 @@ public class StoreController {
 	@ResponseBody
 	public String cancleOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		int r = storeService.cancleOrders(id, "cancle");
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "cancle");
@@ -172,7 +155,7 @@ public class StoreController {
 		Store login = (Store) sess.getAttribute("store");
 		if (login == null) {
 			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
+			model.addAttribute("url", "/login");
 			return "store/alert";
 		}
 
@@ -193,11 +176,6 @@ public class StoreController {
 	@GetMapping("/cancled") 
 	public String getCancledOrders(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		List<Orders> lists = storeService.getOrders(login.getStore_id(), "cancle");
 		model.addAttribute("order", lists);
 		return "/store/cancledorder";
@@ -208,11 +186,6 @@ public class StoreController {
 	@ResponseBody
 	public String pickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		int r = storeService.pickupOrders(id, "pickup");
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "pickup");
@@ -231,11 +204,6 @@ public class StoreController {
 	@ResponseBody
 	public String confirmPickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		int r = storeService.confirmPickupOrders(id, "confirmed");
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "confirmed");
@@ -255,12 +223,14 @@ public class StoreController {
 	public String signup(Store vo,
 			@RequestParam("storeImage") MultipartFile[] storeImageFiles,
 			@RequestParam("storeAddressDetail") String storeAddressDetail,
+			@RequestParam("store_menu2") String store_menu2,
+			@RequestParam("store_menu3") String store_menu3,
 			HttpServletRequest request,
 			Model model) {
 		try {
-			storeService.registerStore(vo, storeImageFiles, storeAddressDetail, request);
+			storeService.registerStore(vo, storeImageFiles, storeAddressDetail, store_menu2, store_menu3, request);
 			model.addAttribute("msg", "회원가입이 성공적으로 완료되었습니다.");
-			model.addAttribute("url", "/store/login");
+			model.addAttribute("url", "/login");
 			return "store/alert";
 		} catch (Exception e) {
 			model.addAttribute("msg", "회원가입 중 오류가 발생했습니다.");
@@ -301,12 +271,6 @@ public class StoreController {
 	@GetMapping("/main")
 	public String showMain(HttpSession sess, Model model) {
 	    Store login = (Store) sess.getAttribute("store");
-
-	    if (login == null) {
-	        model.addAttribute("msg", "로그인이 필요합니다.");
-	        model.addAttribute("url", "/store/login");
-	        return "store/alert";
-	    }
 
 	    List<Image> images = storeService.getImagesByStoreId(login.getStore_id());
 	    model.addAttribute("images", images);
@@ -358,12 +322,7 @@ public class StoreController {
 	@GetMapping("/viewsales")
 	public String showViewSales(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			// 로그인 안 되어 있으면 로그인 페이지로
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
+		
 		LocalDate now = LocalDate.now();
 	    LocalDate start = now.withDayOfMonth(1);
 	    LocalDate end = now.withDayOfMonth(now.lengthOfMonth()).plusDays(1);
@@ -393,13 +352,6 @@ public class StoreController {
 	public String showAlarm(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 
-		if (login == null) {
-			// 로그인 안 되어 있으면 로그인 페이지로
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
-
 		// 로그인 되어 있으면 alarm.jsp로
 		return "store/alarm";
 	}
@@ -411,6 +363,9 @@ public class StoreController {
 
 		Store store = storeService.getStoreDetail(login.getStore_id());
 		model.addAttribute("store", store);
+		
+		List<Image> images = storeService.getImagesByStoreId(login.getStore_id());
+	    model.addAttribute("images", images);
 
 		// 오픈시간, 마감시간(시,분)
 		Time openedTime = store.getOpened_at();
@@ -444,15 +399,12 @@ public class StoreController {
 	public String updateMyPage(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 
-		if (login == null) {
-			// 로그인 안 되어 있으면 로그인 페이지로
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		Store store = storeService.getStoreDetail(login.getStore_id());
 		model.addAttribute("store", store);
 
+		List<Image> images = storeService.getImagesByStoreId(login.getStore_id());
+	    model.addAttribute("images", images);
+	    
 		// 오픈시간, 마감시간(시,분)
 		Time openedTime = store.getOpened_at();
 		Time closedTime = store.getClosed_at();
@@ -470,22 +422,31 @@ public class StoreController {
 	// 수정된 마이페이지 내용 반영
 	@PostMapping("/updatemypage")
 	public String updateMyPagePost(HttpSession sess,
-			@ModelAttribute Store store,
-			Model model) {
+	                                @RequestParam String store_menu,
+	                                @RequestParam(required = false) String store_menu2,
+	                                @RequestParam(required = false) String store_menu3,
+	                                @ModelAttribute Store store,
+	                                Model model) {
 
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
+	    // 로그인한 점주 정보 가져오기
+	    Store login = (Store) sess.getAttribute("store");
+	    store.setStore_id(login.getStore_id());
 
-		store.setStore_id(login.getStore_id());
-		storeService.updateStoreCategory(store);
+	    // 대표 메뉴 값 3개를 합쳐서 하나의 문자열로 구성 (|로 구분)
+	    String combinedMenu = Stream.of(store_menu, store_menu2, store_menu3)
+	                                .filter(s -> s != null && !s.trim().isEmpty())
+	                                .map(String::trim)
+	                                .collect(Collectors.joining(" | "));
+	    store.setStore_menu(combinedMenu);
 
-		model.addAttribute("msg", "정보가 수정되었습니다.");
-		model.addAttribute("url", "/store/mypage");
-		return "store/alert";
+	    // DB 업데이트
+	    storeService.updateStoreCategory(store);
+
+	    // 알림 메시지와 이동할 URL 설정
+	    model.addAttribute("msg", "정보가 수정되었습니다.");
+	    model.addAttribute("url", "/store/mypage");
+
+	    return "store/alert";
 	}
 
 }

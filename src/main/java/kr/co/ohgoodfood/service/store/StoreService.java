@@ -38,7 +38,7 @@ public interface StoreService {
 
 	public boolean isDuplicateId(String store_id);
 	
-	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, HttpServletRequest request) throws Exception;
+	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, String store_menu2, String store_menu3, HttpServletRequest request) throws Exception;
 	
 	public void saveImage(String storeId, MultipartFile file, HttpServletRequest request) throws Exception;
 	

@@ -44,3 +44,16 @@
         </div>
     </div>
 </footer>
+
+<script>
+    $(document).ready(function () {
+        const currentPath = window.location.pathname;
+        $('.menu-container a').each(function () {
+            if ($(this).attr('href') === currentPath) {
+                $(this).on('click', function (e) {
+                    e.preventDefault(); // 클릭 막기
+                }).css('pointer-events', 'none'); // 마우스도 막기 (선택사항)
+            }
+        });
+    });
+</script>

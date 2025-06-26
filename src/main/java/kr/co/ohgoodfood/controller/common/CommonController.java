@@ -27,29 +27,34 @@ public class CommonController {
 	}
 	@PostMapping("/login")
 	public String login(HttpServletRequest request, HttpSession sess, Model model) {
-		String id = request.getParameter("id"); // 아이디 파라미터로
-		String pwd = request.getParameter("pwd"); // 비번 파라미터로 가져옴
+		String id = request.getParameter("id");
+		String pwd = request.getParameter("pwd");
+
 		Account account = commonService.loginAccount(id, pwd);
-		if(account != null) {
+		if (account != null) {
 			sess.setAttribute("user", account);
-			//model.addAttribute("msg", "사용자 로그인 성공");
-	        //model.addAttribute("url", "/common/intro"); 
 			model.addAttribute("user", account);
-	        
 			return "/common/intro";
 		}
+
 		Store store = commonService.loginStore(id, pwd);
-		if(store != null) {
+		if (store != null) {
+			if ("N".equals(store.getConfirmed())) {
+				sess.setAttribute("store", store);
+				return "store/loginconfirmed";  // 승인 대기 중인 가게는 이 페이지로
+			}
 			sess.setAttribute("store", store);
-			//model.addAttribute("msg", "사장님 로그인 성공");
-			//model.addAttribute("url", "/common/intro");
 			model.addAttribute("store", store);
 			return "/common/intro";
 		}
+
 		model.addAttribute("msg", "로그인 실패");
-		model.addAttribute("url", "/login"); // [gaeun] 로그인 실패시 다시 로그인 창으로 이동
+		model.addAttribute("url", "/login");
 		return "store/alert";
 	}
+
+
+
 	@GetMapping("/jointype") // 회원가입 유형 선택 페이지
 	public String jointype() {
 		return "/common/jointype";

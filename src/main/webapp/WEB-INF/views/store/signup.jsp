@@ -18,7 +18,7 @@
 				<div class="header-container">
 					<img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
 					<div class="icon-container">
-						<a href="${pageContext.request.contextPath}/store/login">
+						<a href="${pageContext.request.contextPath}/login">
 							<img src="${pageContext.request.contextPath}/img/store_login.png" alt="로그인" class="icon">
 						</a>
 					</div>
@@ -48,7 +48,7 @@
 							</div>
 
 							<p>이름</p>
-							<input type="text" id="owner_name" name="owner_name" placeholder="이름을 입력하세요" required>
+							<input type="text" id="owner_name" name="owner_name" placeholder="이름을 입력하세요" maxlength="20" required>
 
 							<p>전화번호</p>
 							<input type="text" id="store_telnumber" name="store_telnumber" placeholder="전화번호를 입력하세요"
@@ -56,10 +56,10 @@
 
 							<p>가게이름</p>
 							<p style="font-size:13px; margin-top:-10px;">(체인점일 경우 , 지점명까지 입력)</p>
-							<input type="text" id="store_name" name="store_name" placeholder="가게이름을 입력하세요" required>
+							<input type="text" id="store_name" name="store_name" maxlength="15" placeholder="가게이름을 입력하세요" required>
 
 							<p>가게주소</p>
-							<p style="font-size:13px; margin-top:-10px;">(가게 주소를 정확하게 작성해주세요!)</p>
+							<p style="font-size:13px; margin-top:-10px;">(가게 주소를 정확하게 작성해주세요)</p>
 
 							<div class="inputGroup">
 								<div class="idGroup" style="display:flex">
@@ -75,14 +75,14 @@
 							<div class="mb-2 row">
 							</div>
 							<p>가게 이미지</p>
-							<p style="font-size:13px; margin-top:-10px;">(1~5개 등록 가능)</p>
+							<p style="font-size:13px; margin-top:-10px;">(1~5개 등록 가능 | 권장 사이즈: 200*100)</p>
 							<div class="input-box">
 								<input type="file" id="storeImage" class="file-input" name="storeImage" accept="image/*"
 									multiple style="font-size:15px">
 							</div>
 
 							<p>사업자 등록 번호</p>
-							<p style="font-size:13px; margin-top:-10px;">(사장님인지 확인하기 위해 필요합니다.)</p>
+							<p style="font-size:13px; margin-top:-10px;">(사장님인지 확인하기 위해 필요해요)</p>
 							<input type="text" id="business_number" name="business_number"
 								placeholder="사업자 등록 번호를 입력하세요" required>
 
@@ -116,13 +116,15 @@
 								</div>
 							</div>
 							<p>가게 설명</p>
-							<p style="font-size:13px; margin-top:-10px;">(오굿백에 대한 설명을 작성해주세요.)</p>
-							<input type="text" id="store_explain" name="store_explain" placeholder="가게설명을 입력하세요"
+							<p style="font-size:13px; margin-top:-10px;">(가게에 대한 설명을 작성해주세요.)</p>
+							<input type="text" id="store_explain" name="store_explain" maxlength="50" placeholder="가게설명을 입력하세요"
 								required>
 
 							<p>가게 대표 메뉴</p>
-							<p style="font-size:13px; margin-top:-10px;">(가게를 대표할 만한 것들로 작성해 주세요)</p>
-							<input type="text" id="store_menu" name="store_menu" placeholder="ex) 소금빵 | 앙버터바게트 | 에그타르트">
+							<p style="font-size:13px; margin-top:-10px;">(가게를 대표메뉴를 1개 이상 작성해 주세요)</p>
+							<input type="text" id="store_menu" name="store_menu" placeholder="첫 번째 대표메뉴를 입력하세요" maxlength="6" required>
+							<input type="text" id="store_menu" name="store_menu2" placeholder="두 번째 대표메뉴를 입력하세요" maxlength="6" style="margin-top: 10px;">
+							<input type="text" id="store_menu" name="store_menu3" placeholder="세 번째 대표메뉴를 입력하세요" maxlength="6" style="margin-top: 10px;">
 
 							<p>영업시간</p>
 							<div class="business-hours-group">
@@ -165,18 +167,18 @@
 					const storeId = $(this).val();
 					const idRegex = /^[a-z0-9]{8,15}$/;
 
+					isIdChecked = false; // 중복확인 무효화!
+
 					if (storeId === "") {
 						$("#idCheckMessage").css("color", "red").text("* 아이디를 입력하세요.");
-						isIdChecked = false;
 						return;
 					}
 					if (!idRegex.test(storeId)) {
 						$("#idCheckMessage").css("color", "red").text("* 영어 소문자, 숫자 8~15자만 가능합니다.");
-						isIdChecked = false;
 						return;
 					}
-					$("#idCheckMessage").text(""); // 조건 통과 시 메시지 제거
-					isIdChecked = true;
+
+					$("#idCheckMessage").css("color", "red").text("* 중복확인을 해주세요.");
 				});
 				// 아이디 중복확인 버튼 클릭
 				$("#checkIdButton").click(function () {

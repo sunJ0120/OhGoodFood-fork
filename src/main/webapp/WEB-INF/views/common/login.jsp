@@ -13,13 +13,10 @@
 <body>
      <div id="wrapper">
         <header>
-            <div class="header-container">
-                <img src="${pageContext.request.contextPath}/img/storeohgoodfood_logo.png" alt="Logo Image">
-                <div class="icon-container">
-                        <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
-                </div>
-            </div>
-        </header>
+			<div class="header-container">
+				<img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
+			</div>
+		</header>
         <main>
             <form id="loginForm" action="/login" method="post">
 			    <div class="main-head-container" id="main-image">

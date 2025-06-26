@@ -51,7 +51,7 @@ public class StoreServiceImpl implements StoreService {
 
 	// 회원가입 처리 (주소/이미지 포함)
 	@Override
-	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail,
+	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, String store_menu2, String store_menu3,
 			HttpServletRequest request) throws Exception {
 
 		// 비밀번호 암호화
@@ -77,6 +77,14 @@ public class StoreServiceImpl implements StoreService {
 		// confirmed, store_status 기본값 N
 		vo.setConfirmed("N");
 		vo.setStore_status("N");
+		
+		// 대표메뉴 합치기
+		String menu1 = vo.getStore_menu() != null ? vo.getStore_menu() : "";
+		String menu2 = store_menu2 != null ? store_menu2 : "";
+		String menu3 = store_menu3 != null ? store_menu3 : "";
+
+		String combinedMenu = String.join(" | ", menu1, menu2, menu3).trim();
+		vo.setStore_menu(combinedMenu);
 
 		// insert 실행
 		mapper.insert(vo);
@@ -89,6 +97,7 @@ public class StoreServiceImpl implements StoreService {
 				}
 			}
 		}
+
 	}
 
 	// 이미지 AWS S3에 업로드하고 DB에 기록

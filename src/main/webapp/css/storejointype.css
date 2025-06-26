@@ -7,43 +7,43 @@
   src: url('font/NANUMSQUARENEO-BRG.ttf');
 }
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'nanumesquareneo';
-  height: 100vh;            
-  display: flex;
-  justify-content: center;
-  
+body{
+    font-family: 'nanumesquareneo';
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+}
+#wrapper{
+    width: 440px;
+    height: 956px;
+    background-color: #F5F3EA;   
+    display: flex;
+    flex-direction: column;
+}
+header{
+    height: 30px;
+    padding: 20px 15px 20px 15px;;
+    border-bottom: solid 1px #717171;
 }
 
-#wrapper {
-  width: 440px;
-  height: 100vh;            
-  display: flex;
-  flex-direction: column;
-  background-color: #F5F3EA;
+.header-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-
-header {
-  padding: 20px 15px;
-  border-bottom: 1px solid #717171;
+.icon-container{
+    display: flex;
+    gap:10px;
+    align-items: center;
 }
-
-.header-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.icon-container {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+.icon{
+    width: 20px;
 }
 
 .icon {
-  width: 23px;
+  width: 20px;
 }
 
 main {

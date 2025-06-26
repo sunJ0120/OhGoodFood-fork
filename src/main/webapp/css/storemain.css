@@ -55,6 +55,7 @@ main{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
 }
 .store-image-slider {
     width: 400px; /* 이미지 한 장의 너비 */
@@ -169,10 +170,10 @@ main{
 /*폼 데이터*/
 .info-content form{
     margin-top:20px;
-    font-family: 'nanumesquareneo_b';
+    font-family: 'nanumesquareneo_b'; 
     display:flex;
     flex-direction: column;
-    gap:15px;
+    gap:20px;
     
 }
 .form-group{
