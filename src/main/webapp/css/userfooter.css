@@ -34,9 +34,10 @@ footer{
     align-items: center;
     height: 55px;
     width: 68px;
+
     border-radius: 8px;
     cursor: pointer;
 }
-.menuItem.active {
-    background-color: #F5F3EA; 
+.menuContainer a.active .menuItem {
+    background-color: #F5F3EA;
 }

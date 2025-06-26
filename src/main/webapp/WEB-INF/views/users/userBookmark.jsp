@@ -31,7 +31,7 @@
 
               <div class="productNameWrapper">
                 <div class="productBookmarkWrapper">
-                  <img src="${pageContext.request.contextPath}/img/bookmark.png" class="bookmarkImage">
+                  <img src="${pageContext.request.contextPath}/img/user_bookmark.png" class="bookmarkImage">
                   <div class="productName">${bookmark.store_name}</div>
                 </div>
                 <div class="badge">
@@ -175,7 +175,7 @@
           return alert('요청에 실패했습니다.');
         }
         //이미지 상태 변경 및 오퍼시티 설정
-        $icon.attr('src', '/img/empty_bookmark.png');
+        $icon.attr('src', '/img/user_empty_bookmark.png');
         $card.addClass('unbookmarked');
       },
       error: function() {
