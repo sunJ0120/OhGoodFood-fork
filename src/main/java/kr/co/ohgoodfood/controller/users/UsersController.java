@@ -305,4 +305,12 @@ public class UsersController {
         return "users/userReviewList";  
     }
 
+    /**
+     * 결제 페이지
+     */
+    @GetMapping("/userPaid")
+    public String userPaid(Model model, HttpSession session) {
+        return "users/userPaid";
+    }
+
 }

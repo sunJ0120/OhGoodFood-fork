@@ -38,7 +38,7 @@
 
     <!-- 금일 예약 가게 주문 상태 취소 업데이트 -->
     <update id="updateOrderStatusCancel" parameterType="kr.co.ohgoodfood.dto.ReservationConfirmed">
-        UPDATE Orders SET order_status = "cancel"
+        UPDATE Orders SET order_status = "cancel", canceld_from = "user"
         WHERE order_no = #{order_no} and product_no = #{product_no};
     </update>
 

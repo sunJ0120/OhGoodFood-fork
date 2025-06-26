@@ -67,7 +67,7 @@ a, button {
 /* 폰트 */
 @font-face {
   font-family: 'na';
-  src: url('nanum-square-neo/TTF/NanumSquareNeo-aLt.ttf') format('truetype');
+  src: url('../css/font/NanumSquareNeo-aLt.ttf') format('truetype');
 }
 body {
     font-family: 'na';
