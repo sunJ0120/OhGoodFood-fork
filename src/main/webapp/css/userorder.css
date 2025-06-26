@@ -290,6 +290,7 @@ main {
     color: #dd8888;
     font-size: 14px;
     margin-top: 12px;
+    text-decoration: underline;
 }
 
 .orderBrown{
@@ -380,4 +381,11 @@ main {
     align-items: center;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.postStyle{
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }

@@ -7,7 +7,8 @@
         <article class="productCard"
                  data-order-no="${userOrder.order_no}"
                  data-order-status="${userOrder.order_status}"
-                 data-canceld-from="${userOrder.canceld_from}">
+                 data-canceld-from="${userOrder.canceld_from}"
+                 data-block-cancel="${userOrder.block_cancel}">
             <div class="orderTop">
                 <div class="storeName">${userOrder.store_name}</div>
                 <div class="headerLeftWrapper">
@@ -38,6 +39,11 @@
                             <c:when test="${userOrder.order_status eq 'confirmed'}">
                                 ${userOrder.pickup_status.displayName}
                             </c:when>
+
+                            <%-- 임시로 넣어줌 --%>
+                            <c:otherwise>
+                                ${userOrder.pickup_status.displayName}
+                            </c:otherwise>
 
                         </c:choose>
                     </div>
@@ -84,17 +90,21 @@
                     * 확정 한 시간 전부터 주문 취소가 불가능합니다.
                 </div>
 
-                <button type="button" class="orderBrown hidden orderReview" data-order-no="${userOrder.order_no}">
+                <button type="button" class="orderBrown hidden orderReview"
+                        onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
                     리뷰 쓰기
                 </button>
 
-                <div type="button" class="orderWhite hidden orderPickupCode">
+                <div class="orderWhite hidden orderPickupCode">
                     픽업 코드 : ${userOrder.order_code}
                 </div>
 
-                <button type="button" class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
-                    주문 취소
-                </button>
+                <form action="/user/order/cancel" method="post" class="postStyle hidden" onsubmit="return confirm('정말 주문을 취소하시겠습니까?');">
+                    <input type="hidden" name="order_no" value="${userOrder.order_no}" />
+                    <button type="submit"  class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
+                        주문 취소
+                    </button>
+                </form>
             </div>
         </article>
 

@@ -13,7 +13,6 @@
 <div id="wrapper">
   <%-- header include --%>
   <%@ include file="/WEB-INF/views/users/header.jsp" %>
-
   <main>
     <%-- main의 헤더 부분 --%>
     <section class="orderHeaderWrapper">
@@ -54,7 +53,8 @@
               <article class="productCard"
                        data-order-no="${userOrder.order_no}"
                        data-order-status="${userOrder.order_status}"
-                       data-canceld-from="${userOrder.canceld_from}">
+                       data-canceld-from="${userOrder.canceld_from}"
+                       data-block-cancel="${userOrder.block_cancel}">
                 <div class="orderTop">
                   <div class="storeName">${userOrder.store_name}</div>
                   <div class="headerLeftWrapper">
@@ -85,6 +85,11 @@
                         <c:when test="${userOrder.order_status eq 'confirmed'}">
                           ${userOrder.pickup_status.displayName}
                         </c:when>
+
+                        <%-- 임시로 넣어줌 --%>
+                        <c:otherwise>
+                          ${userOrder.pickup_status.displayName}
+                        </c:otherwise>
 
                       </c:choose>
                     </div>
@@ -131,17 +136,21 @@
                     * 확정 한 시간 전부터 주문 취소가 불가능합니다.
                   </div>
 
-                  <button type="button" class="orderBrown hidden orderReview" data-order-no="${userOrder.order_no}">
+                  <button type="button" class="orderBrown hidden orderReview"
+                          onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
                     리뷰 쓰기
                   </button>
 
-                  <div type="button" class="orderWhite hidden orderPickupCode">
+                  <div class="orderWhite hidden orderPickupCode">
                     픽업 코드 : ${userOrder.order_code}
                   </div>
 
-                  <button type="button" class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
-                    주문 취소
-                  </button>
+                  <form action="/user/order/cancel" method="post" class="postStyle hidden" onsubmit="return confirm('정말 주문을 취소하시겠습니까?');">
+                    <input type="hidden" name="order_no" value="${userOrder.order_no}" />
+                    <button type="submit"  class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
+                      주문 취소
+                    </button>
+                  </form>
                 </div>
               </article>
 
@@ -163,6 +172,18 @@
 </div>
 <%-- JQuery CDN --%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<c:if test="${not empty msg}">
+  <script>
+    alert('${msg}');
+  </script>
+</c:if>
+<c:if test="${not empty errorMsg}">
+  <script>
+    alert('${errorMsg}');
+  </script>
+</c:if>
+
 <%--[main] filterBtn에 따라 필터링 적용, ajax 적용 --%>
 <script>
   let filterParams = {}; // 최종적으로 전송할 JSON 객체
@@ -231,6 +252,7 @@
     $('.productCard').each(function(){
       const $card    = $(this);
       const status   = $card.data('orderStatus');        // reservation, confirmed, pickup, cancel
+      const blockStatus = $card.data('blockCancel');
 
       const $wrapper = $card.find('.orderNoticeWrapper');
 
@@ -238,20 +260,28 @@
       const $review  = $wrapper.find('.orderReview');
       const $pickupCode  = $wrapper.find('.orderPickupCode');
       const $cancel  = $wrapper.find('.orderCancel');
+      const $cancelPost  = $wrapper.find('form.postStyle');
 
       $notice.addClass('hidden');
       $review.addClass('hidden');
       $pickupCode.addClass('hidden');
       $cancel.addClass('hidden');
+      $cancelPost.addClass('hidden');
 
       // 상태별로 필요한 요소만 보이게 한다.
-      // 여기 상태에서, block_cancel 상태 가져오는거 해야 한다.
-      if (status === 'reservation') { //확정 진행중
-        $cancel.removeClass('hidden');
-      } else if (status === 'confirmed') { //확정
-        $pickupCode.removeClass('hidden');
-      } else if (status === 'pickup') { //픽업 완료
-        $review.removeClass('hidden');
+      if(blockStatus){ //확정 한시간 전 & 내일 픽업일 경우, 11시 일 경우 (자정-1)
+        $card.addClass('blockCancel');
+        $notice.removeClass('hidden');
+      }else{
+        $card.removeClass('blockCancel'); //blockCancel 아니므로 class 추가
+        if (status === 'reservation') { //확정 진행중
+          $cancel.removeClass('hidden');
+          $cancelPost.removeClass('hidden');
+        } else if (status === 'confirmed') { //확정
+          $pickupCode.removeClass('hidden');
+        } else if (status === 'pickup') { //픽업 완료
+          $review.removeClass('hidden');
+        }
       }
     });
   }
