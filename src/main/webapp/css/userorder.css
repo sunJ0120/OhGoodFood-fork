@@ -272,7 +272,7 @@ main {
 .orderNoticeWrapper {
     width: 100%;
     display: flex;
-    justify-content: flex-end;
+    /*justify-content: flex-end;*/
     align-items: center;
     gap: 8px;
 }
@@ -290,8 +290,13 @@ main {
 
     height: 29pt;
     border: none;
+    width: 100%;
 
-    float: right;
+    /*float: right;*/
+    align-content: center;
+    justify-content: center;
+    text-align: center;
+    
     font-size: 14px;
     margin-top: 12px;
 }
@@ -301,11 +306,15 @@ main {
     background-color: white;
     border-radius: 10pt;
 
-    width: 183pt;
+    /*width: 183pt;*/
     height: 29pt;
     border: none;
 
-    float: right;
+    width: 100%;
+    /*float: right;*/
+    align-content: center;
+    justify-content: center;
+    text-align: center;
     font-size: 14px;
     margin-top: 12px;
 }

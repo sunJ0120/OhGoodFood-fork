@@ -7,7 +7,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OhGoodFood</title>
-<%--  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">--%>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/usermain.css">
 </head>
 <body>
@@ -156,7 +155,6 @@
 
   <%-- footer include --%>
   <%@ include file="/WEB-INF/views/users/footer.jsp" %>
-
 </div>
 <%-- JQuery CDN --%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

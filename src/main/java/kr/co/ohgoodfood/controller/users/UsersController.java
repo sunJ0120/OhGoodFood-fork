@@ -19,8 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -30,11 +28,13 @@ import java.util.Map;
  * 사용자 페이지 전용 기능을 처리하는 컨트롤러입니다.
  * - GET  /user/main           : 사용자 메인 화면 조회
  * - POST /user/filter/store   : AJAX 기반 가게 목록 필터링
- * - GET  /user/main/bookmark  : 해당 user_id가 가진 bookmark 목록 조회
- * - POST /user/main/bookmark  : 해당하는 bookmark
+ * - GET  /user/bookmark       : 해당 user_id가 가진 bookmark 목록 조회
+ * - POST /user/bookmark       : 해당하는 bookmark 삭제 -> 차후 북마크 다시 insert 하는 로직이 필요할 경우, endPoint 분기 예정
+ * - GET  /user/main/orderList : 유저가 가진 orderList 목록 조회
+ * - POST /user/filter/order   : AJAX 기반 오더 목록 필터링
  *
- * @since 2025-06-22 : 필터에 Map이 아닌, DTO 필터 객체 적용
- * @since 2025-06-25 : 인터셉트로 로그인 정보 체크할 예정이라, 인터셉터에서 alert을 뿌려주는 방식이므로 따로 처리하지는 않은 상태
+ * @since 2025-06-22 : [sunJ] 필터에 Map이 아닌, DTO 필터 객체 적용
+ * @since 2025-06-25 : [sunJ] 인터셉트로 로그인 정보 체크할 예정이라, 인터셉터에서 alert을 뿌려주는 방식이므로 따로 처리하지는 않은 상태
  */
 @Controller
 @RequestMapping("/user")
@@ -93,14 +93,14 @@ public class UsersController {
                                Model model,
                                HttpSession session){
 
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
+        //세션에서 받아오는 로직
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
-        //bookmark를 위해 user_id 세팅
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
+
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
         List<Bookmark> bookmarkList = usersService.getBookmarkList(user_id);
         log.info("[log/UsersController.userBookmark] user_id가 가진 userBookmark 결과 log : {}", bookmarkList);
@@ -122,14 +122,14 @@ public class UsersController {
     public Map<String,Integer> userBookmarkDelete(@RequestBody BookmarkDelete bookmarkDelete,
                                                   Model model,
                                                   HttpSession session){
+        //세션에서 받아오는 로직
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
         //bookmark를 위해 user_id 세팅
         bookmarkDelete.setUser_id(user_id);
 
@@ -138,22 +138,30 @@ public class UsersController {
         return Collections.singletonMap("code", result ? 200 : 500);
     }
 
-    //현재 jsp 연결 확인 완료.
+    /**
+     * 세션에 있는 유저가 가진 주문 목록을 조회한다.
+     *
+     * @param userOrderFilter 쿼리 파라미터로 전달된 필터 정보
+     * @param model          뷰에 전달할 데이터(Model)
+     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
+     * @return               users/userOrders.jsp로 포워딩
+     */
     @GetMapping("/orderList")
     public String userOrderList(@ModelAttribute UserOrderFilter userOrderFilter,
                                 Model model,
                                 HttpSession session){
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
+
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
         log.info("[log/UsersController.userOrderList] user_id가 가진 userOrderList 결과 log : {}", userOrderList);
+
         model.addAttribute("userOrderList", userOrderList);
 
         return "users/userOrders";
@@ -164,25 +172,26 @@ public class UsersController {
      *
      * @param userOrderFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
      * @param model          뷰에 전달할 데이터(Model)
-     * @return               가게 주문 목록만 포함한 JSP 프래그먼트 ("users/fragment/userOrderList")
+     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
+     * @return               필터링 된 가게 주문 목록만 포함한 JSP 프래그먼트 ("users/fragment/userOrderList")
      */
     @PostMapping("/filter/order")
     public String filterOrderList(@RequestBody UserOrderFilter userOrderFilter,
                                   Model model,
                                   HttpSession session){
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
+        //세션에서 받아오는 로직
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
-        log.info("[log/UsersController.userOrderList] user_id가 가진 userOrderList 결과 log : {}", userOrderList);
+        log.info("[log/UsersController.filterOrderList] user_id가 가진 filterOrderList 결과 log : {}", userOrderList);
         model.addAttribute("userOrderList",userOrderList);
-        // JSP fragment만 리턴
+
         return "users/fragment/userOrderList";
     }
     
