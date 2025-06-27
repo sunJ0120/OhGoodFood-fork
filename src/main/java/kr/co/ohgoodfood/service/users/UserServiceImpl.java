@@ -1,37 +1,45 @@
 package kr.co.ohgoodfood.service.users;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import kr.co.ohgoodfood.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
-import kr.co.ohgoodfood.dto.*;
+import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Bookmark;
+import kr.co.ohgoodfood.dto.BookmarkDelete;
+import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.PickupStatus;
+import kr.co.ohgoodfood.dto.ProductDetail;
+import kr.co.ohgoodfood.dto.Review;
+import kr.co.ohgoodfood.dto.ReviewForm;
+import kr.co.ohgoodfood.dto.UserMainFilter;
+import kr.co.ohgoodfood.dto.UserMypage;
+import kr.co.ohgoodfood.dto.UserOrder;
+import kr.co.ohgoodfood.dto.UserOrderFilter;
+import kr.co.ohgoodfood.dto.UserOrderRequest;
 import kr.co.ohgoodfood.util.StringSplitUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.ProductDetail;
-import kr.co.ohgoodfood.dto.Review;
-import kr.co.ohgoodfood.dto.UserMainFilter;
-import kr.co.ohgoodfood.dto.UserMypage;
-import lombok.RequiredArgsConstructor;
 
 /**
  * UsersServiceImpl.java - UsersService interface 구현체
@@ -44,6 +52,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
+	private final AwsS3Config awsS3Config;
+
 
     /**
      * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
@@ -88,7 +98,7 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감을 판별합니다.
+     * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감 상태를 판별합니다.
      *
      * @param mainStore          : 판별이 필요한 데이터가 담긴 객체
      * @return                   : PickupStatus ENUM 객체
@@ -124,6 +134,33 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
+     * LocalDate.now()로 오늘픽업, 내일픽업만을 판별합니다.
+     * Orders 페이지에서는 마감,매진 값은 필요 없기 때문에, 이것만을 판별하는 로직을 따로 만듭니다.
+     *
+     * @param userOrder        : 판별이 필요한 데이터가 담긴 객체
+     * @return                   : PickupStatus ENUM 객체
+     */
+    @Override
+    public PickupStatus getOrderPickupDateStatus(UserOrder userOrder) {
+        LocalDate today = LocalDate.now();
+        // NullPointerException방지, 차후 삭제 예정
+        if (userOrder.getPickup_start() == null) {
+            return PickupStatus.ETC;
+        }
+        LocalDate pickupDate = userOrder.getPickup_start().toLocalDateTime().toLocalDate();
+
+        // [오늘픽업] 현재 날짜와 같음
+        if (pickupDate.isEqual(today)) {
+            return PickupStatus.TODAY;
+        }
+        // [내일픽업] 현재 날짜 + 1과 같음
+        if (pickupDate.isEqual(today.plusDays(1))) {
+            return PickupStatus.TOMORROW;
+        }
+        return PickupStatus.ETC;
+    }
+
+    /**
      * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
      * 서버에서는 리스트에 담아서 보내도록 한다.
      *
@@ -154,18 +191,36 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
-     * 서버에서는 리스트에 담아서 보내도록 한다.
+     * 북마크를 삭제하기 위한 기능이다.
      *
-     * @param bookmarkDelete     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
+     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
      * @return                   : 결과 행 수에 따라 Boolean
      */
     @Override
-    public boolean deleteUserBookMark(BookmarkDelete bookmarkDelete) {
-        String user_id = bookmarkDelete.getUser_id();
-        int bookmark_no = bookmarkDelete.getBookmark_no();
+    public boolean deleteUserBookMark(BookmarkFilter bookmarkFilter) {
+        String user_id = bookmarkFilter.getUser_id();
+        String store_id = bookmarkFilter.getStore_id();
 
-        int cnt = userMapper.deleteBookmark(user_id, bookmark_no);
+        int cnt = userMapper.deleteBookmark(user_id, store_id);
+
+        if (cnt == 1) {
+            return true;
+        }
+        return false; //delete 실패!
+    }
+
+    /**
+     * 북마크를 추가하기 위한 기능이다.
+     *
+     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
+     * @return                   : 결과 행 수에 따라 Boolean
+     */
+    @Override
+    public boolean insertUserBookMark(BookmarkFilter bookmarkFilter) {
+        String user_id = bookmarkFilter.getUser_id();
+        String store_id = bookmarkFilter.getStore_id();
+
+        int cnt = userMapper.insertBookmark(user_id, store_id);
 
         if (cnt == 1) {
             return true;
@@ -185,10 +240,55 @@ public class UserServiceImpl implements UsersService{
 
         // userOrder에 pickup_status를 저장.
         for(UserOrder userOrder : orderList){
-            userOrder.setPickup_status(getPickupDateStatus(userOrder));
+            userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
+            //여기에 Boolean block_cancel 넣는거 하나 추가
+            userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getPickup_status(), userOrder.getReservation_end()));
         }
-
         return orderList;
+    }
+
+    /**
+     * pickup_status가 오늘픽업 혹은 내일 픽업인 경우에, (즉, confirmed 상태) 한 시간 전에 취소 block 상태를 만들기 위함입니다.
+     * reservation_end -1이 NOW일때를 계산합니다.
+     *
+     * @param pickup_status      : 블락 판별에 필요한 pickup_status (confirmed 인 경우, 즉 오늘픽업이나 내일 픽업인 경우에만 진행)
+     * @param reservation_end    : 예약 마감 한시간 전을 계산하기 위한 reservation_end
+     * @return                   : block_cancel 값을 설정하기 위해 boolean return
+     */
+    public Boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp reservation_end){
+        if(pickup_status.equals(PickupStatus.TODAY) || pickup_status.equals(PickupStatus.TOMORROW)){
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+            long oneHourInMillis = 60L * 60L * 1000L;
+            Timestamp oneHourBefore = new Timestamp(reservation_end.getTime() - oneHourInMillis);
+
+            if (now.after(oneHourBefore) && now.before(reservation_end)) {
+                return true;  // 마감 1시간 전 이내이면, 취소 블록하고 막는다.
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * 사용자가 선택한 order를 취소 처리 합니다.
+     *
+     * @param userOrderRequest   : 사용자 주문 상태 변경 처리에 필요한 DTO
+     * @return                   : UPDATE 쿼리가 잘 실행 되었는지 보기 위해 row return
+     */
+    @Override
+    public boolean updateUserOrderCancel(UserOrderRequest userOrderRequest){
+        userOrderRequest.setOrder_status("cancel");
+        userOrderRequest.setCanceld_from("user");
+
+        log.info("userOrderRequest DTO 객체 상태 확인 : {}", userOrderRequest);
+
+        int cnt = userMapper.updateOrderStatus(userOrderRequest);
+
+        if (cnt == 1) {
+            return true;
+        }
+        return false; //update Order 실패!
     }
     
 	/** 유저 정보 한 건 조회 */
@@ -225,6 +325,13 @@ public class UserServiceImpl implements UsersService{
 		detail.setReviewCount(detail.getReviews().size());
 		return detail;
 	}
+	
+	@Override
+    @Transactional(readOnly = true)
+    public List<Review> getReviewsByProductNo(int productNo) {
+        return userMapper.selectProductReviews(productNo);
+    }
+	
 
     @Override
     @Transactional
@@ -288,4 +395,58 @@ public class UserServiceImpl implements UsersService{
         return userMapper.getAllReviews(startIdx, size);
     }
 
+	
+	/**
+	 * 리뷰 이미지 AWS S3에 업로드하고, public URL을 반환
+	 */
+	// GET: orderNo로 DTO 채우기
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewForm getReviewForm(int orderNo) {
+        return userMapper.selectReviewFormByOrderNo(orderNo);
+    }
+
+    // POST: 이미지 업로드 후 DB INSERT
+    @Override
+    @Transactional
+    public void writeReview(ReviewForm form, String userId) {
+        form.setUser_id(userId);
+
+        // — 이미지 업로드 —
+        MultipartFile imgFile = form.getImageFile();
+        if (imgFile != null && !imgFile.isEmpty()) {
+            String fileName = UUID.randomUUID() + "_" + imgFile.getOriginalFilename();
+            ObjectMetadata meta = new ObjectMetadata();
+            meta.setContentType(imgFile.getContentType());
+            meta.setContentLength(imgFile.getSize());
+
+         // InputStream은 try‐with‐resources 로 안전하게 열고 닫기
+            try (InputStream is = imgFile.getInputStream()) {
+                awsS3Config.amazonS3()
+                    .putObject(new PutObjectRequest(
+                        awsS3Config.getBucket(),
+                        fileName,
+                        is,
+                        meta
+                    ));
+            } catch (IOException e) {
+                throw new UncheckedIOException("리뷰 이미지 업로드 실패", e);
+            }
+
+            form.setReview_img(fileName);
+        }
+    	
+    	
+
+        // — 기타 기본값 세팅 —
+//        form.setIs_blocked("N");
+        // writed_at : INSERT 쿼리에서 NOW() 처리
+
+        // — 최종 INSERT 호출 —
+        userMapper.insertReview(form);
+    }
+    // AWS S3 인스턴스 반환
+    	private AmazonS3 amazonS3() {
+            return awsS3Config.amazonS3();
+        }
 }

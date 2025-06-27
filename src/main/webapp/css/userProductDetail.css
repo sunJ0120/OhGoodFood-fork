@@ -262,9 +262,9 @@ body {
 
 .note {
      width: 357px;
-     height: 80px;
-     font-size: 12px;
-     color: #2b2b2b;
+     height: 70px;
+     font-size: 14px;
+     color: #000000;
      line-height: 1.6;
      margin-top: 8px;
      margin: auto;
@@ -274,21 +274,6 @@ body {
      align-items: center;
      justify-content: center;
      padding: 16px;
-     box-sizing: border-box;
-}
-
-/* category 섹션 스타일 */
-
-.categorySection {
-     max-width: 357px;
-     /* 최대 너비 고정 */
-     margin: 10px auto;
-     /* 위아래 여백, 중앙정렬 */
-     padding: 12px;
-     /* 내부 여백 */
-     border: 1px solid #99A99B;
-     border-radius: 10px;
-     background: #F5F3EA;
      box-sizing: border-box;
 }
 
@@ -312,13 +297,14 @@ body {
 /* categorySection 리스트 스타일 */
 .categorySection {
      list-style: none;
-     padding: 0;
+     padding: 12px;
      max-width: 357px;
-     height :200px;
+     height :210px;
      background: #F5F3EA;
      border: 1px solid #99A99B;
      border-radius: 10px;
      box-sizing: border-box;
+     margin: 10px auto;
 }
 
 /* 각 행 스타일 */
@@ -466,11 +452,8 @@ body {
 /* 리뷰 리스트 */
 /* 리뷰 섹션 감추기 + 스크롤 처리 */
 .reviewSection {
-  display: none;        /* 기본 숨김 */
   overflow-y: auto;     /* 내부 스크롤 */
   height: 380px;        /* 고정 높이 */
-  
-  /* 선택적 추가 스타일 */
   width: 100%;
   max-width: 390px;
   margin: -15px auto 10;
@@ -557,4 +540,9 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* js에서 토글할 때 쓸 클래스 */
+.hidden {
+  display: none !important;
 }

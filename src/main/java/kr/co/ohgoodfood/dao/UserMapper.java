@@ -38,11 +38,21 @@ public interface UserMapper {
      * 사용자의 특정 북마크를 삭제 처리
      *
      * @param user_id          조회 대상 user_id
-     * @param bookmark_no      삭제할 북마크 고유번호
+     * @param store_id         user_id + store_id 조합으로 삭제
      * @return                 영향받은 행(row) 수
      */
     int deleteBookmark(@Param("user_id") String user_id,
-                        @Param("bookmark_no") int bookmark_no);
+                       @Param("store_id") String store_id);
+
+    /**
+     * 사용자 북마크 추가
+     *
+     * @param user_id          조회 대상 user_id
+     * @param store_id         북마크에 추가할 store 정보
+     * @return                 영향받은 행(row) 수
+     */
+    int insertBookmark(@Param("user_id") String user_id,
+                       @Param("store_id") String store_id);
 
     /**
      * 사용자의 모든 주문내역을 출력
@@ -53,44 +63,11 @@ public interface UserMapper {
     List<UserOrder> selectOrderList(@Param("filter") UserOrderFilter userOrderFilter);
 
     /**
-     * 📌 차후 수정 예정.
-     * 사용자가 주문을 취소할 때 호출
+     * 사용자가 주문 상태를 변경해야 할때 사용한다.
      *
-     * @param order_status  변경할 주문 상태
-     * @param canceld_from  취소한 사람
-     * @param order_no      주문번호
-     * @param user_id       user_id
+     * @param userOrderRequest 필터 DTO
      */
-    void updateOrderCanceldByUser(@Param("order_status") String order_status,
-                                  @Param("canceld_from") String canceld_from,
-                                  @Param("order_no") int order_no,
-                                  @Param("user_id") String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 주문이 확정된 이후 상태 변경 및 픽업 코드를 설정
-     *
-     * @param order_status  변경할 주문 상태
-     * @param order_code    픽업 코드
-     * @param order_no      주문번호
-     * @param user_id       user_id
-     */
-    void updateOrderConfirmed(@Param("order_status") String order_status,
-                              @Param("order_code") String order_code,
-                              @Param("order_no") int order_no,
-                              @Param("user_id") String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 픽업 완료 후 주문 상태를 업데이트
-     *
-     * @param order_status  변경할 주문 상태
-     * @param order_no      주문번호
-     * @param user_id       user_id
-     */
-    void updateOrderPickup(@Param("order_status") String order_status,
-                           @Param("order_no") int order_no,
-                           @Param("user_id") String user_id);
+    int updateOrderStatus(@Param("order_request") UserOrderRequest userOrderRequest);
 
     /**
      * 📌 차후 수정 예정.
@@ -178,4 +155,18 @@ public interface UserMapper {
         @Param("startIdx") int startIdx,
         @Param("size")     int size
     );
+    
+    /**
+     * 리뷰 insert
+     * 주문 번호 파라미터로 받아 리뷰 작성
+     * @param orderNo
+     * @return
+     */
+	ReviewForm selectReviewFormByOrderNo(int orderNo);
+	
+	/**
+	 * 리뷰 update
+	 * @param form
+	 */
+    void insertReview(ReviewForm form);
 }

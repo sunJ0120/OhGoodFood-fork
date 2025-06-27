@@ -25,14 +25,23 @@ public interface UsersService {
     //[판별 로직] 오늘 픽업, 내일 픽업, 마감 판별 연결 로직
     PickupStatus getPickupDateStatus(MainStore mainStore);
 
+    //[판별 로직] 오늘 픽업, 내일 픽업 판별 로직
+    PickupStatus getOrderPickupDateStatus(UserOrder userOrder);
+
     //[판별 로직] 카테고리 List<String> 저장 로직
     List<String> getCategoryList(MainStore mainStore);
 
     //[Controller 로직] UsersController.userBookmarkDelete 연결 로직
-    boolean deleteUserBookMark(BookmarkDelete bookmarkDelete);
+    boolean deleteUserBookMark(BookmarkFilter bookmarkFilter);
+
+    //[Controller 로직] UsersController.userBookmarkInsert 연결 로직
+    boolean insertUserBookMark(BookmarkFilter bookmarkFilter);
 
     //[Controller 로직] UsersController.userOrders 연결 로직
     List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter);
+
+    //[Controller 로직] UsersController.cancelOrder 연결 로직
+    boolean updateUserOrderCancel(UserOrderRequest userOrderRequest);
 
     /* 사용자 기본 정보 한 건 조회*/
     UserMypage getUserInfo(String userId);
@@ -41,10 +50,12 @@ public interface UsersService {
     /* 마이페이지 전체 조립 (유저정보+리뷰리스트) */
     UserMypage getMypage(String userId);
     
-    //[Controller 로직] UsersController.   제품 상세 보기    
+    //[Controller 로직]     
     /* 상품 상세 정보 조회 */
     ProductDetail getProductDetail(int productId);
-
+    /* 상품(가게)별 리뷰 조회 */
+	List<Review> getReviewsByProductNo(int productNo);
+	
     /* 예약 처리 메서드 (추후 개발) */
     boolean reserveProduct(String userId, int productId);
     
@@ -57,5 +68,12 @@ public interface UsersService {
 	/* 모든 리뷰를 조회 */
     List<Review> getAllReviews(int page, int size);
     
+    /* 리뷰 업데이트 */
+    // 화면에 뿌릴 주문·상품·가게 정보 조회
+    ReviewForm getReviewForm(int orderNo);
+
+    // 실제 리뷰 저장 (이미지 포함)
+    void writeReview(ReviewForm form, String userId);
+
 
 }
