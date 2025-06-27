@@ -221,8 +221,8 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * LocalDate.now()로 오늘픽업, 내일픽업만을 판별합니다.
-     * Orders 페이지에서는 마감,매진 값은 필요 없기 때문에, 이것만을 판별하는 로직을 따로 만듭니다.
+     * pickup_status가 오늘픽업 혹은 내일 픽업인 경우에, (즉, confirmed 상태) 한 시간 전에 취소 block 상태를 만들기 위함입니다.
+     * 내일 픽업의 경우는, now 날짜 기준 자정 -1h에, 오늘 픽업의 경우는 pickup-end -1h가 각각 현재 시간일 경우 block 상태를 true로 만듭니다.
      *
      * @param pickup_status      : 블락 판별에 필요한 pickup_status
      * @param pickup_end         : 픽업 마감 한시간 전을 판별하기 위한 pickup_end 값

@@ -47,122 +47,131 @@
     <div class="tabBoxWrapper">
       <%-- topWrapper로 한 번더 감싸서 스크롤 적용 --%>
       <div class="topWrapper">
-        <div class="productWrapper ${empty userOrderList ? 'hidden' : ''}">
-          <section class="productList">
-            <c:forEach var="userOrder" items = "${userOrderList}" >
-              <article class="productCard"
-                       data-order-no="${userOrder.order_no}"
-                       data-order-status="${userOrder.order_status}"
-                       data-canceld-from="${userOrder.canceld_from}"
-                       data-block-cancel="${userOrder.block_cancel}">
-                <div class="orderTop">
-                  <div class="storeName">${userOrder.store_name}</div>
-                  <div class="headerLeftWrapper">
-                    <div class="orderStatus">
-                      <c:choose>
-                        <c:when test="${userOrder.order_status eq 'reservation'}">
-                          확정 진행중
-                        </c:when>
-
-                        <c:when test="${userOrder.order_status eq 'cancel'}">
+        <div class="productWrapper">
+          <c:choose>
+            <c:when test="${empty userOrderList}">
+              <div class="emptyModal">
+                <div class="modalWrapper">
+                  <img src="${pageContext.request.contextPath}/img/user_cat.png" alt="고양이" class="emptyModalEmoji"/>
+                  <div class="modalBox">
+                    <div class="modalContent">
+                      <div class="orderStatusModal">전체</div> 주문내역<br>검색 결과가 없습니다.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </c:when>
+            <c:otherwise>
+              <section class="productList">
+                <c:forEach var="userOrder" items = "${userOrderList}" >
+                  <article class="productCard"
+                           data-order-no="${userOrder.order_no}"
+                           data-order-status="${userOrder.order_status}"
+                           data-canceld-from="${userOrder.canceld_from}"
+                           data-block-cancel="${userOrder.block_cancel}">
+                    <div class="orderTop">
+                      <div class="storeName">${userOrder.store_name}</div>
+                      <div class="headerLeftWrapper">
+                        <div class="orderStatus">
                           <c:choose>
-                            <c:when test="${userOrder.canceld_from eq 'user'}">
-                              구매자 취소
+                            <c:when test="${userOrder.order_status eq 'reservation'}">
+                              확정 진행중
                             </c:when>
-                            <c:when test="${userOrder.canceld_from eq 'store'}">
-                              가게 취소
+
+                            <c:when test="${userOrder.order_status eq 'cancel'}">
+                              <c:choose>
+                                <c:when test="${userOrder.canceld_from eq 'user'}">
+                                  구매자 취소
+                                </c:when>
+                                <c:when test="${userOrder.canceld_from eq 'store'}">
+                                  가게 취소
+                                </c:when>
+                                <c:otherwise>
+                                  취소
+                                </c:otherwise>
+                              </c:choose>
                             </c:when>
+
+                            <c:when test="${userOrder.order_status eq 'pickup'}">
+                              픽업 완료
+                            </c:when>
+
+                            <c:when test="${userOrder.order_status eq 'confirmed'}">
+                              ${userOrder.pickup_status.displayName}
+                            </c:when>
+
+                            <%-- 임시로 넣어줌 --%>
                             <c:otherwise>
-                              취소
+                              ${userOrder.pickup_status.displayName}
                             </c:otherwise>
+
                           </c:choose>
-                        </c:when>
-
-                        <c:when test="${userOrder.order_status eq 'pickup'}">
-                          픽업 완료
-                        </c:when>
-
-                        <c:when test="${userOrder.order_status eq 'confirmed'}">
-                          ${userOrder.pickup_status.displayName}
-                        </c:when>
-
-                        <%-- 임시로 넣어줌 --%>
-                        <c:otherwise>
-                          ${userOrder.pickup_status.displayName}
-                        </c:otherwise>
-
-                      </c:choose>
-                    </div>
-                    <div class="orderDate">
-                      <c:if test="${not empty userOrder.ordered_at}">
-                        <fmt:formatDate value="${userOrder.ordered_at}" pattern="yyyy.MM.dd"/>
-                      </c:if>
-                    </div>
-                  </div>
-                </div>
-                <hr>
-
-                <div class="orderMiddle">
-                  <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
-                  <div class="orderInfoWrapper">
-                    <div class="orderInfo">
-                      <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.quantity}개</span></div>
-                      <div class="orderInfoSub"><div class="orderTime">픽업 시간 : </div>
-                        <span class="orderTimeValue">
-                          <span class="pickupStartText">
-                          <c:if test="${not empty userOrder.pickup_start}">
-                            <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
-                            ~
+                        </div>
+                        <div class="orderDate">
+                          <c:if test="${not empty userOrder.ordered_at}">
+                            <fmt:formatDate value="${userOrder.ordered_at}" pattern="yyyy.MM.dd"/>
                           </c:if>
-                        </span>
-                        <span class="pickupEndText">
-                          <c:if test="${not empty userOrder.pickup_end}">
-                            <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
-                          </c:if>
-                        </span>
-                        </span>
-                      </div>
-                      <div class="orderInfoSub"><div class="orderPaid">결제 금액 : </div>
-                        <span class="orderPaidValue">
-                          <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
-                        </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <%-- 버튼 --%>
-                <div class="orderNoticeWrapper">
-                  <div class="orderNoticeBlockCancel hidden">
-                    * 확정 한 시간 전부터 주문 취소가 불가능합니다.
-                  </div>
+                    <hr>
 
-                  <button type="button" class="orderBrown hidden orderReview"
-                          onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
-                    리뷰 쓰기
-                  </button>
+                    <div class="orderMiddle">
+                      <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
+                      <div class="orderInfoWrapper">
+                        <div class="orderInfo">
+                          <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.quantity}개</span></div>
+                          <div class="orderInfoSub"><div class="orderTime">픽업 시간 : </div>
+                            <span class="orderTimeValue">
+                        <span class="pickupStartText">
+                        <c:if test="${not empty userOrder.pickup_start}">
+                          <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
+                          ~
+                        </c:if>
+                      </span>
+                      <span class="pickupEndText">
+                        <c:if test="${not empty userOrder.pickup_end}">
+                          <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
+                        </c:if>
+                      </span>
+                      </span>
+                          </div>
+                          <div class="orderInfoSub"><div class="orderPaid">결제 금액 : </div>
+                            <span class="orderPaidValue">
+                        <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
+                      </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <%-- 버튼 --%>
+                    <div class="orderNoticeWrapper">
+                      <div class="orderNoticeBlockCancel hidden">
+                        * 확정 한 시간 전부터 주문 취소가 불가능합니다.
+                      </div>
 
-                  <div class="orderWhite hidden orderPickupCode">
-                    픽업 코드 : ${userOrder.order_code}
-                  </div>
+                      <button type="button" class="orderBrown hidden orderReview"
+                              onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
+                        리뷰 쓰기
+                      </button>
 
-                  <form action="/user/order/cancel" method="post" class="postStyle hidden" onsubmit="return confirm('정말 주문을 취소하시겠습니까?');">
-                    <input type="hidden" name="order_no" value="${userOrder.order_no}" />
-                    <button type="submit"  class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
-                      주문 취소
-                    </button>
-                  </form>
-                </div>
-              </article>
+                      <div class="orderWhite hidden orderPickupCode">
+                        픽업 코드 : ${userOrder.order_code}
+                      </div>
 
-            </c:forEach>
-          </section>
+                      <form action="/user/order/cancel" method="post" class="postStyle hidden" onsubmit="return confirm('정말 주문을 취소하시겠습니까?');">
+                        <input type="hidden" name="order_no" value="${userOrder.order_no}" />
+                        <button type="submit"  class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
+                          주문 취소
+                        </button>
+                      </form>
+                    </div>
+                  </article>
+                </c:forEach>
+              </section>
+            </c:otherwise>
+          </c:choose>
         </div>
-
-        <%-- 주문 내역이 없을 경우 화면 --%>
-        <div class="productWrapper ${empty userOrderList ? '' : 'hidden'}">
-          아직 주문 내역이 없습니다.
-        </div>
-
       </div>
     </div>
   </main>
@@ -224,6 +233,7 @@
 
   // JSON BODY가 들어가야 하기 때문에 POST로 요청한다.
   function sendFilterRequest() {
+
     $.ajax({
       url: '${pageContext.request.contextPath}/user/filter/order',
       type: 'POST',
@@ -235,6 +245,13 @@
         $('.productWrapper').html(responseHtml);
         //프레그먼트에 버튼 hidden 설정
         adjustOrderButtons();
+
+        //modal안의 text 변경
+        const $categoryFilterBtn = $(".categoryFilterBtn");
+        const $orderStatusModal = $(".orderStatusModal");
+        const text = $categoryFilterBtn.text().trim().replace(/주문$/, '');
+        $orderStatusModal.text(text);
+
       },
       error: function (xhr, status, error) {
         console.error("[AJAX 오류 발생]");
