@@ -53,44 +53,11 @@ public interface UserMapper {
     List<UserOrder> selectOrderList(@Param("filter") UserOrderFilter userOrderFilter);
 
     /**
-     * 📌 차후 수정 예정.
-     * 사용자가 주문을 취소할 때 호출
+     * 사용자가 주문 상태를 변경해야 할때 사용한다.
      *
-     * @param order_status  변경할 주문 상태
-     * @param canceld_from  취소한 사람
-     * @param order_no      주문번호
-     * @param user_id       user_id
+     * @param userOrderRequest 필터 DTO
      */
-    void updateOrderCanceldByUser(@Param("order_status") String order_status,
-                                  @Param("canceld_from") String canceld_from,
-                                  @Param("order_no") int order_no,
-                                  @Param("user_id") String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 주문이 확정된 이후 상태 변경 및 픽업 코드를 설정
-     *
-     * @param order_status  변경할 주문 상태
-     * @param order_code    픽업 코드
-     * @param order_no      주문번호
-     * @param user_id       user_id
-     */
-    void updateOrderConfirmed(@Param("order_status") String order_status,
-                              @Param("order_code") String order_code,
-                              @Param("order_no") int order_no,
-                              @Param("user_id") String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 픽업 완료 후 주문 상태를 업데이트
-     *
-     * @param order_status  변경할 주문 상태
-     * @param order_no      주문번호
-     * @param user_id       user_id
-     */
-    void updateOrderPickup(@Param("order_status") String order_status,
-                           @Param("order_no") int order_no,
-                           @Param("user_id") String user_id);
+    int updateOrderStatus(@Param("order_request") UserOrderRequest userOrderRequest);
 
     /**
      * 📌 차후 수정 예정.

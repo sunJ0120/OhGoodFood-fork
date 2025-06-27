@@ -25,6 +25,9 @@ public interface UsersService {
     //[판별 로직] 오늘 픽업, 내일 픽업, 마감 판별 연결 로직
     PickupStatus getPickupDateStatus(MainStore mainStore);
 
+    //[판별 로직] 오늘 픽업, 내일 픽업 판별 로직
+    PickupStatus getOrderPickupDateStatus(UserOrder userOrder);
+
     //[판별 로직] 카테고리 List<String> 저장 로직
     List<String> getCategoryList(MainStore mainStore);
 
@@ -33,6 +36,9 @@ public interface UsersService {
 
     //[Controller 로직] UsersController.userOrders 연결 로직
     List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter);
+
+    //[Controller 로직] UsersController.cancelOrder 연결 로직
+    boolean updateUserOrderCancel(UserOrderRequest userOrderRequest);
 
     /* 사용자 기본 정보 한 건 조회*/
     UserMypage getUserInfo(String userId);

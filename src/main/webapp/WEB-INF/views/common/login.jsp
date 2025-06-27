@@ -32,7 +32,7 @@
 			                <div class="sub-links">
 			                    <a href="/findid">아이디 찾기</a> |
 			                    <a href="/findpwd">비밀번호 찾기</a> |
-			                    <a href="/signup">회원가입</a>
+			                    <a href="/jointype">회원가입</a>
 			                </div>
 			                <div class="main-line"></div>
 			                <div class="sns-login-box">
@@ -52,7 +52,6 @@
 	   	        const id = $('#userId').val().trim();
 	   	        const password = $('#userPwd').val().trim();
 	   	        console.log('logincheck 실행됨', id, password);
-	
 	   	        if(id === '') {
 	   	            alert('아이디 입력바람');
 	   	            e.preventDefault();
@@ -73,7 +72,6 @@
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
-	
 	   	    });
 	     });
      </script>

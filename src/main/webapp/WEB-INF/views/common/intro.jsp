@@ -20,7 +20,6 @@
         // 3초 뒤에 /user/main으로 이동
         //session 값에 ㄸ라서 /user/main 혹은 /store/main으로
         let url = "";
-
         <c:choose>
             <c:when test="${not empty user}">
                 url = "${pageContext.request.contextPath}/user/main";
