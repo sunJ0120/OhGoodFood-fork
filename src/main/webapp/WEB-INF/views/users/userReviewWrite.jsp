@@ -108,6 +108,7 @@
                         const $btnSubmit = $('#btnSubmit');
                         const $btnAdd = $('#btnAddPhoto');
                         const $modal = $('#modalOverlay');
+                        $modal.hide(); 
                         const $preview = $('#photoPreview');
 
                         // 글자수
