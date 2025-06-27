@@ -244,7 +244,7 @@
 	    JOIN (SELECT p.origin_price AS origin_price, p.sale_price AS sale_price, o.user_id AS user_id, o.order_no AS order_no
 	    FROM Product p
 	    JOIN Orders o ON p.product_no = o.product_no) p ON r.order_no = p.order_no
-		 WHERE r.user_id = "u01" AND r.is_blocked="N"
+		 WHERE r.user_id = #{user_id} AND r.is_blocked="N"
 		 ORDER BY r.writed_at DESC
   	</select>
   	
@@ -355,7 +355,7 @@
 		  s.store_name                AS store_name,
 		  s.store_id				  AS store_id,
 		  a.user_id 				  AS user_id,
-		  o.order_no				  AS order_id,
+		  o.order_no				  AS order_no,
 		  (p.sale_price * o.quantity) AS total_price
 		FROM Orders o
 		JOIN Product p ON o.product_no = p.product_no
@@ -369,7 +369,7 @@
 	    INSERT INTO Review
 	      ( review_content , is_blocked , writed_at , review_img , user_id , store_id , order_no )
 	    VALUES
-	      ( #{review_content} , #{is_blocked}  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
+	      ( #{review_content} , "N"  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
 	</insert>
 
 </mapper>
