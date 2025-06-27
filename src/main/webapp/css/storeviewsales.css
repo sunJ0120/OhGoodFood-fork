@@ -31,6 +31,7 @@ main{
     font-size: 20px;
     font-weight: bold;
     margin-bottom: 17px;
+    margin-left:10px;
 }
 
 .myStoreIcon{
@@ -43,6 +44,7 @@ main{
     font-weight: bold;
     color: #535353;
     margin-bottom: 10px;
+    margin-left:10px;
 }
 
 .storeInfoContent{
@@ -50,7 +52,7 @@ main{
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    width: 380px;
+    width: 365px;
     height: 30px;
     border-radius: 10px;
     background-color: #8B6D5C;
@@ -94,13 +96,6 @@ main{
 
 #datepicker {
 	border-radius: 15px;
-}
-
-.salesContainer{
-    margin-top : 20px;
-    border: 1px solid  #99A99B;
-    height: 174px;
-    border-radius: 10px;
 }
 
 .litepicker .container {
@@ -152,6 +147,8 @@ main{
     font-family : 'nanumesquareneo_b';
 }
 
+
+
 .litepicker .button-next-month,
 .litepicker .button-previous-month {
     color: #727272;
@@ -177,5 +174,20 @@ main{
     font-weight: 900 !important;
     font-family : 'nanumesquareneo_b';
 }
-
-
+.headerBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.salesBox{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.salesContainer {
+    margin-top: 20px;
+    border: 1px solid #99A99B;
+    height: 174px;
+    border-radius: 10px;
+    width: 385px;
+}

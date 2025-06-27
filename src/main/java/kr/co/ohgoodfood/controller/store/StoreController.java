@@ -4,6 +4,7 @@ package kr.co.ohgoodfood.controller.store;
 import java.beans.PropertyEditorSupport;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -354,7 +355,7 @@ public class StoreController {
 	    return storeService.getProductByStoreId(login.getStore_id());
 	}
 
-	// 매출확인 -> 기간매출 조회
+	// 매출확인 -> 이번달 매출 조회
 	@GetMapping("/viewsales")
 	public String showViewSales(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -377,7 +378,31 @@ public class StoreController {
 		return "store/viewsales";
 	}
 	
-	//기간 매출 조회
+	//달력 연, 월 바귈 때 해당 월 매출조회
+	@PostMapping("/monthsales")
+	@ResponseBody
+	public StoreSales getMonthSales(@RequestParam("year") int year, @RequestParam("month") int month, HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+		
+		//System.out.println("year : " + year); 2025
+		//System.out.println("month : " + month); 6
+		
+		 YearMonth ym = YearMonth.of(year, month);
+		 String start = ym.atDay(1).toString();     
+		 String end = ym.atEndOfMonth().toString(); 
+		 
+		 StoreSales saleVO = storeService.getSales(login.getStore_id(), start, end);
+		 saleVO.setStart_date(start);
+		 saleVO.setEnd_date(end);
+		 String salesMonth = saleVO.getStart_date().substring(5,7);
+		 System.out.println("salesMonth : " + salesMonth);
+		 model.addAttribute("saleVO", saleVO);
+		 model.addAttribute("salesMonth", salesMonth);
+		 return saleVO;
+		
+	}
+	
+	//당일 매출 조회
 	@PostMapping("/viewsales/{date}")
 	@ResponseBody
 	public StoreSales getDailySales(@PathVariable("date") String date, HttpSession session) {
@@ -386,7 +411,7 @@ public class StoreController {
 	        return null; 
 	    }
 	    StoreSales vo = storeService.getSales(login.getStore_id(), date, date); 
-	    System.out.println("기간매출 vo : " + vo);
+	    System.out.println("당일매출 vo : " + vo);
 	    return vo;
 	}
 

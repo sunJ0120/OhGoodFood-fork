@@ -18,6 +18,7 @@
     <style>
 	  :root {
 	    --litepicker-day-width: 53px !important;
+	    --litepicker-is-end-color-bg: #99A99B;
 	  }
 	</style>
 </head>
@@ -30,34 +31,33 @@
                     <img src="${pageContext.request.contextPath}/img/store_mystore.png" alt="마이페이지" class="myStoreIcon">
                     <div class="storeInfo">매출 확인</div>
                 </div>
-                <div class="storeName">러프도우</div>
-                <div class="storeInfoContent">
-                    <div class="monthlySales">
-                        <p>${month}월 오굿백 매출</p>
-                    </div>
-                    <div class="contentGroup">
-                        <img src="${pageContext.request.contextPath}/img/store_bag_white.png" alt="오굿백" class="whiteBagIcon">
-                        <div class="monthlySalesCount">
-                            <p>${vo.count}개</p>
-                        </div>
-                        <div class="monthlySalesAccount">
-                            <p>${vo.sales }원</p>
-                        </div>
-                    </div>
-                </div>
+                <div class="storeName">${store.store_name }</div>
+                <div class="headerBox">
+	                <div class="storeInfoContent">
+	                    <div class="monthlySales"></div>
+	                    <div class="contentGroup">
+	                        <img src="${pageContext.request.contextPath}/img/store_bag_white.png" alt="오굿백" class="whiteBagIcon">
+	                        <div class="monthlySalesCount"></div>
+	                        <div class="monthlySalesAccount"></div>
+	                    </div>
+	                </div>
+	            </div>
                 <div class="calendarContainer">
                 	<div id="datepicker"></div>
                 </div>
-                <div class="salesContainer" id="dailySales">
-                
-                </div>
+                <div class="salesBox">
+                	<div class="salesContainer" id="dailySales"></div>
+               	</div>
             </div>
         </main>
         <%@ include file="/WEB-INF/views/store/footer.jsp" %>
     </div>
     <script>
+    	const contextPath = '${pageContext.request.contextPath}';
+    </script>
     
-    const contextPath = '${pageContext.request.contextPath}';
+    <script>
+    
     const picker = new Litepicker({
         element: document.getElementById('datepicker'),
         inlineMode: true,
@@ -71,6 +71,7 @@
        		        const monthElem = document.querySelector('.month-item-name');
        		        const yearElem = document.querySelector('.month-item-year');
        		        if (!monthElem || !yearElem) return;
+       		       
        		        if (yearElem.textContent.includes('.')) { // 날짜 클릭때마다 중복으로 00 붙는거 방지. 즉, 1번만 포맷변경
        		            return; 
        		        }
@@ -78,14 +79,35 @@
        		        let year = yearElem.textContent || '';
        		        let month = monthElem.textContent || '';
        		        month = month.replace(/[^\d]/g, '');
-
+					
+       		        let url = contextPath + "/store" +"/monthsales";
+       		        console.log("url : " + url);
+       		        console.log("contextpath : " + contextPath);
+       		        
+       		        $.post(url, {
+       		        	year : year,
+       		        	month : month
+       		        }, function(response) {
+       		        	const sale2 = response.sales;
+       		        	const count2 = response.count;
+       		        	const month2 = response.start_date.substring(5,7);
+       		        	
+       		        	let monthlysales = document.querySelector('.monthlySales');
+       		        	let monthlysalescount = document.querySelector('.monthlySalesCount');
+       		        	let monthlysalesaccount = document.querySelector('.monthlySalesAccount');
+       		        	
+       		        	monthlysales.textContent = month2 + '월 오굿백 매출';
+       		        	monthlysalescount.textContent = count2 + '개';
+       		        	monthlysalesaccount.textContent = sale2 + '원';
+       		        	
+       		        })
        		        monthElem.textContent = '';
        		        yearElem.textContent = '';
        		        yearElem.textContent = year + '.' + month.padStart(2, '0');
-
        		    }, 10);
              });
 
+        	 //날짜 선택시
             picker.on('selected', (date) => {
             	console.log("selected에서 getDate() 사용" + picker.getDate());
                 const selectedDate = date.format('YYYY-MM-DD');
@@ -94,10 +116,68 @@
                     method: 'POST',
                     success: function(data) {
                     	console.log(data);
-                        const $box = $('<div>').addClass('dailyBox');
-                        $box.append($('<h4>').text(data.start_date));
-                        $box.append($('<p>').text('오굿백 판매 개수 : ' + data.count + '개'));
-                        $box.append($('<p>').text('오굿백 판매 매출 : ' + Number(data.sales).toLocaleString() + '원'));
+                    	const formatData =  data.start_date.replace(/-/g, '.'); // -를 . 으로 교체 (날짜)
+                        console.log("formatData : " + formatData);
+                    	const $box = $('<div>').addClass('dailyBox');
+                    		
+                        const $date = $('<h4>').text(formatData).css({
+                        	'font-size': '18px',
+                            'font-weight': 'bold',
+                            'color' : '#4E4E4E',
+                            'font-family' : 'nanumesquareneo_b',
+                            'margin-left': '25px',
+                        })
+                        $box.append($date); // 여기까지 날짜
+                        
+                        const formatCount = '오굿백 판매 개수 : ' + data.count + '개';
+                        
+                        const $countContainer = $('<div>').css({ // 이미지는 자식태그 못가져서 감싸는 태그 필요
+                            'display': 'flex',
+                            'align-items': 'center',
+                            'margin-left': '25px',
+                            'margin-top' : '-20px',
+                        });
+                        //이미지 붙이기
+                        const $countImg = $('<img>').attr('src', contextPath + '/img/storemypagecount.png').css({
+						    'width': '18px',
+						    'height': '18px',
+						    'margin-right': '10px',
+						});
+                        
+                        //판매 갯수
+                        const $countText = $('<h4>').text(formatCount).css({
+                            'font-size': '18px',
+                            'color': '#000000',
+                            'font-family': 'nanumesquareneo'
+                        });
+                        $countContainer.append($countImg, $countText);
+                        $box.append($countContainer);
+                        
+                        // 판매 매출 div 구조
+                        const formatSales = '오굿백 판매 매출 : ' + Number(data.sales).toLocaleString() + '₩';
+                       	const $salesContainer = $('<div>').css({
+                       		'display': 'flex',
+                            'align-items': 'center',
+                            'margin-left': '25px',
+                            'margin-top' : '-20px',
+                       	});
+                       	
+                       	// 판매 매출 옆 이미지
+                       	const $salesImg = $('<img>').attr('src', contextPath + '/img/storecoinhand.png').css({
+						    'width': '18px',
+						    'height': '18px',
+						    'margin-right': '10px',
+						});
+                       	
+                       	// 판매 매출 붙이기
+                       	const $salesText = $('<h4>').text(formatSales).css({
+                            'font-size': '18px',
+                            'color': '#000000',
+                            'font-family': 'nanumesquareneo'
+                        });
+                        
+                       	$salesContainer.append($salesImg, $salesText);
+                       	$box.append($salesContainer);
                         $('#dailySales').empty().append($box);
                     },
                     error: function() {
