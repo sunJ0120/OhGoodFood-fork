@@ -300,52 +300,66 @@
           AND r.is_blocked = 'N'
         ORDER BY r.writed_at DESC
     </select>
-
-	 
-    <!-- 사용자 예약 정보 등록 
-    <insert id="insertReservation" parameterType="map">
-        INSERT INTO reservation (user_id, product_no, reserved_at)
-        VALUES (#{user_id}, #{product_no}, NOW())
-    </insert>
-	-->
+    
 	<!-- 아이디 중복 조회 -->
-	 <select id="countByUserId" parameterType="string" resultType="int">
-	 	 SELECT COUNT(*)  
-	 	 FROM Account
-	  	 WHERE user_id = #{user_id}
-	   </select>
+	<select id="countByUserId" parameterType="string" resultType="int">
+	 	SELECT COUNT(*)  
+	 	FROM Account
+	  	WHERE user_id = #{user_id}
+	</select>
 
   	<!-- 신규 회원 INSERT -->
-	  <insert id="insertUser" parameterType="kr.co.ohgoodfood.dto.UserSignup">
-	    INSERT INTO Account
-	      (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement)
-	    VALUES
-	      (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y")
-	  </insert>
+	<insert id="insertUser" parameterType="kr.co.ohgoodfood.dto.UserSignup">
+		INSERT INTO Account
+		  (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement)
+		VALUES
+		  (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y")
+	</insert>
 	  
 	<!-- 모든 리뷰 모아보기 -->
 	<select id="getAllReviews" parameterType="string" resultType="kr.co.ohgoodfood.dto.Review">
-    SELECT
-      r.review_no          AS review_no,
-      r.review_content     AS review_content,
-      r.writed_at          AS writed_at,
-      r.review_img         AS review_img,
-      a.user_nickname      AS user_nickname,
-      p.origin_price       AS origin_price,
-      p.sale_price         AS sale_price,
-      s.store_id           AS store_id,
-      s.store_name         AS store_name,
-      s.store_menu         AS store_menu,
-      ( SELECT i.store_img
-          FROM Image i
-         WHERE i.store_id = s.store_id
-         ORDER BY i.img_no
-         LIMIT 1
-      )                    AS storeImg
-    FROM Review r
-    JOIN Account a ON r.user_id = a.user_id
-    JOIN Store   s ON r.store_id = s.store_id
-    JOIN Product p ON p.store_id = s.store_id
+	    SELECT
+	      r.review_no          AS review_no,
+	      r.review_content     AS review_content,
+	      r.writed_at          AS writed_at,
+	      r.review_img         AS review_img,
+	      a.user_nickname      AS user_nickname,
+	      p.origin_price       AS origin_price,
+	      p.sale_price         AS sale_price,
+	      s.store_id           AS store_id,
+	      s.store_name         AS store_name,
+	      s.store_menu         AS store_menu,
+	      ( SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = s.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      )                    AS storeImg
+	    FROM Review r
+	    JOIN Account a ON r.user_id = a.user_id
+	    JOIN Store   s ON r.store_id = s.store_id
+	    JOIN Product p ON p.store_id = s.store_id
+	 </select>
+ 	
+ 	<!-- order_no 로 주문·상품·가게 정보 조회 -->
+	<select id="selectReviewFormByOrderNo" parameterType="int" resultType="kr.co.ohgoodfood.dto.ReviewForm">
+		SELECT
+		  o.quantity                  AS quantity,
+		  p.sale_price                AS sale_price,
+		  s.store_name                AS store_name,
+		  (p.sale_price * o.quantity) AS total_price
+		FROM Orders o
+		JOIN Product p ON o.product_no = p.product_no
+		JOIN Store   s ON p.store_id   = s.store_id
+		WHERE o.order_no = #{order_no}
+	</select>
 
-  </select>
+	<!-- 리뷰 쓰기 update -->
+	<insert id="insertReview"  parameterType="kr.co.ohgoodfood.dto.ReviewForm" useGeneratedKeys="true" keyProperty="review_no">
+	    INSERT INTO review
+	      ( review_content , is_blocked , writed_at , review_img , user_id , store_id , order_no )
+	    VALUES
+	      ( #{review_content} , #{is_blocked}  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
+	</insert>
+
 </mapper>

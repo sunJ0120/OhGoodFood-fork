@@ -13,7 +13,7 @@ public class Review {
     private String review_img;
     private String user_id;
     private String store_id;
-    private int oreder_no;
+    private int order_no; // [gaeun] oreder_no로 되어있어 수정했습니다.
 
     private int s_review_no;
     private int s_user_id;

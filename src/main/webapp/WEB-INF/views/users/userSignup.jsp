@@ -27,13 +27,13 @@
 						<div class="title"> 회원가입 </div>
 					</div>
 					<form id="signupForm" class="signupForm" action="${pageContext.request.contextPath}/user/signup" method="post">
-						<p>id</p>
+						<p>id<span id="idCheckMessage" style="font-size:14px; margin-left:10px; color:red;"></span></p>
 						<div class="idGroup">
 							<input type="text" id="user_id" name="user_id" placeholder="아이디를 입력하세요">
 							<button id="checkIdButton" class="checkButton">중복확인</button>
 						</div>
-						<span id="idCheckMessage"></span>
-						<p>password</p>
+						
+						<p>password<span id="pwCheckMessage" style="font-size:14px; margin-left:10px; color:red;"></span></p>
 						<div class="inputGroup">
 							<input type="password" id="user_pwd" name="user_pwd" placeholder="비밀번호를 입력하세요">
 							<input type="password" id="confirmPassword" name="confirmPassword" placeholder="비밀번호 확인하세요">
@@ -68,6 +68,9 @@
 			let isPwMatched = false;
 
 			$(function () {
+				let isIdChecked = false;
+				let isPwMatched = false;
+
 				// 아이디 유효성 검사
 				$("#user_id").on("input", function () {
 					const userId = $(this).val();
@@ -83,8 +86,7 @@
 						isIdChecked = false;
 						return;
 					}
-					$("#idCheckMessage").text(""); // 조건 통과 시 메시지 제거
-					isIdChecked = true;
+					$("#idCheckMessage").css("color", "red").text("* 중복확인을 해주세요.");
 				});
 				// 아이디 중복확인 버튼 클릭
 				$("#checkIdButton").click(function () {

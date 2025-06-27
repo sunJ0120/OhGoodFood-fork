@@ -145,4 +145,18 @@ public interface UserMapper {
         @Param("startIdx") int startIdx,
         @Param("size")     int size
     );
+    
+    /**
+     * 리뷰 insert
+     * 주문 번호 파라미터로 받아 리뷰 작성
+     * @param orderNo
+     * @return
+     */
+	ReviewForm selectReviewFormByOrderNo(int orderNo);
+	
+	/**
+	 * 리뷰 update
+	 * @param form
+	 */
+    void insertReview(ReviewForm form);
 }

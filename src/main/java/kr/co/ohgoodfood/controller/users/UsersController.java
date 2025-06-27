@@ -285,8 +285,10 @@ public class UsersController {
     ) {
         ProductDetail detail = usersService.getProductDetail(product_no);       
         model.addAttribute("productDetail", detail);
-        return "users/userProductDetail";
         
+        List<Review> reviews = usersService.getReviewsByProductNo(product_no);
+        model.addAttribute("reviews", reviews);
+        return "users/userProductDetail";
         
     }
 
@@ -324,5 +326,26 @@ public class UsersController {
         model.addAttribute("reviews", reviews);
         return "users/userReviewList";  
     }
+    
+    /**
+     * 확정 주문내역 -> 리뷰쓰기
+     */
+    // GET : 주문번호로 화면용 DTO 꺼내서 JSP에 바인딩
+    @GetMapping("/reviewWrite")
+    public String showReviewForm(@RequestParam("order_no") int orderNo,
+                                 Model model) {
+        ReviewForm form = usersService.getReviewForm(orderNo);
+        model.addAttribute("reviewForm", form);
+        return "users/userReviewWrite";
+    }
 
+    // POST : 폼 제출 → DTO에 user_id 세팅 → 서비스 호출 → 마이페이지로 리다이렉트
+    @PostMapping("/review/submit")
+    public String submitReview(@ModelAttribute ReviewForm reviewForm,
+                               HttpSession session) {
+        String userId = (String) session.getAttribute("user_id");
+        reviewForm.setUser_id(userId);
+        usersService.writeReview(reviewForm, userId);
+        return "redirect:/user/mypage";
+    }
 }
