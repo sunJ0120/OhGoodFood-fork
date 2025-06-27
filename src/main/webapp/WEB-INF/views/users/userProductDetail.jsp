@@ -26,7 +26,7 @@
                                 <div class="storeImgSlider">
                                     <div class="sliderTrack">
                                         <c:forEach var="imgUrl" items="${productDetail.images}">
-                                            <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/init.jpg"
+                                            <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${productDetail.store_img}"
                                                 alt="상품 이미지" class="sliderImg" />
                                         </c:forEach>
                                     </div>
@@ -76,9 +76,7 @@
                                                 </span>
                                             </div>
                                             <div class="note">
-                                                * 픽업시간 이전/이후에 방문하는 건 사장님을 힘들게해요<br>
-                                                * 확정시간 전에는 가게 상황에 따라, 예약이 취소될 수 있어요.<br>
-                                                * 취소시, 100% 환불이 가능해요
+                                                <span>${productDetail.product_explain}</span>
                                             </div>
                                         </div>
 
@@ -113,9 +111,8 @@
                                                 <span class="addLabel">📞</span>
                                                 <span class="addValue">${productDetail.store_telnumber}</span>
                                             </div>
-                                            <div class="note2">
-                                                다음 사안 해당시 이용이 제한될 수 있어요.<br>
-                                                1. 확정 시간 전 취소에 대한 항의 2. 픽업 시간 외 방문 요구<br>
+                                            <div >
+                                                  <span class="note2">${productDetail.store_explain}</span>
                                             </div>
                                         </div>
 
@@ -138,7 +135,7 @@
                                                 <c:forEach var="r" items="${reviews}">
                                                     <div class="overlap">
                                                         <img class="reviewImage"
-                                                            src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/upload/${r.review_img}"
+                                                            src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${r.review_img}"
                                                             alt="리뷰 이미지" />
                                                         <div class="reviewerName">${r.user_nickname}</div>
                                                         <div class="reviewedDate">

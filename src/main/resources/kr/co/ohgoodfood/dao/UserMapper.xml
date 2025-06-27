@@ -222,30 +222,30 @@
   	</select>
 	<select id="selectUserReviews" parameterType="string"  resultType="kr.co.ohgoodfood.dto.Review">
 	    SELECT
-	      r.review_no        AS review_no,
-	      r.review_content   AS review_content,
-	      r.writed_at        AS writed_at,
-	      r.review_img       AS review_img,
-	      r.is_blocked       AS is_blocked,
-	      r.order_no         AS order_no,
-	      p.origin_price     AS origin_price,
-	      p.sale_price       AS sale_price,
-	      s.store_id         AS store_id,
-	      s.store_name       AS store_name,
-	      s.store_menu       AS store_menu,
-	      (
-	        SELECT i.store_img
+	      r.review_no          AS review_no,
+	      r.review_content     AS review_content,
+	      r.writed_at          AS writed_at,
+	      r.review_img         AS review_img,
+	      a.user_nickname      AS user_nickname,
+	      p.origin_price       AS origin_price,
+	      p.sale_price         AS sale_price,
+	      s.store_id           AS store_id,
+	      s.store_name         AS store_name,
+	      s.store_menu         AS store_menu,
+	      ( SELECT i.store_img
 	          FROM Image i
 	         WHERE i.store_id = s.store_id
 	         ORDER BY i.img_no
 	         LIMIT 1
-	      ) AS store_img
-	    FROM Review  r
+	      )                    AS storeImg
+	    FROM Review r
+	    JOIN Account a ON r.user_id = a.user_id
 	    JOIN Store   s ON r.store_id = s.store_id
-	    JOIN Product p ON p.store_id = s.store_id
-	    WHERE r.user_id    = #{user_id}
-	      AND r.is_blocked = 'N'
-	    ORDER BY r.writed_at DESC
+	    JOIN (SELECT p.origin_price AS origin_price, p.sale_price AS sale_price, o.user_id AS user_id, o.order_no AS order_no
+	    FROM Product p
+	    JOIN Orders o ON p.product_no = o.product_no) p ON r.order_no = p.order_no
+		 WHERE r.user_id = #{user_id} AND r.is_blocked="N"
+		 ORDER BY r.writed_at DESC
   	</select>
   	
   	<!--  selectProductDetail mapper -->
@@ -262,12 +262,14 @@
             s.category_others  AS category_others,
             s.store_address    AS store_address,
             s.store_telnumber  AS store_telnumber,
+            s.store_explain	   AS store_explain,
             p.product_no       AS product_no,
             p.pickup_start     AS pickup_start,
             p.pickup_end       AS pickup_end,
             p.origin_price     AS origin_price,
             p.sale_price       AS sale_price,
-            p.reservation_end  AS reservation_end
+            p.reservation_end  AS reservation_end,
+            p.product_explain  AS product_explain
         FROM Store s
         JOIN Product p ON s.store_id = p.store_id
         WHERE p.product_no = #{product_no}
@@ -318,7 +320,7 @@
 	  
 	<!-- 모든 리뷰 모아보기 -->
 	<select id="getAllReviews" parameterType="string" resultType="kr.co.ohgoodfood.dto.Review">
-	    SELECT
+	   SELECT
 	      r.review_no          AS review_no,
 	      r.review_content     AS review_content,
 	      r.writed_at          AS writed_at,
@@ -338,7 +340,11 @@
 	    FROM Review r
 	    JOIN Account a ON r.user_id = a.user_id
 	    JOIN Store   s ON r.store_id = s.store_id
-	    JOIN Product p ON p.store_id = s.store_id
+	    JOIN (SELECT p.origin_price AS origin_price, p.sale_price AS sale_price, o.user_id AS user_id, o.order_no AS order_no
+	    FROM Product p
+	    JOIN Orders o ON p.product_no = o.product_no) p ON r.order_no = p.order_no
+	    WHERE r.is_blocked="N"
+	    ORDER BY r.writed_at DESC
 	 </select>
  	
  	<!-- order_no 로 주문·상품·가게 정보 조회 -->
@@ -347,19 +353,23 @@
 		  o.quantity                  AS quantity,
 		  p.sale_price                AS sale_price,
 		  s.store_name                AS store_name,
+		  s.store_id				  AS store_id,
+		  a.user_id 				  AS user_id,
+		  o.order_no				  AS order_no,
 		  (p.sale_price * o.quantity) AS total_price
 		FROM Orders o
 		JOIN Product p ON o.product_no = p.product_no
 		JOIN Store   s ON p.store_id   = s.store_id
+		JOIN Account a ON o.user_id = a.user_id
 		WHERE o.order_no = #{order_no}
 	</select>
 
 	<!-- 리뷰 쓰기 update -->
 	<insert id="insertReview"  parameterType="kr.co.ohgoodfood.dto.ReviewForm" useGeneratedKeys="true" keyProperty="review_no">
-	    INSERT INTO review
+	    INSERT INTO Review
 	      ( review_content , is_blocked , writed_at , review_img , user_id , store_id , order_no )
 	    VALUES
-	      ( #{review_content} , #{is_blocked}  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
+	      ( #{review_content} , "N"  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
 	</insert>
 
 </mapper>
