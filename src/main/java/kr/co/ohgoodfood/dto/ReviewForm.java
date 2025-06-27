@@ -36,6 +36,8 @@ public class ReviewForm {
     private String review_img;
     private String store_id;
     
+    
+    // 업로드용
+    private MultipartFile imageFile;   // <input name="imageFile">
     private int total_price;
-    private MultipartFile imageFile; 
 }

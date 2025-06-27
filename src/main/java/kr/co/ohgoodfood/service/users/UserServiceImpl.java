@@ -23,6 +23,20 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
+import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Bookmark;
+import kr.co.ohgoodfood.dto.BookmarkDelete;
+import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.PickupStatus;
+import kr.co.ohgoodfood.dto.ProductDetail;
+import kr.co.ohgoodfood.dto.Review;
+import kr.co.ohgoodfood.dto.ReviewForm;
+import kr.co.ohgoodfood.dto.UserMainFilter;
+import kr.co.ohgoodfood.dto.UserMypage;
+import kr.co.ohgoodfood.dto.UserOrder;
+import kr.co.ohgoodfood.dto.UserOrderFilter;
+import kr.co.ohgoodfood.dto.UserOrderRequest;
 import kr.co.ohgoodfood.util.StringSplitUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -414,22 +428,18 @@ public class UserServiceImpl implements UsersService{
                         fileName,
                         is,
                         meta
-                    ).withCannedAcl(CannedAccessControlList.PublicRead));
+                    ));
             } catch (IOException e) {
                 throw new UncheckedIOException("리뷰 이미지 업로드 실패", e);
             }
 
-            // 3) 업로드된 파일의 public URL 획득
-            String imageUrl = awsS3Config.amazonS3()
-                .getUrl(awsS3Config.getBucket(), fileName)
-                .toString();
-            form.setReview_img(imageUrl);
+            form.setReview_img(fileName);
         }
     	
     	
 
         // — 기타 기본값 세팅 —
-        form.setIs_blocked("N");
+//        form.setIs_blocked("N");
         // writed_at : INSERT 쿼리에서 NOW() 처리
 
         // — 최종 INSERT 호출 —

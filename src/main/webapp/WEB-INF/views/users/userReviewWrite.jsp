@@ -35,10 +35,10 @@
                                 <div class="details">
                                     <p class="name">${reviewForm.store_name}</p>
                                     <p><span class="storeName" style="font-weight:bold;">구매자 :</span>
-                                        <span>"${reviewForm.user_nickname}" </span>
+                                        <span>${reviewForm.user_nickname}</span>
                                     </p>
                                     <p><span class="productCount" style="font-weight:bold;">수량 :</span>
-                                        <span>"${reviewForm.quantity}"</span>개
+                                        <span>${reviewForm.quantity}</span>개
                                     </p>
                                     <p><span class="productPrice" style="font-weight:bold;">결제 금액 :</span>
                                         <span>
@@ -50,12 +50,13 @@
                             </div>
                             <hr class="line" />
                             <!-- 리뷰 입력 폼 -->
-                            <form action="${pageContext.request.contextPath}/review/submit" method="post"
+                            <form action="${pageContext.request.contextPath}/user/review/submit" method="post"
                                 enctype="multipart/form-data" class="reviewForm">
                                 <!-- 숨겨진 필드 -->
                                 <input type="hidden" name="order_no" value="${reviewForm.order_no}" />
                                 <input type="hidden" name="store_id" value="${reviewForm.store_id}" />
                                 <input type="hidden" name="product_no" value="${reviewForm.product_no}" />
+                                <input type="hidden" name="user_id" value="${reviewForm.user_id}" />
 
                                 <!-- 리뷰 텍스트 -->
                                 <span class="reviewInfo">
@@ -63,7 +64,7 @@
                                     <span class="reviewInfo__desc">100자 이내로 작성해주세요.</span>
                                 </span>
                                 <textarea id="reviewText" class="reviewText" placeholder="리뷰는 100자 이내로 작성해주세요."
-                                    maxlength="100" rows="6">${reviewForm.review_content}</textarea>
+                                  name="review_content"  maxlength="100" rows="6">${reviewForm.review_content}</textarea>
                                 <div class="charCount"><span id="currentCount"></span>/100</div>
 
 
@@ -74,7 +75,7 @@
                                         <span class="photoLabel__desc">사진은 필수로 첨부해주세요.</span>
                                     </span>
                                     <div class="photoInput">
-                                        <input type="file" id="photoFile" name="image" accept="image/*" hidden />
+                                        <input type="file" id="photoFile" name="imageFile" accept="image/*" hidden />
                                         <button type="button" id="btnAddPhoto" class="btnAddPhoto">
                                             <img src="${pageContext.request.contextPath}/img/user_plusbtn.png"
                                                 alt="사진 추가" />
@@ -107,6 +108,7 @@
                         const $btnSubmit = $('#btnSubmit');
                         const $btnAdd = $('#btnAddPhoto');
                         const $modal = $('#modalOverlay');
+                        $modal.hide(); 
                         const $preview = $('#photoPreview');
 
                         // 글자수
@@ -148,10 +150,10 @@
                                 const wrapper = $('<div>').addClass('photoPreview-wrapper');
                                 const img = $('<img>').attr('src', e.target.result);
                                 const btn = $('<button>').addClass('remove-btn').text('×');
-
+                                
                                 btn.on('click', () => {
                                     $preview.empty();
-                                    $fileInput.val('');
+                                    $fileInput.val(''); // 빈 문자열 -> 초기화
                                     $btnAdd.show();
                                     updateSubmitState();
                                 });

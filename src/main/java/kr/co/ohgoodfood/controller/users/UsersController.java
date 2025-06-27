@@ -369,7 +369,7 @@ public class UsersController {
     @PostMapping("/review/submit")
     public String submitReview(@ModelAttribute ReviewForm reviewForm,
                                HttpSession session) {
-        String userId = (String) session.getAttribute("user_id");
+        String userId = ((Account)session.getAttribute("user")).getUser_id();
         reviewForm.setUser_id(userId);
         usersService.writeReview(reviewForm, userId);
         return "redirect:/user/mypage";

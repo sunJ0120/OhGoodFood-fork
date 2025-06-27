@@ -239,12 +239,8 @@ header {
   bottom: 0;
   background: rgba(0, 0, 0, 0.5);
   display: none;
-  /* script 로 show/hide */
-  display: flex;
   justify-content: center;
-  /* x축 가운데 정렬 */
   align-items: flex-end;
-  /* y축 아래쪽 정렬 */
   z-index: 1000;
   width: 440px;
 
