@@ -58,8 +58,13 @@ public interface UsersService {
 	
 	/* 모든 리뷰를 조회 */
     List<Review> getAllReviews(int page, int size);
-
-
     
+    /* 리뷰 업데이트 */
+    // 화면에 뿌릴 주문·상품·가게 정보 조회
+    ReviewForm getReviewForm(int orderNo);
+
+    // 실제 리뷰 저장 (이미지 포함)
+    void writeReview(ReviewForm form, String userId);
+
 
 }

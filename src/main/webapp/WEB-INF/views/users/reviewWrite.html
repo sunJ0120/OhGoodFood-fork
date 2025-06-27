@@ -29,7 +29,7 @@
                     <img class="storeImg" src="../../../img/user_pain.png" alt="가게이미지" />
                     <div class="details">
                         <p class="name">러프도우</p>
-                        <p><span class="storeName" style="font-weight:bold;">구매처 :</span> <span>오목곰 베이커리</span></p>
+                        <p><span class="storeName" style="font-weight:bold;">구매자 :</span> <span>오목곰 </span></p>
                         <p><span class="productCount" style="font-weight:bold;">수량 :</span> <span>2개</span></p>
                         <p><span class="productPrice" style="font-weight:bold;">결제 금액 :</span> <span>6,900원</span></p>
                         <!-- <p class="name">${product.name}</p>
@@ -85,59 +85,82 @@
 
     <script>
         $(function () {
-            // character count
+            // ① 토글에 필요한 jQuery 변수 선언
+            const $textarea = $('#reviewText');
+            const $fileInput = $('#photoFile');
+            const $btnSubmit = $('#btnSubmit');
+            const $btnAdd = $('#btnAddPhoto');
+            const $modal = $('#modalOverlay');
+            const $preview = $('#photoPreview');
+
+            // 글자수
             $('#reviewText').on('input', function () {
                 $('#currentCount').text(this.value.length);
+                updateSubmitState();
             });
 
             const modal = $('#modalOverlay');
             const fileInput = $('#photoFile');
             const previewBox = $('#photoPreview');
 
-            // show modal
+            // 사진 추가 모달 보이기
             $('#btnAddPhoto').on('click', function () {
                 modal.fadeIn(200).css('display', 'flex');
             });
-            // hide modal
+            // 사진 추가 모달 숨기기
             $('#btnCancel').on('click', () => modal.fadeOut(200));
             modal.on('click', e => { if (e.target === modal[0]) modal.hide(); });
 
-            // camera option
+            // 카메라
             $('#btnCamera').on('click', function () {
                 fileInput.attr('capture', 'environment').click();
                 modal.hide();
             });
-            // gallery option
+            // 갤러리
             $('#btnGallery').on('click', function () {
                 fileInput.removeAttr('capture').click();
                 modal.hide();
             });
-
-            fileInput.on('change', function () {
+            // 파일 선택 및 미리보기
+            $fileInput.on('change', function () {
                 const file = this.files[0];
                 if (!file) return;
+
                 const reader = new FileReader();
                 reader.onload = e => {
-                    previewBox.empty();
+                    $preview.empty();
                     const wrapper = $('<div>').addClass('photoPreview-wrapper');
                     const img = $('<img>').attr('src', e.target.result);
                     const btn = $('<button>').addClass('remove-btn').text('×');
 
                     btn.on('click', () => {
-                        previewBox.empty();
-                        fileInput.val('');
-                        $('#btnSubmit').prop('disabled', true);
-                        $('#btnAddPhoto').show();     // ① 이미지 추가 버튼 다시 보이기
+                        $preview.empty();
+                        $fileInput.val('');
+                        $btnAdd.show();
+                        updateSubmitState();
                     });
-
                     wrapper.append(img).append(btn);
-                    previewBox.append(wrapper);
+                    $preview.append(wrapper);
 
-                    $('#btnSubmit').prop('disabled', false);
-                    $('#btnAddPhoto').hide();      // ② 이미지 추가 버튼 숨기기
+                    $btnAdd.hide();
+                    updateSubmitState();
                 };
                 reader.readAsDataURL(file);
             });
+
+            // 최종 제출 리뷰 버튼 전환
+            function updateSubmitState() {
+                const hasText = $textarea.val().trim().length > 0;
+                const hasPhoto = $fileInput[0].files.length > 0;
+                if (hasText && hasPhoto) {
+                    $btnSubmit.prop('disabled', false).addClass('active');
+                } else {
+                    $btnSubmit.prop('disabled', true).removeClass('active');
+                }
+            }
+
+            // 초기 상태 체크
+            updateSubmitState();
 
         });
     </script>

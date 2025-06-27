@@ -1,37 +1,42 @@
 package kr.co.ohgoodfood.service.users;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
 import java.security.MessageDigest;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+
+import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
-import kr.co.ohgoodfood.dto.*;
+import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Bookmark;
+import kr.co.ohgoodfood.dto.BookmarkDelete;
+import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.PickupStatus;
+import kr.co.ohgoodfood.dto.ProductDetail;
+import kr.co.ohgoodfood.dto.Review;
+import kr.co.ohgoodfood.dto.ReviewForm;
+import kr.co.ohgoodfood.dto.UserMainFilter;
+import kr.co.ohgoodfood.dto.UserMypage;
+import kr.co.ohgoodfood.dto.UserOrder;
+import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.util.StringSplitUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.ProductDetail;
-import kr.co.ohgoodfood.dto.Review;
-import kr.co.ohgoodfood.dto.UserMainFilter;
-import kr.co.ohgoodfood.dto.UserMypage;
-import lombok.RequiredArgsConstructor;
 
 /**
  * UsersServiceImpl.java - UsersService interface 구현체
@@ -44,6 +49,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
+	private final AwsS3Config awsS3Config;
+
 
     /**
      * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
@@ -295,4 +302,62 @@ public class UserServiceImpl implements UsersService{
         return userMapper.getAllReviews(startIdx, size);
     }
 
+	
+	/**
+	 * 리뷰 이미지 AWS S3에 업로드하고, public URL을 반환
+	 */
+	// GET: orderNo로 DTO 채우기
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewForm getReviewForm(int orderNo) {
+        return userMapper.selectReviewFormByOrderNo(orderNo);
+    }
+
+    // POST: 이미지 업로드 후 DB INSERT
+    @Override
+    @Transactional
+    public void writeReview(ReviewForm form, String userId) {
+        form.setUser_id(userId);
+
+        // — 이미지 업로드 —
+        MultipartFile imgFile = form.getImageFile();
+        if (imgFile != null && !imgFile.isEmpty()) {
+            String fileName = UUID.randomUUID() + "_" + imgFile.getOriginalFilename();
+            ObjectMetadata meta = new ObjectMetadata();
+            meta.setContentType(imgFile.getContentType());
+            meta.setContentLength(imgFile.getSize());
+
+         // InputStream은 try‐with‐resources 로 안전하게 열고 닫기
+            try (InputStream is = imgFile.getInputStream()) {
+                awsS3Config.amazonS3()
+                    .putObject(new PutObjectRequest(
+                        awsS3Config.getBucket(),
+                        fileName,
+                        is,
+                        meta
+                    ).withCannedAcl(CannedAccessControlList.PublicRead));
+            } catch (IOException e) {
+                throw new UncheckedIOException("리뷰 이미지 업로드 실패", e);
+            }
+
+            // 3) 업로드된 파일의 public URL 획득
+            String imageUrl = awsS3Config.amazonS3()
+                .getUrl(awsS3Config.getBucket(), fileName)
+                .toString();
+            form.setReview_img(imageUrl);
+        }
+    	
+    	
+
+        // — 기타 기본값 세팅 —
+        form.setIs_blocked("N");
+        // writed_at : INSERT 쿼리에서 NOW() 처리
+
+        // — 최종 INSERT 호출 —
+        userMapper.insertReview(form);
+    }
+    // AWS S3 인스턴스 반환
+    	private AmazonS3 amazonS3() {
+            return awsS3Config.amazonS3();
+        }
 }
