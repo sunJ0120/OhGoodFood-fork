@@ -20,12 +20,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.zaxxer.hikari.HikariDataSource;
+
+import kr.co.ohgoodfood.util.LoginInterceptor;
 
 @Configuration
 @EnableWebMvc
@@ -104,21 +107,23 @@ public class MvcConfig implements WebMvcConfigurer {
 		return tm;
 	}
 
-//	// interceptor
-//	@Bean
-//	public LoginInterceptor li() {
-//		return new LoginInterceptor();
-//	}
+	// interceptor
+	@Bean
+	public LoginInterceptor li() {
+		return new LoginInterceptor();
+	}
 
-//	@Override
-//	public void addInterceptors(InterceptorRegistry registry) {
-//		registry.addInterceptor(li()).addPathPatterns("/student/mypage");
-//		/*
-//		 * /student/** 모든 페이지
-//		 * 
-//		 * 관리자의 경우 모둔 url에 체크가 필요하기에 전부로 걸고 로그인만 제외 .excludePathPatterns("경로") <-- 제외
-//		 */
-//	}
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(li())
+		.addPathPatterns("/user/**", "/store/**")  // 특정 경로들에만 적용
+		.excludePathPatterns("/login", "/jointype", "/store/signup", "/user/userSignup","/admin/**","/user/userPaid","/user/paidfail");
+		/*
+		 * /student/** 모든 페이지
+		 * 
+		 * 관리자의 경우 모둔 url에 체크가 필요하기에 전부로 걸고 로그인만 제외 .excludePathPatterns("경로") <-- 제외
+		 */
+	}
 
 	// file Upload
 	@Bean

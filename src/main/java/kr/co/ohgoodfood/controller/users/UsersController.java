@@ -365,6 +365,24 @@ public class UsersController {
         return "users/userReviewWrite";
     }
 
+
+    /**
+     * 결제 페이지
+     */
+    @GetMapping("/userPaid")
+    public String userPaid(Model model, HttpSession session) {
+        return "users/userPaid";
+    }
+
+    /**
+     * 결제 실패 페이지
+     */
+    @GetMapping("/paidfail")
+    public String paidfail(Model model, HttpSession session) {
+        return "users/paidfail";
+    }
+
+
     // POST : 폼 제출 → DTO에 user_id 세팅 → 서비스 호출 → 마이페이지로 리다이렉트
     @PostMapping("/review/submit")
     public String submitReview(@ModelAttribute ReviewForm reviewForm,
@@ -374,4 +392,5 @@ public class UsersController {
         usersService.writeReview(reviewForm, userId);
         return "redirect:/user/mypage";
     }
+
 }
