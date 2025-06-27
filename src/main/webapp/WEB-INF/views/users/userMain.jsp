@@ -57,7 +57,9 @@
         <div class="productWrapper">
           <section class="productList">
             <c:forEach var="mainStore" items = "${mainStoreList}" >
-              <article class="productCard" data-product-no="${mainStore.product_no}">
+              <article class="productCard"
+                       data-product-no="${mainStore.product_no}"
+                       data-store-status="${mainStore.store_status}">
                 <div class="cardImage">
                   <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${mainStore.store_img}" alt="상품 이미지" class="storeImage" />
                   <div class="cardLabel">
@@ -69,14 +71,6 @@
                         <span class="statusText">${mainStore.pickup_status.displayName}</span>
                         <span class="timeText">
                           <c:choose>
-                            <c:when test="${mainStore.pickup_status.name() == 'SOLD_OUT'}">
-                              (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
-                            </c:when>
-
-                            <c:when test="${mainStore.pickup_status.name() == 'CLOSED'}">
-                              (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
-                            </c:when>
-
                             <c:when test="${mainStore.pickup_status.name() == 'TOMORROW'}">
                               <c:if test="${mainStore.amount > 5}">(+5)</c:if>
                               <c:if test="${mainStore.amount <= 5}">(${mainStore.amount})</c:if>
@@ -396,7 +390,13 @@
 <script>
   $(function(){
     $('.productCard').on('click', function(){
+      const store_status = $(this).data('store-status');
       const no = $(this).data('product-no');
+
+      if (store_status === 'N') {
+        alert('아직 오픈 전입니다!');
+        return;  // 클릭 처리 종료
+      }
 
       console.log("product-no : " + no);
       const ctx = '${pageContext.request.contextPath}';

@@ -8,23 +8,13 @@
     <!-- selectAllStore mapper, main에서 이용한다. -->
     <select id="selectAllStore" parameterType="map" resultType="kr.co.ohgoodfood.dto.MainStore">
         SELECT
-            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery, s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others AS category_others, s.closed_at AS closed_at,
-            COALESCE(pf.product_no, pa.product_no) AS product_no,
-            pf.pickup_start AS pickup_start, pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at,
+            pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
             img.first_img AS store_img
         FROM Store s
-        LEFT JOIN (
-            SELECT
-                store_id,
-                MAX(product_no) AS product_no
-            FROM Product
-            GROUP BY store_id
-        ) pa ON pa.store_id = s.store_id
-        LEFT JOIN Product pf ON pf.store_id = s.store_id
-            AND (
-                pf.reservation_end IS NULL
-                OR DATE(pf.reservation_end) = CURDATE()
-            )
+            LEFT JOIN Product pf
+            ON pf.store_id = s.store_id
+            AND DATE(pf.reservation_end) = CURDATE()
         LEFT JOIN (
             SELECT
                 store_id,
@@ -59,43 +49,32 @@
                     OR pf.product_explain LIKE CONCAT('%', #{filter.search}, '%')
                 )
             </if>
-            AND COALESCE(pf.product_no, pa.product_no) IS NOT NULL;
         </where>
+        ORDER BY (s.store_status = 'N') ASC;
     </select>
 
     <!-- selectAllBookmark mapper, bookmark에서 이용한다. -->
     <select id="selectAllBookmark" resultType="kr.co.ohgoodfood.dto.Bookmark">
         SELECT
-            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery, s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others AS category_others, s.closed_at AS closed_at,
-            COALESCE(pf.product_no, pa.product_no) AS product_no,
-            pf.pickup_start AS pickup_start, pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
-            img.first_img AS store_img,
-            b.bookmark_no AS bookmark_no, b.user_id AS user_id
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at,
+            pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
+            img.first_img AS store_img
         FROM Bookmark b
         JOIN Store s ON s.store_id = b.store_id
-        LEFT JOIN (
-            SELECT
-                store_id,
-                MAX(product_no) AS product_no
-            FROM Product
-            GROUP BY store_id
-        ) pa ON pa.store_id = s.store_id
-        LEFT JOIN Product pf ON pf.store_id = s.store_id
-            AND (
-                pf.reservation_end IS NULL
-                OR DATE(pf.reservation_end) = CURDATE()
-            )
+            LEFT JOIN Product pf
+            ON pf.store_id = s.store_id
+            AND DATE(pf.reservation_end) = CURDATE()
         LEFT JOIN (
             SELECT
                 store_id,
                 MIN(store_img) AS first_img
             FROM Image
-            GROUP BY store_id
+        GROUP BY store_id
         ) img ON img.store_id = s.store_id
         <where>
             b.user_id = #{user_id}
-            AND COALESCE(pf.product_no, pa.product_no) IS NOT NULL;
         </where>
+        ORDER BY (s.store_status = 'N') ASC;
     </select>
 
     <!-- deleteBookmark mapper -->

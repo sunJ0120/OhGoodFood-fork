@@ -52,11 +52,11 @@
                   <span class="statusText">
                     <c:choose>
                       <c:when test="${bookmark.pickup_status.name() == 'SOLD_OUT'}">
-                        매진 <fmt:formatDate value="${bookmark.closed_at}" pattern="HH:mm" type="time"/>
+                        매진
                       </c:when>
 
                       <c:when test="${bookmark.pickup_status.name() == 'CLOSED'}">
-                        마감 <fmt:formatDate value="${bookmark.closed_at}" pattern="HH:mm" type="time"/>
+                        마감
                       </c:when>
 
                       <c:when test="${bookmark.pickup_status.name() == 'TOMORROW' or bookmark.pickup_status.name() == 'TODAY'}">
@@ -155,7 +155,13 @@
   let bookmarkParams = {};
 
   $('.productCard').on('click', function(){
+    const store_status = $(this).data('status');
     const no = $(this).data('product-no');
+
+    if (store_status === 'N') {
+      alert('아직 오픈 전입니다!');
+      return;  // 클릭 처리 종료
+    }
 
     console.log("product-no : " + no);
     const ctx = '${pageContext.request.contextPath}';

@@ -191,9 +191,9 @@ public class UsersController {
      * AJAX 필터링 결과에 따른 주문 목록을 조회하고 뷰 프래그먼트만 반환한다.
      *
      * @param userOrderFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
-     * @param model          뷰에 전달할 데이터(Model)
-     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
-     * @return               필터링 된 가게 주문 목록만 포함한 JSP 프래그먼트 ("users/fragment/userOrderList")
+     * @param model           뷰에 전달할 데이터(Model)
+     * @param session         현재 HTTP 세션(로그인된 사용자 정보)
+     * @return                필터링 된 가게 주문 목록만 포함한 JSP 프래그먼트 ("users/fragment/userOrderList")
      */
     @PostMapping("/filter/order")
     public String filterOrderList(@RequestBody UserOrderFilter userOrderFilter,
