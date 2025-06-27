@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import kr.co.ohgoodfood.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -190,18 +191,36 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
-     * 서버에서는 리스트에 담아서 보내도록 한다.
+     * 북마크를 삭제하기 위한 기능이다.
      *
-     * @param bookmarkDelete     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
+     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
      * @return                   : 결과 행 수에 따라 Boolean
      */
     @Override
-    public boolean deleteUserBookMark(BookmarkDelete bookmarkDelete) {
-        String user_id = bookmarkDelete.getUser_id();
-        int bookmark_no = bookmarkDelete.getBookmark_no();
+    public boolean deleteUserBookMark(BookmarkFilter bookmarkFilter) {
+        String user_id = bookmarkFilter.getUser_id();
+        String store_id = bookmarkFilter.getStore_id();
 
-        int cnt = userMapper.deleteBookmark(user_id, bookmark_no);
+        int cnt = userMapper.deleteBookmark(user_id, store_id);
+
+        if (cnt == 1) {
+            return true;
+        }
+        return false; //delete 실패!
+    }
+
+    /**
+     * 북마크를 추가하기 위한 기능이다.
+     *
+     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
+     * @return                   : 결과 행 수에 따라 Boolean
+     */
+    @Override
+    public boolean insertUserBookMark(BookmarkFilter bookmarkFilter) {
+        String user_id = bookmarkFilter.getUser_id();
+        String store_id = bookmarkFilter.getStore_id();
+
+        int cnt = userMapper.insertBookmark(user_id, store_id);
 
         if (cnt == 1) {
             return true;
@@ -223,40 +242,28 @@ public class UserServiceImpl implements UsersService{
         for(UserOrder userOrder : orderList){
             userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
             //여기에 Boolean block_cancel 넣는거 하나 추가
-            userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getPickup_status(), userOrder.getPickup_end()));
+            userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getPickup_status(), userOrder.getReservation_end()));
         }
         return orderList;
     }
 
     /**
      * pickup_status가 오늘픽업 혹은 내일 픽업인 경우에, (즉, confirmed 상태) 한 시간 전에 취소 block 상태를 만들기 위함입니다.
-     * 내일 픽업의 경우는, now 날짜 기준 자정 -1h에, 오늘 픽업의 경우는 pickup-end -1h가 각각 현재 시간일 경우 block 상태를 true로 만듭니다.
+     * reservation_end -1이 NOW일때를 계산합니다.
      *
-     * @param pickup_status      : 블락 판별에 필요한 pickup_status
-     * @param pickup_end         : 픽업 마감 한시간 전을 판별하기 위한 pickup_end 값
+     * @param pickup_status      : 블락 판별에 필요한 pickup_status (confirmed 인 경우, 즉 오늘픽업이나 내일 픽업인 경우에만 진행)
+     * @param reservation_end    : 예약 마감 한시간 전을 계산하기 위한 reservation_end
      * @return                   : block_cancel 값을 설정하기 위해 boolean return
      */
-    public Boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp pickup_end){
-        if(pickup_status.equals(PickupStatus.TODAY)){
+    public Boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp reservation_end){
+        if(pickup_status.equals(PickupStatus.TODAY) || pickup_status.equals(PickupStatus.TOMORROW)){
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
             long oneHourInMillis = 60L * 60L * 1000L;
-            Timestamp oneHourBefore = new Timestamp(pickup_end.getTime() - oneHourInMillis);
+            Timestamp oneHourBefore = new Timestamp(reservation_end.getTime() - oneHourInMillis);
 
-            if (now.after(oneHourBefore) && now.before(pickup_end)) {
+            if (now.after(oneHourBefore) && now.before(reservation_end)) {
                 return true;  // 마감 1시간 전 이내이면, 취소 블록하고 막는다.
-            }
-            return false;
-        }else if(pickup_status.equals(PickupStatus.TOMORROW)){
-            LocalDateTime now = LocalDateTime.now();
-            // “내일 00:00” 시각
-            LocalDateTime tomorrowMidnight = LocalDate.now().plusDays(1).atStartOfDay();
-            // 자정 한 시간 전 = 내일 자정에서 1시간 뺀 시각 (오늘 밤 23:00)
-            LocalDateTime blockStart = tomorrowMidnight.minusHours(1);
-
-            // 지금이 그 시각 이후라면(즉, 11시 이후라면 취소 블록)
-            if (now.isAfter(blockStart)) {
-                return true;
             }
             return false;
         }

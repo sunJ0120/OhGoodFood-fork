@@ -32,7 +32,10 @@ public interface UsersService {
     List<String> getCategoryList(MainStore mainStore);
 
     //[Controller 로직] UsersController.userBookmarkDelete 연결 로직
-    boolean deleteUserBookMark(BookmarkDelete bookmarkDelete);
+    boolean deleteUserBookMark(BookmarkFilter bookmarkFilter);
+
+    //[Controller 로직] UsersController.userBookmarkInsert 연결 로직
+    boolean insertUserBookMark(BookmarkFilter bookmarkFilter);
 
     //[Controller 로직] UsersController.userOrders 연결 로직
     List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter);

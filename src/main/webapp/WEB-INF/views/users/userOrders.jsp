@@ -233,7 +233,6 @@
 
   // JSON BODY가 들어가야 하기 때문에 POST로 요청한다.
   function sendFilterRequest() {
-
     $.ajax({
       url: '${pageContext.request.contextPath}/user/filter/order',
       type: 'POST',
