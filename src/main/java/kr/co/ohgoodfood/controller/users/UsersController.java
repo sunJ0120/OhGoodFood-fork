@@ -33,6 +33,7 @@ import java.util.Map;
  * - POST /user/bookmark       : 해당하는 bookmark 삭제 -> 차후 북마크 다시 insert 하는 로직이 필요할 경우, endPoint 분기 예정
  * - GET  /user/main/orderList : 유저가 가진 orderList 목록 조회
  * - POST /user/filter/order   : AJAX 기반 오더 목록 필터링
+ * - POST /user/order/cancel   : 유저가 선택한 오더 주문 취소
  * - GET  /user/mypage         : 유저 mypage 이동
  * - GET  /user/reviewList     : 하단 메뉴바 Review탭 이동시 전체 리뷰 목록 조회
  * @since 2025-06-22 : [sunJ] 필터에 Map이 아닌, DTO 필터 객체 적용
@@ -101,9 +102,6 @@ public class UsersController {
 
         log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
-//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-//        String user_id = "u01";
-
         List<Bookmark> bookmarkList = usersService.getBookmarkList(user_id);
         log.info("[log/UsersController.userBookmark] user_id가 가진 userBookmark 결과 log : {}", bookmarkList);
         model.addAttribute("bookmarkList", bookmarkList);
@@ -129,9 +127,6 @@ public class UsersController {
         String user_id = loginUser.getUser_id();
         log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
-//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-//        String user_id = "u01";
-
         //bookmark를 위해 user_id 세팅
         bookmarkDelete.setUser_id(user_id);
 
@@ -156,9 +151,6 @@ public class UsersController {
         Account loginUser = (Account) session.getAttribute("user");
         String user_id = loginUser.getUser_id();
         log.info("session에서 가져온 user_id값 확인 : {}", user_id);
-
-//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-//        String user_id = "u01";
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
@@ -186,9 +178,6 @@ public class UsersController {
         String user_id = loginUser.getUser_id();
         log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
-//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-//        String user_id = "u01";
-
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
         log.info("[log/UsersController.filterOrderList] user_id가 가진 filterOrderList 결과 log : {}", userOrderList);
@@ -196,7 +185,38 @@ public class UsersController {
 
         return "users/fragment/userOrderList";
     }
-    
+
+    /**
+     * 세션에 있는 유저가 가진 주문 목록중 선택한 것을 취소한다.
+     *
+     * @param userOrderRequest Order delete에 필요한 필드 정보가 담긴 DTO
+     * @param order_no         form에서 보낸 order_no 파라미터 바인딩
+     * @param session          현재 HTTP 세션(로그인된 사용자 정보)
+     * @return                 PRG : /user/orderList 로 리다이렉트
+     */
+    @PostMapping("/order/cancel")
+    public String cancelOrder(@ModelAttribute UserOrderRequest userOrderRequest,
+                              @RequestParam("order_no") int order_no,
+                              HttpSession session,
+                              RedirectAttributes redirectAttributes){
+
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
+
+        userOrderRequest.setUser_id(user_id);
+        userOrderRequest.setOrder_no(order_no);
+        boolean ans = usersService.updateUserOrderCancel(userOrderRequest);
+
+        if (ans) {
+            redirectAttributes.addFlashAttribute("msg", "주문이 정상적으로 취소되었습니다.");
+        } else {
+            redirectAttributes.addFlashAttribute("errorMsg", "주문 취소에 실패했습니다.");
+        }
+
+        return "redirect:/user/orderList";
+    }
+
     /**
      *  사용자 회원가입
      */

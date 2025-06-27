@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -95,7 +96,7 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감을 판별합니다.
+     * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감 상태를 판별합니다.
      *
      * @param mainStore          : 판별이 필요한 데이터가 담긴 객체
      * @return                   : PickupStatus ENUM 객체
@@ -128,6 +129,33 @@ public class UserServiceImpl implements UsersService{
             }
         }
         throw new IllegalStateException();
+    }
+
+    /**
+     * LocalDate.now()로 오늘픽업, 내일픽업만을 판별합니다.
+     * Orders 페이지에서는 마감,매진 값은 필요 없기 때문에, 이것만을 판별하는 로직을 따로 만듭니다.
+     *
+     * @param userOrder        : 판별이 필요한 데이터가 담긴 객체
+     * @return                   : PickupStatus ENUM 객체
+     */
+    @Override
+    public PickupStatus getOrderPickupDateStatus(UserOrder userOrder) {
+        LocalDate today = LocalDate.now();
+        // NullPointerException방지, 차후 삭제 예정
+        if (userOrder.getPickup_start() == null) {
+            return PickupStatus.ETC;
+        }
+        LocalDate pickupDate = userOrder.getPickup_start().toLocalDateTime().toLocalDate();
+
+        // [오늘픽업] 현재 날짜와 같음
+        if (pickupDate.isEqual(today)) {
+            return PickupStatus.TODAY;
+        }
+        // [내일픽업] 현재 날짜 + 1과 같음
+        if (pickupDate.isEqual(today.plusDays(1))) {
+            return PickupStatus.TOMORROW;
+        }
+        return PickupStatus.ETC;
     }
 
     /**
@@ -192,10 +220,67 @@ public class UserServiceImpl implements UsersService{
 
         // userOrder에 pickup_status를 저장.
         for(UserOrder userOrder : orderList){
-            userOrder.setPickup_status(getPickupDateStatus(userOrder));
+            userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
+            //여기에 Boolean block_cancel 넣는거 하나 추가
+            userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getPickup_status(), userOrder.getPickup_end()));
         }
-
         return orderList;
+    }
+
+    /**
+     * pickup_status가 오늘픽업 혹은 내일 픽업인 경우에, (즉, confirmed 상태) 한 시간 전에 취소 block 상태를 만들기 위함입니다.
+     * 내일 픽업의 경우는, now 날짜 기준 자정 -1h에, 오늘 픽업의 경우는 pickup-end -1h가 각각 현재 시간일 경우 block 상태를 true로 만듭니다.
+     *
+     * @param pickup_status      : 블락 판별에 필요한 pickup_status
+     * @param pickup_end         : 픽업 마감 한시간 전을 판별하기 위한 pickup_end 값
+     * @return                   : block_cancel 값을 설정하기 위해 boolean return
+     */
+    public Boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp pickup_end){
+        if(pickup_status.equals(PickupStatus.TODAY)){
+            Timestamp now = new Timestamp(System.currentTimeMillis());
+
+            long oneHourInMillis = 60L * 60L * 1000L;
+            Timestamp oneHourBefore = new Timestamp(pickup_end.getTime() - oneHourInMillis);
+
+            if (now.after(oneHourBefore) && now.before(pickup_end)) {
+                return true;  // 마감 1시간 전 이내이면, 취소 블록하고 막는다.
+            }
+            return false;
+        }else if(pickup_status.equals(PickupStatus.TOMORROW)){
+            LocalDateTime now = LocalDateTime.now();
+            // “내일 00:00” 시각
+            LocalDateTime tomorrowMidnight = LocalDate.now().plusDays(1).atStartOfDay();
+            // 자정 한 시간 전 = 내일 자정에서 1시간 뺀 시각 (오늘 밤 23:00)
+            LocalDateTime blockStart = tomorrowMidnight.minusHours(1);
+
+            // 지금이 그 시각 이후라면(즉, 11시 이후라면 취소 블록)
+            if (now.isAfter(blockStart)) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    /**
+     * 사용자가 선택한 order를 취소 처리 합니다.
+     *
+     * @param userOrderRequest   : 사용자 주문 상태 변경 처리에 필요한 DTO
+     * @return                   : UPDATE 쿼리가 잘 실행 되었는지 보기 위해 row return
+     */
+    @Override
+    public boolean updateUserOrderCancel(UserOrderRequest userOrderRequest){
+        userOrderRequest.setOrder_status("cancel");
+        userOrderRequest.setCanceld_from("user");
+
+        log.info("userOrderRequest DTO 객체 상태 확인 : {}", userOrderRequest);
+
+        int cnt = userMapper.updateOrderStatus(userOrderRequest);
+
+        if (cnt == 1) {
+            return true;
+        }
+        return false; //update Order 실패!
     }
     
 	/** 유저 정보 한 건 조회 */

@@ -147,8 +147,10 @@ main {
 }
 
 .productWrapper {
+    position: relative;
     padding: 16px 12px;
     background-color: #F5F3EA;
+    height: 100%;
 }
 
 .productList {
@@ -335,4 +337,38 @@ main {
 .dropdownModal .item.active {
     background-color: #D8A8AB;
     color: white;
+}
+
+/* 결과 없음 모달 관련 요소들 */
+.emptyModal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.modalWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.modalBox {
+    background: white;
+    border-radius: 10pt;
+    padding: 50px 50px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.modalContent {
+    color: #99A99B;
+}
+
+.emptyModalEmoji {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(calc(-50% + 70px), -70%);
 }

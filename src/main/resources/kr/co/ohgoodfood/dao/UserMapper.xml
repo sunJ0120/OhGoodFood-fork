@@ -16,20 +16,20 @@
         LEFT JOIN (
             SELECT
                 store_id,
-                MIN(product_no) AS product_no
+                MAX(product_no) AS product_no
             FROM Product
             GROUP BY store_id
         ) pa ON pa.store_id = s.store_id
         LEFT JOIN Product pf ON pf.store_id = s.store_id
             AND (
-            pf.reservation_end IS NULL
-            OR DATE(pf.reservation_end) = CURDATE()
+                pf.reservation_end IS NULL
+                OR DATE(pf.reservation_end) = CURDATE()
             )
         LEFT JOIN (
             SELECT
                 store_id,
                 MIN(store_img) AS first_img
-                FROM Image
+            FROM Image
             GROUP BY store_id
         ) img ON img.store_id = s.store_id
         <where>
@@ -59,6 +59,7 @@
                     OR pf.product_explain LIKE CONCAT('%', #{filter.search}, '%')
                 )
             </if>
+            AND COALESCE(pf.product_no, pa.product_no) IS NOT NULL;
         </where>
     </select>
 
@@ -75,7 +76,7 @@
         LEFT JOIN (
             SELECT
                 store_id,
-                MIN(product_no) AS product_no
+                MAX(product_no) AS product_no
             FROM Product
             GROUP BY store_id
         ) pa ON pa.store_id = s.store_id
@@ -93,6 +94,7 @@
         ) img ON img.store_id = s.store_id
         <where>
             b.user_id = #{user_id}
+            AND COALESCE(pf.product_no, pa.product_no) IS NOT NULL;
         </where>
     </select>
 
@@ -115,7 +117,7 @@
         FROM Store s
         JOIN Product p ON s.store_id = p.store_id
         JOIN Image   i ON i.store_id = s.store_id
-        JOIN Orders  o ON o.store_id = p.store_id
+        JOIN Orders  o  ON o.product_no = p.product_no
         JOIN Paid    pa ON pa.order_no = o.order_no
         <where>
             <if test="filter.user_id != null">
@@ -141,33 +143,30 @@
                 </choose>
             </if>
         </where>
-        GROUP BY s.store_id, s.store_name, o.order_no;
+        GROUP BY
+        pa.paid_no, pa.paid_price, pa.paid_status,
+        s.store_name, s.store_id,
+        p.product_no, p.pickup_start, p.pickup_end, p.sale_price,
+        o.order_no, o.ordered_at, o.quantity,
+        o.order_status, o.canceld_from, o.order_code, o.user_id;
     </select>
 
-    <!-- updateOrderCanceldByUser mapper-->
-    <update id="updateOrderCanceldByUser" parameterType="map">
+    <!-- updateOrderStatus mapper-->
+    <update id="updateOrderStatus" parameterType="kr.co.ohgoodfood.dto.UserOrderRequest">
         UPDATE Orders
-            SET order_status = #{order_status},
-            cancled_from =  #{cancled_from}
-        WHERE order_no = #{order_no}
-        AND user_id = #{user_id};
-    </update>
-
-    <!-- updateOrderConfirmed mapper-->
-    <update id="updateOrderConfirmed" parameterType="map">
-        UPDATE Orders
-            SET order_status = #{order_status},
-            order_code = #{order_code}
-        WHERE order_no = #{order_no}
-        AND user_id = #{user_id};
-    </update>
-
-    <!-- updateOrderPickUp mapper-->
-    <update id="updateOrderPickup" parameterType="map">
-        UPDATE Orders
-            SET order_status = #{order_status}
-        WHERE order_no = #{order_no}
-        AND user_id = #{user_id};
+        <set>
+            <if test="order_request.order_status != null">
+                order_status = #{order_request.order_status},
+            </if>
+            <if test="order_request.order_status == 'cancel'">
+                canceld_from = #{order_request.canceld_from},
+            </if>
+            <if test="order_request.order_status == 'confirmed'">
+                order_code = #{order_request.order_code},
+            </if>
+        </set>
+        WHERE order_no = #{order_request.order_no}
+        AND user_id = #{order_request.user_id};
     </update>
 
     <!-- selectUserOrderPay mapper-->
