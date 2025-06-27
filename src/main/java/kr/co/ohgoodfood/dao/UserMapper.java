@@ -38,11 +38,21 @@ public interface UserMapper {
      * 사용자의 특정 북마크를 삭제 처리
      *
      * @param user_id          조회 대상 user_id
-     * @param bookmark_no      삭제할 북마크 고유번호
+     * @param store_id         user_id + store_id 조합으로 삭제
      * @return                 영향받은 행(row) 수
      */
     int deleteBookmark(@Param("user_id") String user_id,
-                        @Param("bookmark_no") int bookmark_no);
+                       @Param("store_id") String store_id);
+
+    /**
+     * 사용자 북마크 추가
+     *
+     * @param user_id          조회 대상 user_id
+     * @param store_id         북마크에 추가할 store 정보
+     * @return                 영향받은 행(row) 수
+     */
+    int insertBookmark(@Param("user_id") String user_id,
+                       @Param("store_id") String store_id);
 
     /**
      * 사용자의 모든 주문내역을 출력

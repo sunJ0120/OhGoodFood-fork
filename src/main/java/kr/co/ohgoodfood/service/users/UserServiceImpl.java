@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+import kr.co.ohgoodfood.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,19 +23,6 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
-import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.BookmarkDelete;
-import kr.co.ohgoodfood.dto.Image;
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.PickupStatus;
-import kr.co.ohgoodfood.dto.ProductDetail;
-import kr.co.ohgoodfood.dto.Review;
-import kr.co.ohgoodfood.dto.ReviewForm;
-import kr.co.ohgoodfood.dto.UserMainFilter;
-import kr.co.ohgoodfood.dto.UserMypage;
-import kr.co.ohgoodfood.dto.UserOrder;
-import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.util.StringSplitUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -189,18 +177,36 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
-     * 서버에서는 리스트에 담아서 보내도록 한다.
+     * 북마크를 삭제하기 위한 기능이다.
      *
-     * @param bookmarkDelete     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
+     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
      * @return                   : 결과 행 수에 따라 Boolean
      */
     @Override
-    public boolean deleteUserBookMark(BookmarkDelete bookmarkDelete) {
-        String user_id = bookmarkDelete.getUser_id();
-        int bookmark_no = bookmarkDelete.getBookmark_no();
+    public boolean deleteUserBookMark(BookmarkFilter bookmarkFilter) {
+        String user_id = bookmarkFilter.getUser_id();
+        String store_id = bookmarkFilter.getStore_id();
 
-        int cnt = userMapper.deleteBookmark(user_id, bookmark_no);
+        int cnt = userMapper.deleteBookmark(user_id, store_id);
+
+        if (cnt == 1) {
+            return true;
+        }
+        return false; //delete 실패!
+    }
+
+    /**
+     * 북마크를 추가하기 위한 기능이다.
+     *
+     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
+     * @return                   : 결과 행 수에 따라 Boolean
+     */
+    @Override
+    public boolean insertUserBookMark(BookmarkFilter bookmarkFilter) {
+        String user_id = bookmarkFilter.getUser_id();
+        String store_id = bookmarkFilter.getStore_id();
+
+        int cnt = userMapper.insertBookmark(user_id, store_id);
 
         if (cnt == 1) {
             return true;

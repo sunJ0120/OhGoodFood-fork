@@ -112,14 +112,14 @@ public class UsersController {
     /**
      * 해당 user가 가진 북마클 리스트 중, 특정 북마크를 삭제한다.
      *
-     * @param bookmarkDelete bookMark delete에 필요한 필드 정보가 담긴 DTO
+     * @param bookmarkFilter bookMark delete에 필요한 필드 정보가 담긴 DTO
      * @param model          뷰에 전달할 데이터(Model)
      * @param session        현재 HTTP 세션(로그인된 사용자 정보)
      * @return               json 응답, 성공시 {"code" : 200} / 실패시 {"code" : 500}
      */
-    @PostMapping("/bookmark")
+    @PostMapping("/bookmark/delete")
     @ResponseBody //json으로 code응답을 주기 위함이다.
-    public Map<String,Integer> userBookmarkDelete(@RequestBody BookmarkDelete bookmarkDelete,
+    public Map<String,Integer> userBookmarkDelete(@RequestBody BookmarkFilter bookmarkFilter,
                                                   Model model,
                                                   HttpSession session){
         //세션에서 받아오는 로직
@@ -128,10 +128,36 @@ public class UsersController {
         log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
         //bookmark를 위해 user_id 세팅
-        bookmarkDelete.setUser_id(user_id);
+        bookmarkFilter.setUser_id(user_id);
 
         //delete bookmark 실행
-        boolean result = usersService.deleteUserBookMark(bookmarkDelete);
+        boolean result = usersService.deleteUserBookMark(bookmarkFilter);
+        return Collections.singletonMap("code", result ? 200 : 500);
+    }
+
+    /**
+     * 해당 user가 가진 북마클 리스트에서 삭제 된 것을 살리기 위함이다.
+     *
+     * @param bookmarkFilter bookMark delete에 필요한 필드 정보가 담긴 DTO
+     * @param model          뷰에 전달할 데이터(Model)
+     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
+     * @return               json 응답, 성공시 {"code" : 200} / 실패시 {"code" : 500}
+     */
+    @PostMapping("/bookmark/insert")
+    @ResponseBody //json으로 code응답을 주기 위함이다.
+    public Map<String,Integer> userBookmarkInsert(@RequestBody BookmarkFilter bookmarkFilter,
+                                                  Model model,
+                                                  HttpSession session){
+        //세션에서 받아오는 로직
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
+
+        //bookmark를 위해 user_id 세팅
+        bookmarkFilter.setUser_id(user_id);
+
+        //delete bookmark 실행
+        boolean result = usersService.insertUserBookMark(bookmarkFilter);
         return Collections.singletonMap("code", result ? 200 : 500);
     }
 

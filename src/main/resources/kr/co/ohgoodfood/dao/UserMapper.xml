@@ -101,8 +101,14 @@
     <!-- deleteBookmark mapper -->
     <delete id="deleteBookmark" parameterType="map">
         DELETE FROM Bookmark
-        WHERE bookmark_no = #{bookmark_no}
+        WHERE store_id = #{store_id}
         AND user_id = #{user_id};
+    </delete>
+
+    <!-- insertBookmark mapper -->
+    <delete id="insertBookmark" parameterType="map">
+        INSERT INTO Bookmark (user_id, store_id)
+        VALUES (#{user_id}, #{store_id});
     </delete>
 
     <!-- selectOrderList mapper -->

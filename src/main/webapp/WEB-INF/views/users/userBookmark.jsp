@@ -41,8 +41,8 @@
                 <article class="productCard"
                          data-status="${bookmark.store_status}"
                          data-bookmark-no="${bookmark.bookmark_no}"
-                         data-product-no="${bookmark.product_no}">
-
+                         data-product-no="${bookmark.product_no}"
+                         data-store-id="${bookmark.store_id}">
                   <div class="productNameWrapper">
                     <div class="productBookmarkWrapper">
                       <img src="${pageContext.request.contextPath}/img/user_bookmark.png" class="bookmarkImage">
@@ -151,7 +151,6 @@
 });
 </script>
 <%-- bookmark 해제시 ui 변경을 위한 js --%>
-<%-- ⭐ bookmark 삭제 후 다시 별을 누르면 북마크 재 추가 할 수 있도록 하는 기능 고민중입니다... --%>
 <script>
   let bookmarkParams = {};
 
@@ -167,36 +166,52 @@
     e.stopPropagation();  // 부모로의 이벤트 전파(=카드 클릭) 차단
     var $icon = $(this);
     var $card = $icon.closest('.productCard');
+    // bookmark no로 삭제할 경우, 더하고 삭제하면 이 no가 바뀌어서 bookmark_no로 지우고 하면 안된다. store_id, user_id 조합으로 구성한다.
+    // var bookmark_no = $card.data('bookmarkNo'); //bookmark_no를 가져오기
+    var store_id = $card.data('storeId'); //store_id 가져오기
+    bookmarkParams['store_id'] = store_id;
 
-    // 이미 삭제(unbookmarked) 상태면 더 클릭하지 못하도록 alert 띄우기.
+    // 이미 삭제(unbookmarked) 상태일 경우 insert 기능 추가
     if ($card.hasClass('unbookmarked')) {
-      return alert('이미 삭제된 북마크입니다.');
-    }
-
-    // JQuery에서 data-bookmark-no 값을 가져올 땐 camelCase 키로 가져온다.
-    var bookmark_no = $card.data('bookmarkNo'); //bookmark_no를 가져오기
-
-    // 해당하는 유저의 해당하는 bookmark를 지워야 한다. 해당하는 json을 만들어서 ajax로 요청한다.
-    bookmarkParams['bookmark_no'] = bookmark_no;
-
-    $.ajax({
-      url: '${pageContext.request.contextPath}/user/bookmark',
-      type: 'POST',
-      contentType: 'application/json',
-      dataType: 'json',          // ← 응답을 JSON 으로 파싱
-      data: JSON.stringify(bookmarkParams),
-      success: function(data) {
-        if (data.code === 500) {
-          return alert('요청에 실패했습니다.');
+      $.ajax({
+        url: '${pageContext.request.contextPath}/user/bookmark/insert',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',          // ← 응답을 JSON 으로 파싱
+        data: JSON.stringify(bookmarkParams),
+        success: function(data) {
+          if (data.code === 500) {
+            return alert('요청에 실패했습니다.');
+          }
+          //이미지 상태 변경
+          $icon.attr('src', '/img/user_bookmark.png');
+          $card.removeClass('unbookmarked');
+        },
+        error: function() {
+          alert('서버 통신 중 오류가 발생했습니다.');
         }
-        //이미지 상태 변경 및 오퍼시티 설정
-        $icon.attr('src', '/img/user_empty_bookmark.png');
-        $card.addClass('unbookmarked');
-      },
-      error: function() {
-        alert('서버 통신 중 오류가 발생했습니다.');
-      }
-    });
+      });
+    }else{
+      // 해당하는 유저의 해당하는 bookmark를 지워야 한다. 해당하는 json을 만들어서 ajax로 요청한다.
+      $.ajax({
+        url: '${pageContext.request.contextPath}/user/bookmark/delete',
+        type: 'POST',
+        contentType: 'application/json',
+        dataType: 'json',          // ← 응답을 JSON 으로 파싱
+        data: JSON.stringify(bookmarkParams),
+        success: function(data) {
+          if (data.code === 500) {
+            return alert('요청에 실패했습니다.');
+          }
+          //이미지 상태 변경 및 오퍼시티 설정
+          $icon.attr('src', '/img/user_empty_bookmark.png');
+          $card.addClass('unbookmarked');
+        },
+        error: function() {
+          alert('서버 통신 중 오류가 발생했습니다.');
+        }
+      });
+    }
   });
 </script>
 </body>
