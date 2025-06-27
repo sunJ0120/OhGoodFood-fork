@@ -26,4 +26,8 @@ public interface PayMapper {
     public int getOrderQuantityByPaidCode(String paid_code);
     // paid_code로 상품 재고 가져오기
     public int getProductAmountByPaidCode(String paid_code);
+    // paid_code로 주문 canceld_from 업데이트
+    public void updateOrderCanceldFromByPaidCode(String paid_code);
+    // paid_code로 주문 canceld_from 가져오기
+    public String getOrderCanceldFromByPaidCode(String paid_code);
 }

@@ -50,4 +50,14 @@
     <select id="getProductAmountByPaidCode" parameterType="String" resultType="int">
         SELECT IFNULL(amount, 0) FROM Product WHERE product_no = (SELECT product_no FROM Orders WHERE order_no = (SELECT order_no FROM Paid WHERE paid_code = #{paid_code}));
     </select>
+
+    <!-- paid_code로 주문 canceld_from 업데이트 -->
+    <update id="updateOrderCanceldFromByPaidCode" parameterType="String">
+        UPDATE Orders SET canceld_from = "store" WHERE order_no = (SELECT order_no FROM Paid WHERE paid_code = #{paid_code});
+    </update>
+
+    <!-- paid_code로 주문 canceld_from 가져오기 -->
+    <select id="getOrderCanceldFromByPaidCode" parameterType="String" resultType="String">
+        SELECT canceld_from FROM Orders WHERE order_no = (SELECT order_no FROM Paid WHERE paid_code = #{paid_code});
+    </select>
 </mapper>

@@ -313,4 +313,12 @@ public class UsersController {
         return "users/userPaid";
     }
 
+    /**
+     * 결제 실패 페이지
+     */
+    @GetMapping("/paidfail")
+    public String paidfail(Model model, HttpSession session) {
+        return "users/paidfail";
+    }
+
 }

@@ -9,4 +9,8 @@ public interface PayService {
     public boolean checkProductAmount(int product_no, int quantity);
     // piad_code로 상품 재고에서 주문 개수만큼 차감 가능 여부 확인
     public boolean checkProductAmountByPaidCode(String paid_code);
+    // 결제 실패 시 주문 canceld_from 업데이트
+    public boolean updateOrderCanceldFromByPaidCode(String paid_code);
+    // 결제 실패 시 주문 canceld_from 가져오기
+    public String getOrderCanceldFromByPaidCode(String paid_code);
 }

@@ -177,6 +177,7 @@
                 console.log('모두 체크됨');
             } else {
                 console.log('하나 이상 체크되지 않음');
+                alert("주의 사항을 모두 체크해주세요.")
                 return;
             }
 
@@ -194,7 +195,7 @@
                 success: function(res){
                     if (res.result === "success" || res.result == "success") {
                         console.log(res);
-                        const tossPayments = TossPayments("test_ck_PBal2vxj814v1pqBmX2Gr5RQgOAN");
+                        const tossPayments = TossPayments(res.clientKey);
                         tossPayments.requestPayment("카드", {
                             amount: res.amount,
                             orderId: res.orderId,
@@ -202,6 +203,8 @@
                             successUrl: "http://localhost:8090/payment/success",
                             failUrl: "http://localhost:8090/payment/fail"
                         });
+                    } else {
+                        alert("주문이 불가능합니다. 메인으로 돌아주세요")
                     }
                 },
                 error: function(){

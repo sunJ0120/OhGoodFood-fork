@@ -7,7 +7,9 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,8 +29,10 @@ import okhttp3.Response;
 @Controller
 @RequiredArgsConstructor
 public class PayController {
-    private final String CLIENT_KEY = "test_ck_PBal2vxj814v1pqBmX2Gr5RQgOAN";
-    private final String SECRET_KEY = "test_sk_DpexMgkW36PJRzJBRgGdrGbR5ozO";
+    @Value("${toss.clientKey}")
+    private String CLIENT_KEY;
+    @Value("${toss.secretKey}")
+    private String SECRET_KEY;
 
     private final PayService payService;
     private final OkHttpClient okHttpClient;
@@ -54,6 +58,7 @@ public class PayController {
             map.put("result", "success");
             map.put("orderId", orderId);
             map.put("amount", paid_price);
+            map.put("clientKey", CLIENT_KEY);
             return map;
         } else {
             Map<String, Object> map = new HashMap<>();
@@ -67,7 +72,8 @@ public class PayController {
     @GetMapping("/payment/success")
     public String confirmPayment(@RequestParam String paymentKey,
                                  @RequestParam String orderId,
-                                 @RequestParam int amount) throws IOException {
+                                 @RequestParam int amount,
+                                 Model model) throws IOException {
 
         Map<String, Object> jsonMap = Map.of(
             "paymentKey", paymentKey,
@@ -88,17 +94,24 @@ public class PayController {
             if (response.isSuccessful() && payService.checkProductAmountByPaidCode(orderId)) {
                 System.out.println("결제 성공");
                 payService.updateOrderStatusAndPaidStatus(orderId);
-                return "redirect:/home";
+                return "redirect:/user/orderList";
             } else {
                 System.out.println("결제 실패");
-                return "redirect:/home";
+                payService.updateOrderCanceldFromByPaidCode(orderId);
+                // model.addAttribute("failReason", payService.getOrderCanceldFromByPaidCode(orderId));
+                // toss orderId <<<< 환불 요청 해야함 
+                return "redirect:/user/paidfail";
             }
         }
     }
 
     @GetMapping("/payment/fail")
-    public String failPage() {
+    public String failPage(@RequestParam String paymentKey,
+                        @RequestParam String orderId,
+                        @RequestParam int amount,
+                        Model model) {
+        payService.updateOrderCanceldFromByPaidCode(orderId);
         System.out.println("결제 실패");
-        return "home";
+        return "redirect:/user/paidfail";
     }
 }

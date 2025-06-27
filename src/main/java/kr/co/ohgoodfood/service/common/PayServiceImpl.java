@@ -76,4 +76,21 @@ public class PayServiceImpl implements PayService {
         int orderQuantity = payMapper.getOrderQuantityByPaidCode(paid_code);
         return productAmount >= orderQuantity;
     }
+
+    // 결제 실패 시 주문 canceld_from 업데이트
+    @Override
+    public boolean updateOrderCanceldFromByPaidCode(String paid_code) {
+        try {
+            payMapper.updateOrderCanceldFromByPaidCode(paid_code);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    // 결제 실패 시 주문 canceld_from 가져오기
+    @Override
+    public String getOrderCanceldFromByPaidCode(String paid_code) {
+        return payMapper.getOrderCanceldFromByPaidCode(paid_code);
+    }
 }
