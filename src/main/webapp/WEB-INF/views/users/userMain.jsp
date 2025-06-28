@@ -172,7 +172,7 @@
         $(this).addClass("active");
 
         $categoryFilterBtn.addClass("active");
-        $dropdownToggle.attr("src", "${contextPath}/img/user_arrow_down_icon_active.png"); //이미지 흰색 토글로 변경
+        $dropdownToggle.attr("src", "${pageContext.request.contextPath}/img/user_arrow_down_icon_active.png"); //이미지 흰색 토글로 변경
         console.log("클릭됨:", $(this).text());
         $btnText.text($(this).text());
       });
@@ -208,8 +208,26 @@
 <script>
   let init = false;
   let map;
-  let latitude;
-  let longitude;
+  let coords;
+
+  // 내 위치 마커를 표시하는 함수, 차후 전체 마커 표시하는 함수로 확장 예정
+  function makeMyLocationMarker(latitude, longitude) {
+    var imageSrc = '${pageContext.request.contextPath}/img/user_my_pin.png', // 마커이미지의 주소
+            imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기
+            imageOption = {offset: new kakao.maps.Point(25, 50)}; // 마커이미지의 옵션, 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정
+
+    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+            markerPosition = new kakao.maps.LatLng(latitude, longitude);
+
+    // 마커를 생성한다.
+    var marker = new kakao.maps.Marker({
+      position: markerPosition,
+      image: markerImage // 마커이미지 설정
+    });
+
+    // 마커가 지도 위에 표시되도록 설정
+    marker.setMap(map);
+  }
 
   function getCurrentLocation() {
     return new Promise((resolve, reject) => {
@@ -244,13 +262,10 @@
     // const $mapLoading  = $(".mapLoading");
 
     try {
-      const coords = await getCurrentLocation(); //현재 위치 받아오기
-      latitude  = coords.latitude;
-      longitude = coords.longitude;
-      initMap(latitude,longitude);
+      coords = await getCurrentLocation(); //현재 위치 받아오기
     } catch (e) {
       console.warn('위치 정보 로드 실패:', e.message);
-      // default center or 에러 UI 처리 가능
+      // 위치 정보 없을 경우 초기 위도 경도값 설정 가능
       initMap(33.450701, 126.570667);
     } finally {
       // 위도 경도 로딩 후 로딩창 숨기기
@@ -271,12 +286,14 @@
           $mapWrapper.show();
 
           if (!init) {
-            initMap();
+            initMap(coords.latitude, coords.longitude);
+            makeMyLocationMarker(coords.latitude, coords.longitude);
+            init = true;
           } else {
             // relayout을 통해 css(display 상태 등)가 바뀌었을때도 동작하도록 한다.
             map.relayout();
-            // 새로 center 잡기
             map.setCenter(map.getCenter());
+            makeMyLocationMarker(coords.latitude,coords.longitude);
           }
         }
       });
@@ -364,7 +381,7 @@
         $('#btnText').text('음식 종류');       // 버튼 텍스트를 기본값인 음식 종류로 다시 변경
         $('.dropdownModal .item').removeClass('active'); // 모든 active 해제 (색상 해제를 위해)
         $('.categoryFilterBtn').removeClass('active'); // categoryFilterBtn (토글)의 active도 삭제
-        $('.dropdownToggle').attr('src', `${contextPath}/img/user_arrow_down_icon.png`); //toggle의 이미지 변경
+        $('.dropdownToggle').attr('src', `${pageContext.request.contextPath}/img/user_arrow_down_icon.png`); //toggle의 이미지 변경
 
       } else {
         // 기존 category_* 키 제거
