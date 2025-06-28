@@ -95,7 +95,7 @@
         SELECT
             pa.paid_no AS paid_no, pa.paid_price AS paid_price, pa.paid_status AS paid_status,
             s.store_name AS store_name, s.store_id AS store_id,
-            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price,
+            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price, p.reservation_end AS reservation_end
             o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.canceld_from AS canceld_from,
             o.order_code AS order_code, o.user_id AS user_id,
             MIN(i.store_img) AS store_img

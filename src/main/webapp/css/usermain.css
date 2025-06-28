@@ -153,6 +153,13 @@ main {
     height: 100%;
 }
 
+.mapWrapper{
+    position: relative;
+    padding: 16px 12px;
+    background-color: #F5F3EA;
+    height: 100%;
+}
+
 .productList {
     display: flex;
     flex-direction: column;
@@ -371,4 +378,8 @@ main {
     top: 0;
     left: 50%;
     transform: translate(calc(-50% + 70px), -70%);
+}
+
+.hidden {
+    display: none;
 }

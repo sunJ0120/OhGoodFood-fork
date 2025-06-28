@@ -139,10 +139,10 @@
             </c:forEach>
           </section>
         </div>
-          <%-- 지도 api 영역 --%>
-          <div class="mapWrapper" style="display: none;">
-            <p>여기에 지도 들어갈 예정입니다~</p>
-          </div>
+        <%-- 지도 api 영역 --%>
+        <div class="mapWrapper" style="display: none;">
+          <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapAppKey}"></script>
+        </div>
       </div>
     </div>
   </main>
@@ -203,12 +203,59 @@
     });
   });
 </script>
+<%-- kakao 지도 호출 --%>
 <%-- [main] main map 화면 전환 js --%>
 <script>
-  $(document).ready(function () {
+  let init = false;
+  let map;
+  let latitude;
+  let longitude;
+
+  function getCurrentLocation() {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        return reject(new Error('Geolocation 미지원'));
+      }
+      navigator.geolocation.getCurrentPosition(
+              pos  => resolve(pos.coords),
+              err  => reject(err),
+              { enableHighAccuracy: true, timeout: 5000 }
+      );
+    });
+  }
+
+  function initMap(latitude, longitude) {
+    const mapWrapper = document.querySelector('.mapWrapper');
+    // SDK 로드 이후에 동작하도록 한다.
+    const center = new kakao.maps.LatLng(latitude, longitude);
+    console.log("위도, 경도 : ", latitude, longitude);
+
+    map = new kakao.maps.Map(mapWrapper, {
+      center: center,
+      level: 3
+    });
+    init = true;
+  }
+
+  $(document).ready(async function () {
     const $tabBtn = $(".tabBtn");
     const $productWrapper = $(".productWrapper");
     const $mapWrapper = $(".mapWrapper");
+    // const $mapLoading  = $(".mapLoading");
+
+    try {
+      const coords = await getCurrentLocation(); //현재 위치 받아오기
+      latitude  = coords.latitude;
+      longitude = coords.longitude;
+      initMap(latitude,longitude);
+    } catch (e) {
+      console.warn('위치 정보 로드 실패:', e.message);
+      // default center or 에러 UI 처리 가능
+      initMap(33.450701, 126.570667);
+    } finally {
+      // 위도 경도 로딩 후 로딩창 숨기기
+      // $mapLoading.addClass("hidden");
+    }
 
     $tabBtn.each(function () {
       $(this).on("click", function () {
@@ -222,6 +269,15 @@
         } else if ($(this).text() === "지도") {
           $productWrapper.hide();
           $mapWrapper.show();
+
+          if (!init) {
+            initMap();
+          } else {
+            // relayout을 통해 css(display 상태 등)가 바뀌었을때도 동작하도록 한다.
+            map.relayout();
+            // 새로 center 잡기
+            map.setCenter(map.getCenter());
+          }
         }
       });
     });
