@@ -159,21 +159,18 @@ public class UserServiceImpl implements UsersService{
     @Override
     public PickupStatus getOrderPickupDateStatus(UserOrder userOrder) {
         LocalDate today = LocalDate.now();
-        // NullPointerException방지, 차후 삭제 예정
-        if (userOrder.getPickup_start() == null) {
-            return PickupStatus.ETC;
-        }
         LocalDate pickupDate = userOrder.getPickup_start().toLocalDateTime().toLocalDate();
 
         // [오늘픽업] 현재 날짜와 같음
         if (pickupDate.isEqual(today)) {
             return PickupStatus.TODAY;
         }
-        // [내일픽업] 현재 날짜 + 1과 같음
-        if (pickupDate.isEqual(today.plusDays(1))) {
-            return PickupStatus.TOMORROW;
-        }
-        return PickupStatus.ETC;
+//        // [내일픽업] 현재 날짜 + 1과 같음
+//        if (pickupDate.isEqual(today.plusDays(1))) {
+//            return PickupStatus.TOMORROW;
+//        }
+        //불안정 하긴 하지만, 이틀 뒤가 pick_up start인 경우가 없기 때문에 나머진 다 내일 픽업
+        return PickupStatus.TOMORROW;
     }
 
     /**
@@ -275,15 +272,16 @@ public class UserServiceImpl implements UsersService{
         if(pickup_status.equals(PickupStatus.TODAY) || pickup_status.equals(PickupStatus.TOMORROW)){
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
-            long oneHourInMillis = 60L * 60L * 1000L;
-            Timestamp oneHourBefore = new Timestamp(reservation_end.getTime() - oneHourInMillis);
+            long oneHourInMillis = 60L * 60L * 1000L; //한시간 계산
+            Timestamp reservationEndOneHourBefore = new Timestamp(reservation_end.getTime() - oneHourInMillis);
 
-            if (now.after(oneHourBefore) && now.before(reservation_end)) {
+            //reservation_end -1h < now < reservation_end
+            if (now.after(reservationEndOneHourBefore) && now.before(reservation_end)) {
                 return true;  // 마감 1시간 전 이내이면, 취소 블록하고 막는다.
             }
             return false;
         }
-        return false;
+        return false; //오늘 픽업, 내일 픽업이 아니라면 이 block 변수는 false
     }
 
     /**

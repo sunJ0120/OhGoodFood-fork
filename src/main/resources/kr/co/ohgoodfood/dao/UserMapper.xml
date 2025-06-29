@@ -174,9 +174,9 @@
         JOIN Orders  o  ON o.product_no = p.product_no
         JOIN Paid    pa ON pa.order_no = o.order_no
         <where>
-            <if test="filter.user_id != null">
-                AND o.user_id = #{filter.user_id}
-            </if>
+            <!-- user_id는 무조건 있어야 하므로, null아닐때 이거 두지 않음. -->
+            AND o.user_id = #{filter.user_id}
+            AND o.order_status != 'ready'
             <if test="filter.order_status != null">
                 <choose>
                     <!-- order_status가 List일 때 IN 절 -->
