@@ -4,63 +4,68 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<c:forEach var="vo" items="${order}">
-	<div class="order-card">
-	       <div class="order-card-header">
-	           <span class="order-card-title">오굿백 ${vo.quantity}개 예약</span>
-	           <div class="order-card-button">
-	           	<c:set var="btnStatus" value="${vo.order_status eq 'pickup' ? 'complete' : 'today'}" />
-	               <button class="order-card-btn" data-status="${btnStatus}">
-	                <c:choose>
-	                	<c:when test="${vo.order_status eq 'pickup' }">픽업완료</c:when>
-	                	<c:otherwise>오늘픽업</c:otherwise>
-	                </c:choose>
-	              </button>
-	               
-	           </div>
-	           <div class="order-group">
-	               <label>
-	                   <input type="checkbox" class="order-checkbox" 
-	                   <c:if test="${not empty vo.pickup_start}">
-  										data-pickup-start="<fmt:formatDate value='${vo.pickup_start}' pattern='yyyy-MM-dd\'T\'HH:mm:ss' />"
-									</c:if>
-	                    			data-order-no="${vo.order_no}" 
-	                    			<c:if test="${not empty vo.pickup_end}">
-  										data-pickup-end="<fmt:formatDate value='${vo.pickup_end}' pattern='yyyy-MM-dd\'T\'HH:mm:ss' />"
-									</c:if>
-	                    			<c:if test="${vo.order_status eq 'pickup'}">checked</c:if> style="display:none; disabled">
-	                     <img class="checkbox-img" 
-								src="${pageContext.request.contextPath}/img/${vo.order_status eq 'pickup' ? 'storerealnoncheck' : 'storenoncheck'}.png" disabled/>
-	
-	               </label>
-	           </div>
-	           
-	           <span class="order-card-date">
-	           		<fmt:formatDate value="${vo.ordered_at}" pattern="yyyy.MM.dd"/>
-	           </span>
-	       </div>
-	       <hr class="order-card-divider">
-	       <div class="order-card-body">
-	           <img src="${pageContext.request.contextPath}/img/${vo.store_img}" alt="오굿백" class="order-card-img">
-	           <div class="order-card-info">
-	               <div class="order-card-info-person"><b>예약자 :</b> ${vo.user_id}</div>
-	               <div class="order-card-info-time"><b>픽업 시간 :</b>
-	               	<fmt:formatDate value="${vo.pickup_start}" pattern="HH:mm" />
-					~
-					<fmt:formatDate value="${vo.pickup_end}" pattern="HH:mm" />
-	               </div>
-	               <div class="order-card-info-ctime"><b>결제 금액 :</b> ${vo.quantity * vo.sale_price}₩</div>
-	               <div class="order-card-btns">
-	                   <button class="order-btn-pickup">픽업코드 : ${vo.order_code}</button>
-	                   
-	               </div>
-	           </div>
-	       </div>
-	   </div>
-</c:forEach>
-    
+
+<c:choose>
+	<c:when test="${empty order}">
+		<div class="empty-order">
+         <img src="${pageContext.request.contextPath}/img/storeorderconfirmed.png" alt="empty" class="empty-img">
+     </div>
+	</c:when>
+	<c:otherwise>
+		<c:forEach var="vo" items="${order}">
+			<div class="order-card">
+			       <div class="order-card-header">
+			           <span class="order-card-title">오굿백 ${vo.quantity}개 예약</span>
+			           <div class="order-card-button">
+			           	<c:set var="btnStatus" value="${vo.order_status eq 'pickup' ? 'complete' : 'today'}" />
+			               <button class="order-card-btn" data-status="${btnStatus}">
+			                <c:choose>
+			                	<c:when test="${vo.order_status eq 'pickup' }">픽업완료</c:when>
+			                	<c:otherwise>오늘픽업</c:otherwise>
+			                </c:choose>
+			              </button>
+			           </div>
+			           <div class="order-group">
+			               <label>
+			                   <input type="checkbox" class="order-checkbox" 
+			                   <c:if test="${not empty vo.pickup_start}">
+		  										data-pickup-start="<fmt:formatDate value='${vo.pickup_start}' pattern='yyyy-MM-dd\'T\'HH:mm:ss' />"
+											</c:if>
+			                    			data-order-no="${vo.order_no}" 
+			                    			<c:if test="${not empty vo.pickup_end}">
+		  										data-pickup-end="<fmt:formatDate value='${vo.pickup_end}' pattern='yyyy-MM-dd\'T\'HH:mm:ss' />"
+											</c:if>
+			                    			<c:if test="${vo.order_status eq 'pickup'}">checked</c:if> style="display:none; disabled">
+			                     <img class="checkbox-img" 
+										src="${pageContext.request.contextPath}/img/${vo.order_status eq 'pickup' ? 'storerealnoncheck' : 'storenoncheck'}.png" disabled/>
+			               </label>
+			           </div>
+			           
+			           <span class="order-card-date">
+			           		<fmt:formatDate value="${vo.ordered_at}" pattern="yyyy.MM.dd"/>
+			           </span>
+			       </div>
+			       <hr class="order-card-divider">
+			       <div class="order-card-body">
+			           <img src="${pageContext.request.contextPath}/img/${vo.store_img}" alt="오굿백" class="order-card-img">
+			           <div class="order-card-info">
+			               <div class="order-card-info-person"><b>예약자 :</b> ${vo.user_id}</div>
+			               <div class="order-card-info-time"><b>픽업 시간 :</b>
+			               	<fmt:formatDate value="${vo.pickup_start}" pattern="HH:mm" />
+							~
+							<fmt:formatDate value="${vo.pickup_end}" pattern="HH:mm" />
+			               </div>
+			               <div class="order-card-info-ctime"><b>결제 금액 :</b> ${vo.quantity * vo.sale_price}₩</div>
+			               <div class="order-card-btns">
+			                   <button class="order-btn-pickup">픽업코드 : ${vo.order_code}</button>
+			               </div>
+			           </div>
+			       </div>
+			   </div>
+		</c:forEach>
+	</c:otherwise>
+</c:choose>
     <script>
-        
         document.querySelectorAll('.order-checkbox').forEach(function (checkbox) {
 	         checkbox.addEventListener('change', function () {
 	            const img = this.nextElementSibling;
@@ -81,7 +86,6 @@
                 const $pickupBtn = $(this).find('.order-btn-pickup');
 
                 if (status === 'complete') {
-                    
                     $pickupBtn.css({
                         'text-decoration': 'line-through',
                         'color': '#8B6D5C'
@@ -92,7 +96,6 @@
                         'border': '1px solid #8B6D5C'
                     });
                 } else if (status === 'today') {
-                    
                     $orderBtn.css({
                         'background-color': '#D8A8AB',
                         'color': '#FFFFFF',

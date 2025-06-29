@@ -93,14 +93,19 @@ public class StoreController {
 	
 	// 이 밑에가 ajax 동적 처리 컨트롤러
 	@PostMapping("/order/{status}")
-	public String loadOrderByStatus(@PathVariable("status") String status, HttpSession session, Model model) {
+	public String loadOrderByStatus(@RequestParam("month") String month,
+									@RequestParam("year") String year,
+									@PathVariable("status") String status, 
+									HttpSession session, 
+									Model model) {
 	    Store store = (Store) session.getAttribute("store");
 	    if (store == null) {
 	        return "store/alert"; 
 	    }
-	    List<Orders> orders = storeService.getOrders(store.getStore_id(), status);
+	    String selectedDate = year + "-" + month;
+	    List<Orders> orders = storeService.getOrders(store.getStore_id(), status, selectedDate);
 	    model.addAttribute("order", orders); 
-	    System.out.println("서버 들어옴" + status);
+	    System.out.println("서버 들어옴" + status + "selectedDate : " + selectedDate);
 	    System.out.println("컨트롤러에서 order 사이즈" + orders.size());
 	    switch (status) { // fragment 에서 ajax 로 div 붙이기
 	        case "reservation":
@@ -166,7 +171,7 @@ public class StoreController {
 			return "failed";
 		}
 	}
-	
+	/*
 	// 토글에서 확정주문 클릭시 -> 확정 주문 내역 조회
 	@GetMapping("/confirmed") 
 	public String getConfirmedOrders(HttpSession sess, Model model) {
@@ -188,8 +193,8 @@ public class StoreController {
 		}
 		model.addAttribute("order", lists);
 		return "/store/confirmedorder";
-	}
-	
+	}*/
+	/*
 	// 토글에서 취소한 주문클릭시 -> 취소 주문 내역 조회
 	@GetMapping("/cancled") 
 	public String getCancledOrders(HttpSession sess, Model model) {
@@ -202,7 +207,7 @@ public class StoreController {
 		List<Orders> lists = storeService.getOrders(login.getStore_id(), "cancle");
 		model.addAttribute("order", lists);
 		return "/store/cancledorder";
-	}
+	}*/
 	
 	// 확정 주문 내역에서 체크 표시 클릭시 픽업 상태로 변경
 	@PostMapping("/confirmed/{id}/pickup")
@@ -355,7 +360,7 @@ public class StoreController {
 	    return storeService.getProductByStoreId(login.getStore_id());
 	}
 
-	// 매출확인 -> 이번달 매출 조회
+	// 매출확인 -> 이번달 매출 조회 (밑에 monthsales 쓰는데 일단 놔둠)
 	@GetMapping("/viewsales")
 	public String showViewSales(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
@@ -383,19 +388,13 @@ public class StoreController {
 	@ResponseBody
 	public StoreSales getMonthSales(@RequestParam("year") int year, @RequestParam("month") int month, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		
-		//System.out.println("year : " + year); 2025
-		//System.out.println("month : " + month); 6
-		
 		 YearMonth ym = YearMonth.of(year, month);
 		 String start = ym.atDay(1).toString();     
 		 String end = ym.atEndOfMonth().toString(); 
-		 
 		 StoreSales saleVO = storeService.getSales(login.getStore_id(), start, end);
 		 saleVO.setStart_date(start);
 		 saleVO.setEnd_date(end);
-		 String salesMonth = saleVO.getStart_date().substring(5,7);
-		 System.out.println("salesMonth : " + salesMonth);
+		 String salesMonth = saleVO.getStart_date().substring(5,7); // 월 추출
 		 model.addAttribute("saleVO", saleVO);
 		 model.addAttribute("salesMonth", salesMonth);
 		 return saleVO;

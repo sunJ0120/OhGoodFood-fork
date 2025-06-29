@@ -49,15 +49,13 @@
 			o.store_id=#{storeId} 
 			<choose>
 				<when test="type == 'confirmed'">
-					AND o.order_status IN ('confirmed', 'pickup')
-					
+					AND o.order_status IN ('confirmed', 'pickup')	
 				</when>
 				<otherwise>
 					AND o.order_status=#{type}
 				</otherwise>
 			</choose>
-			AND MONTH(o.ordered_at) = MONTH(CURDATE())
-			AND YEAR(o.ordered_at) = YEAR(CURDATE())
+			AND DATE_FORMAT(o.ordered_at, '%Y-%m') = #{selectedDate}
 		</where>
 		ORDER BY o.ordered_at DESC
 	</select>

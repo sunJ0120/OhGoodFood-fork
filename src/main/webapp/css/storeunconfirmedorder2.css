@@ -14,8 +14,8 @@ body{
     height: 100vh;
     display: flex;
     justify-content: center;
-    
 }
+
 #wrapper{
     width: 440px;
     height: 956px;
@@ -23,24 +23,29 @@ body{
     display: flex;
     flex-direction: column;
 }
+
 header{
     height: 30px;
     padding: 20px 15px 20px 15px;
     border-bottom: solid 1px #717171;
 }
+
 .header-container{
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .icon-container{
     display: flex;
     gap:10px;
     align-items: center;
 }
+
 .icon{
     width: 23px;
 }
+
 main {
     flex: 1;
     display: flex;
@@ -48,16 +53,19 @@ main {
     align-items: center;
     background: #F5F3EA;
 }
+
 .order-page-container {
     width: 390px;
     margin: 20px 0 0 0;
 }
+
 .order-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 8px;
 }
+
 .order-title {
     font-size: 22px;
     font-weight: bold;
@@ -66,30 +74,31 @@ main {
     align-items: center;
     gap: 4px;
 }
+
 .shop-name {
     font-weight: bold;
     color: #535353;
     font-size: 20px;
     font-family: 'nanumesquareneo_b';
 }
+
 .order-desc {
     color: #99A99B;
     font-size: 15px;
     font-family : 'nanumesquareneo_b';
     font-weight: normal;
 }
+
 .order-status-dropdown {
     position: relative;
-    
 }
+
 .order-status-btn {
     width : 120px;
     text-align: center;
     background: #D8A8AB;
     color: #F5F3EA;
-    
     border-radius: 12px;
-    
     padding: 10px 18px 10px 12px;
     font-size: 13px;
     font-family: 'nanumesquareneo_b';
@@ -103,6 +112,7 @@ main {
     box-shadow: none !important;
     
 }
+
 .order-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -112,6 +122,7 @@ main {
     font-size: 13px;
     margin-left: 2px;
 }
+
 .order-status-list {
     text-align: center;
     list-style: none;
@@ -127,13 +138,14 @@ main {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     z-index: 10;
-    
     padding: 6px 0;
 }
+
 .order-status-list.show {
     display: block;
     text-align: center;
 }
+
 .order-status-list li {
     padding: 8px 18px;
     font-size: 15px;
@@ -142,6 +154,7 @@ main {
     text-align: center;
     transition: background 0.15s;
 }
+
 .order-status-list li.active,
 .order-status-list li:hover {
     background: #D8A8AB;
@@ -153,27 +166,29 @@ main {
     margin-top:4px;
     margin-bottom:4px;
     text-align: center;
-
-
 }
+
 .order-section-title {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
     margin-top: 12px;
 }
+
 .section-title {
     font-size: 20px;
     font-weight: bold;
     color: #535353;
     font-family:'nanumesquareneo_b';
 }
+
 .section-desc {
     color: #99A99B;
     font-family:'nanumesquareneo_b';
     font-size: 15px;
     margin-left: 6px;
 }
+
 .order-list-area {
     padding: 18px 0;
     min-height: 420px;
@@ -192,6 +207,7 @@ main {
     overflow-x: hidden;
     scrollbar-width: none; 
 }
+
 .empty-order {
     display: flex;
     flex-direction: column;
@@ -201,15 +217,13 @@ main {
     height:100%;
     margin-top: 40px;
 }
+
 .empty-img {
     width: 340px;
     display: block;
     margin-left: auto;
     margin-right: auto;
-    
-    
 }
-
 
 footer{
     height: 120px;
@@ -219,6 +233,7 @@ footer{
     justify-content: center;
     align-items: center;
 }
+
 .footer-container{
     display: flex;
     align-items: center;
@@ -228,11 +243,13 @@ footer{
     background-color: #99A99B;
     border-radius: 10px;
 }
+
 .menu-container{
     display: flex;
     align-items: center;
     gap:25px;
 }
+
 .menu-item {
     display: flex;
     flex-direction: column;
@@ -243,6 +260,7 @@ footer{
     border-radius: 8px;
     cursor: pointer;
 }
+
 .menu-item.active {
     background-color: #F5F3EA; 
 }
@@ -254,7 +272,6 @@ footer{
     font-family: 'nanumesquareneo_b';
 }
 
-
 .order-card {
     width: 92%;
     background: #ECE5DD;
@@ -263,10 +280,12 @@ footer{
     box-sizing: border-box;
     margin-bottom: 0;
 }
+
 .order-card:nth-of-type(2n-1) {
     background-color: #E5DFD5;
     border : 1px solid #99A99B;
 }
+
 .order-card:nth-of-type(2n) {
     background-color: #F5F3EA;
     border : 1px solid #99A99B;
@@ -309,7 +328,6 @@ footer{
 
 .order-card-img {
     width: 130px;
-    
     border-radius: 8px;
     object-fit: cover;
     flex-shrink: 0;
@@ -332,11 +350,11 @@ footer{
     font-family: 'nanumesquareneo';
     font-weight: bold;
 }
+
 .order-card-info div {
     color : #000000;
     font-size: 15px;
     font-family: 'nanumesquareneo';
-    
 }
 
 .order-card-btns {
@@ -344,7 +362,6 @@ footer{
     display: flex;
     gap: 10px;
     justify-content: flex-end;
-    
 }
 
 .order-btn {
@@ -365,5 +382,4 @@ footer{
 .order-btn.cancel {
     background: #FFFFFF;
     color: #8B6D5C;
-   
 }

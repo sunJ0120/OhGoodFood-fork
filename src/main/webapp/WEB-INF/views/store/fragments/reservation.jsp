@@ -49,9 +49,6 @@
 </c:choose>
 
 <script>
-  const contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
-</script>
-<script>
 
 	function buttonAbled() {
 		// 확정시간 시작 1시간전 ~ 학정시간 시작 까지만 활성화

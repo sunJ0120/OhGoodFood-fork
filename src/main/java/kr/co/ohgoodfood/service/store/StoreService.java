@@ -16,7 +16,7 @@ public interface StoreService {
 
 	public List<Review> getReviews(String storeId);
 
-	public List<Orders> getOrders(String storeId, String type);
+	public List<Orders> getOrders(String storeId, String type, String selectedDate);
 
 	public int confirmOrders(int id, String type);
 

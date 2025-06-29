@@ -179,8 +179,8 @@ public class StoreServiceImpl implements StoreService {
 	
 	//가게 주문내역 조회(미확정, 확정, 취소)
 	@Override
-	public List<Orders> getOrders(String storeId, String type) {
-		return mapper.getOrders(storeId, type);
+	public List<Orders> getOrders(String storeId, String type, String selectedDate) {
+		return mapper.getOrders(storeId, type, selectedDate);
 	}
 	
 	//미확정 주문 -> 확정 주문으로 바꾸기

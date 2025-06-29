@@ -24,7 +24,7 @@ public interface StoreMapper {
 
 	public int insert(Store vo);
 
-	public List<Orders> getOrders(@Param("storeId") String storeId, @Param("type") String type);
+	public List<Orders> getOrders(@Param("storeId") String storeId, @Param("type") String type, @Param("selectedDate") String selectedDate);
 
 	public int confirmOrders(@Param("id") int id, @Param("type") String type);
 
