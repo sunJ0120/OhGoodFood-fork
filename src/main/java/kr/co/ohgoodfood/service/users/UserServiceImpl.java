@@ -64,7 +64,7 @@ public class UserServiceImpl implements UsersService{
         for(MainStore mainStore : mainStoreList){
             mainStore.setPickup_status(getPickupDateStatus(mainStore));
             mainStore.setCategory_list(getCategoryList(mainStore));
-            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), " | "));
+            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
         }
         log.info("[log/UserServiceImpl.getMainStoreList] mainStoreList 결과 log : {}", mainStoreList);
 
@@ -85,7 +85,7 @@ public class UserServiceImpl implements UsersService{
 
         mainStore.setPickup_status(getPickupDateStatus(mainStore));
         mainStore.setCategory_list(getCategoryList(mainStore));
-        mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), " | "));
+        mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
 
         log.info("[log/UserServiceImpl.getMainStoreOne] mainStore 결과 log : {}", mainStore);
 
