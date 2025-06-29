@@ -249,6 +249,19 @@ public class UsersController {
         return "redirect:/user/orderList";
     }
 
+    @GetMapping("/map/pin")
+    public String getMapPinStore(@ModelAttribute UserMainFilter userMainFilter,
+                                 @RequestParam("store_id") String store_id,
+                                 Model model){
+
+        userMainFilter.setStore_id(store_id);
+        MainStore mainStore = usersService.getMainStoreOne(userMainFilter);
+        model.addAttribute("mainStore", mainStore);
+
+        //fragment return
+        return "users/fragment/userMapPinStore";
+    }
+
     /**
      *  사용자 회원가입
      */

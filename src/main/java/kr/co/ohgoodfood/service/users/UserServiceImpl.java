@@ -7,7 +7,6 @@ import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -52,7 +50,6 @@ public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
 	private final AwsS3Config awsS3Config;
 
-
     /**
      * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
      *
@@ -67,11 +64,32 @@ public class UserServiceImpl implements UsersService{
         for(MainStore mainStore : mainStoreList){
             mainStore.setPickup_status(getPickupDateStatus(mainStore));
             mainStore.setCategory_list(getCategoryList(mainStore));
-            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "/"));
+            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), " | "));
         }
         log.info("[log/UserServiceImpl.getMainStoreList] mainStoreList 결과 log : {}", mainStoreList);
 
         return mainStoreList;
+    }
+
+    /**
+     * 지도에 표시할 가게 정보를 가져오는 method
+     *
+     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. main에서 사용하는걸 그대로 사용한다
+     * @return               : mainStoreList (MainStore DTO의 리스트 객체)
+     */
+    //selectOneStoreByStoreId
+    @Override
+    public MainStore getMainStoreOne(UserMainFilter userMainFilter){
+
+        MainStore mainStore = userMapper.selectOneStoreByStoreId(userMainFilter);
+
+        mainStore.setPickup_status(getPickupDateStatus(mainStore));
+        mainStore.setCategory_list(getCategoryList(mainStore));
+        mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), " | "));
+
+        log.info("[log/UserServiceImpl.getMainStoreOne] mainStore 결과 log : {}", mainStore);
+
+        return mainStore;
     }
 
     /**

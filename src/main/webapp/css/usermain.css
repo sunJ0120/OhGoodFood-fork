@@ -160,6 +160,33 @@ main {
     height: 100%;
 }
 
+.storePinModalWrapper{
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 100;
+}
+
+.storePinModal {
+    position: relative;     /* wrapper가 위치를 담당하므로 relative */
+    width: 100%;
+    max-width: 355px;
+    margin: 0 10px;
+
+    pointer-events: all;    /* 클릭을 받아야 하므로 wrapper 투과 처리 보완 */
+    background-color: #fff;
+    cursor: pointer;
+
+    max-height: 50%;
+    overflow-y: auto;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10pt;
+}
+
 .productList {
     display: flex;
     flex-direction: column;
