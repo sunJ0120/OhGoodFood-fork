@@ -25,7 +25,6 @@ import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.BookmarkDelete;
 import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.PickupStatus;

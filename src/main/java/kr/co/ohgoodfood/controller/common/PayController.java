@@ -52,7 +52,7 @@ public class PayController {
     public Map<String, Object> insertPayment(@RequestParam String user_id, @RequestParam String store_id, 
             @RequestParam int product_no, @RequestParam int quantity, @RequestParam int paid_price) {
         String orderId = "order_" + UUID.randomUUID();
-        if(payService.checkProductAmount(product_no, quantity)) {
+        if(payService.checkProductAmount(product_no, quantity) && payService.getStoreStatus(store_id)) {
             payService.insertOrderAndPaid(user_id, store_id, product_no, quantity, paid_price,orderId);
             Map<String, Object> map = new HashMap<>();
             map.put("result", "success");
@@ -91,7 +91,8 @@ public class PayController {
             .build();
 
         try (Response response = okHttpClient.newCall(request).execute()) {
-            if (response.isSuccessful() && payService.checkProductAmountByPaidCode(orderId)) {
+            if (response.isSuccessful() && payService.checkProductAmountByPaidCode(orderId) 
+            && payService.getStoreStatusByPaidCode(orderId)) {
                 System.out.println("결제 성공");
                 payService.updateOrderStatusAndPaidStatus(orderId);
                 return "redirect:/user/orderList";

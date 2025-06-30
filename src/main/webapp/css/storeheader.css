@@ -32,3 +32,6 @@ header{
 .icon{
     width: 23px;
 }
+.logoutIcon{
+    margin-top: -4px;
+}

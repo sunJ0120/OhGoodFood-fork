@@ -29,6 +29,8 @@ public class CommonController {
 	public String login(HttpServletRequest request, HttpSession sess, Model model) {
 		String id = request.getParameter("id"); // 아이디 파라미터로
 		String pwd = request.getParameter("pwd"); // 비번 파라미터로 가져옴
+		sess.invalidate();
+		sess = request.getSession(true);
 		Account account = commonService.loginAccount(id, pwd);
 		if(account != null) {
 			sess.setAttribute("user", account);

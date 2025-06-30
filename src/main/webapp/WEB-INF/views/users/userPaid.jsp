@@ -22,21 +22,29 @@
                     <div class="productInfo">
                         <img id=storeImg src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/init.jpg">
                         <div class="productInfoSub">
-                            <p id="storeName">가게이름</p>
-                            <p id="productPriceEtc">개당 가격 &#8361;</p>
+                            <p id="storeName">${productDetail.store_name}</p>
+                            <p id="productPriceEtc">${productDetail.sale_price} &#8361;</p>
                             <div class="pickupTimeDiv">
                                 <p id="pickupTimeText">픽업 시간</p>
-                                <p id="pickupTime">00:00 ~ 00:00</p>
+                                <p id="pickupTime">
+                                    <fmt:formatDate value="${productDetail.pickup_start}"
+                                        pattern="HH:mm" /> ~
+                                    <fmt:formatDate value="${productDetail.pickup_end}"
+                                        pattern="HH:mm" />
+                                </p>
                             </div>
                             <div class="confirmedTimeDiv">
                                  <p id="confirmedTimeText">확정 시간</p>
-                                <p id="confirmedTime">00:00 ~ 00:00</p>
+                                <p id="confirmedTime">
+                                    <fmt:formatDate value="${productDetail.reservation_end}"
+                                        pattern="HH:mm" />
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div class="productAmount">
                         <p class="productAmountText">
-                            &ensp;&ensp;수량&ensp;( 최대 : Amount )
+                            &ensp;&ensp;수량&ensp;( 최대 : ${productDetail.amount} )
                         </p>
                         <div class="productAmountSub">
                             <img id="amountMinus"" src="../../../img/user_minusButton.png">
@@ -55,7 +63,7 @@
                             <p class="productTotalPrice">
                                 
                             </p>
-                            <input id="totalPrice" type="hidden" name="paid_price" value="1000">
+                            <input id="totalPrice" type="hidden" name="paid_price" value="${productDetail.sale_price}">
                         </div>
                     </div>
                 </div>
@@ -155,7 +163,7 @@
         })
 
         $("#amountPlus").click(function(){
-            if($("#totalQuantity").val() < 5 ){
+            if($("#totalQuantity").val() < "${productDetail.amount}" ){
                 $("#totalQuantity").val(parseInt($("#totalQuantity").val())+1);
                 $(".productQuantity").html($("#totalQuantity").val());
                 $(".productTotalPrice").html((parseInt($("#totalPrice").val())*$("#totalQuantity").val()).toLocaleString('ko-KR') + " 원");
@@ -185,10 +193,10 @@
                 type: "POST",
                 url: "/payment/insert",
                 data: {
-                    user_id: "u01",
-                    store_id: "st01",
+                    user_id: "${user.user_id}",
+                    store_id: "${productDetail.store_id}",
                     quantity: $("#totalQuantity").val(),
-                    product_no: 1,
+                    product_no: "${productDetail.product_no}",
                     paid_price: $("#totalPrice").val()
                 },
                 dataType: "json",

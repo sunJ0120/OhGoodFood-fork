@@ -13,4 +13,8 @@ public interface PayService {
     public boolean updateOrderCanceldFromByPaidCode(String paid_code);
     // 결제 실패 시 주문 canceld_from 가져오기
     public String getOrderCanceldFromByPaidCode(String paid_code);
+    // 가게 상태 확인하기 
+    public boolean getStoreStatus(String store_id);
+    // Paid_code로 가게 상태 확인하기
+    public boolean getStoreStatusByPaidCode(String paid_code);
 }
