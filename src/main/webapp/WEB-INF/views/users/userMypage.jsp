@@ -54,12 +54,10 @@
                   <div class="reviewList">
                     <c:choose>
                       <c:when test="${empty userMypage.reviews}">
-                        <div class="emptyModal">
                           <div class="modalWrapper">
                             <img src="${pageContext.request.contextPath}/img/user_noreview.png" alt="리뷰없는고양이"
                               class="emptyModalEmoji" />
                           </div>
-                        </div>
                       </c:when>
                       <c:otherwise>
                         <c:forEach var="review" items="${userMypage.reviews}">
