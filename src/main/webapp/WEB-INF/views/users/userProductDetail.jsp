@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <!DOCTYPE html>
             <html lang="ko">
 
@@ -36,7 +36,12 @@
                                 <!-- 제품명/가격 헤더 -->
                                 <div class="storeHeader">
                                     <div class="storeName">${productDetail.store_name}</div>
-                                    <div class="statusBadge" data-status="soldout">매진(17:30)</div> <!--상태 업데이트-->
+                                    <div class="statusBadge" data-status="${productDetail.pickupStatus.name()}"
+                                        data-remaining="${productDetail.amount}">
+                                        <span class="statusBadgeText">
+                                            ${productDetail.pickupStatus.displayName}
+                                        </span>
+                                    </div>
                                     <div class="productPrice">
                                         <span class="original">${productDetail.origin_price} ₩</span>
                                         <span class="discounted">${productDetail.sale_price} ₩</span>
@@ -52,7 +57,7 @@
                                     <div class="tabs">
                                         <button class="tab active">오굿백 정보</button>
                                         <button class="tab">리뷰 (
-                                            <c:out value='${productDetail.reviewCount}'/>)
+                                            <c:out value='${productDetail.reviewCount}' />)
                                         </button>
                                     </div>
 
@@ -101,8 +106,10 @@
                                                 <span class="infoLabel">영업시간</span>
                                                 <span class="pickupdiv">|</span>
                                                 <span class="infoValue">
-                                                    <fmt:formatDate value="${productDetail.opened_at}"   pattern="HH:mm" /> ~
-                                                    <fmt:formatDate value="${productDetail.closed_at}"   pattern="HH:mm" />
+                                                    <fmt:formatDate value="${productDetail.opened_at}"
+                                                        pattern="HH:mm" /> ~
+                                                    <fmt:formatDate value="${productDetail.closed_at}"
+                                                        pattern="HH:mm" />
                                                 </span>
                                             </li>
                                             <div class="addRow">
@@ -111,15 +118,28 @@
                                                 <span class="addLabel">📞</span>
                                                 <span class="addValue">${productDetail.store_telnumber}</span>
                                             </div>
-                                            <div >
-                                                  <span class="note2">${productDetail.store_explain}</span>
+                                            <div>
+                                                <span class="note2">${productDetail.store_explain}</span>
                                             </div>
                                         </div>
 
-                                        <!-- 주문 버튼 -->
+                                        <!-- 주문 버튼 영역: 초기 렌더링 -->
                                         <div id="orderArea">
-
-                                            <div class="orderSoldout">마감</div>
+                                            <c:choose>
+                                                <c:when test="${productDetail.pickupStatus.name() eq 'SOLD_OUT'}">
+                                                    <div class="orderSoldout">매진</div>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <form action="${pageContext.request.contextPath}/user/userPaid"
+                                                        method="post">
+                                                        <input type="hidden" name="productNo"
+                                                            value="${productDetail.product_no}" />
+                                                        <button type="submit" class="orderButton">
+                                                            구매하기(${productDetail.amount}개 남음)
+                                                        </button>
+                                                    </form>
+                                                </c:otherwise>
+                                            </c:choose>
                                         </div>
 
                                     </div>
@@ -129,7 +149,12 @@
                                     <div class="reviewSection">
                                         <c:choose>
                                             <c:when test="${empty reviews}">
-                                                <p style="text-align:center; padding:20px;">등록된 리뷰가 없습니다.</p>
+                                                <div class="emptyModal">
+                                                    <div class="modalWrapper">
+                                                        <img src="${pageContext.request.contextPath}/img/user_noreviewstore.png"
+                                                            alt="리뷰없는고양이" class="emptyModalEmoji" />
+                                                    </div>
+                                                </div>
                                             </c:when>
                                             <c:otherwise>
                                                 <c:forEach var="r" items="${reviews}">
@@ -139,7 +164,8 @@
                                                             alt="리뷰 이미지" />
                                                         <div class="reviewerName">${r.user_nickname}</div>
                                                         <div class="reviewedDate">
-                                                            <fmt:formatDate value="${r.writed_at}"  pattern="yyyy.MM.dd" />
+                                                            <fmt:formatDate value="${r.writed_at}"
+                                                                pattern="yyyy.MM.dd" />
                                                         </div>
                                                         <hr class="line" />
                                                         <p class="reviewContent">${r.review_content}</p>
@@ -159,35 +185,36 @@
 
                 <script>
                     $(function () {
-                        // 1) 상태 배지 셋업
-                        var $badge = $(".statusBadge");
-                        var status = $badge.data("status"); // "soldout" or "available"
-                        var $orderArea = $("#orderArea");
+                        // // 1) 상태 배지 셋업
+                        // var $badge = $(".statusBadge");
+                        // var status = $badge.data("status"); // "soldout" or "available"
+                        // var $orderArea = $("#orderArea");
 
-                        if (status === "soldout") {
-                            $badge.removeClass("available").addClass("soldout")
-                                .text("매진(" + $badge.text().match(/\d{2}:\d{2}/)[0] + ")");
-                            $orderArea.html('<div class="orderSoldout">마감</div>');
-                        } else {
-                            $badge.removeClass("soldout").addClass("available").text("판매중");
-                            $orderArea.html('<button class="orderButton">구매하기(' +
-                                $(".statusBadge").data("remaining") + '개 남음)</button>');
-                        }
+                        // if (status === "soldout") {
+                        //     $badge.removeClass("available").addClass("soldout")
+                        //         .text("매진(" + $badge.text().match(/\d{2}:\d{2}/)[0] + ")");
+                        //     $orderArea.html('<div class="orderSoldout">마감</div>');
+                        // } else {
+                        //     $badge.removeClass("soldout").addClass("available").text("판매중");
+                        //     $orderArea.html('<button class="orderButton">구매하기(' +
+                        //         $(".statusBadge").data("remaining") + '개 남음)</button>');
+                        // }
 
                         // 초기 상태
-                        $('.infoContent').removeClass('hidden');
-                        $('.reviewSection').addClass('hidden');
+                        // 초기 상태
+                        $('.infoContent').show();
+                        $('.reviewSection').hide();
 
-                        // 탭 클릭 토글
                         $('.tabs .tab').on('click', function () {
                             var idx = $(this).index();
                             $('.tabs .tab').removeClass('active').eq(idx).addClass('active');
+
                             if (idx === 0) {
-                                $('.infoContent').removeClass('hidden');
-                                $('.reviewSection').addClass('hidden');
+                                $('.infoContent').show();
+                                $('.reviewSection').hide();
                             } else {
-                                $('.infoContent').addClass('hidden');
-                                $('.reviewSection').removeClass('hidden');
+                                $('.infoContent').hide();
+                                $('.reviewSection').show();
                             }
                         });
 

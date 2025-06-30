@@ -14,7 +14,7 @@
         <div class="iconContainer">
             <%-- 알람 이동 --%>
             <a href="${pageContext.request.contextPath}/user/alarm">
-                <img src="${pageContext.request.contextPath}/img/user_alarm_active.png" alt="알람" class="icon">
+                <img src="${pageContext.request.contextPath}/img/user_alarm.png" alt="알람" class="icon alarmIcon">
             </a>
             <%-- 즐겨찾기 적용 --%>
             <a href="${pageContext.request.contextPath}/user/bookmark">

@@ -87,4 +87,17 @@
             e.preventDefault();
         }
     });
+
+    // 새로운 알람이 있을 시 알람 이미지 변경
+    $(document).ready(function () {
+        $.ajax({
+            type: "POST",
+            url: "/user/alarmcheck",
+            success: function(res){
+                if(res == true || res === "true"){
+                    $(".alarmIcon").attr('src', '${pageContext.request.contextPath}/img/user_alarm_active.png');
+                }
+            }
+        });
+    });
 </script>

@@ -93,4 +93,18 @@ public class PayServiceImpl implements PayService {
     public String getOrderCanceldFromByPaidCode(String paid_code) {
         return payMapper.getOrderCanceldFromByPaidCode(paid_code);
     }
+
+    // 가게 상태 확인하기
+    @Override
+    public boolean getStoreStatus(String store_id) {
+        String storeStatus = payMapper.getStoreStatus(store_id);
+        return storeStatus.equals("Y");
+    }
+
+    // Paid_code로 가게 상태 확인하기
+    @Override
+    public boolean getStoreStatusByPaidCode(String paid_code) {
+        String storeStatus = payMapper.getStoreStatusByPaidCode(paid_code);
+        return storeStatus.equals("Y");
+    }
 }

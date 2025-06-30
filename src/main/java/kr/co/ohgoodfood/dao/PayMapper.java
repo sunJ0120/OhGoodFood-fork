@@ -30,4 +30,8 @@ public interface PayMapper {
     public void updateOrderCanceldFromByPaidCode(String paid_code);
     // paid_code로 주문 canceld_from 가져오기
     public String getOrderCanceldFromByPaidCode(String paid_code);
+    // 가게 상태 확인하기
+    public String getStoreStatus(String store_id);
+    // Paid_code로 가게 상태 확인하기
+    public String getStoreStatusByPaidCode(String paid_code);
 }

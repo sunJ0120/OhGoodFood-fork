@@ -60,4 +60,14 @@
     <select id="getOrderCanceldFromByPaidCode" parameterType="String" resultType="String">
         SELECT canceld_from FROM Orders WHERE order_no = (SELECT order_no FROM Paid WHERE paid_code = #{paid_code});
     </select>
+
+    <!-- 가게 상태 확인하기 -->
+    <select id="getStoreStatus" parameterType="String" resultType="String">
+        SELECT store_status FROM Store WHERE store_id = #{store_id};
+    </select>
+
+    <!-- Paid_code로 가게 상태 확인하기 -->
+    <select id="getStoreStatusByPaidCode" parameterType="String" resultType="String">
+        SELECT store_status FROM Store WHERE store_id = (SELECT store_id FROM Orders WHERE order_no = (SELECT order_no FROM Paid WHERE paid_code = #{paid_code}));
+    </select>
 </mapper>
