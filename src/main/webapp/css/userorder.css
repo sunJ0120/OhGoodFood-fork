@@ -334,6 +334,10 @@ main {
     font-weight: bold;
 }
 
+.orderReviewDone {
+    background-color: #B5A295; /* 연한 색으로 표현.. 왜인지 지금 오퍼시티 안먹혀서 */
+}
+
 .hidden {
     display: none !important;
 }

@@ -27,6 +27,7 @@ public class UserOrder extends MainStore{
 
     //[추가 정보] DB에는 없는 추가 정보
     private Boolean block_cancel; //확정 시간 한 시간 전에 취소하지 못하도록 변수 생성
+    private Boolean has_review; //리뷰가 존재하는 주문인지 판단하기 위함이다.
 
     //Paid 테이블에서 가져오는 정보
     private int paid_no;
