@@ -70,11 +70,10 @@
         <%-- 지도 api 영역 --%>
         <div class="mapWrapper" style="display: none;">
           <%-- 지도 안에 있는 modal --%>
-          <div class="storePinModalWrapper">
-            모달모달 위치~
-          </div>
-
-          <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapAppKey}"></script>
+          <div class="storePinModalWrapper"></div>
+          <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapAppKey}&libraries=clusterer"></script>
+          <%-- 이 위치에서 검색 버튼 --%>
+          <button class="btnSetCenter">이 위치에서 검색</button>
         </div>
       </div>
     </div>
@@ -82,6 +81,7 @@
 
   <%-- footer include --%>
   <%@ include file="/WEB-INF/views/users/footer.jsp" %>
+
 </div>
 <%-- JQuery CDN --%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -146,20 +146,26 @@
   let myLatitude;
   let myLongitude;
 
-  //임시 오차 보정값
-  const offsetLatitude = 0.00385684;
-  const offsetLongitude = 0.00604964;
-
-  // const offsetLatitude = 0;
-  // const offsetLongitude = 0;
-
   //현재 띄워진 마커를 담는 전역 리스트
   let storeMarkers = [];
-
   let filterParams = {}; // 최종적으로 전송할 JSON 객체
+
+  let selectedMarker = null;         // 이전에 클릭된 마커 참조
+  let selectedMarkerPos = null;      // 이전에 클릭된 마커의 pos 정보
+
+  let closePin = "${pageContext.request.contextPath}/img/user_close_pin.png";
+  let openPin  = "${pageContext.request.contextPath}/img/user_open_pin.png";
+
+  // hover시 나타나는 window를 조정하기 위한 값들
+  let pinHoverModal = document.querySelector('.mapPinHoverWrapper');
+  // cluster 처리를 위한 전역변수, 전역으로 선언만 해둔다.
+  let clusterer = null;
 
   //마커 초기화 함수
   function clearStoreMarkers() {
+    if (clusterer) {
+      clusterer.clear();    // 클러스터안의 모든 마커를 비워야 한다.
+    }
     storeMarkers.forEach(m => m.setMap(null));  // 지도에서 제거
     storeMarkers = [];
   }
@@ -167,9 +173,6 @@
   //마커 그리는 함수
   function drawStoreMarkers() {
     const positions = getProductListLatLong();  // [{store_status, latlng}, …]
-    const closePin = "${pageContext.request.contextPath}/img/user_close_pin.png";
-    const openPin  = "${pageContext.request.contextPath}/img/user_open_pin.png";
-
     positions.forEach(pos => {
       const imageSize  = new kakao.maps.Size(30, 30);
       const imgSrc     = (pos.store_status === 'Y' && pos.amount > 0) ? openPin : closePin;
@@ -180,14 +183,57 @@
         image:    markerImg
       });
       storeMarkers.push(marker);
-      markerClickEventSetter(marker,pos);
+      markerClickEventSetter(marker,pos,openPin,closePin);
     });
+    // 마커 생성이 끝난 뒤에 한 번 호출해서 클러스터에 담기
+    // clusterer 가 준비된 경우에만 실행
+    if (clusterer) {
+      clusterer.addMarkers(storeMarkers);
+    }
+  }
+
+  //마커 크기 원래대로 reset 하는 함수, 외부를 눌러서 reset될 경우 진행한다.
+  function resetSelectedMarker(){
+    // 이전에 클릭된 마커가 없으면 return 한다.
+    if (!selectedMarker) {
+      return;
+    }
+    const imgSrc = (selectedMarkerPos.store_status === 'Y' && selectedMarkerPos.amount > 0) ? openPin : closePin;
+    selectedMarker.setImage(new kakao.maps.MarkerImage(imgSrc, new kakao.maps.Size(30, 30)));
+
+    // 기존에 선택된 마커들 없애기, 이제 선택됐던 마커가 없어야 하므로 초기화한다.
+    selectedMarker = null;
+    selectedMarkerPos = null;
   }
 
   //마커에 클릭 이벤트 주입, 리스트 요소를 주입
-  function markerClickEventSetter(marker,pos){
+  function markerClickEventSetter(marker,pos,openPin,closePin){
     // 클릭 이벤트 등록
     kakao.maps.event.addListener(marker, 'click', function() {
+      //새로운 마커를 클릭할 경우
+      if(!selectedMarkerPos){
+        //현재 클릭된 마커 크기를 키운다.
+        const newSrc = (pos.store_status === 'Y' && pos.amount > 0) ? openPin : closePin;
+        marker.setImage(new kakao.maps.MarkerImage(newSrc, new kakao.maps.Size(40, 40)));
+
+        //현재 선택된 마커로 선택 마커를 업데이트 한다.
+        selectedMarker = marker;
+        selectedMarkerPos = pos;
+      }else{
+        // 기존에 선택된 마커가 있으면 종료
+        if (selectedMarker) {
+          resetSelectedMarker();
+        }
+
+        //현재 클릭된 마커 크기를 키운다.
+        const newSrc = (pos.store_status === 'Y' && pos.amount > 0) ? openPin : closePin;
+        marker.setImage(new kakao.maps.MarkerImage(newSrc, new kakao.maps.Size(40, 40)));
+
+        //현재 선택된 마커로 선택 마커를 업데이트 한다.
+        selectedMarker = marker;
+        selectedMarkerPos = pos;
+      }
+
       $.ajax({
         url: '${pageContext.request.contextPath}/user/map/pin',
         type: 'GET',
@@ -203,7 +249,7 @@
         error: function(xhr, status, err) {
           console.error("AJAX 오류", status, err);
         }
-    });
+      });
     });
   }
 
@@ -270,6 +316,23 @@
       center: center,
       level: 3
     });
+
+    // map이 준비된 다음에, 클러스터러도 한 번만 생성하도록 한다.
+    clusterer = new kakao.maps.MarkerClusterer({
+      map: map,
+      averageCenter: true,
+      minLevel: 5, //일단 5로 잡아둔다.
+      disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정
+    });
+
+    // 클러스터 클릭 이벤트를 등록한다.
+    kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
+      // 현 지도 레벨보다 1단계 확대한 레벨
+      const level = map.getLevel() - 1;
+      // 클러스터 중심을 앵커로 삼아 레벨을 조정
+      map.setLevel(level, { anchor: cluster.getCenter() });
+    });
+
     init = true;
   }
 
@@ -370,8 +433,8 @@
     //위치 정보 허용에 따른 위도 경도값 지정
     try {
       coords = await getCurrentLocation();   // 위치 허용 다이얼로그 뜸
-      myLatitude = coords.latitude + offsetLatitude;
-      myLongitude = coords.longitude + offsetLongitude;
+      myLatitude = coords.latitude;
+      myLongitude = coords.longitude;
 
       console.log("현재 내 위도 경도 위치 : ", coords.latitude + ", " + coords.longitude);
       console.log("offset 적용한 현재 내 위도 경도 위치 : ", myLatitude + ", " + myLongitude);
@@ -463,10 +526,12 @@ function productCardClickEvent() {
 <%-- pin에 있는 storePinModal 누르면 상세 이동 --%>
 <script>
     function storePinModalClickEvent() {
+        const $mapWrapper = $('.mapWrapper');
         const $wrapper = $('.storePinModalWrapper');
         $wrapper.removeClass('hidden'); //새로운 핀 클리기 히든 해제
-        const $modal   = $wrapper.find('.storePinModal');
+        const $modal = $wrapper.find('.storePinModal');
 
+        $mapWrapper.addClass('modalOpen'); //modalOpen 후 높이 변경하는 이벤트 추가
         $modal.on('click', function(){
             const store_status = $(this).data('storeStatus');
             const no = $(this).data('productNo');
@@ -486,21 +551,21 @@ function productCardClickEvent() {
             e.stopPropagation();
         });
 
-        // 모달 외부 클릭시 모달 숨기기
-        $(document)
-        .off('click.modalOutside')
-        .on('click.modalOutside', function(e) {
-            // 모달이 보이는 상태이고
-            // 클릭한 요소가 wrapper 내부가 아니면
-            if (
-                $wrapper.is(':visible') &&
-                $(e.target).closest('.storePinModalWrapper').length === 0
-            ) {
-                $wrapper.addClass('hidden');
-                // 한 번 닫으면 리스너 해제
-                $(document).off('click.modalOutside');
-            }
-        });
+        // // 모달 외부 클릭시 모달 숨기기
+        // $(document)
+        // .off('click.modalOutside')
+        // .on('click.modalOutside', function(e) {
+        //     // 모달이 보이는 상태이고
+        //     // 클릭한 요소가 wrapper 내부가 아니면
+        //     if (
+        //         $wrapper.is(':visible') &&
+        //         $(e.target).closest('.storePinModalWrapper').length === 0
+        //     ) {
+        //         $wrapper.addClass('hidden');
+        //         // 한 번 닫으면 리스너 해제
+        //         $(document).off('click.modalOutside');
+        //     }
+        // });
     }
 </script>
 </body>
