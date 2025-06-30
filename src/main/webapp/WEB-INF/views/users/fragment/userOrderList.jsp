@@ -40,6 +40,7 @@
                                             <c:when test="${userOrder.canceld_from eq 'store'}">
                                                 가게 취소
                                             </c:when>
+                                            <%-- 임시이다. 차피 데이터 수정되면 cancel에 @@취소 이게 안 붙어 있을리가 없어서 사라질 부분임 --%>
                                             <c:otherwise>
                                                 취소
                                             </c:otherwise>
@@ -50,15 +51,10 @@
                                         픽업 완료
                                     </c:when>
 
+                                    <%-- 오늘 픽업, 내일 픽업은 확정일시 말한다. --%>
                                     <c:when test="${userOrder.order_status eq 'confirmed'}">
                                         ${userOrder.pickup_status.displayName}
                                     </c:when>
-
-                                    <%-- 임시로 넣어줌 --%>
-                                    <c:otherwise>
-                                        ${userOrder.pickup_status.displayName}
-                                    </c:otherwise>
-
                                 </c:choose>
                             </div>
                             <div class="orderDate">

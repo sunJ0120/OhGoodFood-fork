@@ -8,7 +8,7 @@
     <!-- selectAllStore mapper, main에서 이용한다. -->
     <select id="selectAllStore" parameterType="map" resultType="kr.co.ohgoodfood.dto.MainStore">
         SELECT
-            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at,
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at, s.latitude AS latitude, s.longitude AS longitude,
             pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
             img.first_img AS store_img
         FROM Store s
@@ -23,8 +23,9 @@
             GROUP BY store_id
         ) img ON img.store_id = s.store_id
         <where>
+            s.confirmed = 'Y'
             <if test="filter.store_status != null">
-                AND s.store_status = #{filter.store_status} AND pf.amount >= ${filter.amount}
+                AND s.store_status = #{filter.store_status} AND pf.amount >= #{filter.amount}
             </if>
             <if test="filter.pickup_start != null">
                 AND DATE(pf.pickup_start) = #{filter.pickup_start}
@@ -41,6 +42,14 @@
             <if test="filter.category_others != null">
                 AND s.category_others = #{filter.category_others}
             </if>
+            <!-- 위도/경도 필터링: 반경 500m -->
+            <if test="filter.latitude != null and filter.longitude != null">
+<!--                AND s.latitude  BETWEEN #{filter.latitude}  - 0.005 AND #{filter.latitude}  + 0.005-->
+<!--                AND s.longitude BETWEEN #{filter.longitude} - 0.006 AND #{filter.longitude} + 0.006-->
+                <!-- TEST 오차때문에 임시로 넓게 잡음 -->
+                AND s.latitude  BETWEEN #{filter.latitude}  - 0.01 AND #{filter.latitude}  + 0.01
+                AND s.longitude BETWEEN #{filter.longitude} - 0.02 AND #{filter.longitude} + 0.02
+            </if>
             <!-- 가게 이름, 가게 대표 메뉴, 가게 주소, 가게 상세 검색 필터링 추가 -->
             <if test="filter.search != null and filter.search != ''">
                 AND (
@@ -49,6 +58,65 @@
                     OR pf.product_explain LIKE CONCAT('%', #{filter.search}, '%')
                 )
             </if>
+        </where>
+        ORDER BY (s.store_status = 'N') ASC;
+    </select>
+
+    <!-- selectOneStoreByStoreId mapper, main map에서 이용한다. -->
+    <select id="selectOneStoreByStoreId" parameterType="map" resultType="kr.co.ohgoodfood.dto.MainStore">
+        SELECT
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at, s.latitude AS latitude, s.longitude AS longitude,
+            pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
+            img.first_img AS store_img
+        FROM Store s
+        LEFT JOIN Product pf
+            ON pf.store_id = s.store_id
+            AND DATE(pf.reservation_end) = CURDATE()
+        LEFT JOIN (
+            SELECT
+                store_id,
+                MIN(store_img) AS first_img
+            FROM Image
+            GROUP BY store_id
+        ) img ON img.store_id = s.store_id
+        <where>
+            s.confirmed = 'Y'
+            <if test="filter.store_status != null">
+                AND s.store_status = #{filter.store_status} AND pf.amount >= #{filter.amount}
+            </if>
+            <if test="filter.pickup_start != null">
+                AND DATE(pf.pickup_start) = #{filter.pickup_start}
+            </if>
+            <if test="filter.category_bakery != null">
+                AND s.category_bakery = #{filter.category_bakery}
+            </if>
+            <if test="filter.category_fruit != null">
+                AND s.category_fruit = #{filter.category_fruit}
+            </if>
+            <if test="filter.category_salad != null">
+                AND s.category_salad = #{filter.category_salad}
+            </if>
+            <if test="filter.category_others != null">
+                AND s.category_others = #{filter.category_others}
+            </if>
+            <!-- 위도/경도 필터링: 반경 500m -->
+            <if test="filter.latitude != null and filter.longitude != null">
+                <!--                AND s.latitude  BETWEEN #{filter.latitude}  - 0.005 AND #{filter.latitude}  + 0.005-->
+                <!--                AND s.longitude BETWEEN #{filter.longitude} - 0.006 AND #{filter.longitude} + 0.006-->
+                <!-- TEST 오차때문에 임시로 넓게 잡음 -->
+                AND s.latitude  BETWEEN #{filter.latitude}  - 0.01 AND #{filter.latitude}  + 0.01
+                AND s.longitude BETWEEN #{filter.longitude} - 0.02 AND #{filter.longitude} + 0.02
+            </if>
+            <!-- 가게 이름, 가게 대표 메뉴, 가게 주소, 가게 상세 검색 필터링 추가 -->
+            <if test="filter.search != null and filter.search != ''">
+                AND (
+                s.store_name LIKE CONCAT('%', #{filter.search}, '%')
+                OR s.store_menu LIKE CONCAT('%', #{filter.search}, '%')
+                OR pf.product_explain LIKE CONCAT('%', #{filter.search}, '%')
+                )
+            </if>
+            <!-- 가게 id로 필터링해서 하나만 가져와야 하는 경우 -->
+            AND s.store_id = #{filter.store_id}
         </where>
         ORDER BY (s.store_status = 'N') ASC;
     </select>
@@ -72,7 +140,8 @@
         GROUP BY store_id
         ) img ON img.store_id = s.store_id
         <where>
-            b.user_id = #{user_id}
+            s.confirmed = 'Y'
+            AND b.user_id = #{user_id}
         </where>
         ORDER BY (s.store_status = 'N') ASC;
     </select>
@@ -95,7 +164,7 @@
         SELECT
             pa.paid_no AS paid_no, pa.paid_price AS paid_price, pa.paid_status AS paid_status,
             s.store_name AS store_name, s.store_id AS store_id,
-            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price,
+            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price, p.reservation_end AS reservation_end,
             o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.canceld_from AS canceld_from,
             o.order_code AS order_code, o.user_id AS user_id,
             MIN(i.store_img) AS store_img
@@ -105,9 +174,9 @@
         JOIN Orders  o  ON o.product_no = p.product_no
         JOIN Paid    pa ON pa.order_no = o.order_no
         <where>
-            <if test="filter.user_id != null">
-                AND o.user_id = #{filter.user_id}
-            </if>
+            <!-- user_id는 무조건 있어야 하므로, null아닐때 이거 두지 않음. -->
+            AND o.user_id = #{filter.user_id}
+            AND o.order_status != 'ready'
             <if test="filter.order_status != null">
                 <choose>
                     <!-- order_status가 List일 때 IN 절 -->

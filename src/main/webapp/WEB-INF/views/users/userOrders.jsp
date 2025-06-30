@@ -86,6 +86,7 @@
                                 <c:when test="${userOrder.canceld_from eq 'store'}">
                                   가게 취소
                                 </c:when>
+                                <%-- 임시이다. 차피 데이터 수정되면 cancel에 @@취소 이게 안 붙어 있을리가 없어서 사라질 부분임 --%>
                                 <c:otherwise>
                                   취소
                                 </c:otherwise>
@@ -96,15 +97,10 @@
                               픽업 완료
                             </c:when>
 
+                            <%-- 오늘 픽업, 내일 픽업은 확정일시 말한다. --%>
                             <c:when test="${userOrder.order_status eq 'confirmed'}">
                               ${userOrder.pickup_status.displayName}
                             </c:when>
-
-                            <%-- 임시로 넣어줌 --%>
-                            <c:otherwise>
-                              ${userOrder.pickup_status.displayName}
-                            </c:otherwise>
-
                           </c:choose>
                         </div>
                         <div class="orderDate">
@@ -199,6 +195,8 @@
   $(function(){
     // 초기 페이지 로드 때 버튼 hidden 조정
     adjustOrderButtons();
+    // 초기 페이지 로드 때 버튼 컬러 설정
+    changeOrderButtonsColors()
     // 카테고리 클릭 시
     $('.dropdownModal .item').on('click', function () {
       const selectedCategory = $(this).text().trim();
@@ -244,6 +242,7 @@
         $('.productWrapper').html(responseHtml);
         //프레그먼트에 버튼 hidden 설정
         adjustOrderButtons();
+        changeOrderButtonsColors();
 
         //modal안의 text 변경
         const $categoryFilterBtn = $(".categoryFilterBtn");
@@ -348,25 +347,25 @@
 </script>
 <%-- orderStatus and canceldFrom에 따라서 뱃지 색상 바꾸기 --%>
 <script>
-  $(function(){
-    $('.productCard').each(function(){
-      const $card   = $(this);
-      const $status = $card.find('.orderStatus');
+function changeOrderButtonsColors() {
+  $('.productCard').each(function(){
+    const $card   = $(this);
+    const $status = $card.find('.orderStatus');
 
-      const orderStatus  = $card.data('orderStatus');   // reservation, cancel, pickup, confirmed
-      const canceldFrom  = $card.data('canceldFrom');   // user, store
+    const orderStatus  = $card.data('orderStatus');   // reservation, cancel, pickup, confirmed
+    const canceldFrom  = $card.data('canceldFrom');   // user, store
 
-      if (orderStatus === 'cancel') {
-        if (canceldFrom === 'user')  {
-          $status.addClass('brownBadge');
-        }
-      } else if (orderStatus === 'pickup'){
+    if (orderStatus === 'cancel') {
+      if (canceldFrom === 'user')  {
         $status.addClass('brownBadge');
-      } else{
-        $status.removeClass('brownBadge');
       }
-    });
+    } else if (orderStatus === 'pickup'){
+      $status.addClass('brownBadge');
+    } else{
+      $status.removeClass('brownBadge');
+    }
   });
+}
 </script>
 </body>
 </html>
