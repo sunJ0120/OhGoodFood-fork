@@ -9,8 +9,8 @@ public enum PickupStatus {
     TODAY("오늘픽업"),
     TOMORROW("내일픽업"),
     SOLD_OUT("매진"),
-    CLOSED("마감"),
-    ETC("기타");
+    ERROR("임시 오류"),
+    CLOSED("마감");
 
     private final String displayName;
 

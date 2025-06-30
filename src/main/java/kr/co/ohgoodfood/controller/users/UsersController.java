@@ -12,6 +12,7 @@ import kr.co.ohgoodfood.service.common.CommonService;
 import kr.co.ohgoodfood.service.users.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,6 +49,10 @@ public class UsersController {
     private final UsersService usersService;
     private final CommonService commonService;
 
+    // 지도 사용을 위한 앱키
+    @Value("${kakao.map.appKey}")
+    private String kakaoMapAppKey;
+
     /**
      * 사용자 메인 화면을 조회하고, 가게 목록을 뷰에 바인딩한다.
      *
@@ -61,6 +66,7 @@ public class UsersController {
 
         List<MainStore> mainStoreList = usersService.getMainStoreList(userMainFilter);
         log.info("[log/UsersController.userMain] mainStoreList 결과 log : {}", mainStoreList);
+        model.addAttribute("kakaoMapAppKey", kakaoMapAppKey);
         model.addAttribute("mainStoreList", mainStoreList);
 
         return "users/userMain"; // /WEB-INF/views/user/userMain.jsp로 forwarding
@@ -243,6 +249,19 @@ public class UsersController {
         }
 
         return "redirect:/user/orderList";
+    }
+
+    @GetMapping("/map/pin")
+    public String getMapPinStore(@ModelAttribute UserMainFilter userMainFilter,
+                                 @RequestParam("store_id") String store_id,
+                                 Model model){
+
+        userMainFilter.setStore_id(store_id);
+        MainStore mainStore = usersService.getMainStoreOne(userMainFilter);
+        model.addAttribute("mainStore", mainStore);
+
+        //fragment return
+        return "users/fragment/userMapPinStore";
     }
 
     /**

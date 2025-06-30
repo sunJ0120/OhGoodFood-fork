@@ -153,6 +153,40 @@ main {
     height: 100%;
 }
 
+.mapWrapper{
+    position: relative;
+    padding: 16px 12px;
+    background-color: #F5F3EA;
+    height: 100%;
+}
+
+.storePinModalWrapper{
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 100; /* 버튼 보다 아래 */
+}
+
+.storePinModal {
+    position: relative;     /* wrapper가 위치를 담당하므로 relative */
+    width: 100%;
+    max-width: 355px;
+    margin: 0 10px;
+
+    pointer-events: all;    /* 클릭을 받아야 하므로 wrapper 투과 처리 보완 */
+    background-color: #fff;
+    cursor: pointer;
+
+    max-height: 50%;
+    overflow-y: auto;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10pt;
+}
+
 .productList {
     display: flex;
     flex-direction: column;
@@ -371,4 +405,27 @@ main {
     top: 0;
     left: 50%;
     transform: translate(calc(-50% + 70px), -70%);
+}
+
+.hidden {
+    display: none;
+}
+
+.btnSetCenter{
+    position: absolute;
+    bottom: 16px;       /* 지도 하단에서 띄울 기본 거리 */
+    right: 16px;        /* 오른쪽 여백 */
+    padding: 8px 12px;
+    background: #99A99B;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: bottom 0.2s ease; /* 부드러운 애니메이션 */
+    z-index: 200;        /* 모달보다 위로 */
+}
+
+/* 모달이 열렸을 때 버튼을 모달 높이만큼 위로 올리기 */
+.mapWrapper.modalOpen .btnSetCenter {
+    bottom: calc(200px + 16px);
 }

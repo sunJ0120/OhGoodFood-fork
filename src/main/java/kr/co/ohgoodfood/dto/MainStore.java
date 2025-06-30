@@ -27,6 +27,9 @@ public class MainStore{
     private String category_salad;
     private String category_others;
     private Time closed_at;
+    private String confirmed;
+    private Double latitude;
+    private Double longitude;
 
     //Product table에서 가져오는 정보들
     private int product_no;

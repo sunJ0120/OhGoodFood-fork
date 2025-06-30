@@ -7,7 +7,6 @@ import java.security.MessageDigest;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
@@ -53,7 +51,6 @@ public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
 	private final AwsS3Config awsS3Config;
 
-
     /**
      * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
      *
@@ -68,11 +65,32 @@ public class UserServiceImpl implements UsersService{
         for(MainStore mainStore : mainStoreList){
             mainStore.setPickup_status(getPickupDateStatus(mainStore));
             mainStore.setCategory_list(getCategoryList(mainStore));
-            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "/"));
+            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
         }
         log.info("[log/UserServiceImpl.getMainStoreList] mainStoreList 결과 log : {}", mainStoreList);
 
         return mainStoreList;
+    }
+
+    /**
+     * 지도에 표시할 가게 정보를 가져오는 method
+     *
+     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. main에서 사용하는걸 그대로 사용한다
+     * @return               : mainStoreList (MainStore DTO의 리스트 객체)
+     */
+    //selectOneStoreByStoreId
+    @Override
+    public MainStore getMainStoreOne(UserMainFilter userMainFilter){
+
+        MainStore mainStore = userMapper.selectOneStoreByStoreId(userMainFilter);
+
+        mainStore.setPickup_status(getPickupDateStatus(mainStore));
+        mainStore.setCategory_list(getCategoryList(mainStore));
+        mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
+
+        log.info("[log/UserServiceImpl.getMainStoreOne] mainStore 결과 log : {}", mainStore);
+
+        return mainStore;
     }
 
     /**
@@ -110,9 +128,9 @@ public class UserServiceImpl implements UsersService{
         if("N".equals(mainStore.getStore_status())){
             return PickupStatus.CLOSED;
         }else{
-            // NullPointerException이 걸려서 우선 추가
+            // 더미 데이터 오류로 인해 (오픈 했는데 pickup_start가 없고..이런식) 임시로 넣어둔 값.
             if (mainStore.getPickup_start() == null) {
-                return PickupStatus.CLOSED;
+                return PickupStatus.ERROR;
             }
             LocalDate pickupDate = mainStore.getPickup_start().toLocalDateTime().toLocalDate();
             // [매진] - amount = 0
@@ -142,21 +160,18 @@ public class UserServiceImpl implements UsersService{
     @Override
     public PickupStatus getOrderPickupDateStatus(UserOrder userOrder) {
         LocalDate today = LocalDate.now();
-        // NullPointerException방지, 차후 삭제 예정
-        if (userOrder.getPickup_start() == null) {
-            return PickupStatus.ETC;
-        }
         LocalDate pickupDate = userOrder.getPickup_start().toLocalDateTime().toLocalDate();
 
         // [오늘픽업] 현재 날짜와 같음
         if (pickupDate.isEqual(today)) {
             return PickupStatus.TODAY;
         }
-        // [내일픽업] 현재 날짜 + 1과 같음
-        if (pickupDate.isEqual(today.plusDays(1))) {
-            return PickupStatus.TOMORROW;
-        }
-        return PickupStatus.ETC;
+//        // [내일픽업] 현재 날짜 + 1과 같음
+//        if (pickupDate.isEqual(today.plusDays(1))) {
+//            return PickupStatus.TOMORROW;
+//        }
+        //불안정 하긴 하지만, 이틀 뒤가 pick_up start인 경우가 없기 때문에 나머진 다 내일 픽업
+        return PickupStatus.TOMORROW;
     }
 
     /**
@@ -258,15 +273,16 @@ public class UserServiceImpl implements UsersService{
         if(pickup_status.equals(PickupStatus.TODAY) || pickup_status.equals(PickupStatus.TOMORROW)){
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
-            long oneHourInMillis = 60L * 60L * 1000L;
-            Timestamp oneHourBefore = new Timestamp(reservation_end.getTime() - oneHourInMillis);
+            long oneHourInMillis = 60L * 60L * 1000L; //한시간 계산
+            Timestamp reservationEndOneHourBefore = new Timestamp(reservation_end.getTime() - oneHourInMillis);
 
-            if (now.after(oneHourBefore) && now.before(reservation_end)) {
+            //reservation_end -1h < now < reservation_end
+            if (now.after(reservationEndOneHourBefore) && now.before(reservation_end)) {
                 return true;  // 마감 1시간 전 이내이면, 취소 블록하고 막는다.
             }
             return false;
         }
-        return false;
+        return false; //오늘 픽업, 내일 픽업이 아니라면 이 block 변수는 false
     }
 
     /**

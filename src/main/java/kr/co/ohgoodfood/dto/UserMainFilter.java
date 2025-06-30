@@ -15,6 +15,9 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 public class UserMainFilter {
+    //지도에서 사용하기 위한 store_id
+    private String store_id;
+
     //카테고리 modal 토글
     private String category_bakery;
     private String category_fruit;
@@ -32,4 +35,8 @@ public class UserMainFilter {
     private LocalDate pickup_start;
     //검색어
     private String search;
+
+    //위도, 경도
+    private Double latitude;
+    private Double longitude;
 }

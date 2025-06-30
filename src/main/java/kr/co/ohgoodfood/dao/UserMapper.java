@@ -27,6 +27,13 @@ public interface UserMapper {
     List<MainStore> selectAllStore(@Param("filter") UserMainFilter userMainFilter);
 
     /**
+     * 사용자 지도 영역에 핀을 클릭했을때 가게 정보 조회
+     *
+     * @param userMainFilter   필터 DTO
+     * @return                 필터 적용된 MainStore 요소
+     */
+    MainStore selectOneStoreByStoreId(@Param("filter") UserMainFilter userMainFilter);
+    /**
      * 사용자 북마크 화면에서 표시할 가게 목록을 조회
      *
      * @param user_id          조회 대상 user_id
