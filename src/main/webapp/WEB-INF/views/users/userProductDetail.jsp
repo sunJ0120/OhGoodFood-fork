@@ -140,7 +140,7 @@
                                                 </c:when>
                                                 <c:otherwise>
                                                     <form action="${pageContext.request.contextPath}/user/userPaid"
-                                                        method="get">
+                                                        method="post">
                                                         <input type="hidden" name="productNo"
                                                             value="${productDetail.product_no}" />
                                                         <button type="submit" class="orderButton">
@@ -215,6 +215,7 @@
                             console.log('[DEBUG] 탭 클릭, idx =', $(this).index());
                             var idx = $(this).index();
                             $('.tabs .tab').removeClass('active').eq(idx).addClass('active');
+
                             if (idx === 0) {
                                 $('.infoContent').show();
                                 $('.reviewSection').hide();

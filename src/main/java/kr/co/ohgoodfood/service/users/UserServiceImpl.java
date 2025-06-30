@@ -128,9 +128,9 @@ public class UserServiceImpl implements UsersService{
         if("N".equals(mainStore.getStore_status())){
             return PickupStatus.CLOSED;
         }else{
-            // NullPointerException이 걸려서 우선 추가
+            // 더미 데이터 오류로 인해 (오픈 했는데 pickup_start가 없고..이런식) 임시로 넣어둔 값.
             if (mainStore.getPickup_start() == null) {
-                return PickupStatus.CLOSED;
+                return PickupStatus.ERROR;
             }
             LocalDate pickupDate = mainStore.getPickup_start().toLocalDateTime().toLocalDate();
             // [매진] - amount = 0

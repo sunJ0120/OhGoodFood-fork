@@ -14,7 +14,7 @@
 </head>
 <body>
     <div id="wrapper">
-        <%@ include file="/WEB-INF/views/store/header.jsp" %>
+        <%@ include file="/WEB-INF/views/users/header.jsp" %>
         <main>
             <div class="alarm-container" id="alarm-container">
                 <c:forEach var="alarm" items="${alarms}">
@@ -33,14 +33,14 @@
                 </c:forEach>
             </div>
         </main>
-        <%@ include file="/WEB-INF/views/store/footer.jsp" %>
+        <%@ include file="/WEB-INF/views/users/footer.jsp" %>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
         $(document).ready(function(){
             $.ajax({
                 type: "POST",
-                url: "/store/alarmread",
+                url: "/user/alarmread",
                 success: function(res){
                     if(res == true || res==="true"){
                         console.log("alarm 읽음 처리")
@@ -57,7 +57,7 @@
             if(confirm('이 알람을 삭제하시겠습니까?')) {
                 $.ajax({
                     type: "POST",
-                    url: "/store/alarmhide",
+                    url: "/user/alarmhide",
                     data: {
                         alarm_no: alarmNo
                     },

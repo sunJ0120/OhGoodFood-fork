@@ -44,8 +44,8 @@ public class ProductDetail{
     private Timestamp pickup_start;
     private Timestamp pickup_end;
     private Timestamp reservation_end;
-    private String  status; // "soldout" or "available"
-    private PickupStatus pickupStatus; // enum 타입으로 선언
+    private String status;
+    private PickupStatus pickupStatus;
     
     // Review table에서 가져오는 정보들
     private List<Review> reviews;

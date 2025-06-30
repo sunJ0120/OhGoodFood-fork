@@ -248,7 +248,7 @@
             s.category_others  AS category_others,
             s.store_address    AS store_address,
             s.store_telnumber  AS store_telnumber,
-            s.store_explain	   AS store_explain,
+            s.store_explain      AS store_explain,
             p.product_no       AS product_no,
             p.pickup_start     AS pickup_start,
             p.pickup_end       AS pickup_end,
@@ -256,17 +256,17 @@
             p.sale_price       AS sale_price,
             p.reservation_end  AS reservation_end,
             p.product_explain  AS product_explain,
-	        p.amount           AS amount,
-	    CASE
-	      WHEN p.amount = 0 THEN 'SOLD_OUT'              -- enum 상수명
-	      WHEN DATE(p.pickup_start) = CURDATE() THEN 'TODAY'
-	      WHEN DATE(p.pickup_start) = DATE_ADD(CURDATE(), INTERVAL 1 DAY) THEN 'TOMORROW'
-	      ELSE 'CLOSED'
-	    END AS pickupStatus
-	  FROM Store s
-	  JOIN Product p ON s.store_id = p.store_id
-	  WHERE p.product_no    = #{product_no}
-	    AND s.store_status   = 'Y'
+            p.amount           AS amount,
+        CASE
+            WHEN p.amount = 0 THEN 'SOLD_OUT'              -- enum 상수명
+            WHEN DATE(p.pickup_start) = CURDATE() THEN 'TODAY'
+            WHEN DATE(p.pickup_start) = DATE_ADD(CURDATE(), INTERVAL 1 DAY) THEN 'TOMORROW'
+            ELSE 'CLOSED'
+        END AS pickupStatus
+        FROM Store s
+        JOIN Product p ON s.store_id = p.store_id
+        WHERE p.product_no    = #{product_no}
+        AND s.store_status   = 'Y'
     </select>
 
     <!-- 제품 이미지 전체 목록 조회: 해당 상품의 모든 이미지 URL 리스트 -->

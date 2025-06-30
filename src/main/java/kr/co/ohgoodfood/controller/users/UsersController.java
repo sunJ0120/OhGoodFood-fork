@@ -30,6 +30,8 @@ import kr.co.ohgoodfood.dto.UserMypage;
 import kr.co.ohgoodfood.dto.UserOrder;
 import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.dto.UserOrderRequest;
+import kr.co.ohgoodfood.dto.UserSignup;
+import kr.co.ohgoodfood.service.common.CommonService;
 import kr.co.ohgoodfood.service.users.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +59,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class UsersController {
     private final UsersService usersService;
+    private final CommonService commonService;
 
     // 지도 사용을 위한 앱키
     @Value("${kakao.map.appKey}")
@@ -377,11 +380,11 @@ public class UsersController {
     /**
      * 결제 페이지
      */
-    @GetMapping("/userPaid")
-    public String userPaid(@RequestParam("productNo") int productNo , Model model, HttpSession session) {
-    	ProductDetail detail = usersService.getProductDetail(productNo);
+
+    @PostMapping("/userPaid")
+    public String userPaid(@RequestParam("productNo") int productNo, Model model, HttpSession session) {
+        ProductDetail detail = usersService.getProductDetail(productNo);
         model.addAttribute("productDetail", detail);
-    	System.out.println(detail);
         return "users/userPaid";
     }
 
@@ -404,4 +407,44 @@ public class UsersController {
         return "redirect:/user/mypage";
     }
 
+    /**
+     * 알람 페이지
+     */
+    @GetMapping("/alarm")
+    public String showAlarm(Model model, HttpSession session) {
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        List<Alarm> alarms = commonService.getAlarm(user_id);
+        model.addAttribute("alarms", alarms);
+        return "users/alarm";
+    }
+
+    // 알람 읽음 처리
+	@PostMapping("/alarmread")
+	@ResponseBody
+	public boolean readAlarm(HttpSession sess, Model model) {
+		Account login = (Account) sess.getAttribute("user");
+		if(commonService.updateAlarm(login.getUser_id()) > 0){
+			return true;
+		}
+		return false;
+	}
+
+	// 알람 디스플레이 숨김 처리
+	@PostMapping("/alarmhide")
+	@ResponseBody
+	public boolean hideAlarm(@RequestParam("alarm_no") int alarm_no) {
+		if(commonService.hideAlarm(alarm_no) > 0){
+			return true;
+		}
+		return false;
+	}
+
+    // 안 읽은 알람 확인
+	@PostMapping("/alarmcheck")
+	@ResponseBody
+	public boolean checkUnreadAlarm(HttpSession sess, Model model) {
+		Account login = (Account) sess.getAttribute("user");
+		return commonService.checkUnreadAlarm(login.getUser_id()) > 0;
+	}
 }
