@@ -315,3 +315,30 @@ body{
   /* or 원하는 높이 */
   overflow-y: auto;
 }
+
+/* 결과 없음 모달 관련 요소들 */
+.emptyModal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.modalWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.modalContent {
+    color: #99A99B;
+}
+
+.emptyModalEmoji {
+    margin-top: 150px;
+}
+
+.orderStatusModal {
+    display: inline;
+}

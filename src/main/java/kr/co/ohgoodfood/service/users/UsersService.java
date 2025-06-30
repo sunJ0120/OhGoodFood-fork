@@ -56,8 +56,12 @@ public interface UsersService {
     //[Controller 로직]     
     /* 상품 상세 정보 조회 */
     ProductDetail getProductDetail(int productId);
+    
     /* 상품(가게)별 리뷰 조회 */
 	List<Review> getReviewsByProductNo(int productNo);
+	
+	/* 상품(가게)별 사진 조회*/
+	List<String> getProductImages(int product_no);
 	
     /* 예약 처리 메서드 (추후 개발) */
     boolean reserveProduct(String userId, int productId);
@@ -77,6 +81,5 @@ public interface UsersService {
 
     // 실제 리뷰 저장 (이미지 포함)
     void writeReview(ReviewForm form, String userId);
-
 
 }

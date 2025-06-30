@@ -22,7 +22,7 @@
                     <div class="productInfo">
                         <img id=storeImg src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/init.jpg">
                         <div class="productInfoSub">
-                            <p id="storeName">가게이름</p>
+                            <p id="storeName">${productDetail.store_name}</p>
                             <p id="productPriceEtc">개당 가격 &#8361;</p>
                             <div class="pickupTimeDiv">
                                 <p id="pickupTimeText">픽업 시간</p>
