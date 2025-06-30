@@ -39,8 +39,8 @@ public class ScheduleServiceImpl implements ScheduleService {
 		for (ReservationConfirmed store : reservationStoreList) {
 			scheduleMapper.updateStoreStatus(store);
             Alarm alarm = new Alarm();
-            alarm.setAlarm_title("확정 시간 종료");  
-            alarm.setAlarm_contents("확정 시간이 종료되었습니다.");
+            alarm.setAlarm_title("확정 완료");  
+            alarm.setAlarm_contents("예약들이 확정되었습니다.");
             alarm.setReceive_id(store.getStore_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");

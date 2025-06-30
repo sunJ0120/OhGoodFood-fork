@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Bookmark;
 import kr.co.ohgoodfood.dto.BookmarkFilter;
 import kr.co.ohgoodfood.dto.MainStore;

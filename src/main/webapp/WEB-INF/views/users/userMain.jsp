@@ -406,7 +406,7 @@
       contentType: 'application/json',
       data: JSON.stringify(filterParams),
       success: function(html) {
-        console.log("[AJAX 응답]", html);
+        //console.log("[AJAX 응답]", html);
         $('.productWrapper').html(html);
 
         //기존 마커 지우기
