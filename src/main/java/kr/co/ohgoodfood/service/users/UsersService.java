@@ -43,6 +43,9 @@ public interface UsersService {
     //[Controller 로직] UsersController.cancelOrder 연결 로직
     boolean updateUserOrderCancel(UserOrderRequest userOrderRequest);
 
+    //[Controller 로직] UsersController.getMapPinStore 연결 로직
+    MainStore getMainStoreOne(UserMainFilter userMainFilter);
+
     /* 사용자 기본 정보 한 건 조회*/
     UserMypage getUserInfo(String userId);
     /* 리뷰 리스트 여러 건 조회 */
