@@ -53,4 +53,12 @@ public interface StoreMapper {
 	public Product findProductByStoreId(String store_id);
 	
 	public void updateStoreStatus(Map<String, Object> param);
+	
+	public int insertProduct(Product product);
+	
+	public Product findLatestProductByStoreId(String storeId);
+
+	public int checkOrderStatus(String store_id);
+
+	public int checkTodayReservationEnd(String storeId);
 }

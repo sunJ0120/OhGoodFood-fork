@@ -1,29 +1,32 @@
 package kr.co.ohgoodfood.service.store;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
 import java.security.MessageDigest;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
+
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+
 import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.StoreMapper;
-
 import kr.co.ohgoodfood.dto.Alarm;
-import kr.co.ohgoodfood.dto.Orders;
-import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.Orders;
 import kr.co.ohgoodfood.dto.Product;
+import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +43,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int insert(Store vo) {
 		return mapper.insert(vo);
-	}
+	} 
 
 	// 아이디 중복확인
 	@Override
@@ -59,9 +62,9 @@ public class StoreServiceImpl implements StoreService {
 		if (rawPwd != null && !rawPwd.isEmpty()) {
 			vo.setStore_pwd(md5(rawPwd));
 		}
-
+ 
 		// 주소 합치기 (주소가 null일 가능성도 체크)
-		if (vo.getStore_address() == null) {
+		if (vo.getStore_address() == null) { 
 			vo.setStore_address("");
 		}
 		if (storeAddressDetail != null && !storeAddressDetail.trim().isEmpty()) {
@@ -146,9 +149,13 @@ public class StoreServiceImpl implements StoreService {
 	// 매장 상품 조회 (메인화면용) 
 	@Override
 	public Product getProductByStoreId(String store_id) {
-	    return mapper.findProductByStoreId(store_id);
+	    return mapper.findLatestProductByStoreId(store_id);
 	}
 	
+	@Override
+	public int checkOrderStatus(String storeId) {
+		return mapper.checkOrderStatus(storeId);
+	}
 	// 가게 상태 업데이트
 	@Override
 	public void updateStoreStatus(String store_id, String status) {
@@ -159,6 +166,44 @@ public class StoreServiceImpl implements StoreService {
 	    mapper.updateStoreStatus(param);
 	}
 	
+	public void createProduct(Store store, String productExplain, String pickupDateType, String pickupStartTime, String pickupEndTime,
+                          int originPrice, int salePrice, int amount) {
+
+	LocalDate pickupDate = pickupDateType.equals("today")
+	? LocalDate.now()
+	: LocalDate.now().plusDays(1);
+	
+	// pickup_start, pickup_end
+	LocalDateTime pickupStart = LocalDateTime.of(pickupDate, LocalTime.parse(pickupStartTime));
+    LocalDateTime pickupEnd = LocalDateTime.of(pickupDate, LocalTime.parse(pickupEndTime));
+	
+	// reservation_end 계산
+	LocalDateTime reservationEnd;
+	if (pickupDateType.equals("today")) {
+		reservationEnd = pickupStart;
+	} else {
+		reservationEnd = LocalDateTime.of(LocalDate.now(), store.getClosed_at().toLocalTime());
+	}
+	
+	Product product = new Product();
+	product.setStore_id(store.getStore_id());
+	product.setPickup_start(Timestamp.valueOf(pickupStart));
+	product.setPickup_end(Timestamp.valueOf(pickupEnd));
+	product.setReservation_end(Timestamp.valueOf(reservationEnd));
+	product.setOrigin_price(originPrice);
+	product.setSale_price(salePrice);
+	product.setAmount(amount);
+	product.setProduct_explain(productExplain); // 혹시 JS에서 설명 입력받는다면 매개변수 추가
+	
+	mapper.insertProduct(product);
+	}
+	
+	@Override
+	public boolean isTodayReservationClosed(String storeId) {
+	    // 실제 DB 호출 코드 예시, 예: mapper에서 오늘 마감 카운트 가져오기
+	    int count = mapper.checkTodayReservationEnd(storeId);
+	    return count > 0;
+	}
 	// 마이페이지
 	// store_i로 마이페이지 조회
 	@Override

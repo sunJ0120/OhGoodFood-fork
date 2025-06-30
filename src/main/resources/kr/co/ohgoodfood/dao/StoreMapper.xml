@@ -166,10 +166,14 @@
 	<select id="findImagesByStoreId" parameterType="string" resultType="kr.co.ohgoodfood.dto.Image">
     	SELECT * FROM Image WHERE store_id = #{store_id}
 	</select>
-
-
-	<select id="findProductByStoreId" parameterType="string" resultType="kr.co.ohgoodfood.dto.Product">
-	    SELECT * FROM Product WHERE store_id = #{store_id} LIMIT 1
+	
+	<!-- 가장 최근 product_id 조회 -->
+	<select id="findLatestProductByStoreId" parameterType="string" resultType="kr.co.ohgoodfood.dto.Product">
+	    SELECT *
+	    FROM Product
+	    WHERE store_id = #{store_id}
+	    ORDER BY product_no DESC
+	    LIMIT 1
 	</select>
 	
 	<!-- 오픈/마감 상태 변경 -->
@@ -179,7 +183,37 @@
 	    WHERE store_id = #{store_id}
 	</update>
 
-	<!--마이페이지 수정-->
+
+	<!-- 오픈 상품 등록 -->
+	<!-- useGeneratedKeys : MyBatis에서 INSERT 문 실행 후 자동 생성된 기본키(primary key) 값을 Java 객체에 자동으로 채워주는 MyBatis 전용 옵션 -->
+	<insert id="insertProduct" parameterType="kr.co.ohgoodfood.dto.Product" useGeneratedKeys="true" keyProperty="product_no">
+	    INSERT INTO Product (
+	        store_id, pickup_start, pickup_end, reservation_end,
+	        origin_price, sale_price, amount, product_explain
+	    )
+	    VALUES (
+	        #{store_id}, #{pickup_start}, #{pickup_end}, #{reservation_end},
+	        #{origin_price}, #{sale_price}, #{amount}, #{product_explain}
+	    ) 
+	</insert>
+
+	<!-- 마감 상태 확인 -->
+	<select id="checkOrderStatus" resultType="int">
+		SELECT COUNT(*)
+		FROM Orders
+		WHERE store_id = #{storeId}
+		AND order_status = 'reservation'
+	</select>
+	
+	<!-- 해당 store_id의 금일 마감된 예약 존재 여부 확인 -->
+	<select id="checkTodayReservationEnd" resultType="int">
+	  SELECT COUNT(*)
+	  FROM Product
+	  WHERE store_id = #{storeId}
+	  AND DATE(reservation_end) = CURDATE()
+	</select>
+	
+	<!--마이페이지 수정--> 
 	<update id="updateStore" parameterType="kr.co.ohgoodfood.dto.Store">
 		UPDATE Store
 		SET

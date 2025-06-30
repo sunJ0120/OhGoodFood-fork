@@ -10,12 +10,14 @@
 </head>
 <header>
     <div class="headerContainer">
-        <img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
+        <a href="/store/main" id="alarm-icon">
+            <img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
+        </a>    
         <div class="iconContainer">
             <a href="/store/alarm" id="alarm-icon">
-                <img src="${pageContext.request.contextPath}/img/store_alarm_active.png" alt="알람" class="icon">
+                <img src="${pageContext.request.contextPath}/img/storealarm.png" alt="알람" class="icon">
             </a>  
-            <img src="${pageContext.request.contextPath}/img/store_logout.png" alt="로그아웃" class="icon">
+            <img src="${pageContext.request.contextPath}/img/store_logout.png" alt="로그아웃" class="icon2">
         </div>
     </div>
 </header>

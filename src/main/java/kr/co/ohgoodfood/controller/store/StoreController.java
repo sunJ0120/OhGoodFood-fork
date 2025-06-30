@@ -306,6 +306,60 @@ public class StoreController {
 	    
 	    return "success";
 	}
+	//오픈하기 
+	@PostMapping("/createProduct")
+	@ResponseBody
+	public String createProduct(
+			@RequestParam String productExplain,
+	        @RequestParam String pickupDateType,
+	        @RequestParam String pickupStartTime,
+	        @RequestParam String pickupEndTime,
+	        @RequestParam int originPrice,
+	        @RequestParam int salePrice,
+	        @RequestParam int amount,
+	        HttpSession sess) {
+
+	    Store store = (Store) sess.getAttribute("store");
+
+	    // 오늘 날짜에 이미 마감된 내역 있는지 체크 (서비스 호출)
+	    boolean isClosedToday = storeService.isTodayReservationClosed(store.getStore_id());
+	    
+	    if (isClosedToday) {
+	        // 오늘 이미 마감되었으면 오픈 막기
+	        return "closedToday";  // 클라이언트가 이 문자열 받으면 처리하도록 함
+	    }
+	    
+	    try {
+	        storeService.createProduct(
+	            store,
+	            productExplain,
+	            pickupDateType,
+	            pickupStartTime,
+	            pickupEndTime,
+	            originPrice,
+	            salePrice,
+	            amount
+	        );
+	        storeService.updateStoreStatus(store.getStore_id(), "Y");
+	        store.setStore_status("Y");
+	        sess.setAttribute("store", store);
+	        return "success";
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "failed";
+	    }
+	}
+
+	//마감하기
+	@GetMapping("/checkOrderStatus")
+	@ResponseBody
+	public int checkUnconfirmedOrders(HttpSession session) {
+		Store store = (Store) session.getAttribute("store");
+		if (store == null) return 0;
+
+		int count = storeService.checkOrderStatus(store.getStore_id());
+		return count;
+	}
 
 	// 상품 정보 조회
 	@GetMapping("/product")

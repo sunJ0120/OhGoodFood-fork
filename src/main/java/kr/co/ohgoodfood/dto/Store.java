@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class Store {
     private String store_id;
-    private String confirmed;
+    private String confirmed; 
     private String business_number;
     private String store_address;
     private String store_name;
@@ -27,7 +27,7 @@ public class Store {
     private double longitude;
 
     private String s_store_id;
-
+  
     private String s_confirmed;
 
     private String s_store_address;

@@ -51,5 +51,10 @@ public interface StoreService {
 	public Product getProductByStoreId(String store_id);
 	
 	public void updateStoreStatus(String store_id, String status);
+	
+	public void createProduct(Store store, String productExplain, String pickupDateType, String pickupStartTime, String pickupEndTime, int originPrice, int salePrice, int amount);
 
+	public int checkOrderStatus(String store_id);
+	
+	public boolean isTodayReservationClosed(String store_id);
 }
