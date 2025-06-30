@@ -1,5 +1,6 @@
 package kr.co.ohgoodfood.service.store;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -180,7 +181,15 @@ public class StoreServiceImpl implements StoreService {
 	//가게 주문내역 조회(미확정, 확정, 취소)
 	@Override
 	public List<Orders> getOrders(String storeId, String type, String selectedDate) {
-		return mapper.getOrders(storeId, type, selectedDate);
+		List<Orders> list = mapper.getOrders(storeId, type, selectedDate);
+		for (Orders order : list) {
+			if (order.getReservation_end() != null) {
+				Timestamp end = order.getReservation_end();
+				Timestamp start = new Timestamp(end.getTime() - 60 * 60 * 1000); // reservation_end - 1시간
+				order.setReservation_start(start);
+			}
+		}
+		return list;
 	}
 	
 	//미확정 주문 -> 확정 주문으로 바꾸기

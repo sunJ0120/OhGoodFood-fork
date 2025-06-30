@@ -23,26 +23,38 @@
                 <div class="order-header">
                     <div class="order-title">
                         <span class="shop-name">${store.store_name}</span>&nbsp;&nbsp;
-                        <!--  년, 월 선택 필터  / 년도는 동적 생성-->
-                        <div class="orderFilter">
-						  <select id="yearSelect"></select>
-						  <select id="monthSelect">
-						    <option value="01">1월</option>
-						    <option value="02">2월</option>
-						    <option value="03">3월</option>
-						    <option value="04">4월</option>
-						    <option value="05">5월</option>
-						    <option value="06">6월</option>
-						    <option value="07">7월</option>
-						    <option value="08">8월</option>
-						    <option value="09">9월</option>
-						    <option value="10">10월</option>
-						    <option value="11">11월</option>
-						    <option value="12">12월</option>
-						  </select>
-						</div>
                     </div>
-                    <div class="order-status-dropdown">
+                    <div class="dropdown-wrapper">
+                        <div class="custom-filter">
+					        <div class="custom-dropdown year-dropdown">
+					            <button class="dropdown-btn" data-type="year">
+					                <span class="selected-text">2025</span>
+					                <img src="${pageContext.request.contextPath}/img/storearrow.png" class="arrow-icon" />
+					            </button>
+					            <ul class="dropdown-list year-list"></ul>
+					        </div>
+					        <div class="custom-dropdown month-dropdown">
+					            <button class="dropdown-btn" data-type="month">
+					                <span class="selected-text">6월</span>
+					                <img src="${pageContext.request.contextPath}/img/storearrow.png" class="arrow-icon" />
+					            </button>
+					            <ul class="dropdown-list month-list">
+					                <li data-value="01">1월</li>
+					                <li data-value="02">2월</li>
+					                <li data-value="03">3월</li>
+					                <li data-value="04">4월</li>
+					                <li data-value="05">5월</li>
+					                <li data-value="06">6월</li>
+					                <li data-value="07">7월</li>
+					                <li data-value="08">8월</li>
+					                <li data-value="09">9월</li>
+					                <li data-value="10">10월</li>
+					                <li data-value="11">11월</li>
+					                <li data-value="12">12월</li>
+					            </ul>
+					        </div>
+					    </div>
+                        <div class="order-status-dropdown">
                         <button class="order-status-btn">미확정 주문 <img src="${pageContext.request.contextPath}/img/storearrow.png"
                                 class="dropdown-arrow"></button>
                         <ul class="order-status-list">
@@ -50,6 +62,7 @@
                             <li data-status="confirmed">확정 주문</li>
                             <li data-status="cancel">취소한 주문</li>
                         </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="order-section-title">
@@ -70,11 +83,9 @@
         // 드롭다운 메뉴
         const statusBtn = document.querySelector('.order-status-btn');
         const statusList = document.querySelector('.order-status-list');
-        const statusText = document.querySelector('.section-title');
-        const statusSubText = document.querySelector('.section-desc')
-        let sectionTitle = document.querySelector('.section-title');
-        let sectionDesc = document.querySelector('.section-desc');
         
+        //const statusSubText = document.querySelector('.section-desc')
+   
         if (statusBtn) {
             statusBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -97,8 +108,8 @@
         }
         
         function loadOrders(status) {
-        	const year = $('#yearSelect').val(); // select 에서 year값 가져옴
-        	let month = $('#monthSelect').val(); // select 에서 month값 가져옴
+        	let year = $('.year-dropdown .dropdown-btn').attr('data-selected'); // 선택된 연도
+            let month = $('.month-dropdown .dropdown-btn').attr('data-selected'); // 선택된 월
             let url = contextPath + "/store/order/" + status;
 
             $.post(url, {
@@ -109,21 +120,24 @@
                 $('#dynamic-css').remove();
                 let cssPath = '';
                 month = parseInt(month, 10);
+                let statusText = $('.section-title');
+                let sectionDesc = $('.section-desc');
+               
                 if (status === 'reservation') {
                 	console.log('order.jsp 에서 reservation 들어옴');
                     cssPath = contextPath + '/css/storeunconfirmedorder2.css';  	
-                	statusText.textContent = month + "월 미확정 주문내역";
-                	sectionDesc.textContent = '| 주문을 확정해 주세요';
+                    statusText.text(month + "월 미확정 주문내역");
+                    sectionDesc.text('| 주문을 확정해 주세요');
                 } else if (status === 'confirmed') {
                 	console.log('order.jsp 에서 confirm 들어옴');
                     cssPath = contextPath + '/css/storeconfirmedorder.css';
-                    statusText.textContent = month + "월 확정 주문내역";
-                	sectionDesc.textContent = '| 픽업 확정 표시를 꼭 해주세요';
+                    statusText.text(month + '월 확정 주문내역');
+                    sectionDesc.text('| 픽업 확정 표시를 꼭 해주세요');
                 } else if (status === 'cancel') {
                 	console.log('order.jsp 에서 cancel 들어옴');
                     cssPath = contextPath + '/css/storecancledorder.css';
-                    statusText.textContent = month + "월 취소한 주문내역";
-                	sectionDesc.textContent = '| 취소한 주문기록';
+                    statusText.text(month + '월 취소한 주문내역');
+                    sectionDesc.text('| 취소한 주문기록');
                 }
                 if (cssPath !== '') {
                     $('head').append('<link id="dynamic-css" rel="stylesheet" type="text/css" href="' + cssPath + '">');
@@ -136,23 +150,50 @@
             });
         }
         $(document).ready(function () {
-        	// 년도 동적 생성
-        	const now = new Date();
-        	const curYear = now.getFullYear();
-        	const curMonth = String(now.getMonth() + 1).padStart(2, '0');
-        	const $yearSelect = $('#yearSelect');
-        	$yearSelect.empty();
-        	for (let y = curYear; y >= curYear - 5; y--) { // yearSelect의 option에 값 넣기
-        		$yearSelect.append('<option value="' + y + '">' + y + '</option>');
+            const now = new Date();
+            const curYear = now.getFullYear();
+            const curMonth = String(now.getMonth() + 1).padStart(2, '0');
+            const $yearList = $('.year-list');
+
+            for (let y = curYear; y >= curYear - 5; y--) {
+                $yearList.append('<li data-value="' + y + '">' + y + '년</li>');
             }
-        	$yearSelect.val(curYear); // 현재 년도를 기본값
-        	$('#monthSelect').val(curMonth); // 현재 월을 기본값
+
+            $('.year-dropdown .dropdown-btn')
+                .attr('data-selected', curYear)
+                .find('.selected-text').text(curYear + '년');
+
+            $('.month-dropdown .dropdown-btn')
+                .attr('data-selected', curMonth)
+                .find('.selected-text').text(parseInt(curMonth, 10) + '월');
+
             loadOrders('reservation');
-            $('#yearSelect, #monthSelect').on('change', function () {
+
+            $('.dropdown-list li').on('click', function () {
+                const value = $(this).data('value');
+                const text = $(this).text();
+                const $dropdown = $(this).closest('.custom-dropdown');
+                $dropdown.find('.dropdown-btn')
+                    .attr('data-selected', value)
+                    .find('.selected-text').text(text);
+                $('.dropdown-list').hide();
+
                 const status = $('.order-status-list li.active').data('status');
                 loadOrders(status);
             });
+
+            $('.dropdown-btn').on('click', function (e) {
+                e.stopPropagation();
+                $(this).siblings('.dropdown-list').toggle();
+                $('.dropdown-list').not($(this).siblings()).hide();
+            });
+
+            $(document).on('click', function () {
+                $('.dropdown-list').hide();
+            });
         });
+
+
     </script>
 </body>
 

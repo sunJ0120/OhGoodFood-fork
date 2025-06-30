@@ -66,6 +66,7 @@
 	</c:otherwise>
 </c:choose>
     <script>
+	// 체크박스 선택시 이미지 변경 로직
         document.querySelectorAll('.order-checkbox').forEach(function (checkbox) {
 	         checkbox.addEventListener('change', function () {
 	            const img = this.nextElementSibling;
@@ -79,6 +80,7 @@
 	            }
 	          });
         });
+	//오늘픽업, 픽업완료 별로 동적 css
         $(document).ready(function () {
             $('.order-card').each(function () {
                 const $orderBtn =$(this).find('.order-card-btn');
@@ -104,50 +106,29 @@
                 }
             });
         });
-		/*
-        $(document).ready(function () {
-            $('.order-card').each(function () {
-                const status = $(this).find('.order-card-btn').data('status');
-                const $pickupBtn = $(this).find('.order-btn-pickup');
-
-                if (status === 'complete') {
-                    $pickupBtn.css({
-                        'text-decoration': 'line-through',
-                        'color': '#8B6D5C' 
-                    });
-                }
-            });
-        });*/
-        
-        //db 연계시 '픽업완료' 상태이면 데이터를 불러올때 체크박스가 되어있어야 함 
-        //그렇지 않으면 '오늘픽업' 이면 체크박스에 체크가 안되어 있는데 
-        // '픽업완료' 상태일때 기본적으로 체크박스에 체크가 안되어 있는것과 로직이 꼬임
-		
+	// 확정시간, 픽업시간 시간 예외처리 및 ajax
         $(document).ready(function() {
-		    $('.order-checkbox').click(function() {
+		    $('.order-checkbox').click(function(e) {
+				const $checkbox = $(this);
 		        const pickupStartStr = $(this).data('pickup-start');
 		        const pickupEndStr = $(this).data('pickup-end'); 
 		        let pickupStart = new Date(pickupStartStr);
 		        let pickupEnd = new Date(pickupEndStr);
+				const orderNo = $(this).data('order-no');
+		        const isChecked = $(this).is(':checked');
+		        const $parentCard = $(this).closest('.order-card');
+		        const $btn = $parentCard.find('.order-card-btn');
 		        console.log("pickupStart : " + pickupStart);
 		        console.log("pickupEnd : " + pickupEnd);
 		        
 		        const now = new Date();
+				if (now < pickupStart || now > pickupEnd) {
+					alert('픽업 시간이 아닙니다');
+					e.preventDefault();
+					$checkbox.prop('checked', !isChecked);
+					return false;
+				}
 		        console.log("now : " + now);
-		        /*
-		        if(now >= pickupStart && now <= pickupEnd) {
-		        	$(this).find('.checkbox-img').prop('disabled', false);
-		        	$(this).prop('disabled', false);
-		        	
-		        }else {
-		        	$(this).find('.checkbox-img').prop('disabled', true);
-		        	$(this).prop('disabled', true);
-		        }*/
-		        const orderNo = $(this).data('order-no');
-		        const isChecked = $(this).is(':checked');
-		        const $parentCard = $(this).closest('.order-card');
-		        const $btn = $parentCard.find('.order-card-btn');
-		
 		        if (isChecked && now >= pickupStart && now <= pickupEnd) {
 		        	$(this).siblings('.checkbox-img').css({
 		        	    'pointer-events': 'auto',
@@ -210,6 +191,7 @@
 		                $(this).prop('checked', true);
 		            }
 		        }else {
+					alert('픽업 시간이 아닙니다.');
 		        	if(isChecked) {
 		        		$(this).prop('checked', false);
 		        	}else {
@@ -220,122 +202,7 @@
 		        	    'opacity': 1
 		        	});
 		        	$(this).prop('disabled', true);
-		        	
-		        	alert('픽업 시간이 아닙니다.');
 		        }
 		    });
 		});
-        
-        
-        /*
-        let $parentCard = '';
-        $(document).ready(function() {
-          $('.order-checkbox').click(function() {
-            if($(this).is(':checked')) {
-                if(confirm('픽업 완료로 바꾸시겠습니까?')) {
-                    $parentCard = $(this).parents('.order-card');
-                    $parentCard.find('.order-btn-pickup').css({
-                    'text-decoration': 'line-through',
-                    'color': '#8B6D5C'
-                });
-                    $parentCard.find('.order-card-btn[data-status="today"]').text('픽업 완료');
-                    
-                    $parentCard.find('.order-card-btn[data-status="today"]').css({
-                        'background-color' : '#8B6D5C'
-                    })
-                    $parentCard.find('.order-card-btn[data-status="today"]').attr('data-status', 'complete');
-                }
-                
-            }
-            if($(this).is(':not(:checked)')) {
-                if($(this).parents('.order-card').find('.order-card-btn[data-status="complete"]')) {
-                    if(confirm('오늘 픽업으로 바꾸시겠습니까?')) {
-                    $parentCard = $(this).parents('.order-card');
-                    $parentCard.find('.order-btn-pickup').css({
-                        'text-decoration': 'none'
-                    })
-                    $parentCard.find('.order-card-btn[data-status="complete"]').text('오늘 픽업');
-                    
-                    $parentCard.find('.order-card-btn[data-status="complete"]').css({
-                        'background-color' : '#D8A8AB'
-                    })
-                    $parentCard.find('.order-card-btn[data-status="complete"]').attr('data-status', 'today');
-                }
-                
-                }
-                
-                
-            }
-          })
-        })
-        */
-        /*
-        $(document).ready(function() {
-            $('.order-checkbox').click(function() {
-                const $parentCard = $(this).closest('.order-card');
-                const $btn = $parentCard.find('.order-card-btn');
-                const currentStatus = $btn.attr('data-status');
-
-                if ($(this).is(':checked')) {
-                // 체크 시: today → complete 로 바꿈
-                if (currentStatus === 'today') {
-                    if (confirm('픽업 완료로 바꾸시겠습니까?')) {
-                    $parentCard.find('.order-btn-pickup').css({
-                        'text-decoration': 'line-through',
-                        'color': '#8B6D5C'
-                    });
-                    $btn.text('픽업 완료')
-                        .css('background-color', '#8B6D5C')
-                        .attr('data-status', 'complete');
-                    } else {
-                    $(this).prop('checked', false); // 사용자가 취소하면 체크 해제
-                    }
-                } else {
-                    $(this).prop('checked', false); // complete 상태일 때 실수로 클릭하면 체크 되지 않게
-                }
-                } else {
-                // 체크 해제 시: complete → today 로 바꿈
-                if (currentStatus === 'complete') {
-                    if (confirm('오늘 픽업으로 바꾸시겠습니까?')) {
-                    $parentCard.find('.order-btn-pickup').css({
-                        'text-decoration': 'none',
-                        'color': 'inherit'
-                    });
-                    $btn.text('오늘 픽업')
-                        .css('background-color', '#D8A8AB')
-                        .attr('data-status', 'today');
-                    } else {
-                    $(this).prop('checked', true); // 사용자가 취소하면 다시 체크함
-                    }
-                }
-                }
-            });
-            });*/
-        /*
-        const $specificPickUp = '';
-        const $specificCheckBox = '';
-        $(document).ready(function() {
-            $('.order-checkbox').click(function() {
-                if($(this).is(':checked')) {
-                    $specificCheckBox = $(this);
-                    $('.order-card-info').each(function() {
-                        $($specificCheckBox).find('.order-btn-pickup').css({
-                            'text-decoration': 'line-through',
-                            'color': '#8B6D5C'
-                        });
-                    })
-                    
-                }
-                if($(this).is(':not(:checked)')) {
-                    const $checkBtn = $(this)
-
-                    $('.order-card-info').each(function() {
-                        $(this).find('.order-btn-pickup').css({
-                            'text-decoration': 'none'
-                            
-                        });
-                    })
-                }
-            })
-        })*/
     </script>
