@@ -262,6 +262,7 @@
 
       let latitude = parseFloat($productCard.data('latitude'));
       let longitude = parseFloat($productCard.data('longitude'));
+
       let storeId = $productCard.data('storeId');
       let storeStatus = $productCard.data('storeStatus'); //JQuery는 camelCase 매핑
       let amount = $productCard.data('amount');
@@ -406,7 +407,6 @@
       contentType: 'application/json',
       data: JSON.stringify(filterParams),
       success: function(html) {
-        console.log("[AJAX 응답]", html);
         $('.productWrapper').html(html);
 
         //기존 마커 지우기
