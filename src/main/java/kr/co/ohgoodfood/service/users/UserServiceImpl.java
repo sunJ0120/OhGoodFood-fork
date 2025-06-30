@@ -343,6 +343,12 @@ public class UserServiceImpl implements UsersService{
 	
 	@Override
     @Transactional(readOnly = true)
+    public List<String> getProductImages(int product_no) {
+        return userMapper.selectProductImages(product_no);
+    }
+	
+	@Override
+    @Transactional(readOnly = true)
     public List<Review> getReviewsByProductNo(int productNo) {
         return userMapper.selectProductReviews(productNo);
     }

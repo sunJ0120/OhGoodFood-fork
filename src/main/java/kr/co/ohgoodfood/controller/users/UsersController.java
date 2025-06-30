@@ -1,28 +1,40 @@
 package kr.co.ohgoodfood.controller.users;
 
-import kr.co.ohgoodfood.dto.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import kr.co.ohgoodfood.dto.Account;
+import kr.co.ohgoodfood.dto.Bookmark;
+import kr.co.ohgoodfood.dto.BookmarkFilter;
 import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.Review;
+import kr.co.ohgoodfood.dto.ReviewForm;
 import kr.co.ohgoodfood.dto.UserMainFilter;
 import kr.co.ohgoodfood.dto.UserMypage;
+import kr.co.ohgoodfood.dto.UserOrder;
+import kr.co.ohgoodfood.dto.UserOrderFilter;
+import kr.co.ohgoodfood.dto.UserOrderRequest;
 import kr.co.ohgoodfood.dto.UserSignup;
 import kr.co.ohgoodfood.service.common.CommonService;
 import kr.co.ohgoodfood.service.users.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import javax.servlet.http.HttpSession;
-import java.util.Collections;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * UsersController
@@ -333,37 +345,15 @@ public class UsersController {
         ProductDetail detail = usersService.getProductDetail(product_no);       
         model.addAttribute("productDetail", detail);
         
+        List<String> images = usersService.getProductImages(product_no);
+        model.addAttribute("images", images);
+        
         List<Review> reviews = usersService.getReviewsByProductNo(product_no);
         model.addAttribute("reviews", reviews);
         return "users/userProductDetail";
         
     }
 
-    /**
-     * 특정 가게 상세 정보로 리다이렉트
-     *
-     */
-    @PostMapping("/productDetail")
-    public String reserve(
-            @RequestParam("product_no") int product_no,
-            HttpSession session,
-            RedirectAttributes redirectAttrs
-    ) {
-        String userId = (String) session.getAttribute("user_id");
-        if (userId == null) {
-            redirectAttrs.addFlashAttribute("error", "로그인이 필요합니다."); // 추후 인터셉터 구현시 제거
-            return "redirect:/login";
-        }
-
-        // 
-        boolean success = usersService.reserveProduct(userId, product_no);
-        if (success) {
-            redirectAttrs.addFlashAttribute("msg", "예약이 완료되었습니다.");
-        } else {
-            redirectAttrs.addFlashAttribute("error", "예약에 실패했습니다.");
-        }
-        return "redirect:/user/productDetail?product_no=" + product_no;
-    }
     /**
      * 하단 메뉴바 Review 페이지
      */
@@ -390,6 +380,7 @@ public class UsersController {
     /**
      * 결제 페이지
      */
+
     @PostMapping("/userPaid")
     public String userPaid(@RequestParam("productNo") int productNo, Model model, HttpSession session) {
         ProductDetail detail = usersService.getProductDetail(productNo);

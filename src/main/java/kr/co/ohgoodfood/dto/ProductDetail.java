@@ -14,7 +14,7 @@ import lombok.ToString;
 @ToString
 @Data
 @NoArgsConstructor
-public class ProductDetail {
+public class ProductDetail{
 	// Account table에서 가져오는 정보들
     private String user_id;
     private String user_nickname;
@@ -54,6 +54,11 @@ public class ProductDetail {
     // Image table에서 가져오는 정보들
     private String store_img; // 가게 이미지 전체
     private List<String> images;
+    
+
+    
+
+
     
     
 

@@ -26,7 +26,7 @@
                                 <div class="storeImgSlider">
                                     <div class="sliderTrack">
                                         <c:forEach var="imgUrl" items="${productDetail.images}">
-                                            <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${productDetail.store_img}"
+                                            <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${productDetail.images}"
                                                 alt="상품 이미지" class="sliderImg" />
                                         </c:forEach>
                                     </div>
@@ -36,7 +36,16 @@
                                 <!-- 제품명/가격 헤더 -->
                                 <div class="storeHeader">
                                     <div class="storeName">${productDetail.store_name}</div>
-                                    <div class="statusBadge" data-status="${productDetail.pickupStatus.name()}"
+                                    <div class="statusBadge
+                                    <c:choose>
+                                    <c:when test=" ${productDetail.pickupStatus.name() eq 'SOLD_OUT' or productDetail.pickupStatus.name() eq 'CLOSED' }">
+                                        soldout
+                                        </c:when>
+                                        <c:otherwise>
+                                            available
+                                        </c:otherwise>
+                                        </c:choose>"
+                                        data-status="${productDetail.pickupStatus.name()}"
                                         data-remaining="${productDetail.amount}">
                                         <span class="statusBadgeText">
                                             ${productDetail.pickupStatus.displayName}
@@ -149,11 +158,9 @@
                                     <div class="reviewSection">
                                         <c:choose>
                                             <c:when test="${empty reviews}">
-                                                <div class="emptyModal">
-                                                    <div class="modalWrapper">
-                                                        <img src="${pageContext.request.contextPath}/img/user_noreviewstore.png"
-                                                            alt="리뷰없는고양이" class="emptyModalEmoji" />
-                                                    </div>
+                                                <div class="modalWrapper">
+                                                    <img src="${pageContext.request.contextPath}/img/user_noreviewstore.png"
+                                                        alt="리뷰없는고양이" class="emptyModalEmoji" />
                                                 </div>
                                             </c:when>
                                             <c:otherwise>
@@ -201,11 +208,11 @@
                         // }
 
                         // 초기 상태
-                        // 초기 상태
                         $('.infoContent').show();
                         $('.reviewSection').hide();
 
                         $('.tabs .tab').on('click', function () {
+                            console.log('[DEBUG] 탭 클릭, idx =', $(this).index());
                             var idx = $(this).index();
                             $('.tabs .tab').removeClass('active').eq(idx).addClass('active');
 
