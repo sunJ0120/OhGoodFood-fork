@@ -429,6 +429,7 @@
     const $tabBtn         = $(".tabBtn");
     const $productWrapper = $(".productWrapper");
     const $mapWrapper     = $(".mapWrapper");
+    const $storePinModalWrapper = $('.storePinModalWrapper'); // center 변경 버튼 눌렀을때 modal 닫기 위함이다.
 
     //위치 정보 허용에 따른 위도 경도값 지정
     try {
@@ -480,6 +481,23 @@
           map.relayout();
           map.setCenter(map.getCenter());
         }
+
+        //이 위치에서 검색 버튼 클릭 했을때, center를 변경하기 위함이다.
+        $('.btnSetCenter').on('click', function(){
+          //현재 지도의 바뀐 중심 좌표 가져오기
+          const center = map.getCenter();
+
+          const changeLatitude = center.getLat();
+          const changeLongitude = center.getLng();
+
+          // 현재 filterParams에 들어가는 latitude 덮어쓰기.
+          filterParams.latitude  = changeLatitude;
+          filterParams.longitude = changeLongitude;
+
+          $storePinModalWrapper.addClass('hidden'); // center 바뀌면, 열려있던 modal을 닫는다.
+          $mapWrapper.removeClass('modalOpen'); // 버튼 다시 아래로 내리기
+          sendFilterRequest();
+        });
       });
     });
   });
