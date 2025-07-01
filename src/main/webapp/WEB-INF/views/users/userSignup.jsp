@@ -116,17 +116,10 @@
 						error: function () {
 							$("#idCheckMessage").css("color", "red").text("* 서버 오류");
 							isIdChecked = false;
-						} else { //사용 가능 
-							$("#idCheckMessage").css("color", "green").text("* 사용 가능한 아이디입니다.");
-							isIdChecked = true;
 						}
-					},
-					error: function () {
-						$("#idCheckMessage").css("color", "red").text("* 서버 오류");
-						isIdChecked = false;
-					}
 				});
 			});
+		
 			// 비밀번호 유효성 검사
 			$("#user_pwd").on("input", function () {
 				const pw = $(this).val();

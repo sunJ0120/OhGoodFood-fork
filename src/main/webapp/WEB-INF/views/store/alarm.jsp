@@ -17,20 +17,29 @@
         <%@ include file="/WEB-INF/views/store/header.jsp" %>
         <main>
             <div class="alarm-container" id="alarm-container">
-                <c:forEach var="alarm" items="${alarms}">
-                    <div class="alarm-item ${alarm.alarm_read == 'N' ? 'new-alarm' : ''}" data-alarm-no="${alarm.alarm_no}">
-                        <div class="alarm-header">
-                            <div class="alarm-date">
-                                <fmt:formatDate value="${alarm.sended_at}" pattern="yyyy-MM-dd HH:mm:ss" />
+                <c:choose>
+                    <c:when test="${not empty alarms}">
+                        <c:forEach var="alarm" items="${alarms}">
+                            <div class="alarm-item ${alarm.alarm_read == 'N' ? 'new-alarm' : ''}" data-alarm-no="${alarm.alarm_no}">
+                                <div class="alarm-header">
+                                    <div class="alarm-date">
+                                        <fmt:formatDate value="${alarm.sended_at}" pattern="yyyy-MM-dd HH:mm:ss" />
+                                    </div>
+                                    <img src="../../../img/store_delete.png" alt="삭제 아이콘" class="delete-icon">
+                                </div>
+                                <div class="alarm-content">
+                                    <span class="alarm-status">${alarm.alarm_title}</span>
+                                    <span class="alarm-desc">| ${alarm.alarm_contents}</span>
+                                </div>
                             </div>
-                            <img src="../../../img/store_delete.png" alt="삭제 아이콘" class="delete-icon">
+                        </c:forEach>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="no-alarm-container">
+                            <img src="../../../img/commonnoalarmInfo.png" alt="알람이 없습니다" class="no-alarm-image">
                         </div>
-                        <div class="alarm-content">
-                            <span class="alarm-status">${alarm.alarm_title}</span>
-                            <span class="alarm-desc">| ${alarm.alarm_contents}</span>
-                        </div>
-                    </div>
-                </c:forEach>
+                    </c:otherwise>
+                </c:choose>
             </div>
         </main>
         <%@ include file="/WEB-INF/views/store/footer.jsp" %>
