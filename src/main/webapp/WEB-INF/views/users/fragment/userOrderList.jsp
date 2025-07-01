@@ -22,7 +22,8 @@
                          data-order-no="${userOrder.order_no}"
                          data-order-status="${userOrder.order_status}"
                          data-canceld-from="${userOrder.canceld_from}"
-                         data-block-cancel="${userOrder.block_cancel}">
+                         data-block-cancel="${userOrder.block_cancel}"
+                         data-has-review="${userOrder.has_review}">
                     <div class="orderTop">
                         <div class="storeName">${userOrder.store_name}</div>
                         <div class="headerLeftWrapper">
@@ -104,6 +105,10 @@
                                 onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
                             리뷰 쓰기
                         </button>
+
+                        <div class="orderBrown hidden orderReviewDone">
+                            이미 리뷰를 작성했습니다.
+                        </div>
 
                         <div class="orderWhite hidden orderPickupCode">
                             픽업 코드 : ${userOrder.order_code}

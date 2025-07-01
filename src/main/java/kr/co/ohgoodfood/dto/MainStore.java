@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 /**
  * [DTO] MainStore
  *
- * - Main과 Bookmark에서 가게 정보를 사용하기 위한 DTO 클래스
+ * - Main에 나오는 가게 정보 카드를 사용하기 위한 DTO 클래스
  * - 카드 안에 들어가는 모든 정보들을 한 번에 저장해서 사용한다.
  */
 

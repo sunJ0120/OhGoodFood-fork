@@ -68,7 +68,8 @@
                            data-order-no="${userOrder.order_no}"
                            data-order-status="${userOrder.order_status}"
                            data-canceld-from="${userOrder.canceld_from}"
-                           data-block-cancel="${userOrder.block_cancel}">
+                           data-block-cancel="${userOrder.block_cancel}"
+                           data-has-review="${userOrder.has_review}">
                     <div class="orderTop">
                       <div class="storeName">${userOrder.store_name}</div>
                       <div class="headerLeftWrapper">
@@ -151,6 +152,10 @@
                         리뷰 쓰기
                       </button>
 
+                      <div class="orderBrown hidden orderReviewDone">
+                        이미 리뷰를 작성했습니다.
+                      </div>
+
                       <div class="orderWhite hidden orderPickupCode">
                         픽업 코드 : ${userOrder.order_code}
                       </div>
@@ -196,7 +201,7 @@
     // 초기 페이지 로드 때 버튼 hidden 조정
     adjustOrderButtons();
     // 초기 페이지 로드 때 버튼 컬러 설정
-    changeOrderButtonsColors()
+    changeOrderButtonsColors();
     // 카테고리 클릭 시
     $('.dropdownModal .item').on('click', function () {
       const selectedCategory = $(this).text().trim();
@@ -264,18 +269,20 @@
 <%-- 버튼 hidden 조정 --%>
 <script>
   function adjustOrderButtons() {
-    $('.productCard').each(function(){
-      const $card    = $(this);
-      const status   = $card.data('orderStatus');        // reservation, confirmed, pickup, cancel
+    $('.productCard').each(function() {
+      const $card = $(this);
+      const status = $card.data('orderStatus');        // reservation, confirmed, pickup, cancel
       const blockStatus = $card.data('blockCancel');
+      const hasReview = $card.data('hasReview');
 
       const $wrapper = $card.find('.orderNoticeWrapper');
 
-      const $notice  = $wrapper.find('.orderNoticeBlockCancel');
-      const $review  = $wrapper.find('.orderReview');
-      const $pickupCode  = $wrapper.find('.orderPickupCode');
-      const $cancel  = $wrapper.find('.orderCancel');
-      const $cancelPost  = $wrapper.find('form.postStyle');
+      const $notice = $wrapper.find('.orderNoticeBlockCancel');
+      const $review = $wrapper.find('.orderReview');
+      const $reviewDone = $wrapper.find('.orderReviewDone');
+      const $pickupCode = $wrapper.find('.orderPickupCode');
+      const $cancel = $wrapper.find('.orderCancel');
+      const $cancelPost = $wrapper.find('form.postStyle');
 
       $notice.addClass('hidden');
       $review.addClass('hidden');
@@ -284,10 +291,10 @@
       $cancelPost.addClass('hidden');
 
       // 상태별로 필요한 요소만 보이게 한다.
-      if(blockStatus){ //확정 한시간 전 & 내일 픽업일 경우, 11시 일 경우 (자정-1)
+      if (blockStatus) { //확정 한시간 전 & 내일 픽업일 경우, 11시 일 경우 (자정-1)
         $card.addClass('blockCancel');
         $notice.removeClass('hidden');
-      }else{
+      } else {
         $card.removeClass('blockCancel'); //blockCancel 아니므로 class 추가
         if (status === 'reservation') { //확정 진행중
           $cancel.removeClass('hidden');
@@ -295,7 +302,11 @@
         } else if (status === 'confirmed') { //확정
           $pickupCode.removeClass('hidden');
         } else if (status === 'pickup') { //픽업 완료
-          $review.removeClass('hidden');
+          if (hasReview) { //리뷰가 있음
+            $reviewDone.removeClass('hidden');
+          }else{
+            $review.removeClass('hidden');
+          }
         }
       }
     });

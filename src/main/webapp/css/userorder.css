@@ -31,7 +31,7 @@ main {
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
-    font-family: "NanumSquare Neo-Bold", sans-serif;
+    font-weight: bold;
     font-size: 14px;
 
     gap: 4px;
@@ -133,7 +133,7 @@ main {
 }
 
 .salePrice {
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
     font-size: 18px;
     color: #333;
 }
@@ -169,7 +169,7 @@ main {
     border-radius: 8px;
     font-size: 13px;
     color: black;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 }
@@ -225,7 +225,7 @@ main {
     padding: 16px;
     background-color: #fdfdf5;
     margin-bottom: 20px;
-    font-family: 'Pretendard', sans-serif;
+    /*font-weight: normal;*/
 }
 
 .orderTop {
@@ -238,7 +238,6 @@ main {
 
 .orderTop .storeName{
     font-size: 18px;
-    font-family: "nanumesquareneo_b", sans-serif;
     font-weight: bold;
 }
 
@@ -256,7 +255,6 @@ main {
     color: white;
 }
 
-/* 이거 container 넘는거 해결 필요. */
 .orderMiddle {
     display: flex;
     align-items: flex-start;
@@ -332,6 +330,10 @@ main {
     font-size: 15px;
     margin-top: 12px;
     font-weight: bold;
+}
+
+.orderReviewDone {
+    background-color: #B5A295; /* 연한 색으로 표현.. 왜인지 지금 오퍼시티 안먹혀서 */
 }
 
 .hidden {

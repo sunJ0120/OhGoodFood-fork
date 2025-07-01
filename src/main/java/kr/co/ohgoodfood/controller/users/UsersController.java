@@ -6,7 +6,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
-import kr.co.ohgoodfood.dto.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +31,6 @@ import kr.co.ohgoodfood.dto.UserMypage;
 import kr.co.ohgoodfood.dto.UserOrder;
 import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.dto.UserOrderRequest;
-import kr.co.ohgoodfood.dto.UserSignup;
 import kr.co.ohgoodfood.service.common.CommonService;
 import kr.co.ohgoodfood.service.common.PayService;
 import kr.co.ohgoodfood.service.users.UsersService;
@@ -43,18 +41,19 @@ import lombok.extern.slf4j.Slf4j;
  * UsersController
  *
  * 사용자 페이지 전용 기능을 처리하는 컨트롤러입니다.
- * - POST /user/signup	       : 사용자 회원가입 페이지
- * - GET  /user/main           : 사용자 메인 화면 조회
- * - POST /user/filter/store   : AJAX 기반 가게 목록 필터링
- * - GET  /user/bookmark       : 해당 user_id가 가진 bookmark 목록 조회
- * - POST /user/bookmark       : 해당하는 bookmark 삭제 -> 차후 북마크 다시 insert 하는 로직이 필요할 경우, endPoint 분기 예정
- * - GET  /user/main/orderList : 유저가 가진 orderList 목록 조회
- * - POST /user/filter/order   : AJAX 기반 오더 목록 필터링
- * - POST /user/order/cancel   : 유저가 선택한 오더 주문 취소
- * - GET  /user/mypage         : 유저 mypage 이동
- * - GET  /user/reviewList     : 하단 메뉴바 Review탭 이동시 전체 리뷰 목록 조회
- * @since 2025-06-22 : [sunJ] 필터에 Map이 아닌, DTO 필터 객체 적용
- * @since 2025-06-25 : [sunJ] 인터셉트로 로그인 정보 체크할 예정이라, 인터셉터에서 alert을 뿌려주는 방식이므로 따로 처리하지는 않은 상태
+ * - POST /user/signup	              : 사용자 회원가입 페이지
+ * - GET  /user/main                  : 사용자 메인 화면 조회
+ * - POST /user/filter/store          : AJAX 기반 가게 목록 필터링
+ * - GET  /user/bookmark              : 해당 user_id가 가진 bookmark 목록 조회
+ * - POST /user/bookmark/delete       : 해당하는 bookmark 삭제
+ * - POST /user/bookmark/insert       : 해당하는 bookmark 추가
+ * - GET  /user/main/orderList        : 유저가 가진 orderList 목록 조회
+ * - POST /user/filter/order          : AJAX 기반 오더 목록 필터링
+ * - POST /user/order/cancel          : 유저가 선택한 오더 주문 취소
+ * - GET  /user/map/pin               : AJAX 기반 핀으로 선택한 스토어 fragment 조회
+ * - GET  /user/mypage                : 유저 mypage 이동
+ * - GET  /user/reviewList            : 하단 메뉴바 Review탭 이동시 전체 리뷰 목록 조회
+ *
  */
 @Controller
 @RequestMapping("/user")
@@ -72,7 +71,7 @@ public class UsersController {
     /**
      * 사용자 메인 화면을 조회하고, 가게 목록을 뷰에 바인딩한다.
      *
-     * @param userMainFilter 쿼리 파라미터로 전달된 필터 정보
+     * @param userMainFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
      * @param model          뷰에 전달할 데이터(Model)
      * @return               포워딩할 JSP 뷰 이름 ("users/userMain")
      */
@@ -81,11 +80,10 @@ public class UsersController {
                            Model model){
 
         List<MainStore> mainStoreList = usersService.getMainStoreList(userMainFilter);
-        log.info("[log/UsersController.userMain] mainStoreList 결과 log : {}", mainStoreList);
         model.addAttribute("kakaoMapAppKey", kakaoMapAppKey);
         model.addAttribute("mainStoreList", mainStoreList);
 
-        return "users/userMain"; // /WEB-INF/views/user/userMain.jsp로 forwarding
+        return "users/userMain";
     }
 
     /**
@@ -98,10 +96,8 @@ public class UsersController {
     @PostMapping("/filter/store")
     public String filterStoreList(@RequestBody UserMainFilter userMainFilter,
                                   Model model){
-        log.info("[log/UsersController.filterStoreList] 받은 필터 파라미터 결과 log : {}", userMainFilter);
 
         List<MainStore> mainStoreList = usersService.getMainStoreList(userMainFilter);
-        log.info("[log/UsersController.filterStoreList] filtering된 mainStoreList 결과 log : {}", mainStoreList);
         model.addAttribute("mainStoreList", mainStoreList);
         // JSP fragment만 리턴
         return "users/fragment/userMainStoreList";
@@ -110,7 +106,7 @@ public class UsersController {
     /**
      * 해당 user가 가진 북마크 리스트를 조회한다.
      *
-     * @param userMainFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
+     * @param userMainFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
      * @param model          뷰에 전달할 데이터(Model)
      * @param session        현재 HTTP 세션(로그인된 사용자 정보)
      * @return               users/userBookmark.jsp로 포워딩
@@ -124,17 +120,14 @@ public class UsersController {
         Account loginUser = (Account) session.getAttribute("user");
         String user_id = loginUser.getUser_id();
 
-        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
-
         List<Bookmark> bookmarkList = usersService.getBookmarkList(user_id);
-        log.info("[log/UsersController.userBookmark] user_id가 가진 userBookmark 결과 log : {}", bookmarkList);
         model.addAttribute("bookmarkList", bookmarkList);
 
         return "users/userBookmark"; // /WEB-INF/views/users/userBookmark.jsp로 forwarding
     }
 
     /**
-     * 해당 user가 가진 북마클 리스트 중, 특정 북마크를 삭제한다.
+     * 해당 user가 가진 북마크 리스트 중, 특정 북마크를 삭제한다.
      *
      * @param bookmarkFilter bookMark delete에 필요한 필드 정보가 담긴 DTO
      * @param model          뷰에 전달할 데이터(Model)
@@ -149,7 +142,6 @@ public class UsersController {
         //세션에서 받아오는 로직
         Account loginUser = (Account) session.getAttribute("user");
         String user_id = loginUser.getUser_id();
-        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
         //bookmark를 위해 user_id 세팅
         bookmarkFilter.setUser_id(user_id);
@@ -175,7 +167,6 @@ public class UsersController {
         //세션에서 받아오는 로직
         Account loginUser = (Account) session.getAttribute("user");
         String user_id = loginUser.getUser_id();
-        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
         //bookmark를 위해 user_id 세팅
         bookmarkFilter.setUser_id(user_id);
@@ -188,10 +179,10 @@ public class UsersController {
     /**
      * 세션에 있는 유저가 가진 주문 목록을 조회한다.
      *
-     * @param userOrderFilter 쿼리 파라미터로 전달된 필터 정보
-     * @param model          뷰에 전달할 데이터(Model)
-     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
-     * @return               users/userOrders.jsp로 포워딩
+     * @param userOrderFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
+     * @param model           뷰에 전달할 데이터(Model)
+     * @param session         현재 HTTP 세션(로그인된 사용자 정보)
+     * @return                users/userOrders.jsp로 포워딩
      */
     @GetMapping("/orderList")
     public String userOrderList(@ModelAttribute UserOrderFilter userOrderFilter,
@@ -200,11 +191,9 @@ public class UsersController {
 
         Account loginUser = (Account) session.getAttribute("user");
         String user_id = loginUser.getUser_id();
-        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
-        log.info("[log/UsersController.userOrderList] user_id가 가진 userOrderList 결과 log : {}", userOrderList);
 
         model.addAttribute("userOrderList", userOrderList);
 
@@ -226,11 +215,9 @@ public class UsersController {
         //세션에서 받아오는 로직
         Account loginUser = (Account) session.getAttribute("user");
         String user_id = loginUser.getUser_id();
-        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
-        log.info("[log/UsersController.filterOrderList] user_id가 가진 filterOrderList 결과 log : {}", userOrderList);
         model.addAttribute("userOrderList",userOrderList);
 
         return "users/fragment/userOrderList";
@@ -239,23 +226,19 @@ public class UsersController {
     /**
      * 세션에 있는 유저가 가진 주문 목록중 선택한 것을 취소한다.
      *
-     * @param userOrderRequest Order delete에 필요한 필드 정보가 담긴 DTO
-     * @param order_no         form에서 보낸 order_no 파라미터 바인딩
+     * @param userOrderRequest 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
      * @param session          현재 HTTP 세션(로그인된 사용자 정보)
      * @return                 PRG : /user/orderList 로 리다이렉트
      */
     @PostMapping("/order/cancel")
     public String cancelOrder(@ModelAttribute UserOrderRequest userOrderRequest,
-                              @RequestParam("order_no") int order_no,
                               HttpSession session,
                               RedirectAttributes redirectAttributes){
 
         Account loginUser = (Account) session.getAttribute("user");
         String user_id = loginUser.getUser_id();
-        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
         userOrderRequest.setUser_id(user_id);
-        userOrderRequest.setOrder_no(order_no);
         boolean ans = usersService.updateUserOrderCancel(userOrderRequest);
 
         if (ans) {
@@ -267,12 +250,16 @@ public class UsersController {
         return "redirect:/user/orderList";
     }
 
+    /**
+     * map에서 pin 선택한 가게의 정보를 AJAX로 조회하고 뷰 프래그먼트만 반환한다.
+     *
+     * @param userMainFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
+     * @return               가게 정보를 포함한 JSP 프래그먼트 ("users/fragment/userMapPinStore")
+     */
     @GetMapping("/map/pin")
     public String getMapPinStore(@ModelAttribute UserMainFilter userMainFilter,
-                                 @RequestParam("store_id") String store_id,
                                  Model model){
 
-        userMainFilter.setStore_id(store_id);
         MainStore mainStore = usersService.getMainStoreOne(userMainFilter);
         model.addAttribute("mainStore", mainStore);
 

@@ -3,6 +3,13 @@ package kr.co.ohgoodfood.dto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * [DTO / ENUM] PickupStatus
+ *
+ * - 확장성 및 유지보수성을 위해 ENUM type으로 구성
+ * - .displayName을 이용하면 지정한 string을 화면에서 사용할 수 있습니다.
+ */
+
 @Getter
 @RequiredArgsConstructor
 public enum PickupStatus {
