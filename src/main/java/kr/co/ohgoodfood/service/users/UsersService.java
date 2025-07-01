@@ -68,6 +68,9 @@ public interface UsersService {
 	/* 상품(가게)별 사진 조회*/
 	List<String> getProductImages(int product_no);
 	
+	/* 북마크 조회 */
+	boolean isBookmarked(String user_id, String store_id);
+	
     /* 예약 처리 메서드 (추후 개발) */
     boolean reserveProduct(String userId, int productId);
     
@@ -89,5 +92,6 @@ public interface UsersService {
 
     /* 가게 이미지 하나 가져오기 */
     String getStoreImg(String store_id);
+
 
 }

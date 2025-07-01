@@ -136,4 +136,13 @@ public interface UserMapper {
      * @return
      */
     String selectStoreImg(String store_id);
+    
+    /**
+     * 북마크 여부
+     * @param user_id
+     * @param store_id
+     * @return
+     */
+    int isBookmarked(@Param("user_id") String user_id, @Param("store_id") String store_id);
+
 }
