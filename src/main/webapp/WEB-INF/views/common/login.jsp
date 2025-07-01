@@ -81,22 +81,22 @@
 	   	        const password = $('#userPwd').val().trim();
 	   	        console.log('logincheck 실행됨', id, password);
 	   	        if(id === '') {
-	   	            alert('아이디 입력바람');
+	   	            alert('아이디를 입력하세요');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if(password === '') {
-	   	            alert('비밀번호 입력바람');
+	   	            alert('비밀번호를 입력하세요');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if(id.length > 15) {
-	   	            alert('아이디는 15자 이하로 입력바람');
+	   	            alert('아이디는 15자 이하로 입력하세요');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if (!/^[a-zA-Z0-9]+$/.test(id)) {
-	   	            alert("아이디는 영문자와 숫자만 입력 가능함");
+	   	            alert("아이디는 영문자와 숫자만 입력 가능합니다.");
 	   	            e.preventDefault();
 	   	            return;
 	   	        }

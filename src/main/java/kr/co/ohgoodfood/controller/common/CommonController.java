@@ -45,7 +45,7 @@ public class CommonController {
 			return "/common/intro";
 		}
 
-		model.addAttribute("msg", "로그인 실패");
+		model.addAttribute("msg", "아이디 또는 비밀번호가 일치하지 않습니다.");
 		model.addAttribute("url", "/login");
 		return "store/alert";
 	}
