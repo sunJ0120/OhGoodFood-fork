@@ -239,14 +239,15 @@ public class UsersController {
         String user_id = loginUser.getUser_id();
 
         userOrderRequest.setUser_id(user_id);
-        boolean ans = usersService.updateUserOrderCancel(userOrderRequest);
 
-        if (ans) {
+        //주문 취소의 경우는, 두 테이블을 UPDATE 하므로 @Transactional 처리, 그러므로 예외처리해준다.
+        try {
+            usersService.updateUserOrderCancel(userOrderRequest);
             redirectAttributes.addFlashAttribute("msg", "주문이 정상적으로 취소되었습니다.");
-        } else {
-            redirectAttributes.addFlashAttribute("errorMsg", "주문 취소에 실패했습니다.");
+        } catch (IllegalStateException e) {
+            // 트랜잭션은 exception 던졌을 때 롤백됨
+            redirectAttributes.addFlashAttribute("errorMsg", "[ERROR!] 주문 취소에 실패했습니다.");
         }
-
         return "redirect:/user/orderList";
     }
 

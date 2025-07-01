@@ -70,7 +70,9 @@
                     </div>
                       <%-- 가게 상세 정보 --%>
                     <div class="cardInfo">
-                      <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${bookmark.store_img}" alt="상품 이미지" class="storeImage"/>
+                      <div class="imgWrapper">
+                        <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${bookmark.store_img}" alt="상품 이미지" class="storeImage"/>
+                      </div>
                       <div class="productTextWrapper">
                         <div class="productTexts">
 

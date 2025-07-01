@@ -282,16 +282,19 @@ public class UserServiceImpl implements UsersService{
      * @return                   : UPDATE 쿼리가 잘 실행 되었는지 보기 위해 row return
      */
     @Override
+    @Transactional
     public boolean updateUserOrderCancel(UserOrderRequest userOrderRequest){
         userOrderRequest.setOrder_status("cancel");
         userOrderRequest.setCanceld_from("user");
 
-        int cnt = userMapper.updateOrderStatus(userOrderRequest);
+        int updateOrderCnt = userMapper.updateOrderStatus(userOrderRequest);
+        int updateAmountCnt = userMapper.restoreProductAmount(userOrderRequest);
 
-        if (cnt == 1) {
-            return true;
+        // 하나라도 오류가 발생할 경우, 롤백을 위해 exception throws
+        if (updateOrderCnt != 1 || updateAmountCnt != 1) {
+            throw new IllegalStateException("주문 취소 처리 중 오류 발생");
         }
-        return false; //update Order 실패!
+        return true;
     }
     
 	/** 유저 정보 한 건 조회 */

@@ -75,6 +75,13 @@ public interface UserMapper {
     int updateOrderStatus(@Param("order_request") UserOrderRequest userOrderRequest);
 
     /**
+     * 사용자 주문 취소시, Product의 amount를 복원하기 위함이다.
+     *
+     * @param userOrderRequest 필터 DTO
+     */
+    int restoreProductAmount(@Param("order_request") UserOrderRequest userOrderRequest);
+
+    /**
     * 세션의 user_id 로 MyPage DTO 전체를 조회 
     * @param user_id  사용자 ID
     */
