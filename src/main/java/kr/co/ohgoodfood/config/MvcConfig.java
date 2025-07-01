@@ -117,7 +117,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(li())
 		.addPathPatterns("/user/**", "/store/**")  // 특정 경로들에만 적용
-		.excludePathPatterns("/login", "/jointype", "/store/signup", "/user/userSignup","/admin/**","/user/userPaid","/user/paidfail");
+		.excludePathPatterns("/login", "/jointype", "/store/signup", "/user/signup", "/user/checkId", "/admin/**","/user/userPaid","/user/paidfail");
 		/*
 		 * /student/** 모든 페이지
 		 * 
