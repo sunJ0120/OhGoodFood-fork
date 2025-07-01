@@ -189,10 +189,8 @@ body{
     "img line"
     "img content"
     "store store";
-  gap: 8px 12px;
-  width: 90%;
   max-width: 357px;
-  height: 195px;
+  height: 170px;
   padding: 16px;
   background: #F5F3EA;
   border: 1px solid #E5DFD5;
@@ -205,6 +203,7 @@ body{
   background: #717171;
   height: 1px;
   margin: 0;              /* grid row-gap(4px)으로 간격 처리 */
+  margin-left: 7px;
 }
 .reviewImageArea {
   grid-area: img;
@@ -232,6 +231,7 @@ body{
   font-size: 13px;
   font-weight: 700;
   color: #000;
+  margin-left: 7px;
 }
 
 .reviewDate {
@@ -243,10 +243,11 @@ body{
 .reviewContent {
   grid-area: content;
   font-family: 'nanumesquareneo', sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 17px;
   color: #000;
   margin-top: 5px;
+  margin-left: 7px;
 }
 
 /* 매장 정보 + 가격 */
