@@ -67,9 +67,7 @@
 			let isIdChecked = false;
 			let isPwMatched = false;
 
-			$(function () {
-				let isIdChecked = false;
-				let isPwMatched = false;
+			// $(function () {
 
 				// 아이디 유효성 검사
 				$("#user_id").on("input", function () {
@@ -89,7 +87,8 @@
 					$("#idCheckMessage").css("color", "red").text("* 중복확인을 해주세요.");
 				});
 				// 아이디 중복확인 버튼 클릭
-				$("#checkIdButton").click(function () {
+				$("#checkIdButton").click(function (e) {
+					e.preventDefault();
 					const userId = $("#user_id").val();
 					if (userId === "") {
 						$("#idCheckMessage").css("color", "red").text("* 아이디를 입력하세요.");
@@ -102,7 +101,7 @@
 						type: "GET",
 						data: { user_id: userId },
 						success: function (res) {
-							if (res) { // 중복
+							if (res == true || res === "true") { // 중복
 								$("#idCheckMessage").css("color", "red").text("* 이미 사용중인 아이디입니다.");
 								isIdChecked = false;
 							} else { //사용 가능 
@@ -262,7 +261,7 @@
 					}
 
 				});
-			});
+			// });
 
 		</script>
 	</body>

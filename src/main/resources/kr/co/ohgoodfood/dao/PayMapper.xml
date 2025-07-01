@@ -70,4 +70,9 @@
     <select id="getStoreStatusByPaidCode" parameterType="String" resultType="String">
         SELECT store_status FROM Store WHERE store_id = (SELECT store_id FROM Orders WHERE order_no = (SELECT order_no FROM Paid WHERE paid_code = #{paid_code}));
     </select>
+
+    <!-- Paid_code로 주문 번호 가져오기 -->
+    <select id="getOrderNoByPaidCode" parameterType="String" resultType="int">
+        SELECT order_no FROM Paid WHERE paid_code = #{paid_code};
+    </select>
 </mapper>

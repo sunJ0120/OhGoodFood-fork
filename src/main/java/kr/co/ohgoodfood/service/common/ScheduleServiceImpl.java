@@ -40,7 +40,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleMapper.updateStoreStatus(store);
             Alarm alarm = new Alarm();
             alarm.setAlarm_title("확정 완료");  
-            alarm.setAlarm_contents("예약들이 확정되었습니다.");
+            alarm.setAlarm_contents(scheduleMapper.getStoreName(store.getStore_id()) + " 예약이 확정되었습니다.");
             alarm.setReceive_id(store.getStore_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");
@@ -55,8 +55,8 @@ public class ScheduleServiceImpl implements ScheduleService {
             order.setOrder_code((int)(Math.random() * 900000) + 100000);
 			scheduleMapper.updateOrderStatus(order);
             Alarm alarm = new Alarm();
-            alarm.setAlarm_title("예약 확정");  
-            alarm.setAlarm_contents("예약 확정되었습니다.");
+            alarm.setAlarm_title("확정 완료");  
+            alarm.setAlarm_contents(scheduleMapper.getStoreName(order.getStore_id()) + " 예약이 확정되었습니다.");
             alarm.setReceive_id(order.getUser_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");
@@ -84,7 +84,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         for (ReservationConfirmed store : reservationStoreList) {
             Alarm alarm = new Alarm();
             alarm.setAlarm_title("확정 임박");  
-            alarm.setAlarm_contents("확정 마감 1시간 전입니다.");
+            alarm.setAlarm_contents("확정까지 1시간 남았습니다.");
             alarm.setReceive_id(store.getStore_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");
@@ -109,9 +109,18 @@ public class ScheduleServiceImpl implements ScheduleService {
             scheduleMapper.updateOrderStatusCancel(order);
             // 유저에게 픽업 안 된 주문 알람 보내기
             Alarm alarm = new Alarm();
-            alarm.setAlarm_title("픽업 실패");  
-            alarm.setAlarm_contents("픽업하지 못했습니다.");
+            alarm.setAlarm_title("픽업 종료");  
+            alarm.setAlarm_contents(scheduleMapper.getStoreName(order.getStore_id()) + " 픽업이 종료되었습니다.");
             alarm.setReceive_id(order.getUser_id());
+            alarm.setAlarm_displayed("Y");
+            alarm.setAlarm_read("N");
+            adminMapper.sendAlarm(alarm);
+
+            // 사장님에게 픽업 종료 알람 보내기
+            Alarm alarm2 = new Alarm();
+            alarm.setAlarm_title("픽업 종료");  
+            alarm.setAlarm_contents(scheduleMapper.getUserNickname(order.getUser_id()) + " 님이 픽업을 하지 않으셨습니다.");
+            alarm.setReceive_id(order.getStore_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");
             adminMapper.sendAlarm(alarm);
@@ -132,7 +141,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         for (ReservationConfirmed order : pickupNotDoneStartList) {
             Alarm alarm = new Alarm();
             alarm.setAlarm_title("픽업 시작");  
-            alarm.setAlarm_contents("픽업 가능 시간이 되었습니다.");
+            alarm.setAlarm_contents(scheduleMapper.getStoreName(order.getStore_id()) + " 픽업이 시작되었습니다.");
             alarm.setReceive_id(order.getUser_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");

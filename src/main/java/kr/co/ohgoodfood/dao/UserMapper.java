@@ -176,4 +176,11 @@ public interface UserMapper {
 	 * @param form
 	 */
     void insertReview(ReviewForm form);
+
+    /**
+     * 가게 이미지 하나 가져오기
+     * @param store_id
+     * @return
+     */
+    String selectStoreImg(String store_id);
 }

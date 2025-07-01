@@ -27,8 +27,14 @@ header{
 .iconContainer{
     display: flex;
     gap:15px;
+    display: flex;
+    align-items: center;
+}
+.iconContainer > a{
+    display: flex;
     align-items: center;
 }
 .icon{
     width: 23px;
+    align-items: center;
 }

@@ -82,7 +82,7 @@ public class PayController {
         );
 
         String json = new Gson().toJson(jsonMap);
-        System.out.println("결제 진입");
+        
         Request request = new Request.Builder()
             .url("https://api.tosspayments.com/v1/payments/confirm")
             .post(RequestBody.create(json, MediaType.get("application/json")))
@@ -93,13 +93,11 @@ public class PayController {
         try (Response response = okHttpClient.newCall(request).execute()) {
             if (response.isSuccessful() && payService.checkProductAmountByPaidCode(orderId) 
             && payService.getStoreStatusByPaidCode(orderId)) {
-                System.out.println("결제 성공");
                 payService.updateOrderStatusAndPaidStatus(orderId);
                 return "redirect:/user/orderList";
             } else {
-                System.out.println("결제 실패");
                 payService.updateOrderCanceldFromByPaidCode(orderId);
-                // model.addAttribute("failReason", payService.getOrderCanceldFromByPaidCode(orderId));
+                model.addAttribute("orderId", orderId);
                 // toss orderId <<<< 환불 요청 해야함 
                 return "redirect:/user/paidfail";
             }
@@ -112,7 +110,7 @@ public class PayController {
                         @RequestParam int amount,
                         Model model) {
         payService.updateOrderCanceldFromByPaidCode(orderId);
-        System.out.println("결제 실패");
+        model.addAttribute("orderId", orderId);
         return "redirect:/user/paidfail";
     }
 }

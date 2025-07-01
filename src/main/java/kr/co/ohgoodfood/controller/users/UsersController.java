@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import kr.co.ohgoodfood.dto.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +34,7 @@ import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.dto.UserOrderRequest;
 import kr.co.ohgoodfood.dto.UserSignup;
 import kr.co.ohgoodfood.service.common.CommonService;
+import kr.co.ohgoodfood.service.common.PayService;
 import kr.co.ohgoodfood.service.users.UsersService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,6 +63,7 @@ import lombok.extern.slf4j.Slf4j;
 public class UsersController {
     private final UsersService usersService;
     private final CommonService commonService;
+    private final PayService payService;
 
     // 지도 사용을 위한 앱키
     @Value("${kakao.map.appKey}")
@@ -385,6 +388,7 @@ public class UsersController {
     @PostMapping("/userPaid")
     public String userPaid(@RequestParam("productNo") int productNo, Model model, HttpSession session) {
         ProductDetail detail = usersService.getProductDetail(productNo);
+        detail.setStore_img(usersService.getStoreImg(detail.getStore_id()));
         model.addAttribute("productDetail", detail);
         return "users/userPaid";
     }
@@ -393,7 +397,9 @@ public class UsersController {
      * 결제 실패 페이지
      */
     @GetMapping("/paidfail")
-    public String paidfail(Model model, HttpSession session) {
+    public String paidfail(@RequestParam("orderId") String orderId, Model model, HttpSession session) {
+        int orderNo = payService.getOrderNoByPaidCode(orderId);
+        model.addAttribute("orderNo", orderNo);
         return "users/paidfail";
     }
 

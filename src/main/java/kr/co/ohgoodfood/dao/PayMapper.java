@@ -34,4 +34,6 @@ public interface PayMapper {
     public String getStoreStatus(String store_id);
     // Paid_code로 가게 상태 확인하기
     public String getStoreStatusByPaidCode(String paid_code);
+    // Paid_code로 주문 번호 가져오기
+    public int getOrderNoByPaidCode(String paid_code);
 }
