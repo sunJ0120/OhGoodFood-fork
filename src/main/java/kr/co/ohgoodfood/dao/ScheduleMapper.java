@@ -23,4 +23,8 @@ public interface ScheduleMapper {
     List<ReservationConfirmed> pickupNotDone(String formattedDate);
     //픽업 안 된 주문 가져오기, 픽업 시간 시작 기준
     List<ReservationConfirmed> pickupNotDoneStart(String formattedDate);
+    //가게 이름 가져오기
+    String getStoreName(String store_id);
+    //사용자 닉네임 가져오기
+    String getUserNickname(String user_id);
 }

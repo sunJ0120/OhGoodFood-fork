@@ -13,14 +13,14 @@
 <body>
     <div class="wrapper">
         <div class="header">
-            <img src="../../../img/user_GoBackIcon.png">
+            <img id="goBackIcon" src="../../../img/user_GoBackIcon.png" onclick="location.href='/user/productDetail?product_no='+'${productDetail.product_no}'">
             <p>예약하기</p>
         </div>
         <div class="content">
             <div class="productDiv">
                 <div class="productWrapper">
                     <div class="productInfo">
-                        <img id=storeImg src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/init.jpg">
+                        <img id=storeImg src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${productDetail.store_img}">
                         <div class="productInfoSub">
                             <p id="storeName">${productDetail.store_name}</p>
                             <p id="productPriceEtc">개당 가격 ${productDetail.sale_price} &#8361;</p>
@@ -120,7 +120,6 @@
     <script>
         $("#toggle1").click(function() {
             let displayStatus = $('.img1').css('display');
-            console.log(displayStatus);
             if (displayStatus === 'none') {
                 $('.img1').css('display', 'flex');
                 $('#toggle1').attr('src', '../../../img/user_toggleUp.png');
@@ -132,7 +131,6 @@
 
         $("#toggle2").click(function() {
             let displayStatus = $('.img2').css('display');
-            console.log(displayStatus);
             if (displayStatus === 'none') {
                 $('.img2').css('display', 'flex');
                 $('#toggle2').attr('src', '../../../img/user_toggleUp.png');
@@ -144,7 +142,6 @@
 
         $("#toggle3").click(function() {
             let displayStatus = $('.img3').css('display');
-            console.log(displayStatus);
             if (displayStatus === 'none') {
                 $('.img3').css('display', 'flex');
                 $('#toggle3').attr('src', '../../../img/user_toggleUp.png');
@@ -158,7 +155,8 @@
             if($("#totalQuantity").val() > 1 ){
                 $("#totalQuantity").val($("#totalQuantity").val()-1);
                 $(".productQuantity").html($("#totalQuantity").val());
-                $(".productTotalPrice").html((parseInt($("#totalPrice").val())*$("#totalQuantity").val()).toLocaleString('ko-KR') + " 원");
+                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()).toLocaleString('ko-KR') + " 원");
+                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val());
             }
         })
 
@@ -166,7 +164,8 @@
             if($("#totalQuantity").val() < "${productDetail.amount}" ){
                 $("#totalQuantity").val(parseInt($("#totalQuantity").val())+1);
                 $(".productQuantity").html($("#totalQuantity").val());
-                $(".productTotalPrice").html((parseInt($("#totalPrice").val())*$("#totalQuantity").val()).toLocaleString('ko-KR') + " 원");
+                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()).toLocaleString('ko-KR') + " 원");
+                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val());
             }
         })
 
@@ -182,9 +181,7 @@
             e.preventDefault();
 
             if ($('.totalCheck:checked').length === $('.totalCheck').length) {
-                console.log('모두 체크됨');
             } else {
-                console.log('하나 이상 체크되지 않음');
                 alert("주의 사항을 모두 체크해주세요.")
                 return;
             }
@@ -219,29 +216,8 @@
                     return;
                 }
             })
-
-            // $.ajax({
-            //     type: "POST",
-            //     url: "/payment/ready",
-            //     data: {
-            //         amount: 1000
-            //     },
-            //     dataType: "json",
-            //     success: function(data) {
-            //         const tossPayments = TossPayments(data.clientKey);
-            //         tossPayments.requestPayment("카드", {
-            //             amount: data.amount,
-            //             orderId: data.orderId,
-            //             orderName: "오굿백 테스트 상품",
-            //             successUrl: "http://localhost:8090/payment/success",
-            //             failUrl: "http://localhost:8090/payment/fail"
-            //         });
-            //     },
-            //     error: function(xhr, status, error) {
-            //         alert("결제 준비 중 오류 발생: " + error);
-            //     }
-            // });
         });
+
     </script>
 </body>
 </html>

@@ -239,7 +239,6 @@
         type: 'GET',
         data: { store_id : pos.store_id },
         success: function(html) {
-          console.log("[AJAX 응답]", html);
           $('.storePinModalWrapper').html(html);
             //뱃지 상태 변경
             applyBadgeStyles();

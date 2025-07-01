@@ -77,35 +77,44 @@
 				const userId = $(this).val();
 				const idRegex = /^[a-z0-9]{8,15}$/;
 
-				if (userId === "") {
-					$("#idCheckMessage").css("color", "red").text("* 아이디를 입력하세요.");
-					isIdChecked = false;
-					return;
-				}
-				if (!idRegex.test(userId)) {
-					$("#idCheckMessage").css("color", "red").text("* 영어 소문자, 숫자 8~15자만 가능합니다.");
-					isIdChecked = false;
-					return;
-				}
-				$("#idCheckMessage").css("color", "red").text("* 중복확인을 해주세요.");
-			});
-			// 아이디 중복확인 버튼 클릭
-			$("#checkIdButton").click(function (e) {
-				e.preventDefault();
-				const userId = $("#user_id").val();
-				if (userId === "") {
-					$("#idCheckMessage").css("color", "red").text("* 아이디를 입력하세요.");
-					isIdChecked = false;
-					return;
-				}
 
-				$.ajax({
-					url: "${pageContext.request.contextPath}/user/checkId",
-					type: "GET",
-					data: { user_id: userId },
-					success: function (res) {
-						if (res == true || res === "true") { // 중복
-							$("#idCheckMessage").css("color", "red").text("* 이미 사용중인 아이디입니다.");
+					if (userId === "") {
+						$("#idCheckMessage").css("color", "red").text("* 아이디를 입력하세요.");
+						isIdChecked = false;
+						return;
+					}
+					if (!idRegex.test(userId)) {
+						$("#idCheckMessage").css("color", "red").text("* 영어 소문자, 숫자 8~15자만 가능합니다.");
+						isIdChecked = false;
+						return;
+					}
+					$("#idCheckMessage").css("color", "red").text("* 중복확인을 해주세요.");
+				});
+				// 아이디 중복확인 버튼 클릭
+				$("#checkIdButton").click(function (e) {
+					e.preventDefault();
+					const userId = $("#user_id").val();
+					if (userId === "") {
+						$("#idCheckMessage").css("color", "red").text("* 아이디를 입력하세요.");
+						isIdChecked = false;
+						return;
+					}
+
+					$.ajax({
+						url: "/user/checkId",
+						type: "GET",
+						data: { user_id: userId },
+						success: function (res) {
+							if (res == true || res === "true") { // 중복
+								$("#idCheckMessage").css("color", "red").text("* 이미 사용중인 아이디입니다.");
+								isIdChecked = false;
+							} else { //사용 가능 
+								$("#idCheckMessage").css("color", "green").text("* 사용 가능한 아이디입니다.");
+								isIdChecked = true;
+							}
+						},
+						error: function () {
+							$("#idCheckMessage").css("color", "red").text("* 서버 오류");
 							isIdChecked = false;
 						} else { //사용 가능 
 							$("#idCheckMessage").css("color", "green").text("* 사용 가능한 아이디입니다.");
@@ -263,7 +272,9 @@
 					return;
 				}
 
-			});
+
+				});
+
 			// });
 
 		</script>
