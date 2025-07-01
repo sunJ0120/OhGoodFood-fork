@@ -53,7 +53,7 @@ main{
 }
 .storeAddress {
   display: inline-block;
-    max-width: 1450px;
+    max-width: 190px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

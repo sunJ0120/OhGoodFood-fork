@@ -10,46 +10,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
 
-    <link rel="stylesheet" href="../../../css/storemypage.css" />
-    <link rel="stylesheet" href="../../../css/storeupdate.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storemypage.css" />
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storeupdate.css" />
 
     <title>Ohgoodfood</title>
 </head>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <body>
     <div id="wrapper">
+        <!-- 헤더 -->
         <%@ include file="/WEB-INF/views/store/header.jsp" %>
         <main>
+            <!-- 내 정보 헤더 -->
             <div class="myInfo-header">
                 <div class="myInfo-group">
-                    <img src="../../../img/store_person.png" alt="마이페이지" class="personIcon">
+                    <img src="${pageContext.request.contextPath}/img/store_person.png" alt="마이페이지" class="personIcon">
                     <div class="myInfo">내 정보</div>
                 </div>
                 <div class="deleteAccount-group">
-                    <img src="../../../img/store_deleteAccount.png" alt="탈퇴하기" class="deleteAccountIcon">
+                    <img src="${pageContext.request.contextPath}/img/store_deleteAccount.png" alt="탈퇴하기" class="deleteAccountIcon">
                     <button class="deleteAccount">탈퇴하기</button>
                 </div>
             </div>
+
+            <!-- 아이디, 사업자등록번호 -->
             <div class="myInfo-content">
                 <input type="text" id="id" name="id" value="${store.store_id}" readonly>
                 <input type="text" id="business_number" name="business_number" value="${store.business_number}" readonly>
             </div>
+
+            <!-- 가게 정보-->
             <div class="main-content">
                 <div class="storeInfo-header">
                     <div class="storeInfo-group">
-                        <img src="../../../img/store_mystore.png" alt="내 가게" class="myStoreIcon">
+                        <img src="${pageContext.request.contextPath}/img/store_mystore.png" alt="내 가게" class="myStoreIcon">
                         <div class="myInfo">내 가게</div>
                     </div>
                     <div class="viewSales-group">
-                        <img src="../../../img/store_sales.png" alt="매출확인" class="viewSalesIcon">
+                        <img src="${pageContext.request.contextPath}/img/store_sales.png" alt="매출확인" class="viewSalesIcon">
                         <button class="viewSales">매출확인</button>
                     </div>
                 </div>
+
+                <!-- 가게 이름, 주소, 전화번호 -->
                 <div class="name-group">
                     <div class="name-container">
                         <div class="storeName">${store.store_name}</div>
                         <div class="info-container">
-                            <img src="../../../img/store_loaction.png" alt="위치" class="storeIcon">
+                            <img src="${pageContext.request.contextPath}/img/store_loaction.png" alt="위치" class="storeIcon">
                             <span class="storeAddress" id="address-short">${store.store_address}</span>
                             <!-- 주소 상세 팝업 모달 -->
 							<div class="address-modal" id="addressModal">
@@ -63,13 +71,15 @@
 									</div>
 								</div>
 							</div>
-                            <img src="../../../img/store_number.png" alt="전화" class="storeIcon">
+                            <img src="${pageContext.request.contextPath}/img/store_number.png" alt="전화" class="storeIcon">
                             <div class="number">${store.store_telnumber}</div>
                         </div>
                     </div>
+                    <!-- 수정 버튼 -->
                     <button class="updateBtn">수정</button>
                 </div>
 
+                <!-- 가게 이미지 슬라이더 -->
                 <div class="store-image-slider">
                     <div class="slider-track">
 						<c:forEach var="img" items="${images}">
@@ -80,6 +90,8 @@
 					</div>
                 	<div class="slider-indicators"></div>
                 </div>
+
+                <!-- 상세 정보 (영업시간, 카테고리, 대표메뉴, 설명) -->
                 <div class="details-container">
                     <form>
                         <div class="form-group">
@@ -111,7 +123,7 @@
                     </form>
                     <form>
                         <div class="form-group" id="bag-container">
-                            <img src="../../../img/store_bag.png" alt="오굿백" class="bagIcon">
+                            <img src="${pageContext.request.contextPath}/img/store_bag.png" alt="오굿백" class="bagIcon">
                             <label class="label">가게설명</label>
                             <span class="divider">|</span>
                             <div class="details-content" style="line-height: 1.5; font-size:15px;">${store.store_explain}
@@ -122,9 +134,8 @@
 
                 </div>
             </div>
-
-
         </main>
+        <!-- 푸터 -->
         <%@ include file="/WEB-INF/views/store/footer.jsp" %>
     </div>
 </body>
@@ -140,6 +151,7 @@
         var isDragging = false;
         var imgWidth = $images[0] ? $images[0].clientWidth : 400;
 
+        // 인디케이터(점) 생성
         function createIndicators() {
             $indicatorContainer.empty();
             for (var i = 0; i < $images.length; i++) {
@@ -147,18 +159,20 @@
                 $indicatorContainer.append(dot);
             }
         }
-
+        // 인디케이터 상태 갱신
         function updateIndicators() {
             $indicatorContainer.find('.slider-indicator').each(function (i) {
                 $(this).toggleClass('active', i === currentIndex);
             });
         }
 
+        // 슬라이더 위치 갱신
         function updateSlider(instant) {
             $track.css('transition', instant ? 'none' : 'transform 0.3s');
             $track.css('transform', 'translateX(0px)');
         }
 
+        // 왼쪽으로 슬라이드 시 첫 이미지 뒤로 이동
         function rotateLeft() {
             $track.append($track.children().first());
             $images = $track.children();
@@ -167,6 +181,7 @@
             updateIndicators();
         }
 
+        // 오른쪽으로 슬라이드 시 마지막 이미지 앞으로 이동
         function rotateRight() {
             $track.prepend($track.children().last());
             $images = $track.children();
@@ -178,7 +193,7 @@
         // 기존 이벤트 제거 후 재바인딩
         $track.off();
 
-        // 터치 이벤트
+        // 모바일 터치 이벤트
         $track.on('touchstart', function (e) {
             isDragging = true;
             startX = e.originalEvent.touches[0].clientX;
@@ -213,7 +228,7 @@
             }
         });
 
-        // 마우스 이벤트
+        // PC 마우스 이벤트
         $track.on('mousedown', function (e) {
             isDragging = true;
             startX = e.clientX;
@@ -258,7 +273,7 @@
 
     $(function () {
         initSlider();
-
+        // 수정 버튼 클릭 시 update 페이지 내용 load
         $(document).on('click', '.updateBtn', function () {
             $('.main-content').load('/store/updatemypage .main-content > *', function () {
                 $('#wrapper').addClass('update-page');
@@ -266,6 +281,7 @@
             });
         });
 
+        // 취소 버튼 클릭 시 마이페이지로 복귀
         $(document).on('click', '.cancleBtn', function () {
             $('.main-content').load('/store/mypage .main-content > *', function () {
                 $('#wrapper').removeClass('update-page');
@@ -275,7 +291,7 @@
 
     });
     
- 	// 주소 팝업
+ 	// 상세주소 팝업 열기
     $('#address-short').click(function() {
     	console.log('주소 클릭됨');
         const fullAddress = '${store.store_address}';
@@ -295,13 +311,14 @@
         $('#time-modal').css('display', 'none');
     });
     
-    /*매출확인 버튼*/
+    // 매출확인 버튼 이동
     $(document).on('click', '.viewSales', function () {
         window.location.href = '/store/viewsales';
     });
     
     
-    /* updatemypage.jsp 체크박스 */
+    // updatemypage
+    // 카테고리 체크박스 스타일 변경(active)
     $(document).on('change', '.category-checkbox', function () {
         const img = $(this).next('.checkbox-img')[0];
         const label = $(this).parent()[0];
@@ -313,12 +330,12 @@
             label.style.fontWeight = "normal";
         }
     });
-    
-    $(document).on('click', '#address-short', function () {
+    // 대표 메뉴 자동 
+    /*$(document).on('click', '#address-short', function () {
         const fullAddress = '${store.store_address}';
         $('#fullAddress').text(fullAddress);
         $('#addressModal').fadeIn(200);
-    });
+    }); */
 
     $(document).on('click', '#closeAddressModal', function () {
         $('#addressModal').fadeOut(200);

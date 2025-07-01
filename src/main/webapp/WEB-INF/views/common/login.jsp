@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +14,12 @@
     
 </head>
 <body>
+	 <!-- <c:if test="${not empty sessionScope.logoutMsg}">
+        <script>
+            alert("${sessionScope.logoutMsg}");
+        </script>
+        <c:remove var="logoutMsg" scope="session"/>
+    </c:if>-->
      <div id="wrapper">
         <header>
 			<div class="header-container">
@@ -31,11 +40,23 @@
 			                    <a href="/findpwd">비밀번호 찾기</a> |
 			                    <a href="/jointype">회원가입</a>
 			                </div>
-			                <div class="main-line"></div>
+							<div class="snsHeader">
+								<div class="main-line"></div>
+								<div class="snsTitle">SNS LOGIN</div>
+								<div class="main-line"></div>
+							</div>
+			                
 			                <div class="sns-login-box">
-			                    <div class="sns-login-title">SNS로그인</div>
-			                    <img src="${pageContext.request.contextPath}/img/storekakaologin.png" alt="카카오로그인" />
-			                </div>
+								<div class="kakao">
+									<img src="${pageContext.request.contextPath}/img/kakao.png" alt="카카오 아이콘" class="kakaoIcon">
+									<div class="kakaoTitle">카카오로 로그인</div>
+								</div>
+								<div class="naver">
+									<img src="${pageContext.request.contextPath}/img/naver.png" alt="네이버 아이콘" class="kakaoIcon">
+									<div class="naverTitle">네이버로 로그인</div>
+								</div>
+							</div>
+							<div class="main-line2"></div>
 			            </div>
 			        </div>
 			    </div>

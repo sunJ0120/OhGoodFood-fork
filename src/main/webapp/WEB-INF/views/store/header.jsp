@@ -10,14 +10,14 @@
 </head>
 <header>
     <div class="headerContainer">
-        <a href="/store/main" id="alarm-icon">
-            <img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
-        </a>    
+        <img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
         <div class="iconContainer">
             <a href="/store/alarm" id="alarm-icon">
                 <img src="${pageContext.request.contextPath}/img/storealarm.png" alt="알람" class="icon">
             </a>  
-            <img src="${pageContext.request.contextPath}/img/store_logout.png" alt="로그아웃" class="icon2">
+            <a href="${pageContext.request.contextPath}/logout" onclick="return confirm('로그아웃 하시겠습니까?');">
+                <img src="${pageContext.request.contextPath}/img/store_logout.png" alt="로그아웃" class="icon2">
+            </a>
         </div>
     </div>
 </header>

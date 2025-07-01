@@ -13,8 +13,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="stylesheet" href="../../../css/storemypage.css" />
-<link rel="stylesheet" href="../../../css/storeupdate.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/storemypage.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/storeupdate.css" />
 <title>가게 정보 수정</title>
 
 </head>
@@ -24,7 +24,7 @@
 	<div class="main-content">
 		<div class="storeInfo-header">
 			<div class="storeInfo-group">
-				<img src="../../../img/store_mystore.png" alt="내 가게"
+				<img src="${pageContext.request.contextPath}/img/store_mystore.png" alt="내 가게"
 					class="myStoreIcon">
 				<div class="myInfo">내 가게 정보 수정</div>
 			</div>
@@ -35,7 +35,7 @@
 				<div class="name-container">
 					<div class="storeName">${store.store_name}</div>
 					<div class="info-container">
-						<img src="../../../img/store_loaction.png" alt="위치" class="storeIcon">
+						<img src="${pageContext.request.contextPath}/img/store_loaction.png" alt="위치" class="storeIcon">
 						<span class="storeAddress" id="address-short">${store.store_address}</span>
                             <!-- 주소 상세 팝업 모달 -->
 							<div class="address-modal" id="addressModal">
@@ -49,7 +49,7 @@
 									</div>
 								</div>
 							</div>
-						<img src="../../../img/store_number.png" alt="전화"
+						<img src="${pageContext.request.contextPath}/img/store_number.png" alt="전화"
 							class="storeIcon">
 						<div class="number">${store.store_telnumber}</div>
 					</div>
@@ -91,7 +91,7 @@
 									name="category_bakery" value="Y"
 									${store.category_bakery == 'Y' ? 'checked' : ''}
 									style="display: none;"> <img
-									src="../../../img/${store.category_bakery == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
+									src="${pageContext.request.contextPath}/img/${store.category_bakery == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
 									class="checkbox-img" alt="체크박스"> 빵 & 디저트
 								</label> <label
 									style="${store.category_salad == 'Y' ? 'font-weight:bold;' : ''}">
@@ -99,7 +99,7 @@
 									name="category_salad" value="Y"
 									${store.category_salad == 'Y' ? 'checked' : ''}
 									style="display: none;"> <img
-									src="../../../img/${store.category_salad == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
+									src="${pageContext.request.contextPath}/img/${store.category_salad == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
 									class="checkbox-img" alt="체크박스"> 샐러드
 								</label> <label
 									style="${store.category_fruit == 'Y' ? 'font-weight:bold;' : ''}">
@@ -107,7 +107,7 @@
 									name="category_fruit" value="Y"
 									${store.category_fruit == 'Y' ? 'checked' : ''}
 									style="display: none;"> <img
-									src="../../../img/${store.category_fruit == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
+									src="${pageContext.request.contextPath}/img/${store.category_fruit == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
 									class="checkbox-img" alt="체크박스"> 과일
 								</label> <label
 									style="${store.category_others == 'Y' ? 'font-weight:bold;' : ''}">
@@ -115,7 +115,7 @@
 									name="category_others" value="Y"
 									${store.category_others == 'Y' ? 'checked' : ''}
 									style="display: none;"> <img
-									src="../../../img/${store.category_others == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
+									src="${pageContext.request.contextPath}/img/${store.category_others == 'Y' ? 'store_checkbox_active.png' : 'store_checkbox.png'}"
 									class="checkbox-img" alt="체크박스"> 그 외
 								</label>
 							</div>
@@ -132,7 +132,7 @@
 					    </div>
 					</div>
 					<div class="form-group" id="bag-container">
-						<img src="../../../img/store_bag.png" alt="오굿백" class="bagIcon">
+						<img src="${pageContext.request.contextPath}/img/store_bag.png" alt="오굿백" class="bagIcon">
 						<label class="updateLabel">가게설명</label> <span class="divider">|</span>
 						<textarea name="store_explain" placeholder="가게설명을 작성해주세요" maxlength="50"
 							style="line-height: 1.5; font-size: 14px;">${store.store_explain}</textarea>

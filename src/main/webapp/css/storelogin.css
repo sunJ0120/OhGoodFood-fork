@@ -4,7 +4,7 @@
 }
 @font-face {
     font-family: 'nanumesquareneo_b';
-    src: url('font/NANUMSQUARENEO-BRG.ttf');
+    src: url('font/NanumSquareNeo-bRg.ttf');
 }
 body{
     font-family: 'nanumesquareneo';
@@ -73,10 +73,11 @@ main{
     border: none;
     border-radius: 10px;
     font-size: 20px;
-    font-weight: bold;
+    height: 30px;
 }
 .login-button {
     width: 358px;
+    height: 50px;
     padding: 12px;
     background: #f5f3ea;
     color : #99A99B;
@@ -94,8 +95,7 @@ main{
     justify-content: space-between;
     font-size: 20px;
     color: #F5F3EA;
-    font-weight: bold;
-    font-family: "nanumesquareneo";
+    font-family: "nanumesquareneo_b";
 }
 .sub-links a {
     text-decoration: none;
@@ -105,36 +105,71 @@ main{
     text-decoration: underline;
     color: #000;
 }
-.main-line {
-  margin-top: 10px;
-  height: 1px;
-  background-color: #F5F3EA;
-  width: 100%;
-  max-width: 440px;
-}
-.sns-login-box {
-    margin-top: 30px;
-    width: 346px;
-    background-color: #F5F3EA;
-    border-radius: 10px;
-    padding: 20px 0;
+
+.snsHeader {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    font-family: 'nanumesquareneo';
-}
-.sns-login-title {
-    font-size: 20px;
-    font-weight: extrabold;
-    color: #8B6D5C;
+    justify-content: center;
+    gap: 16px; 
+    width: 100%;
+    margin-top: 40px;
     margin-bottom: 10px;
 }
-.sns-login-box img {
-    width: 320px;
-    height: auto;
-    border-radius: 8px;
+.main-line {
+    height: 1px;
+    background-color: #F5F3EA;
+    width: 105px;  
+    margin: 0;
+}
+.snsTitle {
+    display: inline-block;
+    white-space: nowrap;
+    font-family: 'nanumesquareneo_b';
+    color: #F5F3EA;
+    font-size: 18px;
+    letter-spacing: 2px;
 }
 
+.sns-login-box{
+    display:flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.kakao{
+    display: flex;
+    align-items: center;
+    background-color: #F9E000;
+    width: 346px;
+    height: 38px;
+    padding: 5px;
+    font-family: 'nanumesquareneo_b';
+}
+
+.naver{
+    display: flex;
+    align-items: center;
+    background-color: #02C55B;
+    width: 346px;
+    height: 38px;
+    padding: 5px;
+    color: white;
+    font-family: 'nanumesquareneo_b';
+}
+.kakaoIcon{
+    margin-left:10px;
+    margin-right: 85px;
+}
+.naverIcon{
+    margin-left:10px;
+    margin-right: 85px;
+}
+.main-line2 {
+    margin-top: 15px;
+    height: 1px;
+    background-color: #F5F3EA;
+    width: 80%;
+}
 .modal {
     position: fixed;
     z-index: 9999;

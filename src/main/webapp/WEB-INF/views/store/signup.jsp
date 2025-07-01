@@ -104,7 +104,7 @@
 									<label>
 										<input type="checkbox" class="category-checkbox" name="category_fruit" value="Y"
 											style="display:none;">
-										<img src="../../../img/store_checkbox.png" class="checkbox-img" alt="체크박스">
+										<img src="${pageContext.request.contextPath}/img/store_checkbox.png" class="checkbox-img" alt="체크박스">
 										과일
 									</label>
 									<label>

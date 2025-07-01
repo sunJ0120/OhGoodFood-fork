@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
 
-<link rel="stylesheet" href="../../../css/storemain.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/storemain.css" />
 <title>Ohgoodfood</title>
 </head>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -41,49 +41,55 @@
 							</div>
 						</div>
 					</div>
-
+					<!-- 전화번호 아이콘, 가게 전화번호 -->
 					<span class="NumberIcon">
 						<img src="${pageContext.request.contextPath}/img/store_number.png" alt="전화 아이콘">
 					</span> 
 					<span class="storeNumber">${store.store_telnumber}</span>
 				</div>
 			</div>
-			 <!-- 이미지 슬라이더 -->
+			 <!-- 이미지 슬라이더 영역 -->
 			<div class="store-image-slider">
 				<div class="slider-track">
+					<!-- 가게 이미지 반복 출력 -->
 					<c:forEach var="img" items="${images}">
 						<img
 							src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${img.store_img}"
 							alt="Store Image" class="slider-img">
 					</c:forEach>
 				</div>
+				<!-- 이미지 하단 인디케이터 -->
 				<div class="slider-indicators"></div>
 			</div>
+
 			<!-- 오픈/마감 버튼 -->
 			<div class="sale-status">
 			    <div class="view-toggle">
+					<!-- 현재 상태에 따라 active class 적용 -->
 			        <button id="open" class="view-button <c:if test="${store.store_status == 'Y'}">active</c:if>">오픈하기</button>
 			        <button id="close" class="view-button <c:if test="${store.store_status == 'N'}">active</c:if>">마감하기</button>
 			    </div>
 			</div>
+
 			<!-- 판매 정보 영역 -->
 			<div class="sale-info">
 				<p>오굿백 구성 후에 오픈 버튼을 눌러주세요 ~</p>
 				<div class="info-title">
-					<img src="../../../img/store_bag.png" alt="오굿백 아이콘">
+					<img src="${pageContext.request.contextPath}/img/store_bag.png" alt="오굿백 아이콘">
 					<p>오굿백</p>
 				</div>
 				
-				<!-- 상품 상세정보 폼 -->
+				<!-- 상품 상세정보 입력 -->
 				<div class="info-content">
 					<form>
 						<!-- 상품 설명 -->
 						<textarea class="product_explain" maxlength="50" placeholder="오굿백 설명을 작성해주세요">${product.product_explain}</textarea>
 
-						<!-- 픽업 날짜 -->
+						<!-- 픽업 날짜 선택 -->
 						<div class="form-group">
 							<label class="label">픽업 날짜</label> <span class="divider">|</span>
 							<div class="btn-container">
+								<!-- 오늘/내일 버튼 -->
 							    <button type="button" class="pickup-btn ${isToday ? 'active' : ''}" data-value="today">오늘</button>
 							    <button type="button" class="pickup-btn ${!isToday ? 'active' : ''}" data-value="tomorrow">내일</button>
 							</div>
@@ -97,7 +103,7 @@
 							       id="pickup-time-input" 
 							       class="time-input" readonly />
 
-							<img src="../../../img/store_time.png" alt="시계 아이콘" class="timer-icon" id="timer-icon">
+							<img src="${pageContext.request.contextPath}/img/store_time.png" alt="시계 아이콘" class="timer-icon" id="timer-icon">
 
 							 <!-- 시간 설정 모달 -->
 							<div id="time-modal" class="modal">
@@ -112,28 +118,32 @@
 								</div>
 							</div>
 						</div>
+
 						<!-- 원래 가격 -->
 						<div class="form-group">
 							<label class="label">원래 가격</label> <span class="divider">|</span>
 							<input type="number" value="${product.origin_price}" class="time-input" placeholder="가격을 입력하세요" min="0" step="100">
 						</div>
+
 						<!-- 오굿백 가격 -->
 						<div class="form-group">
 							<label class="label">오굿백 가격</label> <span class="divider">|</span>
 							<input type="number" value="${product.sale_price}" class="time-input" placeholder="가격을 입력하세요" min="0" step="100">
 						</div>
+						
 						<!-- 오굿백 수량 -->
 						<div class="form-group">
 							<label class="label">오굿백 수량</label> <span class="divider">|</span>
 							<div class="quantity-container">
-								<img src="../../../img/store_minus.png" alt="빼기 아이콘" class="quantity-icon" id="minus-btn">
+								<img src="${pageContext.request.contextPath}/img/store_minus.png" alt="빼기 아이콘" class="quantity-icon" id="minus-btn">
 								<div class="count" id="count-value">${product.amount}개</div>
-								<img src="../../../img/store_plus.png" alt="더하기 아이콘" class="quantity-icon" id="plus-btn">
+								<img src="${pageContext.request.contextPath}/img/store_plus.png" alt="더하기 아이콘" class="quantity-icon" id="plus-btn">
 							</div>
 						</div>
 					</form>
 				</div>				
 			</div>
+
 			<!-- 오픈/마감 확인 모달 -->
 			<div class="confirm-modal-container" id="confirmModal" style="display:none;">
 				   <div class="confirm-modal-content">
@@ -150,7 +160,9 @@
 	</div>
 </body>
 <script>
+	// storeStatus: 현재 가게 오픈/마감 상태
 	let storeStatus = '${store.store_status}'; // 서버에서 store_status 값 가져옴
+	
 	$(window).on('load', function () {
         // 이미지 슬라이더(터치, 드래그)
         const $track = $('.slider-track');
@@ -335,7 +347,7 @@
 						$('#open').addClass('active');
 						$('#close').removeClass('active');
 
-						// ✅ 즉시 비활성화
+						// 즉시 비활성화
 						$('textarea.product_explain').prop('readonly', true);
 						$('input[type="number"]').prop('readonly', true);
 						$('#pickup-time-input').prop('readonly', true);
@@ -360,71 +372,71 @@
 
 
 		// 마감 버튼 클릭 시 단순 상태 변경
-		$('#close').click(function () {
-			if (storeStatus === 'N') return;
+	$('#close').click(function () {
+		if (storeStatus === 'N') return;
 
-			// step 1. 서버에 미확정 주문 있는지 조회
-			$.ajax({
-				url: '/store/checkOrderStatus', 
-				type: 'GET',
-				success: function (count) {
-					if (count > 0) {
-						// step 2. 모달 띄우기
-						$('#confirmMessage').text("미확정 주문이 있습니다.");
-						$('#confirmYes').text("주문내역").off('click').on('click', function () {
-							window.location.href = '/store/reservation';
-						});
-						$('#confirmNo').text("닫기").show().off('click').on('click', function () {
-							$('#confirmModal').fadeOut(200);
-						});
-						$('#confirmModal').fadeIn(200);
-						return;
-					}
+		// 서버에 미확정 주문 있는지 조회
+		$.ajax({
+			url: '/store/checkOrderStatus', 
+			type: 'GET',
+			success: function (count) {
+				if (count > 0) {
+					// 모달 띄우기
+					$('#confirmMessage').text("미확정 주문이 있습니다.");
+					$('#confirmYes').text("주문내역").off('click').on('click', function () {
+						window.location.href = '/store/reservation';
+					});
+					$('#confirmNo').text("닫기").show().off('click').on('click', function () {
+						$('#confirmModal').fadeOut(200);
+					});
+					$('#confirmModal').fadeIn(200);
+					return;
+				}
 
-					// step 3. 없으면 기존 마감하기 실행
-					$('#confirmMessage').text("정말 마감하시겠습니까?");
-					$('#confirmYes').text("확인").off('click').on('click', function () {
-						$.ajax({
-							url: '/store/updateStatus',
-							type: 'POST',
-							data: { status: 'N' },
-							success: function () {
-								storeStatus = 'N';
-								$('#close').addClass('active');
-								$('#open').removeClass('active');
-								// 필드 초기화 로직 그대로 유지
-								$('textarea.product_explain').val('').prop('readonly', false);
-								$('input[type="number"]').val('').prop('readonly', false);
-								$('#pickup-time-input').val('').prop('readonly', false);
-								$('.pickup-btn').removeClass('active').css('opacity', '').css('cursor', 'pointer');
-								$('#minus-btn, #plus-btn').css('opacity', '').css('cursor', 'pointer');
-								$('#timer-icon').css('opacity', '').css('cursor', 'pointer');
-								count = 1;
-								$('#count-value').text(count + '개');
+				// 없으면 기존 마감하기 실행
+				$('#confirmMessage').text("정말 마감하시겠습니까?");
+				$('#confirmYes').text("확인").off('click').on('click', function () {
+					$.ajax({
+						url: '/store/updateStatus',
+						type: 'POST',
+						data: { status: 'N' },
+						success: function () {
+							storeStatus = 'N';
+							$('#close').addClass('active');
+							$('#open').removeClass('active');
+							// 필드 초기화 
+							$('textarea.product_explain').val('').prop('readonly', false);
+							$('input[type="number"]').val('').prop('readonly', false);
+							$('#pickup-time-input').val('').prop('readonly', false);
+							$('.pickup-btn').removeClass('active').css('opacity', '').css('cursor', 'pointer');
+							$('#minus-btn, #plus-btn').css('opacity', '').css('cursor', 'pointer');
+							$('#timer-icon').css('opacity', '').css('cursor', 'pointer');
+							count = 1;
+							$('#count-value').text(count + '개');
 							
-								generatePickupOptions();
+							generatePickupOptions();
 													
-								$('#minus-btn').off('click').on('click', function () {
-									if (count > 1) {
-										count--;
-										$('#count-value').text(count + '개');
-									}
-								});
-								$('#plus-btn').off('click').on('click', function () {
-									count++;
+							$('#minus-btn').off('click').on('click', function () {
+								if (count > 1) {
+									count--;
 									$('#count-value').text(count + '개');
-								});
-								$('.pickup-btn').off('click').on('click', function () {
-									$('.pickup-btn').removeClass('active');
-									$(this).addClass('active');
+								}
+							});
+							$('#plus-btn').off('click').on('click', function () {
+								count++;
+								$('#count-value').text(count + '개');
+							});
+							$('.pickup-btn').off('click').on('click', function () {
+								$('.pickup-btn').removeClass('active');
+								$(this).addClass('active');
 
-									 $('#pickup-time-input').val('');
+								$('#pickup-time-input').val('');
   									generatePickupOptions();
-								});
-								$('#timer-icon').off('click').on('click', function () {
-									$('#time-modal').css('display', 'flex');
-								});
-								$('#confirmModal').fadeOut(200);
+							});
+							$('#timer-icon').off('click').on('click', function () {
+								$('#time-modal').css('display', 'flex');
+							});
+							$('#confirmModal').fadeOut(200);
 							},
 							error: function () {
 								alert('서버 오류가 발생했습니다.');
