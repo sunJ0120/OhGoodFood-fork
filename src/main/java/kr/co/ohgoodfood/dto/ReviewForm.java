@@ -35,7 +35,8 @@ public class ReviewForm {
     private String is_blocked;
     private String review_img;
     private String store_id;
-    
+    private String store_img;
+
     
     // 업로드용
     private MultipartFile imageFile;   // <input name="imageFile">
