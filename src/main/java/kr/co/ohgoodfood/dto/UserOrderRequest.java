@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class UserOrderRequest {
     private String user_id;
     private int order_no;
+    private int product_no;
+    private int quantity;
     private String canceld_from;
     private String order_status;
     private int order_code;

@@ -162,6 +162,8 @@
 
                       <form action="/user/order/cancel" method="post" class="postStyle hidden" onsubmit="return confirm('정말 주문을 취소하시겠습니까?');">
                         <input type="hidden" name="order_no" value="${userOrder.order_no}" />
+                        <input type="hidden" name="quantity"   value="${userOrder.quantity}" />
+                        <input type="hidden" name="product_no"   value="${userOrder.product_no}" />
                         <button type="submit"  class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
                           주문 취소
                         </button>
