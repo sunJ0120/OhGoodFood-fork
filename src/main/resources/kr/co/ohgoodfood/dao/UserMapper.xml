@@ -350,7 +350,12 @@
 		   WHERE p.product_no = #{product_no}
 		   ORDER BY i.img_no
     </select>
-
+	<!-- 북마크 -->
+	<select id="isBookmarked" resultType="int">
+	    SELECT COUNT(*) FROM Bookmark
+	    WHERE user_id = #{user_id}
+	      AND store_id = #{store_id}
+	</select>
     <!-- 제품 리뷰 리스트 조회: 해당 매장(store_id) 기준으로 모든 리뷰 조회 --> 
     <select id="selectProductReviews" parameterType="int" resultType="kr.co.ohgoodfood.dto.Review"> 
         SELECT

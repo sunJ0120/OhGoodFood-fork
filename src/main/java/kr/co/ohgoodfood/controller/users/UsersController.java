@@ -332,13 +332,26 @@ public class UsersController {
     @GetMapping("/productDetail")
     public String productDetail(
             @RequestParam("product_no") int product_no,
+            HttpSession session,
             Model model
     ) {
+    	
         ProductDetail detail = usersService.getProductDetail(product_no);       
         model.addAttribute("productDetail", detail);
         
         List<String> images = usersService.getProductImages(product_no);
         model.addAttribute("images", images);
+        
+        // 세션에서 로그인한 사용자 정보 가져오기
+        Account loginUser = (Account) session.getAttribute("user");
+
+        boolean isBookmarked = false;
+        if (loginUser != null) {
+            String user_id = loginUser.getUser_id();
+            String store_id = detail.getStore_id();
+            isBookmarked = usersService.isBookmarked(user_id, store_id);  // 북마크 여부 조회
+        }
+        detail.setBookmarked(isBookmarked);  // 실제 여부 세팅
         
         List<Review> reviews = usersService.getReviewsByProductNo(product_no);
         model.addAttribute("reviews", reviews);

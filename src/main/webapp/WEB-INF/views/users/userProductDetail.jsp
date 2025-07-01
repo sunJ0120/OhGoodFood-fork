@@ -24,6 +24,17 @@
                             <!-- 이미지 영역 -->
                             <div class="storeDetailImg">
                                 <div class="storeImgSlider">
+                                    <!-- 북마크 버튼 -->
+                                    <button class="bookmarkBtn" data-bookmarked="${productDetail.bookmarked}">
+                                        <c:choose>
+                                            <c:when test="${productDetail.bookmarked}">
+                                                <img src="${pageContext.request.contextPath}/img/user_bookmark.png" alt="북마크" />
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="${pageContext.request.contextPath}/img/user_empty_bookmark.png" alt="북마크" />
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </button>
                                     <div class="sliderTrack">
                                         <c:forEach var="imgUrl" items="${images}">
                                             <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${imgUrl}"
@@ -249,6 +260,41 @@
                             $(indicators).children().removeClass('active')
                                 .eq(currentIndex).addClass('active');
                         }
+
+                        // 북마크 버튼 클릭 시
+                        $('.bookmarkBtn').on('click', function () {
+                            const $btn = $(this);
+                            const $img = $btn.find('img');
+                            const isBookmarked = $btn.data('bookmarked') === true || $btn.data('bookmarked') === 'true';
+                            const productNo = '${productDetail.product_no}';
+                            const storeId = '${productDetail.store_id}';
+                            const contextPath = '${pageContext.request.contextPath}';
+
+                            const bookmarkParams = {
+                                product_no: productNo,
+                                store_id: storeId
+                            };
+
+                            $.ajax({
+                                type: 'POST',
+                                url: contextPath + (isBookmarked ? '/user/bookmark/delete' : '/user/bookmark/insert'),
+                                contentType: 'application/json',
+                                dataType: 'json',
+                                data: JSON.stringify(bookmarkParams),
+                                success: function (data) {
+                                    if (data.code === 200) {
+                                        $img.attr('src', contextPath + (isBookmarked ? '/img/user_empty_bookmark.png' : '/img/user_bookmark.png'));
+                                        $btn.data('bookmarked', !isBookmarked);
+                                    } else {
+                                        alert('북마크 처리 실패');
+                                    }
+                                },
+                                error: function () {
+                                    alert('서버 통신 오류 발생');
+                                }
+                            });
+                        });
+
 
                         // 4) 리뷰 무한 스크롤 함수
                         function setupReviewInfiniteScroll() {
