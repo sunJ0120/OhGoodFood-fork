@@ -292,8 +292,7 @@
     });
     
  	// 상세주소 팝업 열기
-    $('#address-short').click(function() {
-    	console.log('주소 클릭됨');
+    $(document).on('click', '#address-short', function() {
         const fullAddress = '${store.store_address}';
         $('#fullAddress').text(fullAddress);
         $('#addressModal').fadeIn(200);
@@ -330,12 +329,6 @@
             label.style.fontWeight = "normal";
         }
     });
-    // 대표 메뉴 자동 
-    /*$(document).on('click', '#address-short', function () {
-        const fullAddress = '${store.store_address}';
-        $('#fullAddress').text(fullAddress);
-        $('#addressModal').fadeIn(200);
-    }); */
 
     $(document).on('click', '#closeAddressModal', function () {
         $('#addressModal').fadeOut(200);

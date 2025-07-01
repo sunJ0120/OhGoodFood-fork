@@ -9,19 +9,21 @@
 	
 	<!-- 내 가게 리뷰 보기 -->
 	<select id="getReviews" resultType="kr.co.ohgoodfood.dto.Review">
-		SELECT 
-			review_no,
-			review_content,
-			writed_at,
-			is_blocked,
-			review_img,
-			user_id,
-			store_id,
-			order_no
-		FROM Review
-		WHERE store_id=#{storeId} AND is_blocked = 'N'
-		ORDER BY writed_at DESC
-	</select>
+        SELECT
+            r.review_no,
+            r.review_content,
+            r.writed_at,
+            r.is_blocked,
+            r.review_img,
+            a.user_nickname,
+            r.store_id,
+            r.order_no
+        FROM Review r
+        JOIN Account a
+        ON r.user_id = a.user_id
+        WHERE store_id=#{storeId} AND is_blocked = 'N'
+        ORDER BY writed_at DESC
+    </select>
 
 	<!-- 주문(미확정, 확정, 취소) 조회 -->
 	<select id="getOrders" resultType="kr.co.ohgoodfood.dto.Orders">
