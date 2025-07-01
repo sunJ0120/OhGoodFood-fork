@@ -216,6 +216,7 @@ body{
   height: 94px;
   object-fit: cover;
   border-radius: 8px;
+  border: 1px solid #E5DFD5;
 }
 
 /* 작성자 + 날짜 */
@@ -269,6 +270,7 @@ body{
   height: 44px;
   object-fit: cover;
   border-radius: 8px;
+  border: 1px solid #8B6D5C;
 }
 
 .storeDetail {
