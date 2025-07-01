@@ -330,6 +330,11 @@ public class UserServiceImpl implements UsersService{
 	}
 	
 	@Override
+	public boolean isBookmarked(String user_id, String store_id) {
+	    return userMapper.isBookmarked(user_id, store_id) > 0;
+	}
+	
+	@Override
     @Transactional(readOnly = true)
     public List<String> getProductImages(int product_no) {
         return userMapper.selectProductImages(product_no);

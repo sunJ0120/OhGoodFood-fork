@@ -55,6 +55,10 @@ public class ProductDetail{
     private String store_img; // 가게 이미지 전체
     private List<String> images;
     
+    
+    // Bookmark table에서 가져오는 정보들
+    private boolean bookmarked;
+    private Integer bookmark_no;
 
     
 
