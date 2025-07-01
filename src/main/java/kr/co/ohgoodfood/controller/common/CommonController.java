@@ -17,15 +17,16 @@ public class CommonController {
 	
 	private final CommonService commonService;
 	
-	@GetMapping("/login") // 로그인 페이지 가져옴
+	// 로그인 페이지 리턴
+	@GetMapping("/login") 
 	public String login() {
 		return "common/login";
 	}
+	
 	@PostMapping("/login")
 	public String login(HttpServletRequest request, HttpSession sess, Model model) {
-		String id = request.getParameter("id");
-		String pwd = request.getParameter("pwd");
-
+		String id = request.getParameter("id"); // 아이디 파라미터
+		String pwd = request.getParameter("pwd");  // 비밀번호 파라미터
 		Account account = commonService.loginAccount(id, pwd);
 		if (account != null) {
 			sess.setAttribute("user", account);

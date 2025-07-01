@@ -14,35 +14,43 @@ import kr.co.ohgoodfood.dto.StoreSales;
 
 @Mapper
 public interface StoreMapper {
-	// 로그인
-	public Store login(Store vo);
-
-	public Review viewReview(Store vo);
-	
+	// 내 가게 리뷰보기
 	public List<Review> getReviews(String storeId);
 
 	// 회원가입(가게 등록)
 	public int insert(Store vo);
 
-	public List<Orders> getOrders(@Param("storeId") String storeId, @Param("type") String type);
+	// 주문(미확정, 확정, 취소) 조회
+	public List<Orders> getOrders(@Param("storeId") String storeId, @Param("type") String type, @Param("selectedDate") String selectedDate);
 
+	// 내 가게 주문을 확정
 	public int confirmOrders(@Param("id") int id, @Param("type") String type);
 
+	// 내 가게 주문을 취소
 	public int cancleOrders(@Param("id") int id, @Param("type") String type);
 
+	// order_no로 주문 조회
 	public Orders getOrderById(int no);
 
+	// order_no로 스토어 이름 조회
+	public Store getStoreNameByOrderNo(@Param("no") int no);
+
+	// 알람 생성
 	public int insertAlarm(Alarm alarm);
 
+	// 주문을 픽업상태로 변경
 	public int pickupOrders(@Param("id") int id, @Param("type") String type);
 
+	// 주문이 확정 혹은 픽업 상태인 것만 조회
 	public List<Orders> getConfirmedOrPickupOrders(@Param("id") String id);
 
+	// 내 가게 기간 매출 조회
 	public StoreSales getSales(@Param("store_id") String store_id, @Param("start") String start, @Param("end") String end);
 
+	// 주문 코드 생성
 	public int createOrderCode(@Param("id") int id, @Param("type") String type, @Param("randomCode") int randomCode);
 	
-	// 아이디로 가게 조회
+	// 아이디 중복 확인
 	public Store findById(String store_id);
 
 	// 가게 이미지 등록

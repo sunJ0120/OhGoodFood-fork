@@ -11,21 +11,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storelogin.css">
-    
 </head>
 <body>
-	 <!-- <c:if test="${not empty sessionScope.logoutMsg}">
-        <script>
-            alert("${sessionScope.logoutMsg}");
-        </script>
-        <c:remove var="logoutMsg" scope="session"/>
-    </c:if>-->
      <div id="wrapper">
         <header>
-			<div class="header-container">
-				<img src="${pageContext.request.contextPath}/img/store_ohgoodfood_logo.png" alt="Logo Image">
-			</div>
-		</header>
+            <div class="header-container">
+                <img src="${pageContext.request.contextPath}/img/storeohgoodfood_logo.png" alt="Logo Image">
+                <div class="icon-container">
+                    <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
+                </div>
+            </div>
+        </header>
         <main>
             <form id="loginForm" action="/login" method="post">
 			    <div class="main-head-container" id="main-image">
@@ -79,7 +75,6 @@
 	   	    $('#loginForm').on('submit', function(e) {
 	   	        const id = $('#userId').val().trim();
 	   	        const password = $('#userPwd').val().trim();
-	   	        console.log('logincheck 실행됨', id, password);
 	   	        if(id === '') {
 	   	            alert('아이디를 입력하세요');
 	   	            e.preventDefault();
