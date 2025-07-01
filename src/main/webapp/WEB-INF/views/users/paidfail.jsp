@@ -17,11 +17,11 @@
             <div class="failReasonDiv">
                 <div class="failReasonText">
                     <p class="constText">주문 실패 사유 :&nbsp;</p>
-                    <p class="realFailReason">failReason</p>
+                    <p class="realFailReason">가게 마감 혹은 재고 부족</p>
                 </div>
                 <div class="orderNoDiv">
                     <p class="orderNoText">
-                        주문 번호 : order_no
+                        주문 번호 : ${orderNo}
                     </p>
                 </div>
             </div>

@@ -458,4 +458,10 @@ public class UserServiceImpl implements UsersService{
     	private AmazonS3 amazonS3() {
             return awsS3Config.amazonS3();
         }
+
+    /* 가게 이미지 하나 가져오기 */
+    @Override
+    public String getStoreImg(String store_id) {
+        return userMapper.selectStoreImg(store_id);
+    }
 }

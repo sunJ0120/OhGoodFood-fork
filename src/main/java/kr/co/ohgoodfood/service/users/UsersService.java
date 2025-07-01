@@ -87,4 +87,7 @@ public interface UsersService {
     // 실제 리뷰 저장 (이미지 포함)
     void writeReview(ReviewForm form, String userId);
 
+    /* 가게 이미지 하나 가져오기 */
+    String getStoreImg(String store_id);
+
 }

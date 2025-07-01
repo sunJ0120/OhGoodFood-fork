@@ -107,4 +107,10 @@ public class PayServiceImpl implements PayService {
         String storeStatus = payMapper.getStoreStatusByPaidCode(paid_code);
         return storeStatus.equals("Y");
     }
+
+    // Paid_code로 주문 번호 가져오기
+    @Override
+    public int getOrderNoByPaidCode(String paid_code) {
+        return payMapper.getOrderNoByPaidCode(paid_code);
+    }
 }
