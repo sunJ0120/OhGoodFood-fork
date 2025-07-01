@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storelogin.css">
-    
 </head>
 <body>
      <div id="wrapper">
@@ -16,7 +15,7 @@
             <div class="header-container">
                 <img src="${pageContext.request.contextPath}/img/storeohgoodfood_logo.png" alt="Logo Image">
                 <div class="icon-container">
-                        <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
+                    <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
                 </div>
             </div>
         </header>
@@ -51,24 +50,23 @@
 	   	    $('#loginForm').on('submit', function(e) {
 	   	        const id = $('#userId').val().trim();
 	   	        const password = $('#userPwd').val().trim();
-	   	        console.log('logincheck 실행됨', id, password);
 	   	        if(id === '') {
-	   	            alert('아이디 입력바람');
+	   	            alert('아이디를 입력해주세요.');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if(password === '') {
-	   	            alert('비밀번호 입력바람');
+	   	            alert('비밀번호를 입력해주세요.');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if(id.length > 15) {
-	   	            alert('아이디는 15자 이하로 입력바람');
+	   	            alert('아이디는 15자 이하로 입력해주세요.');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if (!/^[a-zA-Z0-9]+$/.test(id)) {
-	   	            alert("아이디는 영문자와 숫자만 입력 가능함");
+	   	            alert("아이디는 영문자와 숫자만 입력 가능합니다.");
 	   	            e.preventDefault();
 	   	            return;
 	   	        }

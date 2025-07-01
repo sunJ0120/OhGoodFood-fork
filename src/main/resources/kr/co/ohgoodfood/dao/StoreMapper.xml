@@ -2,20 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.ohgoodfood.dao.StoreMapper">
 
-	<select id="login" parameterType="kr.co.ohgoodfood.dto.Store" resultType="kr.co.ohgoodfood.dto.Store">
-		SELECT * FROM Store WHERE store_id=#{store_id} AND store_pwd=#{store_pwd}
-	</select>
-		
 	<!-- 아이디 중복확인 -->
 	<select id="findById" parameterType="String" resultType="kr.co.ohgoodfood.dto.Store">
 		SELECT * FROM Store WHERE store_id = #{value}
 	</select>
 	
-	<select id="viewReview" parameterType="kr.co.ohgoodfood.dto.Store" resultType="kr.co.ohgoodfood.dto.Review">
-		SELECT user_id, writed_at, review_content 
-		FROM Review WHERE store_id=#{store_id}
-	</select>
-	
+	<!-- 내 가게 리뷰 보기 -->
 	<select id="getReviews" resultType="kr.co.ohgoodfood.dto.Review">
 		SELECT 
 			review_no,
@@ -30,6 +22,8 @@
 		WHERE store_id=#{storeId} AND is_blocked = 'N'
 		ORDER BY writed_at DESC
 	</select>
+
+	<!-- 주문(미확정, 확정, 취소) 조회 -->
 	<select id="getOrders" resultType="kr.co.ohgoodfood.dto.Orders">
 		SELECT 
 			o.*, p.*, i.store_img
@@ -59,32 +53,41 @@
 		</where>
 		ORDER BY o.ordered_at DESC
 	</select>
+
+	<!-- order_no로 스토어 이름 조회 -->
+	<select id="getStoreNameByOrderNo" resultType="kr.co.ohgoodfood.dto.Store">
+		SELECT s.*
+		FROM Orders o
+		JOIN Store s ON o.store_id = s.store_id
+		WHERE o.order_no = #{no}
+	</select>
 	
+	<!-- 주문을 확정 -->
 	<update id="confirmOrders">
 		UPDATE Orders
 		SET order_status=#{type}
 		WHERE order_no=#{id}
 	</update>
 	
+	<!-- 주문 코드 생성 -->
 	<update id="createOrderCode">
 		UPDATE Orders 
 		SET order_code=#{randomCode}
 		WHERE order_no=#{id} AND order_status=#{type}
-	
 	</update>
 	
+	<!-- 주문을 취소 -->
 	<update id="cancleOrders">
 		UPDATE Orders
-		SET order_status=#{type}, canceld_from="store"
+		SET order_status=#{type}, canceld_from='store'
 		WHERE order_no=#{id}
-	
 	</update>
 	
+	<!-- order_no로 주문 조회 -->
 	<select id="getOrderById" parameterType="int" resultType="kr.co.ohgoodfood.dto.Orders">
 		SELECT * 
 		FROM Orders
 		WHERE order_no=#{no}
-			
 	</select>
 	
 	<insert id="insertAlarm">
@@ -96,12 +99,14 @@
 		
 	</insert>
 	
+	<!-- 주문을 픽업 상태로 변경 -->
 	<update id="pickupOrders">
 		UPDATE Orders
 		SET order_status=#{type}, picked_at=NOW()
 		WHERE order_no=#{id}
 	</update>
 	
+	<!-- 주문상태(확정, 픽업) 조회  -->
 	<select id="getConfirmedOrPickupOrders" parameterType="String" resultType="kr.co.ohgoodfood.dto.Orders">
 	    SELECT o.*, p.*, i.store_img
 	    FROM Orders o
@@ -120,6 +125,7 @@
 	    ORDER BY o.ordered_at DESC
 	</select>
 	
+	<!-- 내 가게 기간 매출 조회 -->
 	<select id="getSales" resultType="kr.co.ohgoodfood.dto.StoreSales">
 		SELECT
 			o.store_id AS store_id,

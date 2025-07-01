@@ -31,13 +31,12 @@
 		                    <div class="review-card">
 		                    	<c:choose>
 		                    		<c:when test="${not empty vo.review_img}">
-		                    			<img src="${pageContext.request.contextPath}/upload/${vo.review_img}" alt="${vo.user_id}" class="review-img">
+		                    			<img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${vo.review_img}" alt="${vo.user_id}" class="review-img">
 		                    		</c:when>
 		                    		<c:otherwise>
 		                    			 <img src="${pageContext.request.contextPath}/upload/storebread2.png" alt="${vo.user_id}" class="review-img">
 		                    		</c:otherwise>
 		                    	</c:choose>
-		                        
 		                        <div class="review-content">
 		                            <div class="review-header">
 		                                <span class="review-name">${vo.user_id}</span>

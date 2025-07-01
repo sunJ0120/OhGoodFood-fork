@@ -183,6 +183,7 @@ public class StoreServiceImpl implements StoreService {
 	public List<Orders> getOrders(String storeId, String type, String selectedDate) {
 		List<Orders> list = mapper.getOrders(storeId, type, selectedDate);
 		for (Orders order : list) {
+			// 확정 시작시간 구하는 로직
 			if (order.getReservation_end() != null) {
 				Timestamp end = order.getReservation_end();
 				Timestamp start = new Timestamp(end.getTime() - 60 * 60 * 1000); // reservation_end - 1시간
@@ -208,23 +209,22 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int createUserAlarm(int no, String type) {
 		Orders order = mapper.getOrderById(no);
+		Store store = mapper.getStoreNameByOrderNo(no);
+		String storeName = store.getStore_name();
 		String userId = order.getUser_id();
-		String storeId = order.getStore_id();
 		String title = "";
 		String content = "";
 		
+		// type에 따라서 알람 제목, 내용 분기처리
 		if("confirmed".equals(type)) {
 			title = "확정 완료";
-			content = order.getOrdered_at() + " " + order.getUser_id() + 
-					" 님의 오굿백" + order.getQuantity() + "개 예약";
-		}else if("cancle".equals(type)) {
-			title = "취소 완료";
-			content = order.getOrdered_at() + " " + order.getUser_id() + 
-					" 님의 오굿백" + order.getQuantity() + "개 예약";
+			content = storeName + " 예약이 확정되었습니다.";
+		}else if("cancel".equals(type)) {
+			title = "예약 취소";
+			content = storeName + " 이(가) 예약을 취소하셨습니다.";
 		}else if("pickup".equals(type)) {
-			title = " 픽업 완료";
-			content = order.getOrdered_at() + " " + order.getUser_id() + 
-					" 님의 오굿백" + order.getQuantity() + "개 예약";
+			title = "픽업 완료";
+			content = storeName + " 픽업을 완료하였습니다.";
 		}
 		
 		Alarm alarm = new Alarm();
@@ -250,7 +250,7 @@ public class StoreServiceImpl implements StoreService {
 			title = "확정 완료";
 			content = order.getOrdered_at() + " " + order.getUser_id() + 
 					" 님의 오굿백" + order.getQuantity() + "개 예약";
-		}else if("cancle".equals(type)) {
+		}else if("cancel".equals(type)) {
 			title = "취소 완료";
 			content = order.getOrdered_at() + " " + order.getUser_id() + 
 					" 님의 오굿백" + order.getQuantity() + "개 예약";

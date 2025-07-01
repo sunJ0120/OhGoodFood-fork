@@ -24,7 +24,13 @@
                     <div class="order-title">
                         <span class="shop-name">${store.store_name}</span>&nbsp;&nbsp;
                     </div>
-                    <div class="dropdown-wrapper">
+                    
+                </div>
+                <div class="order-section-title">
+                    <span class="section-title"></span>&nbsp;
+                    <span class="section-desc"></span>
+                </div>
+                <div class="dropdown-wrapper">
                         <div class="custom-filter">
 					        <div class="custom-dropdown year-dropdown">
 					            <button class="dropdown-btn" data-type="year">
@@ -64,11 +70,6 @@
                         </ul>
                         </div>
                     </div>
-                </div>
-                <div class="order-section-title">
-                    <span class="section-title"></span>&nbsp;
-                    <span class="section-desc"></span>
-                </div>
                 <div class="order-list-area"></div>
             </div>
         </main>
@@ -83,9 +84,7 @@
         // 드롭다운 메뉴
         const statusBtn = document.querySelector('.order-status-btn');
         const statusList = document.querySelector('.order-status-list');
-        
-        //const statusSubText = document.querySelector('.section-desc')
-   
+
         if (statusBtn) {
             statusBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -107,15 +106,16 @@
             });
         }
         
+        // data-status에 따른 제목, 설명 바꾸는 로직
         function loadOrders(status) {
         	let year = $('.year-dropdown .dropdown-btn').attr('data-selected'); // 선택된 연도
             let month = $('.month-dropdown .dropdown-btn').attr('data-selected'); // 선택된 월
             let url = contextPath + "/store/order/" + status;
 
-            $.post(url, {
+            $.post(url, { // ajax + fragment
             	year : year,
             	month : month
-            },function (html) {
+            }, function (html) {
                 $('.order-list-area').html(html);
                 $('#dynamic-css').remove();
                 let cssPath = '';
@@ -124,17 +124,14 @@
                 let sectionDesc = $('.section-desc');
                
                 if (status === 'reservation') {
-                	console.log('order.jsp 에서 reservation 들어옴');
                     cssPath = contextPath + '/css/storeunconfirmedorder2.css';  	
                     statusText.text(month + "월 미확정 주문내역");
                     sectionDesc.text('| 주문을 확정해 주세요');
                 } else if (status === 'confirmed') {
-                	console.log('order.jsp 에서 confirm 들어옴');
                     cssPath = contextPath + '/css/storeconfirmedorder.css';
                     statusText.text(month + '월 확정 주문내역');
                     sectionDesc.text('| 픽업 확정 표시를 꼭 해주세요');
                 } else if (status === 'cancel') {
-                	console.log('order.jsp 에서 cancel 들어옴');
                     cssPath = contextPath + '/css/storecancledorder.css';
                     statusText.text(month + '월 취소한 주문내역');
                     sectionDesc.text('| 취소한 주문기록');
@@ -143,22 +140,21 @@
                     $('head').append('<link id="dynamic-css" rel="stylesheet" type="text/css" href="' + cssPath + '">');
                 }
             }).fail(function (xhr, status, error) {
-                console.error("❌ AJAX 실패");
+                console.error("AJAX 실패");
                 console.error("Status:", status);
                 console.error("Error:", error);
                 console.error("Response Text:", xhr.responseText);
             });
         }
-        $(document).ready(function () {
+        $(document).ready(function () { // 동적으로 년도 생성하는 로직
             const now = new Date();
             const curYear = now.getFullYear();
             const curMonth = String(now.getMonth() + 1).padStart(2, '0');
             const $yearList = $('.year-list');
 
-            for (let y = curYear; y >= curYear - 5; y--) {
+            for (let y = curYear; y >= curYear - 5; y--) { // 현재년도 ~ 현재년도-5년 생성
                 $yearList.append('<li data-value="' + y + '">' + y + '년</li>');
             }
-
             $('.year-dropdown .dropdown-btn')
                 .attr('data-selected', curYear)
                 .find('.selected-text').text(curYear + '년');
@@ -192,8 +188,6 @@
                 $('.dropdown-list').hide();
             });
         });
-
-
     </script>
 </body>
 

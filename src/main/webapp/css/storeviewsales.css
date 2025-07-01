@@ -9,7 +9,6 @@
 
 #wrapper {
 	width:100%;
-	
 }
 
 main{
@@ -147,8 +146,6 @@ main{
     font-family : 'nanumesquareneo_b';
 }
 
-
-
 .litepicker .button-next-month,
 .litepicker .button-previous-month {
     color: #727272;
@@ -165,6 +162,7 @@ main{
 	display: flex;
 	justify-content: left;
 }
+
 .litepicker .container__months .month-item-header {
 	font-weight: 900 !important;
     font-family : 'nanumesquareneo_b';
@@ -174,16 +172,19 @@ main{
     font-weight: 900 !important;
     font-family : 'nanumesquareneo_b';
 }
+
 .headerBox{
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .salesBox{
 	display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .salesContainer {
     margin-top: 20px;
     border: 1px solid #99A99B;

@@ -4,7 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-
 <c:choose>
 	<c:when test="${empty order}">
 		<div class="empty-order">
@@ -29,7 +28,7 @@
           </div>
           <hr class="order-card-divider">
           <div class="order-card-body">
-              <img src="${pageContext.request.contextPath}/img/${vo.store_img}" alt="오굿백" class="order-card-img">
+              <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${vo.store_img}" alt="오굿백" class="order-card-img">
               <div class="order-card-info">
                   <div class="order-card-info-person"><b>예약자 :</b> ${vo.user_id}</div>
                   <div class="order-card-info-time"><b>픽업 시간 :</b> 
@@ -50,52 +49,37 @@
 	</c:forEach>
  </c:otherwise>
 </c:choose>
-
 <script>
 	/* 
 	픽업시간이 오늘인 경우 : pickup_start = 2025.06.27 17:00:00 , pickup_end = 2025.06.27 19:00:00, 
 	reservation_end = pickup_start - 1 hour = 2025.06.27 16:00:00
-	-확정 클릭 가능시간 : 2025.06.27 14:59~16:01
-	-취소 클릭 가능시간 : 2025.06.27 14:59~17:01
+	-확정 클릭 가능시간 : 2025.06.27 14:59~16:01 -> 15:00~15:59 로 수정
+	-취소 클릭 가능시간 : 2025.06.27 14:59~17:01 -> 15:00~16:59 로 수정
 	*/
 	function buttonAbled() {
-		
 	    $('.order-card').each(function () {
 	        const resEndStr = $(this).data('res-end'); 
 			const pickupStartStr = $(this).data('pickup-start');
 			if (!resEndStr || !pickupStartStr) return; // 값이 없으면 리턴
-
 	        let resEnd = new Date(resEndStr);
-	        let resEndPlusOneMinute = new Date(resEnd.getTime() + 60 * 1000); // 확정 마감시간 + 1분
+	        let resEndMinusOneMinute = new Date(resEnd.getTime() - 60 * 1000); // 확정 마감시간 - 1분
 	        let now = new Date(); // 지금시간
 			let pickupStart = new Date(pickupStartStr); // 픽업시작시간
 	        let oneHourBeforeResEnd = new Date(resEnd.getTime() - 60 * 60 * 1000); // 확정 시작시간
-			let oneHourBeforeResEndMinus = oneHourBeforeResEnd.getTime() - 60 * 1000; // 확정 시작시간 -1분
-
-			//확정 버튼 클릭 조건 : 확정시작시간 - 1분 ~ 확정마감시간 + 1분
-			if(now >= oneHourBeforeResEndMinus && now <= resEndPlusOneMinute) {
+			//let oneHourBeforeResEndMinus = oneHourBeforeResEnd.getTime() - 60 * 1000; // 확정 시작시간 -1분
+			//확정 버튼 클릭 조건 : 확정시작시간 ~ 확정마감시간 - 1분
+			if(now >= oneHourBeforeResEnd && now <= resEndMinusOneMinute) {
 				$(this).find('.order-btn.confirm').addClass('active');
 			}else {
 				$(this).find('.order-btn.confirm').removeClass('active');
 			}
 
-			//취소 버튼 클릭 조건 : 확정시작시간 - 1분 ~ 픽업시작시간 + 1분
-			if(now >= oneHourBeforeResEndMinus && now <= pickupStart.getTime() + 60 * 1000) {
+			//취소 버튼 클릭 조건 : 확정시작시간 ~ 픽업시작시간 - 1분
+			if(now >= oneHourBeforeResEnd && now <= pickupStart.getTime() - 60 * 1000) {
 				$(this).find('.order-btn.cancel').addClass('active');
 			}else {
 				$(this).find('.order-btn.cancel').removeClass('active');
 			}
-
-			/*
-	        if (now >= oneHourBefore && now <= resEnd) {
-	            $(this).find('.order-btn.confirm').prop('disabled', false);
-	            $(this).find('.order-btn.cancel').prop('disabled', false);
-	            
-	        } else {
-	            $(this).find('.order-btn.confirm').prop('disabled', true);
-	            $(this).find('.order-btn.cancel').prop('disabled', true);
-	        } 이전코드 일단 남겨둠
-			*/
 	    });
 	};
 	$(function () {
@@ -106,24 +90,20 @@
 			if (!resEndStr) return;
 			const now = new Date();
 			const resEnd = new Date(resEndStr);
-			const confirmStart = new Date(resEnd.getTime() - 61 * 60 * 1000); // 확정마감시간 -1시간 -1분
-			const confirmEnd = new Date(resEnd.getTime() + 60 * 1000); // 확정마감시간 + 1분
-			console.log("확정시작시간 : " + confirmStart);
-			console.log("확정종료시간 : " + confirmEnd);
+			const confirmStart = new Date(resEnd.getTime() - 60 * 60 * 1000); // 확정마감시간-1시간
+			const confirmEnd = new Date(resEnd.getTime() - 60 * 1000); // 확정마감시간 - 1분
 			if (now < confirmStart || now > confirmEnd) {
 				alert('확정 버튼을 클릭할 수 있는 시간이 아닙니다');
 				return;
 			}     
 	        const orderNo = $(this).closest('.order-card').data('order-no');
-	        console.log("확정 주문번호:", orderNo);
-	        console.log("contextPath :", contextPath);
 	        var url = contextPath + "/store/reservation/" + orderNo + "/confirm";
 	        $.post(url, function (res) {
 	            if (res === 'success') {
-	            	alert('확정 완료');
+	            	alert('확정이 완료되었습니다.');
 	            	loadOrders('reservation');
 	            }
-	            else alert('확정 실패');
+	            else alert('확정이 실패했습니다.');
 	        });
 	    });
 	
@@ -135,10 +115,8 @@
 			const now = new Date();
 			const resEnd = new Date(resEndStr);
 			const pickupStart = new Date(pickupStartStr);
-			const cancelStart = new Date(resEnd.getTime() - 61 * 60 * 1000); // 확정마감시간 -1시간 -1분
-			const cancelEnd = new Date(pickupStart.getTime() + 60 * 1000);   // 픽업시작시간 + 1분
-			console.log("취소시작시간 : " + cancelStart);
-			console.log("취소종료시간 : " + cancelEnd);
+			const cancelStart = new Date(resEnd.getTime() - 60 * 60 * 1000); // 확정마감시간 -1시간
+			const cancelEnd = new Date(pickupStart.getTime() - 60 * 1000);   // 픽업시작시간 - 1분
 			if (now < cancelStart || now > cancelEnd) {
 				alert('취소 버튼을 클릭할 수 있는 시간이 아닙니다');
 				return;
@@ -147,10 +125,10 @@
 	        var url = contextPath + "/store/reservation/" + orderNo + "/cancel";
 	        $.post(url, function (res) {
 	            if (res === 'success'){
-	            	alert('취소 완료');
+	            	alert('취소가 완료되었습니다.');
 	            	loadOrders('reservation');
 	            }
-	            else alert('취소 실패');
+	            else alert('취소가 실패하였습니다.');
 	        });
 	    });
 	});

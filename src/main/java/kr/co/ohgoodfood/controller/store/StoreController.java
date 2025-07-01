@@ -68,11 +68,6 @@ public class StoreController {
 	@GetMapping("/review")
 	public String getReviews(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		String storeId = login.getStore_id();
 		List<Review> lists = storeService.getReviews(storeId);
 		model.addAttribute("reviews", lists);
@@ -83,11 +78,6 @@ public class StoreController {
 	@GetMapping("/reservation") 
 	public String getReservationOrders(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		return "/store/order";
 	}
 	
@@ -99,14 +89,13 @@ public class StoreController {
 									HttpSession session, 
 									Model model) {
 	    Store store = (Store) session.getAttribute("store");
+	    // 이 부분은 store 유효성 없으면 NullPointerException 에러가 나서 추가
 	    if (store == null) {
-	        return "store/alert"; 
+	    	return "redirect:/store/login"; 
 	    }
 	    String selectedDate = year + "-" + month;
 	    List<Orders> orders = storeService.getOrders(store.getStore_id(), status, selectedDate);
 	    model.addAttribute("order", orders); 
-	    System.out.println("서버 들어옴" + status + "selectedDate : " + selectedDate);
-	    System.out.println("컨트롤러에서 order 사이즈" + orders.size());
 	    switch (status) { // fragment 에서 ajax 로 div 붙이기
 	        case "reservation":
 	        	System.out.println("reservation 컨트롤러 들어옴");
@@ -126,19 +115,11 @@ public class StoreController {
 	@PostMapping("/reservation/{id}/confirm") 
 	@ResponseBody
 	public String confirmOrders(@PathVariable("id") int id ,HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		int r = storeService.confirmOrders(id, "confirmed");
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "confirmed");
-			int b = storeService.createStoreAlarm(id, "confirmed");
-			int c = storeService.createOrderCode(id, "confirmed");
-			
-			if(a > 0 && b > 0 && c > 0) {
+			int b = storeService.createOrderCode(id, "confirmed");	
+			if(a > 0 && b > 0) {
 				return "success";
 			}
 			return "failed";
@@ -149,20 +130,13 @@ public class StoreController {
 	}
 	
 	// 미확정 탭에서 취소 버튼 클릭시 -> 취소 상태로 바꿈
-	@PostMapping("/reservation/{id}/cancle") 
+	@PostMapping("/reservation/{id}/cancel") 
 	@ResponseBody
 	public String cancleOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
-		int r = storeService.cancleOrders(id, "cancle");
+		int r = storeService.cancleOrders(id, "cancel");
 		if(r > 0) {
-			int a = storeService.createUserAlarm(id, "cancle");
-			int b = storeService.createStoreAlarm(id, "cancle");
-			if(a > 0 && b > 0) {
+			int a = storeService.createUserAlarm(id, "cancel");
+			if(a > 0) {
 				return "success";
 			}
 			return "failed";
@@ -171,59 +145,15 @@ public class StoreController {
 			return "failed";
 		}
 	}
-	/*
-	// 토글에서 확정주문 클릭시 -> 확정 주문 내역 조회
-	@GetMapping("/confirmed") 
-	public String getConfirmedOrders(HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
-
-		List<Orders> lists = storeService.getConfirmedOrPickupOrders(login.getStore_id());
-		
-		for(Orders order : lists) {
-			if("pickup".equals(order.getOrder_status())) {
-				order.setPickup_status("complete");
-			}else {
-				order.setPickup_status("today");
-			}
-		}
-		model.addAttribute("order", lists);
-		return "/store/confirmedorder";
-	}*/
-	/*
-	// 토글에서 취소한 주문클릭시 -> 취소 주문 내역 조회
-	@GetMapping("/cancled") 
-	public String getCancledOrders(HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
-		List<Orders> lists = storeService.getOrders(login.getStore_id(), "cancle");
-		model.addAttribute("order", lists);
-		return "/store/cancledorder";
-	}*/
 	
 	// 확정 주문 내역에서 체크 표시 클릭시 픽업 상태로 변경
 	@PostMapping("/confirmed/{id}/pickup")
 	@ResponseBody
 	public String pickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		int r = storeService.pickupOrders(id, "pickup");
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "pickup");
-			int b = storeService.createStoreAlarm(id, "pickup");
-			if(a > 0 && b > 0) {
+			if(a > 0) {
 				return "success";
 			}
 			return "failed";
@@ -236,17 +166,10 @@ public class StoreController {
 	@PostMapping("/confirmed/{id}/confirmed")
 	@ResponseBody
 	public String confirmPickupOrders(@PathVariable("id") int id, HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		int r = storeService.confirmPickupOrders(id, "confirmed");
 		if(r > 0) {
 			int a = storeService.createUserAlarm(id, "confirmed");
-			int b = storeService.createStoreAlarm(id, "confirmed");
-			if(a > 0 && b > 0) {
+			if(a > 0) {
 				return "success";
 			}
 			return "failed";
@@ -360,16 +283,10 @@ public class StoreController {
 	    return storeService.getProductByStoreId(login.getStore_id());
 	}
 
-	// 매출확인 -> 이번달 매출 조회 (밑에 monthsales 쓰는데 일단 놔둠)
+	// 매출확인 -> 이번달 매출 조회 
 	@GetMapping("/viewsales")
 	public String showViewSales(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			// 로그인 안 되어 있으면 로그인 페이지로
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/store/login");
-			return "store/alert";
-		}
 		LocalDate now = LocalDate.now();
 	    LocalDate start = now.withDayOfMonth(1);
 	    LocalDate end = now.withDayOfMonth(now.lengthOfMonth()).plusDays(1);
@@ -388,17 +305,16 @@ public class StoreController {
 	@ResponseBody
 	public StoreSales getMonthSales(@RequestParam("year") int year, @RequestParam("month") int month, HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
-		 YearMonth ym = YearMonth.of(year, month);
-		 String start = ym.atDay(1).toString();     
-		 String end = ym.atEndOfMonth().toString(); 
-		 StoreSales saleVO = storeService.getSales(login.getStore_id(), start, end);
-		 saleVO.setStart_date(start);
-		 saleVO.setEnd_date(end);
-		 String salesMonth = saleVO.getStart_date().substring(5,7); // 월 추출
-		 model.addAttribute("saleVO", saleVO);
-		 model.addAttribute("salesMonth", salesMonth);
-		 return saleVO;
-		
+		YearMonth ym = YearMonth.of(year, month);
+		String start = ym.atDay(1).toString();     
+		String end = ym.atEndOfMonth().toString(); 
+		StoreSales saleVO = storeService.getSales(login.getStore_id(), start, end);
+		saleVO.setStart_date(start);
+		saleVO.setEnd_date(end);
+		String salesMonth = saleVO.getStart_date().substring(5,7); // 월 추출
+		model.addAttribute("saleVO", saleVO);
+		model.addAttribute("salesMonth", salesMonth);
+		return saleVO;
 	}
 	
 	//당일 매출 조회
@@ -406,11 +322,7 @@ public class StoreController {
 	@ResponseBody
 	public StoreSales getDailySales(@PathVariable("date") String date, HttpSession session) {
 	    Store login = (Store) session.getAttribute("store");
-	    if (login == null) {
-	        return null; 
-	    }
 	    StoreSales vo = storeService.getSales(login.getStore_id(), date, date); 
-	    System.out.println("당일매출 vo : " + vo);
 	    return vo;
 	}
 

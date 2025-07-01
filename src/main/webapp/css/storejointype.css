@@ -14,19 +14,19 @@ body {
   height: 100vh;            
   display: flex;
   justify-content: center;
-  
 }
 
 #wrapper {
   width: 440px;
-  height: 100vh;            
+  height: 956px;           
   display: flex;
   flex-direction: column;
   background-color: #F5F3EA;
 }
 
 header {
-  padding: 20px 15px;
+  height: 30px;
+  padding: 20px 15px 20px 15px;
   border-bottom: 1px solid #717171;
 }
 
@@ -43,7 +43,7 @@ header {
 }
 
 .icon {
-  width: 23px;
+  width: 20px;
 }
 
 main {
@@ -67,7 +67,6 @@ main {
   background-color: #99A99B;
   border-radius: 48px 48px 0 0;
   box-sizing: border-box;
-  
 }
 
 .main-middle-container {
@@ -100,12 +99,15 @@ main {
   height: 1px;
   background: rgba(255,255,255,0.8);
 }
+
 .join-box:nth-of-type(1) .join-button::after {
   background: #717171;
 }
+
 .join-box:nth-of-type(2) .join-button::after {
   background: #D8A8AB;
 }
+
 .join-box {
   margin-top: 20px;
   width: 393px;
@@ -114,16 +116,18 @@ main {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
   padding-bottom: 25px;
 }
+
 #joinbox1 {
     margin-top: 100px;
 }
+
 .join-desc {
   font-size: 15px;
   font-family: 'nanumesquareneo_b';
   color: #7C7C7C;
   padding: 16px 20px 0;
-
 }
+
 .join-button {
   display: flex;
   justify-content: space-between;
@@ -135,8 +139,8 @@ main {
   color: #333;
   font-weight: bold;
   cursor: pointer;
-  
 }
+
 .join-button::after {
   content: '';
   position: absolute;
@@ -147,6 +151,7 @@ main {
   background: #d9d9d9;
   border-radius: 1px;
 }
+
 .join-button img {
   width: 40px;   
   height: 40px;

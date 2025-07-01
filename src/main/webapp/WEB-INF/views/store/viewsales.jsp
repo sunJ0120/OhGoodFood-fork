@@ -3,7 +3,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -16,6 +15,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/litepicker/dist/litepicker.js"></script>
     <style>
+     /* litepicker의 라이브러리 안에 속성 변경*/
 	  :root {
 	    --litepicker-day-width: 53px !important;
 	    --litepicker-is-end-color-bg: #99A99B;
@@ -57,7 +57,7 @@
     </script>
     
     <script>
-    
+    // 동적으로 달력 생성하는 로직
     const picker = new Litepicker({
         element: document.getElementById('datepicker'),
         inlineMode: true,
@@ -75,15 +75,11 @@
        		        if (yearElem.textContent.includes('.')) { // 날짜 클릭때마다 중복으로 00 붙는거 방지. 즉, 1번만 포맷변경
        		            return; 
        		        }
-
        		        let year = yearElem.textContent || '';
        		        let month = monthElem.textContent || '';
        		        month = month.replace(/[^\d]/g, '');
-					
        		        let url = contextPath + "/store" +"/monthsales";
-       		        console.log("url : " + url);
-       		        console.log("contextpath : " + contextPath);
-       		        
+                    // 컨트롤러에 년, 월 보내고 매출, 판매갯수, 월 받아옴
        		        $.post(url, {
        		        	year : year,
        		        	month : month
@@ -99,7 +95,6 @@
        		        	monthlysales.textContent = month2 + '월 오굿백 매출';
        		        	monthlysalescount.textContent = count2 + '개';
        		        	monthlysalesaccount.textContent = sale2 + '원';
-       		        	
        		        })
        		        monthElem.textContent = '';
        		        yearElem.textContent = '';
@@ -109,17 +104,13 @@
 
         	 //날짜 선택시
             picker.on('selected', (date) => {
-            	console.log("selected에서 getDate() 사용" + picker.getDate());
                 const selectedDate = date.format('YYYY-MM-DD');
                 $.ajax({
                     url: contextPath + '/store/viewsales/' + selectedDate,
                     method: 'POST',
                     success: function(data) {
-                    	console.log(data);
                     	const formatData =  data.start_date.replace(/-/g, '.'); // -를 . 으로 교체 (날짜)
-                        console.log("formatData : " + formatData);
                     	const $box = $('<div>').addClass('dailyBox');
-                    		
                         const $date = $('<h4>').text(formatData).css({
                         	'font-size': '18px',
                             'font-weight': 'bold',
@@ -128,9 +119,7 @@
                             'margin-left': '25px',
                         })
                         $box.append($date); // 여기까지 날짜
-                        
                         const formatCount = '오굿백 판매 개수 : ' + data.count + '개';
-                        
                         const $countContainer = $('<div>').css({ // 이미지는 자식태그 못가져서 감싸는 태그 필요
                             'display': 'flex',
                             'align-items': 'center',
@@ -169,13 +158,12 @@
 						    'margin-right': '10px',
 						});
                        	
-                       	// 판매 매출 붙이기
+                       	// 판매 매출 css 및 붙이기 
                        	const $salesText = $('<h4>').text(formatSales).css({
                             'font-size': '18px',
                             'color': '#000000',
                             'font-family': 'nanumesquareneo'
                         });
-                        
                        	$salesContainer.append($salesImg, $salesText);
                        	$box.append($salesContainer);
                         $('#dailySales').empty().append($box);
