@@ -4,10 +4,8 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * [DTO] MainStore
@@ -15,9 +13,8 @@ import lombok.ToString;
  * - Main과 Bookmark에서 가게 정보를 사용하기 위한 DTO 클래스
  * - 카드 안에 들어가는 모든 정보들을 한 번에 저장해서 사용한다.
  */
-@ToString
+
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class MainStore{
     //Store table에서 가져오는 정보들

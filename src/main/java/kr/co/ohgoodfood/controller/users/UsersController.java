@@ -19,8 +19,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.servlet.http.HttpSession;
 import java.util.Collections;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -28,13 +26,17 @@ import java.util.Map;
  * UsersController
  *
  * 사용자 페이지 전용 기능을 처리하는 컨트롤러입니다.
+ * - POST /user/signup	       : 사용자 회원가입 페이지
  * - GET  /user/main           : 사용자 메인 화면 조회
  * - POST /user/filter/store   : AJAX 기반 가게 목록 필터링
- * - GET  /user/main/bookmark  : 해당 user_id가 가진 bookmark 목록 조회
- * - POST /user/main/bookmark  : 해당하는 bookmark
- *
- * @since 2025-06-22 : 필터에 Map이 아닌, DTO 필터 객체 적용
- * @since 2025-06-25 : 인터셉트로 로그인 정보 체크할 예정이라, 인터셉터에서 alert을 뿌려주는 방식이므로 따로 처리하지는 않은 상태
+ * - GET  /user/bookmark       : 해당 user_id가 가진 bookmark 목록 조회
+ * - POST /user/bookmark       : 해당하는 bookmark 삭제 -> 차후 북마크 다시 insert 하는 로직이 필요할 경우, endPoint 분기 예정
+ * - GET  /user/main/orderList : 유저가 가진 orderList 목록 조회
+ * - POST /user/filter/order   : AJAX 기반 오더 목록 필터링
+ * - GET  /user/mypage         : 유저 mypage 이동
+ * - GET  /user/reviewList     : 하단 메뉴바 Review탭 이동시 전체 리뷰 목록 조회
+ * @since 2025-06-22 : [sunJ] 필터에 Map이 아닌, DTO 필터 객체 적용
+ * @since 2025-06-25 : [sunJ] 인터셉트로 로그인 정보 체크할 예정이라, 인터셉터에서 alert을 뿌려주는 방식이므로 따로 처리하지는 않은 상태
  */
 @Controller
 @RequestMapping("/user")
@@ -93,14 +95,14 @@ public class UsersController {
                                Model model,
                                HttpSession session){
 
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
+        //세션에서 받아오는 로직
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
-        //bookmark를 위해 user_id 세팅
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
+
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
         List<Bookmark> bookmarkList = usersService.getBookmarkList(user_id);
         log.info("[log/UsersController.userBookmark] user_id가 가진 userBookmark 결과 log : {}", bookmarkList);
@@ -122,14 +124,14 @@ public class UsersController {
     public Map<String,Integer> userBookmarkDelete(@RequestBody BookmarkDelete bookmarkDelete,
                                                   Model model,
                                                   HttpSession session){
+        //세션에서 받아오는 로직
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
         //bookmark를 위해 user_id 세팅
         bookmarkDelete.setUser_id(user_id);
 
@@ -138,22 +140,30 @@ public class UsersController {
         return Collections.singletonMap("code", result ? 200 : 500);
     }
 
-    //현재 jsp 연결 확인 완료.
+    /**
+     * 세션에 있는 유저가 가진 주문 목록을 조회한다.
+     *
+     * @param userOrderFilter 쿼리 파라미터로 전달된 필터 정보
+     * @param model          뷰에 전달할 데이터(Model)
+     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
+     * @return               users/userOrders.jsp로 포워딩
+     */
     @GetMapping("/orderList")
     public String userOrderList(@ModelAttribute UserOrderFilter userOrderFilter,
                                 Model model,
                                 HttpSession session){
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
+
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
         log.info("[log/UsersController.userOrderList] user_id가 가진 userOrderList 결과 log : {}", userOrderList);
+
         model.addAttribute("userOrderList", userOrderList);
 
         return "users/userOrders";
@@ -164,25 +174,26 @@ public class UsersController {
      *
      * @param userOrderFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
      * @param model          뷰에 전달할 데이터(Model)
-     * @return               가게 주문 목록만 포함한 JSP 프래그먼트 ("users/fragment/userOrderList")
+     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
+     * @return               필터링 된 가게 주문 목록만 포함한 JSP 프래그먼트 ("users/fragment/userOrderList")
      */
     @PostMapping("/filter/order")
     public String filterOrderList(@RequestBody UserOrderFilter userOrderFilter,
                                   Model model,
                                   HttpSession session){
-//        //세션에서 받아오는 로직
-//        // store 단에서 store로 키값을 저장했으므로, user로 맞춘다.
-//        Account loginUser = (Account) session.getAttribute("user");
-//        String user_id = loginUser.getUser_id();
+        //세션에서 받아오는 로직
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
+        log.info("session에서 가져온 user_id값 확인 : {}", user_id);
 
-        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
-        String user_id = "u01";
+//        //임시 하드코딩 값, 실제로는 세션에서 받아온다.
+//        String user_id = "u01";
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
         List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
-        log.info("[log/UsersController.userOrderList] user_id가 가진 userOrderList 결과 log : {}", userOrderList);
+        log.info("[log/UsersController.filterOrderList] user_id가 가진 filterOrderList 결과 log : {}", userOrderList);
         model.addAttribute("userOrderList",userOrderList);
-        // JSP fragment만 리턴
+
         return "users/fragment/userOrderList";
     }
     
@@ -192,16 +203,16 @@ public class UsersController {
     /**  회원가입 폼 보여주기 */
     @GetMapping("/signup")
     public String showSignupForm() {
-        return "users/userSignup";  // /WEB-INF/views/users/userSignup.jsp
+        return "users/userSignup"; 
     }
 
-    /** AJAX 아이디 중복 확인 */
+    /** 아이디 중복 확인 */
     @GetMapping("/checkId")
     @ResponseBody
     public boolean checkId(@RequestParam("user_id") String userId) {
         return usersService.isDuplicateId(userId);
     }
-    /**  실제 회원가입 처리 */
+    /** 회원가입 처리 */
     @PostMapping("/signup")
     public String signup(
             @ModelAttribute Account account,
@@ -217,7 +228,7 @@ public class UsersController {
         try {
         	usersService.registerUser(account);
             model.addAttribute("msg", "회원가입이 성공적으로 완료되었습니다.");
-            model.addAttribute("url", "/user/login");
+            model.addAttribute("url", "/login");
         } catch (Exception e) {
             model.addAttribute("msg", "회원가입 중 오류가 발생했습니다.");
             model.addAttribute("url", "/user/signup");
@@ -227,39 +238,41 @@ public class UsersController {
 
     /**
      *  사용자 마이페이지 조회
-     *
+     *  
      */
     
     @GetMapping("/mypage")
     public String userMypage(Model model, HttpSession session) {
-        String userId = (String) session.getAttribute("user_id");
-        if (userId == null) userId = "u10";
+    	
+        // String userId = (String) session.getAttribute("user_id");
+        // if (userId == null) userId = "u10"; // 임시 하드코딩값
+        // 세션에서 user_id 가져오기
+        Account loginUser = (Account) session.getAttribute("user");
+        String user_id = loginUser.getUser_id();
 
-        UserMypage page = usersService.getMypage(userId);
+        UserMypage page = usersService.getMypage(user_id);
         model.addAttribute("userMypage", page);
         return "users/userMypage";
         
     }
     /**
      * 제품 상세보기
-     * URL: /user/productdetail?product_no=123
      */
     @GetMapping("/productDetail")
     public String productDetail(
             @RequestParam("product_no") int product_no,
             Model model
     ) {
-        // productService → usersService 로 교체
         ProductDetail detail = usersService.getProductDetail(product_no);       
         model.addAttribute("productDetail", detail);
-        return "users/productDetail";
+        return "users/userProductDetail";
         
         
     }
 
     /**
-     * POST /user/productdetail
-     * (GET과 같은 URL, HTTP 메서드만 POST로 분기)
+     * 특정 가게 상세 정보로 리다이렉트
+     *
      */
     @PostMapping("/productDetail")
     public String reserve(
@@ -269,11 +282,11 @@ public class UsersController {
     ) {
         String userId = (String) session.getAttribute("user_id");
         if (userId == null) {
-            redirectAttrs.addFlashAttribute("error", "로그인이 필요합니다.");
+            redirectAttrs.addFlashAttribute("error", "로그인이 필요합니다."); // 추후 인터셉터 구현시 제거
             return "redirect:/login";
         }
 
-        // 여기 역시 productService → usersService 로
+        // 
         boolean success = usersService.reserveProduct(userId, product_no);
         if (success) {
             redirectAttrs.addFlashAttribute("msg", "예약이 완료되었습니다.");
@@ -287,8 +300,9 @@ public class UsersController {
      */
     @GetMapping("/reviewList")
     public String listReviews(Model model) {
-    	List<Review> review = usersService.getAllReviews();
-    	model.addAttribute("review", review);
-        return "users/reviewList";  // reviewList
+        List<Review> reviews = usersService.getAllReviews(1, Integer.MAX_VALUE);
+        model.addAttribute("reviews", reviews);
+        return "users/userReviewList";  
     }
+
 }

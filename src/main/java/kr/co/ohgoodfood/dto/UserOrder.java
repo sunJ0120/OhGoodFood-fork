@@ -7,11 +7,13 @@ import lombok.ToString;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-/*
-User 화면의 Order list에 들어오는 정보들을 가져온다.
+/**
+ * [DTO] UserOrder.java
+ *
+ * - Order List 정보에 필요한 DTO
+ * - MainStore를 상속받아서, Service 단의 "픽업" 구분 로직을 사용할 수 있도록 한다.
  */
 
-@ToString
 @Data
 @NoArgsConstructor
 public class UserOrder extends MainStore{

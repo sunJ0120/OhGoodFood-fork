@@ -37,7 +37,6 @@ import lombok.RequiredArgsConstructor;
  * UsersServiceImpl.java - UsersService interface 구현체
  * 
  * @see UsersService - 세부 기능은 해당 클래스인 UsersServiceImpl에 구현한다. - 의존성 주입은 생성자 주입으로
- *      구현
  */
 
 @Slf4j
@@ -47,10 +46,10 @@ public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
 
     /**
-     * 메인 화면에 뿌릴 DTO리스트를 가져오는 메서드
+     * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
      *
-     * @param userMainFilter 필터링을 위한 객체가 담겨있다. (필터링 대상 : Category, 가게 상세, 가게 이름)
-     * @return mainStoreList (MainStore DTO의 리스트 객체)
+     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. (필터링 대상 : Category, 가게 상세, 가게 이름)
+     * @return               : mainStoreList (MainStore DTO의 리스트 객체)
      */
     @Override
     public List<MainStore> getMainStoreList(UserMainFilter userMainFilter) {
@@ -67,23 +66,11 @@ public class UserServiceImpl implements UsersService{
         return mainStoreList;
     }
 
-    @Override
-    public List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter){
-        List<UserOrder> orderList = userMapper.selectOrderList(userOrderFilter);
-
-        // userOrder에 pickup_status를 저장.
-        for(UserOrder userOrder : orderList){
-            userOrder.setPickup_status(getPickupDateStatus(userOrder));
-        }
-
-        return orderList;
-    }
-
     /**
-     * 사용자가 가진 북마크 리스트를 가져오는 함수
+     * 사용자가 가진 북마크 리스트를 가져오는 method
      *
-     * @param user_id user_id
-     * @return mainStoreList (MainStore DTO의 리스트 객체)
+     * @param user_id           : 현재 세션에 접속한 사용자 id
+     * @return                  : mainStoreList (MainStore DTO의 리스트 객체)
      */
     @Override
     public List<Bookmark> getBookmarkList(String user_id){
@@ -103,18 +90,21 @@ public class UserServiceImpl implements UsersService{
     /**
      * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감을 판별합니다.
      *
-     * @param mainStore 판별 데이터가 담긴 객체
-     * @return PickupStatus enum 객체
+     * @param mainStore          : 판별이 필요한 데이터가 담긴 객체
+     * @return                   : PickupStatus ENUM 객체
      */
     @Override
     public PickupStatus getPickupDateStatus(MainStore mainStore) {
-
         LocalDate today = LocalDate.now();
 
         // [마감] - store_status = N
         if("N".equals(mainStore.getStore_status())){
             return PickupStatus.CLOSED;
         }else{
+            // NullPointerException이 걸려서 우선 추가
+            if (mainStore.getPickup_start() == null) {
+                return PickupStatus.CLOSED;
+            }
             LocalDate pickupDate = mainStore.getPickup_start().toLocalDateTime().toLocalDate();
             // [매진] - amount = 0
             if(mainStore.getAmount() == 0){
@@ -134,13 +124,12 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * 로직 변경, | 구분은 확장성을 위해 프론트 단에 위임
+     * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
      * 서버에서는 리스트에 담아서 보내도록 한다.
      *
-     * @param mainStore
-     * @return 카테고리 이름이 담긴 List
+     * @param mainStore          : 판별이 필요한 데이터가 담긴 객체
+     * @return                   : 카테고리 이름이 담긴 List
      */
-
     @Override
     public List<String> getCategoryList(MainStore mainStore) {
         List<String> category_list = new ArrayList<>();
@@ -164,6 +153,13 @@ public class UserServiceImpl implements UsersService{
         return category_list;
     }
 
+    /**
+     * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
+     * 서버에서는 리스트에 담아서 보내도록 한다.
+     *
+     * @param bookmarkDelete     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
+     * @return                   : 결과 행 수에 따라 Boolean
+     */
     @Override
     public boolean deleteUserBookMark(BookmarkDelete bookmarkDelete) {
         String user_id = bookmarkDelete.getUser_id();
@@ -175,6 +171,24 @@ public class UserServiceImpl implements UsersService{
             return true;
         }
         return false; //delete 실패!
+    }
+
+    /**
+     * 사용자의 OrderList를 가져오는 method
+     *
+     * @param userOrderFilter    : 세션에 접속한 사용자 id와 필터링을 위한 객체가 담겨있다. (필터링 대상 : order_status)
+     * @return                   : 조회한 UserOrderList
+     */
+    @Override
+    public List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter){
+        List<UserOrder> orderList = userMapper.selectOrderList(userOrderFilter);
+
+        // userOrder에 pickup_status를 저장.
+        for(UserOrder userOrder : orderList){
+            userOrder.setPickup_status(getPickupDateStatus(userOrder));
+        }
+
+        return orderList;
     }
     
 	/** 유저 정보 한 건 조회 */
@@ -265,12 +279,13 @@ public class UserServiceImpl implements UsersService{
 	}
 	
 	/**
-	 * 메뉴바 review
+	 * 메뉴바 review 탭
 	 * */
 
-    @Override
-    public List<Review> getAllReviews() {
-        return userMapper.findAllReviews();
+	@Override
+    public List<Review> getAllReviews(int page, int size) {
+        int startIdx = (page - 1) * size;
+        return userMapper.getAllReviews(startIdx, size);
     }
 
 }

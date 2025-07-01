@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -9,40 +9,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/layout.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userbookmark.css">
 </head>
 <body>
 <div id="wrapper">
-
-  <header>
-    <div class="header-container">
-      <img src="${pageContext.request.contextPath}/img/ohgoodfood_logo.png" alt="Logo Image">
-      <div class="icon-container">
-        <!-- 알람 이동 -->
-        <a href="${pageContext.request.contextPath}/user/alarm">
-          <img src="${pageContext.request.contextPath}/img/alarm_active.png" alt="알람" class="icon">
-        </a>
-        <!-- 즐겨찾기 적용 -->
-        <a href="${pageContext.request.contextPath}/user/bookmark">
-          <img src="${pageContext.request.contextPath}/img/bookmark.png" alt="즐겨찾기" class="icon">
-        </a>
-        <!-- 로그아웃 이동 -->
-        <a href="${pageContext.request.contextPath}/logout">
-          <img src="${pageContext.request.contextPath}/img/logout.png" alt="로그아웃" class="icon">
-        </a>
-      </div>
-    </div>
-  </header>
+  <%-- header include --%>
+  <%@ include file="/WEB-INF/views/users/header.jsp" %>
 
   <main>
-    <!-- topWrapper로 한 번더 감싸서 스크롤 적용 -->
+    <%-- topWrapper로 한 번더 감싸서 스크롤 적용 --%>
     <div class="topWrapper">
       <div class="productWrapper">
-        <!-- 북마크에도 상품 상세 기능 추가 -->
+        <%-- 북마크에도 상품 상세 기능 추가 --%>
         <section class="productList">
           <c:forEach var="bookmark" items = "${bookmarkList}" varStatus="st">
-            <!-- store_status를 받아오기 위해 data-status를 지정 -->
+            <%-- store_status를 받아오기 위해 data-status를 지정 --%>
             <article class="productCard"
                      data-status="${bookmark.store_status}"
                      data-bookmark-no="${bookmark.bookmark_no}"
@@ -74,7 +55,7 @@
                 </div>
               </div>
 
-              <!-- 가게 상세 정보 -->
+              <%-- 가게 상세 정보 --%>
               <div class="cardInfo">
                 <img src="${pageContext.request.contextPath}/img/user_store3.jpg" alt="상품 이미지" class="storeImage"/>
                 <div class="productTextWrapper">
@@ -134,78 +115,12 @@
 
   </main>
 
-  <footer>
-    <div class="footer-container">
-      <div class="menu-container">
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/main">
-            <img src="${pageContext.request.contextPath}/img/home.png" data-name="home" alt="홈" class="menu-icon">
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/reviewList">
-            <img src="${pageContext.request.contextPath}/img/review.png" data-name="review" alt="리뷰" class="menu-icon">
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/orderList">
-            <img src="${pageContext.request.contextPath}/img/order.png" data-name="order" alt="주문" class="menu-icon">
-          </a>
-        </div>
-        <div class="menu-item">
-          <a href="${pageContext.request.contextPath}/user/mypage">
-            <img src="${pageContext.request.contextPath}/img/mypage.png" data-name="mypage" alt="마이페이지" class="menu-icon">
-          </a>
-        </div>
-      </div>
-    </div>
-  </footer>
-
+  <%-- footer include --%>
+  <%@ include file="/WEB-INF/views/users/footer.jsp" %>
 </div>
-<!-- JQuery CDN -->
+<%-- JQuery CDN --%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- [layout] bottom navigation js -->
-<script>
-  // ⭐ 해당 페이지면 켜져 있어야 하므로 로직 추가
-  // ⭐  1) 로드 시: 현재 페이지와 링크 비교해서 active 세팅
-  const contextPath = '${pageContext.request.contextPath}';
-
-  const curr = window.location.pathname.replace(contextPath, '').replace(/\/$/, '');
-  $('.menu-item').each(function(){
-    const $a = $(this).find('a');
-    if (!$a.length) return;  // <a> 없는 아이템 패스 (링크 없으므로)
-    // a 태그의 pathname 만 뽑아서 비교
-    const link = this.querySelector('a').pathname
-            .replace(contextPath, '').replace(/\/$/, '');
-    if (link === curr) {
-      $(this).addClass('active');
-      const $img = $(this).find('img');
-      const name = $img.data('name');
-      $img.attr('src', `${contextPath}/img/${"${name}"}_active.png`);
-    }
-  });
-
-  $(document).ready(function () {
-    $('.menu-item').on('click', function () {
-      $('.menu-item').each(function () {
-        $(this).removeClass('active');
-        const $img = $(this).find('img');
-        // 기본 이미지로 복원
-        const name = $img.attr('data-name');
-        $img.attr('src', `${contextPath}/img/${"${name}"}.png`);
-      });
-      $(this).addClass('active');
-      const $img = $(this).find('img');
-      // active 이미지로 변경
-      const name = $img.attr('data-name');
-      // log 찍어보기
-      console.log("data-name:", $img.attr('data-name'));
-
-      $img.attr('src', `${contextPath}/img/${"${name}"}_active.png`);
-    });
-  });
-</script>
-<!-- data-status 정보 받아서 컬러를 변경하기 위한 js -->
+<%-- data-status 정보 받아서 컬러를 변경하기 위한 js --%>
 <script>
   // 렌더 타임에 EL로 채워진 data-status 읽는다.
   //dateset으로 읽기 위해서는 data-status 이거 처럼 하이픈으로 구별한다.
@@ -220,8 +135,8 @@
     });
 });
 </script>
-<!-- bookmark 해제시 ui 변경을 위한 js -->
-<!-- ⭐ bookmark 삭제 후 다시 별을 누르면 북마크 재 추가 할 수 있도록 하는 기능 고민중입니다... -->
+<%-- bookmark 해제시 ui 변경을 위한 js --%>
+<%-- ⭐ bookmark 삭제 후 다시 별을 누르면 북마크 재 추가 할 수 있도록 하는 기능 고민중입니다... --%>
 <script>
   let bookmarkParams = {};
 
@@ -230,7 +145,7 @@
 
     console.log("product-no : " + no);
     const ctx = '${pageContext.request.contextPath}';
-    window.location.href = ctx + '/user/productdetail?product_no=' + no;
+    window.location.href = ctx + '/user/productDetail?product_no=' + no;
   });
 
   $('.bookmarkImage').on('click', function(e) {
@@ -267,30 +182,6 @@
         alert('서버 통신 중 오류가 발생했습니다.');
       }
     });
-  });
-</script>
-
-<!-- navigation 클릭시, 현재 페이지면 이동 방지 -->
-<script>
-  $(function(){
-    const currentPath = window.location.pathname.replace(/\/$/, '');  // 끝의 / 제거
-    $('.menu-item a').on('click', function(e){
-      const linkPath = this.pathname.replace(/\/$/, '');               // 끝의 / 제거
-      console.log({ linkPath, currentPath });
-      if (linkPath === currentPath) {
-        e.preventDefault();
-      }
-    });
-
-    //헤더에 있는 요소들 같은 경우도 현재 위치면 클릭 방지
-    $('.icon-container a').on('click', function(e){
-      const linkPath = this.pathname.replace(/\/$/, '');               // 끝의 / 제거
-      console.log({ linkPath, currentPath });
-      if (linkPath === currentPath) {
-        e.preventDefault();
-      }
-    });
-
   });
 </script>
 </body>

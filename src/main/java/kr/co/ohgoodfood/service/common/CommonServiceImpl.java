@@ -8,21 +8,26 @@ import org.springframework.stereotype.Service;
 import kr.co.ohgoodfood.dao.CommonMapper;
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.Store;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class CommonServiceImpl implements CommonService{
 	
-	@Autowired
-	private CommonMapper commonMapper;
+	private final CommonMapper commonMapper;
 	
+	// 사용자 로그인 
 	@Override
 	public Account loginAccount(String id, String pwd) {
 		return commonMapper.loginAccount(id, md5(pwd));
 	}
+
+	// 가게 사장 로그인
 	@Override
 	public Store loginStore(String id, String pwd) {
 		return commonMapper.loginStore(id, md5(pwd));
 	}
+
 	// MD5 암호화 메서드 추가
 	private String md5(String input) {
 		try {

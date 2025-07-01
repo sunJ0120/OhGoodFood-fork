@@ -48,11 +48,12 @@ public interface UserMapper {
      * 사용자의 모든 주문내역을 출력
      *
      * @param userOrderFilter  필터 DTO
-     * @return         UserOrder 리스트
+     * @return                 UserOrder 리스트
      */
     List<UserOrder> selectOrderList(@Param("filter") UserOrderFilter userOrderFilter);
 
     /**
+     * 📌 차후 수정 예정.
      * 사용자가 주문을 취소할 때 호출
      *
      * @param order_status  변경할 주문 상태
@@ -66,6 +67,7 @@ public interface UserMapper {
                                   @Param("user_id") String user_id);
 
     /**
+     * 📌 차후 수정 예정.
      * 주문이 확정된 이후 상태 변경 및 픽업 코드를 설정
      *
      * @param order_status  변경할 주문 상태
@@ -79,6 +81,7 @@ public interface UserMapper {
                               @Param("user_id") String user_id);
 
     /**
+     * 📌 차후 수정 예정.
      * 픽업 완료 후 주문 상태를 업데이트
      *
      * @param order_status  변경할 주문 상태
@@ -90,6 +93,7 @@ public interface UserMapper {
                            @Param("user_id") String user_id);
 
     /**
+     * 📌 차후 수정 예정.
      * 결제 진행을 위해 특정 상품의 주문 정보를 조회
      *
      * @param product_no  조회할 상품 번호
@@ -98,6 +102,7 @@ public interface UserMapper {
     UserOrder selectUserOrderPay(int product_no);
 
     /**
+     * 📌 차후 수정 예정.
      * 결제 전 상품 수량과 가게 오픈 상태를 확인
      *
      * @param product_no  조회할 상품 번호
@@ -106,6 +111,7 @@ public interface UserMapper {
     OrderPayCheck selectUserOrderPayCheck(int product_no);
 
     /**
+     * 📌 차후 수정 예정.
      * 사용자별 전체 알림 목록을 조회
      *
      * @param user_id  user_id
@@ -114,6 +120,7 @@ public interface UserMapper {
     List<Alarm> selectAlarmList(String user_id);
 
     /**
+     * 📌 차후 수정 예정.
      * 사용자의 모든 알림을 읽음 처리
      *
      * @param user_id user_id
@@ -121,6 +128,7 @@ public interface UserMapper {
     void updateAlarmRead(String user_id);
 
     /**
+     * 📌 차후 수정 예정.
      * X가 눌린 or 기한이 지난 알림을 숨김 처리
      *
      * @param user_id  사용자 ID
@@ -161,6 +169,13 @@ public interface UserMapper {
 	int countByUserId(@Param("user_id") String user_id);
 
 
-	/** 모든 리뷰 모아보기*/
-	 List<Review> findAllReviews();
+	/** 모든 리뷰 모아보기
+     * startIdx부터 size만큼 모든 리뷰를 조인 결과로 가져옵니다.
+     * @param startIdx  조회 시작 오프셋
+     * @param size      한 번에 조회할 건 수
+     */
+    List<Review> getAllReviews(
+        @Param("startIdx") int startIdx,
+        @Param("size")     int size
+    );
 }

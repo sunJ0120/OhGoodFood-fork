@@ -1,6 +1,6 @@
 package kr.co.ohgoodfood.service.users;
 
-import kr.co.ohgoodfood.dao.TestMapper;
+//import kr.co.ohgoodfood.dao.TestMapper;
 import kr.co.ohgoodfood.dto.MainStore;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;

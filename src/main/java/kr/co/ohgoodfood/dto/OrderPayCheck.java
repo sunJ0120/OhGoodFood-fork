@@ -2,7 +2,6 @@ package kr.co.ohgoodfood.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 /**
  * OrderPayCheck.java
@@ -11,7 +10,7 @@ import lombok.ToString;
  * - store_status로 현재 마감 상태인지를 체크하고
  * - amount로 수량이 충분한지를 체크한다.
  */
-@ToString
+
 @Data
 @NoArgsConstructor
 public class OrderPayCheck {
