@@ -2,16 +2,13 @@ package kr.co.ohgoodfood.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
-
-import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
  * [DTO] UserOrder.java
  *
  * - Order List 정보에 필요한 DTO
- * - MainStore를 상속받아서, Service 단의 "픽업" 구분 로직을 사용할 수 있도록 한다.
+ * - Service로직을 사용하기 위해 MainStore를 상속받도록 구성한다.
  */
 
 @Data

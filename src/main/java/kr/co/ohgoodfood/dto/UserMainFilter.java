@@ -27,7 +27,7 @@ public class UserMainFilter {
     //예약 가능만 토글
     private String store_status;
 
-    //필터링 기본값은 1
+    //필터링 기본값은 1, 이하면 매진
     private int amount = 1;
 
     //오늘예약 & 내일 예약 토글

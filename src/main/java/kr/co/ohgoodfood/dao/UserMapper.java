@@ -12,8 +12,6 @@ import java.util.List;
  * 사용자 관련 주요 CRUD 및 조회 기능을 정의하는 MyBatis Mapper 인터페이스
  * - 메인 화면 & 북마크 조회
  * - 주문 내역 조회 및 상태 변경
- * - 결제 전 처리
- * - 알림 조회 및 상태 변경
  * - 마이페이지 조회
  */
 @Mapper
@@ -75,51 +73,6 @@ public interface UserMapper {
      * @param userOrderRequest 필터 DTO
      */
     int updateOrderStatus(@Param("order_request") UserOrderRequest userOrderRequest);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 결제 진행을 위해 특정 상품의 주문 정보를 조회
-     *
-     * @param product_no  조회할 상품 번호
-     * @return           UserOrder DTO
-     */
-    UserOrder selectUserOrderPay(int product_no);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 결제 전 상품 수량과 가게 오픈 상태를 확인
-     *
-     * @param product_no  조회할 상품 번호
-     * @return           OrderPayCheck
-     */
-    OrderPayCheck selectUserOrderPayCheck(int product_no);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 사용자별 전체 알림 목록을 조회
-     *
-     * @param user_id  user_id
-     * @return         Alarm 리스트
-     */
-    List<Alarm> selectAlarmList(String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 사용자의 모든 알림을 읽음 처리
-     *
-     * @param user_id user_id
-     */
-    void updateAlarmRead(String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * X가 눌린 or 기한이 지난 알림을 숨김 처리
-     *
-     * @param user_id  사용자 ID
-     * @param alarm_no 숨김 처리할 알림 번호
-     */
-    void updateAlarmHidden(@Param("user_id") String user_id,
-                           @Param("alarm_no") int alarm_no);
 
     /**
     * 세션의 user_id 로 MyPage DTO 전체를 조회 

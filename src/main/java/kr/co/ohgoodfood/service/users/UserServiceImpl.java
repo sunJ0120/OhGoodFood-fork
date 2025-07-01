@@ -23,7 +23,6 @@ import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.PickupStatus;
 import kr.co.ohgoodfood.dto.ProductDetail;
@@ -41,7 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * UsersServiceImpl.java - UsersService interface 구현체
  * 
- * @see UsersService - 세부 기능은 해당 클래스인 UsersServiceImpl에 구현한다. - 의존성 주입은 생성자 주입으로
+ * @see UsersService - 세부 기능은 해당 클래스인 UsersServiceImpl에 구현한다.
+ * 의존성 주입은 생성자 주입으로 구성한다.
  */
 
 @Slf4j
@@ -54,21 +54,19 @@ public class UserServiceImpl implements UsersService{
     /**
      * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
      *
-     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. (필터링 대상 : Category, 가게 상세, 가게 이름)
+     * @param userMainFilter : 필터링을 위한 객체가 담겨있다.
      * @return               : mainStoreList (MainStore DTO의 리스트 객체)
      */
     @Override
     public List<MainStore> getMainStoreList(UserMainFilter userMainFilter) {
         List<MainStore> mainStoreList = userMapper.selectAllStore(userMainFilter);
 
-        // 여기에 카테고리 이름과 pickup 상태를 저장
+        // 카테고리 이름과 pickup 상태를 저장
         for(MainStore mainStore : mainStoreList){
             mainStore.setPickup_status(getPickupDateStatus(mainStore));
             mainStore.setCategory_list(getCategoryList(mainStore));
             mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
         }
-        log.info("[log/UserServiceImpl.getMainStoreList] mainStoreList 결과 log : {}", mainStoreList);
-
         return mainStoreList;
     }
 
@@ -76,7 +74,7 @@ public class UserServiceImpl implements UsersService{
      * 지도에 표시할 가게 정보를 가져오는 method
      *
      * @param userMainFilter : 필터링을 위한 객체가 담겨있다. main에서 사용하는걸 그대로 사용한다
-     * @return               : mainStoreList (MainStore DTO의 리스트 객체)
+     * @return               : mainStore
      */
     //selectOneStoreByStoreId
     @Override
@@ -88,8 +86,6 @@ public class UserServiceImpl implements UsersService{
         mainStore.setCategory_list(getCategoryList(mainStore));
         mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
 
-        log.info("[log/UserServiceImpl.getMainStoreOne] mainStore 결과 log : {}", mainStore);
-
         return mainStore;
     }
 
@@ -97,7 +93,7 @@ public class UserServiceImpl implements UsersService{
      * 사용자가 가진 북마크 리스트를 가져오는 method
      *
      * @param user_id           : 현재 세션에 접속한 사용자 id
-     * @return                  : mainStoreList (MainStore DTO의 리스트 객체)
+     * @return                  : bookmarkList (Bookmark DTO의 리스트 객체)
      */
     @Override
     public List<Bookmark> getBookmarkList(String user_id){
@@ -109,7 +105,6 @@ public class UserServiceImpl implements UsersService{
             bookmark.setCategory_list(getCategoryList(bookmark));
             bookmark.setMainmenu_list(StringSplitUtils.splitMenu(bookmark.getStore_menu(), "/"));
         }
-        log.info("[log/UserServiceImpl.getBookmarkList] mainStoreList 결과 log : {}", bookmarkList);
 
         return bookmarkList;
     }
@@ -128,10 +123,6 @@ public class UserServiceImpl implements UsersService{
         if("N".equals(mainStore.getStore_status())){
             return PickupStatus.CLOSED;
         }else{
-            // 더미 데이터 오류로 인해 (오픈 했는데 pickup_start가 없고..이런식) 임시로 넣어둔 값.
-            if (mainStore.getPickup_start() == null) {
-                return PickupStatus.ERROR;
-            }
             LocalDate pickupDate = mainStore.getPickup_start().toLocalDateTime().toLocalDate();
             // [매진] - amount = 0
             if(mainStore.getAmount() == 0){
@@ -155,7 +146,7 @@ public class UserServiceImpl implements UsersService{
      * Orders 페이지에서는 마감,매진 값은 필요 없기 때문에, 이것만을 판별하는 로직을 따로 만듭니다.
      *
      * @param userOrder        : 판별이 필요한 데이터가 담긴 객체
-     * @return                   : PickupStatus ENUM 객체
+     * @return                 : PickupStatus ENUM 객체
      */
     @Override
     public PickupStatus getOrderPickupDateStatus(UserOrder userOrder) {
@@ -208,7 +199,7 @@ public class UserServiceImpl implements UsersService{
      * 북마크를 삭제하기 위한 기능이다.
      *
      * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
-     * @return                   : 결과 행 수에 따라 Boolean
+     * @return                   : 실행 결과 행 수에 따라 Boolean
      */
     @Override
     public boolean deleteUserBookMark(BookmarkFilter bookmarkFilter) {
@@ -239,23 +230,22 @@ public class UserServiceImpl implements UsersService{
         if (cnt == 1) {
             return true;
         }
-        return false; //delete 실패!
+        return false; //insert 실패!
     }
 
     /**
      * 사용자의 OrderList를 가져오는 method
      *
-     * @param userOrderFilter    : 세션에 접속한 사용자 id와 필터링을 위한 객체가 담겨있다. (필터링 대상 : order_status)
+     * @param userOrderFilter    : 세션에 접속한 사용자 id와 필터링을 위한 객체가 담겨있다.
      * @return                   : 조회한 UserOrderList
      */
     @Override
     public List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter){
         List<UserOrder> orderList = userMapper.selectOrderList(userOrderFilter);
 
-        // userOrder에 pickup_status를 저장.
+        // userOrder에 pickup_status와 block_cancel 상태를 저장.
         for(UserOrder userOrder : orderList){
             userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
-            //여기에 Boolean block_cancel 넣는거 하나 추가
             userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getPickup_status(), userOrder.getReservation_end()));
         }
         return orderList;
@@ -269,7 +259,7 @@ public class UserServiceImpl implements UsersService{
      * @param reservation_end    : 예약 마감 한시간 전을 계산하기 위한 reservation_end
      * @return                   : block_cancel 값을 설정하기 위해 boolean return
      */
-    public Boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp reservation_end){
+    public boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp reservation_end){
         if(pickup_status.equals(PickupStatus.TODAY) || pickup_status.equals(PickupStatus.TOMORROW)){
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
@@ -295,8 +285,6 @@ public class UserServiceImpl implements UsersService{
     public boolean updateUserOrderCancel(UserOrderRequest userOrderRequest){
         userOrderRequest.setOrder_status("cancel");
         userOrderRequest.setCanceld_from("user");
-
-        log.info("userOrderRequest DTO 객체 상태 확인 : {}", userOrderRequest);
 
         int cnt = userMapper.updateOrderStatus(userOrderRequest);
 

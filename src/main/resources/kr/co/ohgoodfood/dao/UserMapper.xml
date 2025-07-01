@@ -42,11 +42,8 @@
             <if test="filter.category_others != null">
                 AND s.category_others = #{filter.category_others}
             </if>
-            <!-- 위도/경도 필터링: 반경 500m -->
-            <if test="filter.latitude != null and filter.longitude != null">
-                <!--                AND s.latitude  BETWEEN #{filter.latitude}  - 0.005 AND #{filter.latitude}  + 0.005-->
-                <!--                AND s.longitude BETWEEN #{filter.longitude} - 0.006 AND #{filter.longitude} + 0.006-->
-                <!-- TEST 오차때문에 임시로 넓게 잡음 -->
+            <!-- 위도/경도 필터링: 반경 500m, 검색어가 들어갔을때는 위도 경도 필터링 안걸리게 한다. -->
+            <if test="filter.latitude != null and filter.longitude != null and (filter.search == null or filter.search == '')">
                 AND s.latitude  BETWEEN #{filter.latitude}  - 0.01 AND #{filter.latitude}  + 0.01
                 AND s.longitude BETWEEN #{filter.longitude} - 0.02 AND #{filter.longitude} + 0.02
             </if>
@@ -99,11 +96,8 @@
             <if test="filter.category_others != null">
                 AND s.category_others = #{filter.category_others}
             </if>
-            <!-- 위도/경도 필터링: 반경 500m -->
-            <if test="filter.latitude != null and filter.longitude != null">
-                <!--                AND s.latitude  BETWEEN #{filter.latitude}  - 0.005 AND #{filter.latitude}  + 0.005-->
-                <!--                AND s.longitude BETWEEN #{filter.longitude} - 0.006 AND #{filter.longitude} + 0.006-->
-                <!-- TEST 오차때문에 임시로 넓게 잡음 -->
+            <!-- 위도/경도 필터링: 반경 500m, 검색어가 들어갔을때는 위도 경도 필터링 안걸리게 한다. -->
+            <if test="filter.latitude != null and filter.longitude != null and (filter.search == null or filter.search == '')">
                 AND s.latitude  BETWEEN #{filter.latitude}  - 0.01 AND #{filter.latitude}  + 0.01
                 AND s.longitude BETWEEN #{filter.longitude} - 0.02 AND #{filter.longitude} + 0.02
             </if>

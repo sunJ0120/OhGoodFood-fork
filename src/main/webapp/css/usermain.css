@@ -24,7 +24,7 @@ main {
     border: none;
     outline: none;
     font-size: 14px;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
     background-color: transparent;
     color: #7C7C7C;
 }
@@ -57,14 +57,13 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    /*min-width: 120px;*/
 
     padding: 6px 10px;
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
-    font-family: "NanumSquare Neo-Bold", sans-serif;
+    font-weight: bold;
     font-size: 14px;
 
     gap: 4px;
@@ -230,7 +229,7 @@ main {
     bottom: 8px;
     left: 12px;
     color: white;
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -252,7 +251,7 @@ main {
 }
 
 .productNameWrapper {
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
     font-size: 20px;
     color: #535353;
     margin: 0;
@@ -272,8 +271,7 @@ main {
     align-items: center;
     justify-content: center;
 
-    font-family: "NanumSquare Neo-Regular", sans-serif;
-    font-weight: 400;
+    font-weight: normal;
     background-color: #8b6d5c;
     color: #fff;
     padding: 2px 10px;
@@ -287,7 +285,7 @@ main {
 .productDetail,
 .pickupTime {
     margin: 0;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
     font-size: 13px;
     color: #333;
 }
@@ -303,7 +301,7 @@ main {
     align-items: flex-end;
     text-align: right;
     white-space: nowrap;
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
     align-self: flex-end;
 }
 
@@ -313,12 +311,11 @@ main {
 }
 
 .salePrice {
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
     font-size: 18px;
     color: #333;
 }
 
-/* 📌 soldout 될 경우 이 속성을 추가하도록 변경해야 한다.*/
 .storeImage.soldout{
     opacity: 0.6;
 }
@@ -363,7 +360,7 @@ main {
     border-radius: 8px;
     font-size: 13px;
     color: black;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 }
@@ -425,7 +422,7 @@ main {
     z-index: 200;        /* 모달보다 위로 */
 }
 
-/* 모달이 열렸을 때 버튼을 모달 높이만큼 위로 올리기 */
+/* 모달이 열렸을 때 버튼을 모달 높이만큼 위로 올리기 위함 */
 .mapWrapper.modalOpen .btnSetCenter {
     bottom: calc(200px + 16px);
 }
