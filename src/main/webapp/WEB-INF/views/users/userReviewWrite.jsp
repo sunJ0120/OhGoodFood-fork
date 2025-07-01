@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
             <!DOCTYPE html>
@@ -17,13 +17,10 @@
                 <div id="wrapper">
                     <header>
                         <div class="headerContainer">
-                            <img src="${pageContext.request.contextPath}/img/user_backdo.png" alt="뒤로가기" class="icon">
-                            <div class="iconContainer">
-                                <img src="${pageContext.request.contextPath}/img/user_alarm_active.png" alt="알람"
-                                    class="icon">
-                                <img src="${pageContext.request.contextPath}/img/user_logout.png" alt="로그아웃"
-                                    class="icon">
-                            </div>
+                            <a href="javascript:history.back()">
+                                <img src="${pageContext.request.contextPath}/img/user_backdo.png" alt="뒤로가기"
+                                    class="icon" />
+                            </a>
                         </div>
                     </header>
                     <main class="content">
@@ -31,7 +28,9 @@
                         <div class="reviewContainer">
                             <!-- 상품 정보 카드 -->
                             <div class="productCard">
-                                <img class="storeImg" src="../../../img/user_pain.png" alt="가게이미지" />
+                                <img class="storeImg"
+                                    src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${reviewForm.store_img}"
+                                    alt="가게이미지" />
                                 <div class="details">
                                     <p class="name">${reviewForm.store_name}</p>
                                     <p><span class="storeName" style="font-weight:bold;">구매자 :</span>
@@ -61,11 +60,12 @@
                                 <!-- 리뷰 텍스트 -->
                                 <span class="reviewInfo">
                                     <strong class="reviewInfo__title">리뷰</strong>
-                                    <span class="reviewInfo__desc">100자 이내로 작성해주세요.</span>
+                                    <span class="reviewInfo__desc">80자 이내로 작성해주세요.</span>
                                 </span>
-                                <textarea id="reviewText" class="reviewText" placeholder="리뷰는 100자 이내로 작성해주세요."
-                                  name="review_content"  maxlength="100" rows="6">${reviewForm.review_content}</textarea>
-                                <div class="charCount"><span id="currentCount"></span>/100</div>
+                                <textarea id="reviewText" class="reviewText" placeholder="리뷰는 80자 이내로 작성해주세요."
+                                    name="review_content" maxlength="80"
+                                    rows="6">${reviewForm.review_content}</textarea>
+                                <div class="charCount"><span id="currentCount"></span>/80</div>
 
 
                                 <!-- 사진 업로드 -->
@@ -108,7 +108,7 @@
                         const $btnSubmit = $('#btnSubmit');
                         const $btnAdd = $('#btnAddPhoto');
                         const $modal = $('#modalOverlay');
-                        $modal.hide(); 
+                        $modal.hide();
                         const $preview = $('#photoPreview');
 
                         // 글자수
@@ -150,7 +150,7 @@
                                 const wrapper = $('<div>').addClass('photoPreview-wrapper');
                                 const img = $('<img>').attr('src', e.target.result);
                                 const btn = $('<button>').addClass('remove-btn').text('×');
-                                
+
                                 btn.on('click', () => {
                                     $preview.empty();
                                     $fileInput.val(''); // 빈 문자열 -> 초기화

@@ -39,7 +39,7 @@
             </p>
             <div class="storeBox"></div>
             <div class="storeName">${review.store_name}</div>
-            <img class="storeImage" src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${review.store_img}" alt="리뷰 이미지" />
+            <img class="storeImage" src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${review.store_img}" alt="가게 이미지" />
             <p class="storeMenu">
               <span class="span">${review.store_menu}</span>
             </p>
