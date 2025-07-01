@@ -292,7 +292,7 @@
 	         WHERE i.store_id = s.store_id
 	         ORDER BY i.img_no
 	         LIMIT 1
-	      )                    AS storeImg
+	      )                    AS store_img
 	    FROM Review r
 	    JOIN Account a ON r.user_id = a.user_id
 	    JOIN Store   s ON r.store_id = s.store_id
@@ -354,7 +354,14 @@
             r.review_no      AS review_no,
             r.review_content AS review_content,
             r.writed_at      AS writed_at,
-            r.review_img     AS reviewImg
+            r.review_img     AS review_img,
+            ( SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = r.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      )                    AS store_img
+            
         FROM Review r
         JOIN Account a ON r.user_id = a.user_id
         WHERE r.store_id = (
@@ -368,9 +375,11 @@
     
 	<!-- 아이디 중복 조회 -->
 	<select id="countByUserId" parameterType="string" resultType="int">
-	 	SELECT COUNT(*)  
-	 	FROM Account
-	  	WHERE user_id = #{user_id}
+		  SELECT COUNT(*) FROM (
+		    SELECT user_id  AS id FROM Account WHERE user_id  = #{user_id}
+		    UNION ALL
+		    SELECT store_id AS id FROM Store   WHERE store_id = #{user_id}
+		  ) t
 	</select>
 
   	<!-- 신규 회원 INSERT -->
@@ -399,7 +408,7 @@
 	         WHERE i.store_id = s.store_id
 	         ORDER BY i.img_no
 	         LIMIT 1
-	      )                    AS storeImg
+	      )                    AS store_img
 	    FROM Review r
 	    JOIN Account a ON r.user_id = a.user_id
 	    JOIN Store   s ON r.store_id = s.store_id
@@ -418,7 +427,14 @@
 		  s.store_name                AS store_name,
 		  s.store_id				  AS store_id,
 		  a.user_id 				  AS user_id,
+		  a.user_nickname			  AS user_nickname,
 		  o.order_no				  AS order_no,
+		  ( SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = s.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      )                    AS store_img,
 		  (p.sale_price * o.quantity) AS total_price
 		FROM Orders o
 		JOIN Product p ON o.product_no = p.product_no
