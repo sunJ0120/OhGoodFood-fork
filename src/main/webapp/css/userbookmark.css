@@ -58,8 +58,13 @@ main {
     height: 93px;
 }
 
-.storeImage {
+.imgWrapper{
+    width: 100px;
+    height: 100px;
     margin-right: 12px;
+}
+
+.storeImage {
     width: 100px;
     height: 100px;
     object-fit: cover;

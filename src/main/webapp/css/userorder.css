@@ -263,6 +263,11 @@ main {
     gap: 16px;
 }
 
+.imgWrapper{
+    width: 120px;
+    height: 90px;
+}
+
 .productImg {
     width: 120px;
     height: 90px;

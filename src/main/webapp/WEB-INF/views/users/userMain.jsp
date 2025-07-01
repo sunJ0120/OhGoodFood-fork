@@ -92,9 +92,23 @@
       const $filterButtons = $(".filterBtn");
 
       $dropdownToggle.on("click", function (e) {
+        let iconPath;
         e.stopPropagation(); // 부모 클릭 방지
         const isVisible = $dropdownModal.css("display") === "block";
+        //모달 보여주기/숨기기
         $dropdownModal.css("display", isVisible ? "none" : "block");
+        // 아이콘 결정, 현재 modal이 보이는 상태일 경우 up으로
+        if (isVisible) {
+          iconPath = $categoryFilterBtn.hasClass("active")
+                  ? "/img/user_arrow_down_icon_active.png"
+                  : "/img/user_arrow_down_icon.png";
+        } else {
+          // 현재 modal이 보이지 않는 상태일 경우 down
+          iconPath = $categoryFilterBtn.hasClass("active")
+                  ? "/img/user_arrow_up_icon_active.png"
+                  : "/img/user_arrow_up_icon.png";
+        }
+        $dropdownToggle.attr("src", '${pageContext.request.contextPath}' + iconPath);
       });
 
       // 필터링 항목 클릭 시, 버튼 텍스트 및 컬러 상태 바꾸기

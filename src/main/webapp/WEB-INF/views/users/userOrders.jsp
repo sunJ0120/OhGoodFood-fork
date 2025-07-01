@@ -114,7 +114,11 @@
                     <hr>
 
                     <div class="orderMiddle">
-                      <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
+
+                      <div class="imgWrapper">
+                        <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
+                      </div>
+
                       <div class="orderInfoWrapper">
                         <div class="orderInfo">
                           <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.quantity}개</span></div>
