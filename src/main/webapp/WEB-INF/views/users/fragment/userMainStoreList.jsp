@@ -4,14 +4,9 @@
 
 <c:choose>
   <c:when test="${empty mainStoreList}">
-    <div class="emptyModal">
+    <div class="productWrapper">
       <div class="modalWrapper">
-        <img src="${pageContext.request.contextPath}/img/user_cat.png" alt="고양이" class="emptyModalEmoji"/>
-        <div class="modalBox">
-          <div class="modalContent">
-            검색 결과가 없습니다.
-          </div>
-        </div>
+        <img src="${pageContext.request.contextPath}/img/user_mainSearchResultModal.png" alt="고양이" class="catModal"/>
       </div>
     </div>
   </c:when>
