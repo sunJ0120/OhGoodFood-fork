@@ -336,8 +336,7 @@ public class UsersController {
             Model model
     ) {
     	
-        ProductDetail detail = usersService.getProductDetail(product_no);       
-        model.addAttribute("productDetail", detail);
+        ProductDetail detail = usersService.getProductDetail(product_no);
         
         List<String> images = usersService.getProductImages(product_no);
         model.addAttribute("images", images);
@@ -352,6 +351,7 @@ public class UsersController {
             isBookmarked = usersService.isBookmarked(user_id, store_id);  // 북마크 여부 조회
         }
         detail.setBookmarked(isBookmarked);  // 실제 여부 세팅
+        model.addAttribute("productDetail", detail);
         
         List<Review> reviews = usersService.getReviewsByProductNo(product_no);
         model.addAttribute("reviews", reviews);
