@@ -15,4 +15,26 @@
 		WHERE store_id=#{id}
 		AND store_pwd=#{pwd}
 	</select>
+	
+	<!-- 카카오 객체 검색 -->
+	<select id="findById" resultType="kr.co.ohgoodfood.dto.Account">
+        SELECT * FROM Account WHERE user_id = #{userId}
+    </select>
+    
+    <!-- 카카오 회원 가입 -->
+    <insert id="insertKakaoUser">
+    INSERT INTO Account (
+        user_id, user_name, user_nickname, user_pwd, phone_number, join_date, user_status, location_agreement
+    ) VALUES (
+        #{id}, #{nickname}, #{nickname}, 'kakao_login', #{email}, NOW(), 'Y', 'Y'
+    )
+    </insert>
+    
+    <!-- 카카오 유저 정보 업데이트 -->
+    <update id="updateInfo">
+    	UPDATE Account 
+    	SET user_name=#{nickname}, user_nickname=#{nickname}, phone_number=#{email}
+    	WHERE user_id=#{id}
+    </update>
+
 </mapper>

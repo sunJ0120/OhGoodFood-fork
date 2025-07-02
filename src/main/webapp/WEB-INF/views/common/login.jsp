@@ -36,7 +36,9 @@
 			                <div class="main-line"></div>
 			                <div class="sns-login-box">
 			                    <div class="sns-login-title">SNS로그인</div>
-			                    <img src="${pageContext.request.contextPath}/img/storekakaologin.png" alt="카카오로그인" />
+			                    <a href="https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}&response_type=code">
+								    <img src="${pageContext.request.contextPath}/img/storekakaologin.png" alt="카카오로그인" />
+								</a>
 			                </div>
 			            </div>
 			        </div>
