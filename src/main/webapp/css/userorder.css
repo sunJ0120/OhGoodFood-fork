@@ -32,34 +32,25 @@ main {
 .categoryFilterBtn {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     /*min-width: 120px;*/
 
-    padding: 6px 10px;
+    padding: 10px 10px;
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
-    font-weight: bold;
+    font-family: 'nanumesquareneo_b';
     font-size: 14px;
 
-    gap: 4px;
+    box-sizing: border-box;
+    width: 125px;
+    gap: 6px;
 }
 
 .categoryFilterBtn.active{
     background-color: #D8A8AB;
     color: white;
-}
-
-.categoryFilterBtn {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
-    gap: 6px;
-    box-sizing: border-box;
-
-    width: 125px;
 }
 
 .dropdownToggle {
@@ -79,7 +70,7 @@ main {
 .tabBoxWrapper {
     border: 1px solid #99a99b;
     overflow: hidden;
-    max-height: 665px;
+    max-height: 667.5px;
     width: 100%;
     padding-bottom: 10px;
 }
@@ -142,7 +133,7 @@ main {
 }
 
 .salePrice {
-    font-weight: bold;
+    font-family: 'nanumesquareneo_b';
     font-size: 18px;
     color: #333;
 }
@@ -215,7 +206,7 @@ main {
 
 .orderHeaderText .title {
     font-size: 15pt;
-    font-weight: bold;
+    font-family: 'nanumesquareneo_b';
 }
 
 .orderHeaderText .subtitle {
@@ -247,7 +238,7 @@ main {
 
 .orderTop .storeName{
     font-size: 18px;
-    font-weight: bold;
+    font-family: 'nanumesquareneo_b';
 }
 
 .orderStatus {
@@ -266,7 +257,7 @@ main {
 
 .orderMiddle {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     width: 100%;
     margin-top: 16px;
     gap: 16px;
@@ -323,7 +314,7 @@ main {
     
     font-size: 15px;
     margin-top: 12px;
-    font-weight: bold;
+    font-family: 'nanumesquareneo_b';
 }
 
 .orderWhite{
@@ -343,7 +334,7 @@ main {
 
     font-size: 15px;
     margin-top: 12px;
-    font-weight: bold;
+    font-family: 'nanumesquareneo_b';
 }
 
 .orderReviewDone {
@@ -374,13 +365,12 @@ main {
 
 .orderInfo .orderAmount, .orderInfo .orderTime, .orderInfo .orderPaid{
     font-size: 14px;
-    font-weight: bold;
+    font-family: 'nanumesquareneo_b';
 }
 
 .orderInfo .orderAmountValue, .orderInfo .orderTimeValue, .orderInfo .orderPaidValue{
     font-size: 14px;
     justify-content: space-between; /* 왼쪽: label / 오른쪽: value */
-    font-weight: normal;
 }
 
 .orderInfo .orderInfoSub{
@@ -409,37 +399,16 @@ main {
 }
 
 /* 결과 없음 모달 관련 요소들 */
-.emptyModal {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 200px;
-}
-
 .modalWrapper {
     position: relative;
-    display: inline-block;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
 }
 
-.modalBox {
-    background: white;
-    border-radius: 10pt;
-    padding: 50px 50px;
-    box-sizing: border-box;
-    text-align: center;
-}
-
-.modalContent {
-    color: #99A99B;
-}
-
-.emptyModalEmoji {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translate(calc(-50% + 70px), -70%);
+.catModal{
+    margin-bottom: 40pt;
 }
 
 .orderStatusModal {
