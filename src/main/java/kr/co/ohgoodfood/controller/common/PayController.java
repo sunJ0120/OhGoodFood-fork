@@ -50,10 +50,10 @@ public class PayController {
     @PostMapping("/payment/insert")
     @ResponseBody
     public Map<String, Object> insertPayment(@RequestParam String user_id, @RequestParam String store_id, 
-            @RequestParam int product_no, @RequestParam int quantity, @RequestParam int paid_price) {
+            @RequestParam int product_no, @RequestParam int quantity, @RequestParam int paid_price, @RequestParam int paid_point) {
         String orderId = "order_" + UUID.randomUUID();
         if(payService.checkProductAmount(product_no, quantity) && payService.getStoreStatus(store_id)) {
-            payService.insertOrderAndPaid(user_id, store_id, product_no, quantity, paid_price,orderId);
+            payService.insertOrderAndPaid(user_id, store_id, product_no, quantity, paid_price,orderId, paid_point);
             Map<String, Object> map = new HashMap<>();
             map.put("result", "success");
             map.put("orderId", orderId);
@@ -94,6 +94,7 @@ public class PayController {
             if (response.isSuccessful() && payService.checkProductAmountByPaidCode(orderId) 
             && payService.getStoreStatusByPaidCode(orderId)) {
                 payService.updateOrderStatusAndPaidStatus(orderId);
+                payService.updateUserPointByPaidCode(orderId);
                 return "redirect:/user/orderList";
             } else {
                 payService.updateOrderCanceldFromByPaidCode(orderId);

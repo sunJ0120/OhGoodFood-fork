@@ -45,12 +45,12 @@ body{
 }
 .productDiv{
     width: 440px;
-    height: 398px;
+    height: 458px;
     position: relative;
 }
 .productWrapper{
     width: 383px;
-    height: 352px;
+    height: 412px;
     border-radius: 10px;
     border: 1px solid #99A99B;
     position: absolute;
@@ -144,6 +144,24 @@ body{
     font-size: 15px;
     font-weight: bold;
 }
+.userPointDiv{
+    width: 381px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+.userPointDiv > p{
+    font-size: 16px;
+    font-weight: bold;
+}
+.userPointDiv > input{
+    width: 118px;
+    height: 30px;
+    border: 1px solid #99A99B;
+    border-radius: 10px;
+    text-align: right;
+}
 .productPrice{
     width: 381px;
     height: 90px;
@@ -173,7 +191,7 @@ body{
 }
 .cautionDiv{
     width: 440px;
-    height: 373px;
+    height: 313px;
     overflow-y: auto;
     overflow-x: hidden;
 }

@@ -26,8 +26,8 @@
 				amount: data.amount,
 				orderId: data.orderId,
 				orderName: "오굿백 테스트 상품",
-				successUrl: "http://localhost:8090/payment/success",
-				failUrl: "http://localhost:8090/payment/fail"
+				successUrl: "http://www.ohgoodfood.com/payment/success",
+				failUrl: "http://www.ohgoodfood.com/payment/fail"
 			});
 			},
 			error: function(xhr, status, error) {

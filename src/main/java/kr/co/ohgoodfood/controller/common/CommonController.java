@@ -95,4 +95,5 @@ public class CommonController {
 
         return "common/error";
     }
+
 }

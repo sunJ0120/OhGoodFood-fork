@@ -21,6 +21,7 @@ public class Account {
     private String s_user_id;
     private String s_user_nickname;
     private String s_user_name;
+    private int user_point;
 
     private int page;
     private int startIdx;

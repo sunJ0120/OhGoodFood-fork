@@ -36,4 +36,6 @@ public interface PayMapper {
     public String getStoreStatusByPaidCode(String paid_code);
     // Paid_code로 주문 번호 가져오기
     public int getOrderNoByPaidCode(String paid_code);
+    // paid_code로 포인트 차감
+    public void updateUserPointByPaidCode(String paid_code);
 }
