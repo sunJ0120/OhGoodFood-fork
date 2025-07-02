@@ -146,7 +146,7 @@
 
                       <button type="button" class="orderBrown hidden orderReview"
                               onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
-                        리뷰 쓰기
+                        리뷰 쓰기 (${userOrder.point}P)
                       </button>
 
                       <div class="orderBrown hidden orderReviewDone">
