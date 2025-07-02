@@ -14,6 +14,7 @@ public class Account {
     private Timestamp join_date;
     private String user_status;
     private String location_agreement;
+    private int user_point; 
 
     private String s_type;
     private String s_value;

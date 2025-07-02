@@ -428,7 +428,10 @@ public class UserServiceImpl implements UsersService{
     @Transactional
     public void writeReview(ReviewForm form, String userId) {
         form.setUser_id(userId);
-
+        
+        ReviewForm info = userMapper.selectReviewFormByOrderNo(form.getOrder_no());
+        form.setTotal_price(info.getTotal_price());  
+        
         // — 이미지 업로드 —
         MultipartFile imgFile = form.getImageFile();
         if (imgFile != null && !imgFile.isEmpty()) {
@@ -453,14 +456,14 @@ public class UserServiceImpl implements UsersService{
             form.setReview_img(fileName);
         }
     	
-    	
-
-        // — 기타 기본값 세팅 —
-//        form.setIs_blocked("N");
-        // writed_at : INSERT 쿼리에서 NOW() 처리
-
-        // — 최종 INSERT 호출 —
+        System.out.println("[DEBUG] user_id = " + form.getUser_id());
+        System.out.println("[DEBUG] total_price = " + form.getTotal_price());
+        
+        // 리뷰 저장
         userMapper.insertReview(form);
+        
+        // 포인트 적립
+        userMapper.updateUserPoint(form);
     }
     // AWS S3 인스턴스 반환
     	private AmazonS3 amazonS3() {

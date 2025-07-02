@@ -23,12 +23,9 @@
                   <img src="${pageContext.request.contextPath}/img/user_user.png" alt="내 정보 아이콘" class="infoIcon" />
                   내 정보
                   <span class="actionButtons">
-                    <img src="${pageContext.request.contextPath}/img/user_refactor.png" alt="수정하기 아이콘"
-                      class="modifyIcon" />
-                    <button type="button" class="modifyBtn">수정하기</button>
-                    <img src="${pageContext.request.contextPath}/img/user_refactor.png" alt="탈퇴하기 아이콘"
-                      class="outIcon" />
-                    <button type="button" class="outBtn">탈퇴하기</button>
+                    <img src="${pageContext.request.contextPath}/img/user_point.png" alt="포인트 아이콘"
+                      class="pointIcon" />
+                    <span class="point">${userMypage.user_point}P</span> 
                   </span>
                 </h2>
                 <div class="infoForm">
