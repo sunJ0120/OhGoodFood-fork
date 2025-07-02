@@ -33,7 +33,7 @@
                 </h2>
                 <div class="infoForm">
                   <div class="infoItem">
-                    <span class="valueText">${userMypage.user_id}</span>
+                    <span id="user_id" class="valueText">${userMypage.user_id}</span>
                   </div>
                   <div class="infoItem">
                     <span class="valueText">${userMypage.user_nickname}</span>
@@ -109,6 +109,22 @@
 
             <%@ include file="/WEB-INF/views/users/footer.jsp" %>
         </div>
-      </body>
 
+        <script>
+          window.addEventListener('DOMContentLoaded', function () {
+            const userIdSpan = document.getElementById('user_id');
+            if (!userIdSpan) return;
+
+            const rawId = userIdSpan.textContent.trim();
+
+            if (rawId.startsWith('naver_id')) {
+              userIdSpan.textContent = 'NAVER 로그인';
+            } else if (rawId.startsWith('kakao_id')) {
+              userIdSpan.textContent = 'KAKAO 로그인';
+            } else {
+              // 아무것도 안 함 → 기존 아이디 그대로 표시
+            }
+          });
+        </script>
+      </body>
       </html>

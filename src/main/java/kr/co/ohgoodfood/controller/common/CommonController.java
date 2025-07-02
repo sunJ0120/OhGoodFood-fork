@@ -2,10 +2,15 @@ package kr.co.ohgoodfood.controller.common;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.service.common.CommonService;
@@ -13,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@ControllerAdvice // 전역 예외처리
 public class CommonController {
 	
 	private final CommonService commonService;
@@ -70,9 +76,23 @@ public class CommonController {
 		return "/common/intro";
 	}
 	
-    @GetMapping("/logout") // 로그아웃 
-    public String logout(HttpSession session) {
-        session.invalidate();                    // 세션 무효화
-        return "redirect:/login";                // 로그인 페이지로 리다이렉트
+    // 상태 코드에 따른 에러 페이지 반환
+    @RequestMapping("/error")
+    public String handleException(HttpServletRequest request) {
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+
+        if (statusCode != null) {
+            if (statusCode == 404) {
+                return "common/error404";
+            } else if (statusCode == 500) {
+                return "common/error500";
+            } else if (statusCode == 403) {
+                return "common/error403";
+            } else if (statusCode == 400) {
+                return "common/error400";
+            }
+        }
+
+        return "common/error";
     }
 }
