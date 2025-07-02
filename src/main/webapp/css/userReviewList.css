@@ -75,6 +75,7 @@
   object-fit: cover;
   border-radius: 10px;
   margin-top: -5px;
+  border: 1px solid #E5DFD5;
 }
 
 /* 구분선 */
@@ -134,7 +135,8 @@
   height: 44px;
   object-fit: cover;
   border-radius: 10px;
-  margin-left: 5px
+  margin-left: 5px;
+  border: 1px solid #8B6D5C;
 }
 
 /* 메뉴 텍스트 */

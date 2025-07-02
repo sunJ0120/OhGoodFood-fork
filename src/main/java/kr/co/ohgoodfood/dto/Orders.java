@@ -36,6 +36,7 @@ public class Orders {
     private Timestamp reservation_end;
     private String pickup_status; 
     private int sale_price;
+    private Timestamp reservation_start; // reservation.jsp 에서 reservation_end -1시간 위해서
     
     public Orders() {
         this.page = 1;

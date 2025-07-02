@@ -9,9 +9,10 @@ import kr.co.ohgoodfood.dto.Store;
 
 public interface CommonService {
 
-	// 사용자 로그인
+	// 유저 로그인 입력 정보 조회
 	public Account loginAccount(String id, String pwd);
-	// 가게 로그인
+	
+	// 가게 사장 로그인 입력 정보 조회 
 	public Store loginStore(String id, String pwd);
 	// 알람 가져오기
 	public List<Alarm> getAlarm(String id);

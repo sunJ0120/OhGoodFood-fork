@@ -2,14 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.ohgoodfood.dao.CommonMapper">
 
-	<!-- 사용자 로그인 -->
+	<!-- 유저 로그인 입력 정보 검증 -->
 	<select id="loginAccount" resultType="kr.co.ohgoodfood.dto.Account">
 		SELECT * FROM Account
 		WHERE user_id=#{id}
 		AND user_pwd=#{pwd}
 	</select>
 
-	<!-- 가게 로그인 -->
+	<!-- 가게 사장 로그인 입력 정보 검증 -->
 	<select id="loginStore" resultType="kr.co.ohgoodfood.dto.Store">
 		SELECT * FROM Store
 		WHERE store_id=#{id}
