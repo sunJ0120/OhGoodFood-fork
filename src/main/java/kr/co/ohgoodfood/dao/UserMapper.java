@@ -136,7 +136,8 @@ public interface UserMapper {
 	 * @param form
 	 */
     void insertReview(ReviewForm form);
-
+	  void updateUserPoint(ReviewForm form);
+	
     /**
      * 가게 이미지 하나 가져오기
      * @param store_id

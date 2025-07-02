@@ -16,6 +16,7 @@ public class ReviewForm {
 	// Account table에서 가져오는 정보들
 	private String user_id;
 	private String user_nickname;
+	private int user_point;
 	
     // Product table에서 가져오는 정보들
     private int    sale_price;
@@ -41,4 +42,5 @@ public class ReviewForm {
     // 업로드용
     private MultipartFile imageFile;   // <input name="imageFile">
     private int total_price;
+    
 }
