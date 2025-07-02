@@ -73,7 +73,126 @@
 
 			<!-- 판매 정보 영역 -->
 			<div class="sale-info">
-				<p>오굿백 구성 후에 오픈 버튼을 눌러주세요 ~</p>
+				<div class="saleHeaderBox">
+					<p>오굿백 구성 후에 오픈 버튼을 눌러주세요 ~</p>
+					<img src="${pageContext.request.contextPath}/img/store_explain.png" class= "explainIcon" alt="물음표 아이콘">
+				</div>
+				<!-- 설명 모달 -->
+				<div id="explainModal" class="explain-modal" style="display:none;">
+				<div class="explain-modal-content">
+					<div class="explain-modal-header">
+					<span>오굿백 설명</span>
+					<button id="closeExplainModal" class="close-explain-modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						<div class="explainGroup">
+							<div class="explainImg">
+								<img src="${pageContext.request.contextPath}/img/store_bag.png" class="explainIcon2" alt="오굿백 아이콘" >
+								<div class="explainTitle">오굿백이란?</div>
+							</div>
+							<div class="explainContent">
+								오굿백은 가게에 남아 있는 재고 상품들을 <span class="highlight">랜덤박스</span> 형식으로 구성하여 판매하는 특별 상품입니다.
+							</div>
+
+							<div class="explainContent">
+								남은 재고를 효율적으로 처리하면서도 고객에게는 다양한 상품을 합리적인 가격에 경험할 수 있는 기회를 제공합니다.
+							</div>	
+						</div>
+						<div class="explainGroup">
+							<div class="explainImg">
+								<img src="${pageContext.request.contextPath}/img/store_explain2.png" class="explainIcon3" alt="모리 궁금 아이콘" >
+								<div class="explainTitle">오굿백 설명은 어떻게 작성하나요?</div>
+							</div>
+							<div class="explainContent">
+								오늘 오굿백에 <span class="highlight">어떤 상품</span>들이 포함되어 있는지, <span class="highlight">가게 대표 메뉴</span> 등에 대해서 작성하면 됩니다.
+							</div>
+						</div>
+						<div class="explainGroup">
+							<div class="explainImg">
+								<img src="${pageContext.request.contextPath}/img/store_explain2.png" class="explainIcon3" alt="모리 궁금 아이콘" >
+								<div class="explainTitle">픽업 날짜/시간은 무엇인가요?</div>
+							</div>
+							<div class="explainContent">
+								<span style="font-weight: bold;">픽업 날짜:</span> 고객이 상품을 픽업할 날짜로, “오늘” 또는 “내일” 중 선택할 수 있습니다.
+							</div>
+							<div class="explainContent">
+								<span style="font-weight: bold;">픽업 날짜가 “오늘”인 경우</span>
+							</div>	
+							<div class="explainContent">
+								픽업 시작 시간은 현재 시간 기준 <span class="highlight">3시간 이후</span>부터 가능합니다.
+							</div>
+							<div class="explainContent">
+								픽업 마감 시간은 픽업 시작 시간으로부터 <span class="highlight">최소 1시간 이후부터 최대 23:30</span>까지 설정할 수 있습니다.
+							</div>
+							<div class="explainContent">
+								<span style="font-weight: bold;">확정 시간:</span> 픽업 시작 시간 2시간 전부터 주문 확정이 시작되며, 픽업 시작 1시간 전부터는 주문 취소만 가능합니다.
+							</div>
+							<div class="explainContent">
+								<button type="button" class="toggleBtn">▶️</button>
+								예시
+							</div>
+							<div class="toggleContent" style="display: none;">
+								<span style="font-family: 'nanumesquareneo_b';">현재 시간이 오후 2시일 때</span>
+								<span>- 픽업 시작 시간: 17:00 ~</span>
+								<span>- 픽업 종료 시간: 18:00 ~ 23:30 선택 가능</span>
+								<span>- 주문 확정 가능 시간: 15:00(픽업 시작 2시간 전) ~ 16:00</span>
+								<span>- 주문 취소 가능 시간: 15:00 ~ 17:00</span>
+							</div>
+							<div class="explainContent">
+								<span style="font-weight: bold;">픽업 날짜가 “내일”인 경우</span>
+							</div>	
+							<div class="explainContent">
+								픽업 시작 시간은 <span class="highlight">오전 6시</span>부터 가능합니다.
+							</div>
+							<div class="explainContent">
+								픽업 마감 시간은 <span class="highlight">최대 23:30</span>까지 설정할 수 있습니다.
+							</div>
+							<div class="explainContent">
+								<span style="font-weight: bold;">확정 시간:</span> 가게 마감 1시간 전까지 주문 확정이 가능하며, 이후부터는 주문 취소만 가능합니다.
+							</div>
+							<div class="explainContent">
+								<button type="button" class="toggleBtn">▶️</button>
+								예시
+							</div>
+							<div class="toggleContent" style="display: none;">
+								<span style="font-family: 'nanumesquareneo_b';">내일 픽업 시</span>
+								<span>- 픽업 시작 시간: 06:00 ~</span>
+								<span>- 픽업 종료 시간: 07:00 ~ 23:30 선택 가능</span>
+								<span>- 마감 시간이 11:30인 경우</span>
+								<span>- 주문 확정 가능 시간: 21:30 ~ 22:30</span>
+								<span>- 주문 취소 가능 시간: 21:30 ~ 23:30</span>
+							</div>
+						</div>
+						<div class="explainGroup">
+							<div class="explainImg">
+								<img src="${pageContext.request.contextPath}/img/store_explain2.png" class="explainIcon3" alt="모리 궁금 아이콘" >
+								<div class="explainTitle">원래 가격이란?</div>
+							</div>
+							<div class="explainContent">
+								원래 상품의 가격을 입력하시면 됩니다.
+							</div>
+						</div>
+						<div class="explainGroup">
+							<div class="explainImg">
+								<img src="${pageContext.request.contextPath}/img/store_explain2.png" class="explainIcon3" alt="모리 궁금 아이콘" >
+								<div class="explainTitle">오굿백 가격이란?</div>
+							</div>
+							<div class="explainContent">
+								오굿백으로 판매할 가격을 입력하시면 됩니다.
+							</div>
+						</div>
+						<div class="explainGroup">
+							<div class="explainImg">
+								<img src="${pageContext.request.contextPath}/img/store_explain2.png" class="explainIcon3" alt="모리 궁금 아이콘" >
+								<div class="explainTitle">오굿백 수량이란?</div>
+							</div>
+							<div class="explainContent">
+								판매할 오굿백 수량을 입력하시면 됩니다.
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
 				<div class="info-title">
 					<img src="${pageContext.request.contextPath}/img/store_bag.png" alt="오굿백 아이콘">
 					<p>오굿백</p>
@@ -485,18 +604,19 @@
 
         // 알람 모달
 		$('#timer-icon').click(function () {
-		// 픽업 날짜가 선택되어 있는지 확인
-		const pickupDateType = $('.pickup-btn.active').data('value');
-		if (!pickupDateType) {
-			alert('먼저 픽업 날짜를 선택해주세요.');
-			return;
-		}
-		// 모달 열 때 select 활성화
-		$('#pickup-time').prop('disabled', false);
-		$('#pickup-end-time').prop('disabled', false);
-		generatePickupOptions();
-		$('#time-modal').css('display', 'flex');
-	});
+			// 픽업 날짜가 선택되어 있는지 확인
+			const pickupDateType = $('.pickup-btn.active').data('value');
+			if (!pickupDateType) {
+				alert('먼저 픽업 날짜를 선택해주세요.');
+				return;
+			}
+			// 모달 열 때 select 활성화
+			$('#pickup-time').prop('disabled', false);
+			$('#pickup-end-time').prop('disabled', false);
+			generatePickupOptions();
+			$('#time-modal').css('display', 'flex');
+		});
+
         $('#close-modal').click(function () {
             $('#time-modal').css('display', 'none');
         });
@@ -662,8 +782,22 @@
                 pickupEndTimeSelect.append($('<option>').val(optionValue).text(optionValue));
             }
         }
+				// 설명 아이콘 클릭 시 모달 열기
+		$('.explainIcon').click(function () {
+			$('#explainModal').fadeIn(200);
+		});
 
-    });
+		// 설명 모달 닫기 버튼 클릭 시 모달 닫기
+		$('#closeExplainModal').click(function () {
+			$('#explainModal').fadeOut(200);
+		});
+	});
+
+	$(document).on('click', '.toggleBtn', function() {
+		const $content = $(this).parent().next('.toggleContent');
+		$content.toggle();
+		$content.toggleClass('active');
+	});
 </script>
 
 </html>

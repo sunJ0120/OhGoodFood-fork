@@ -137,11 +137,121 @@ main{
     padding: 20px;
     padding-top: 10px;
 }
-.sale-info p{
-    font-size: 13px;
+.saleHeaderBox{
+  display : flex;
+  justify-content: space-between;
+
+}
+
+/* 오굿백 설명 모달 */
+.explain-modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; right: 0; bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.explain-modal-content {
+    background: white;
+    padding: 20px;
+    width: 340px;
+    height: 550px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.explain-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
     font-family: 'nanumesquareneo_b';
-    color: #FF8888;
-    margin-bottom:5px;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    margin-bottom: 15px;
+}
+.explainIcon2{
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+}
+.explainIcon3{
+  width: 25px;
+  height: 25px;
+  margin-right: 3px;
+  margin-top: -5px;
+}
+.explainContent .highlight {
+	color: #FF8888;
+  font-family: 'nanumesquareneo_b';
+}
+.explainImg{
+  display:flex;
+
+}
+.explainGroup {
+    border-bottom: 1px solid #dbdbdb;
+    margin-bottom: 15px;
+}
+.explainTitle{
+  font-size: 17px;
+  font-family: 'nanumesquareneo_b';
+  color: #8b6d5c;
+  margin-bottom: 10px;
+}
+.explainContent{
+  font-size: 13px;
+  line-height: 1.45;
+  margin-bottom: 5px;
+}
+
+.modal-body{
+  height: 500px;
+  margin-top: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  max-height: 550px;
+}
+.close-explain-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+}
+.toggleContent{
+    display: none;
+}
+.toggleContent.active {
+    display: flex !important;
+    flex-direction: column;
+    font-size: 13px;
+    line-height: 1.45;
+    margin-bottom: 10px;
+    border: 1px solid #dbdbdb;
+    border-radius: 10px;
+    padding: 10px;
+}
+button.toggleBtn {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+/* 물음표 아이콘 */
+.explainIcon{
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  margin-top: 10px;
+}
+.sale-info p{
+  font-size: 13px;
+  font-family: 'nanumesquareneo_b';
+  color: #FF8888;
+  margin-bottom:5px;
 }
 
 .info-title{
