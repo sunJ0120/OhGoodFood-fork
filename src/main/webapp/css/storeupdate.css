@@ -1,19 +1,26 @@
-.details-container{
+.updateDetails-container{
+	display:flex;
+	flex-direction: column;
+	gap:10px;
+	margin-top: 10px;
+	border: 1px solid #99A99B;
+	border-radius: 10px;
     background-color: #F5F3EA;
-    max-height: 222px;
+    max-height: 210px;
     overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
     padding: 20px;
+    padding-top: 12px;
 }
-.details-container form{
+.updateDetails-container form{
     gap:10px;
 }
 .saveBtn{
     background-color: #8B6D5C;
     border: none;
     height: 30px;
-    width: 45px;
+    width: 50px;
     border-radius: 10px;
     color:#F5F3EA;
 }
@@ -21,47 +28,45 @@
     background-color: #F5F3EA;
     border: 1px solid #8B6D5C;
     height: 30px;
-    width: 45px;
+    width: 50px;
     border-radius: 10px;
     color:#8B6D5C;
-    margin-left:5px;
+    margin-left:15px;
 }
 .business-hours-group {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 3px;
 }
 .time-divider {
     font-size: 18px;
     color: #888;
 }
-.details-container input[type="time"]{
-    width:100%;
+.updateDetails-container input[type="time"]{
     padding: 6px 10px;
     border: none;
     border-radius: 6px;
     font-size: 11px;
     background: #fff;
-    width: 85px;
+    width: 95px; 
     height: 20px;
     font-family: 'nanumesquareneo_b';
 }
 
-.details-container input[type="text"][readonly],
-.details-container input[type="text"] {
-    width: 210px;
+.updateDetails-container input[type="text"][readonly],
+.updateDetails-container input[type="text"] {
     height: 35px;
     margin-bottom: 0px;
     font-family: 'nanumesquareneo_b';
     border: none;
     padding: 6px 10px;
     border-radius: 6px;
-    font-size: 15px;
+    font-size: 13px;
     box-sizing: border-box;
     cursor: default;
 }
-.details-container input[type="text"]{
-    width: 240px;
+.updateDetails-container input[type="text"]{
+    width: 245px;
 }
 
 .timer-icon{
@@ -80,7 +85,7 @@
     border-radius: 5px;
     font-size: 18px;
     color: #5C5C5C;
-    width: 220px;
+    width: 225px;
     height: 20px;
 }
 .category-group {
@@ -93,8 +98,8 @@
     width: 10px;
 }
 #bag-container textarea {
-    height: 75px !important;
-    width: 240px !important;
+    height: 85px !important;
+    width: 245px !important;
     resize: vertical;
     box-sizing: border-box;
     white-space: pre-wrap; 
@@ -104,7 +109,19 @@
     padding: 10px;
     border: none;
     border-radius: 6px;
-    margin-bottom: 20px;
+}
+
+.updateLabel{
+	margin-right: 25px;
+}
+
+.updateDivider{
+	color: #696969;
+    margin-right: 20px;
+    margin-left: -4px;
+}
+#hoursDivider{
+	margin-left:-3px;
 }
 /*알람 모달*/
 .modal {
@@ -131,3 +148,19 @@
   font-size: 24px;
   cursor: pointer;
 }
+
+.address-modal .aclose-modal {
+  background: transparent;
+  border: none; 
+  font-size: 24px;
+  color: #fff;
+  cursor: pointer; 
+}
+
+.menu-group  {
+    margin-right: 5px;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+} 
