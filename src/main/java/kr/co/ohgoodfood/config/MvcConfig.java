@@ -65,7 +65,8 @@ public class MvcConfig implements WebMvcConfigurer {
 	// addViewController의 url로 진입 시 setViewName으로 포워딩
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/home").setViewName("home");
+		registry.addViewController("/").setViewName("/common/login");
+		registry.addViewController("/home").setViewName("/common/login");
 	}
 
 	// HikariCP

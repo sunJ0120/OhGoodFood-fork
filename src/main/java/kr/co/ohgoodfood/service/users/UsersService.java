@@ -93,5 +93,7 @@ public interface UsersService {
     /* 가게 이미지 하나 가져오기 */
     String getStoreImg(String store_id);
 
+    /* 포인트 조회 */
+    int getUserPoint(String user_id);
 
 }
