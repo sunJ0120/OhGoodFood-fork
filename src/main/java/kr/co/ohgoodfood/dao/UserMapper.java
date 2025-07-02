@@ -152,4 +152,17 @@ public interface UserMapper {
      */
     int isBookmarked(@Param("user_id") String user_id, @Param("store_id") String store_id);
 
+    /**
+     * 포인트 조회
+     * @param user_id
+     * @return
+     */
+    Integer selectUserPoint(String user_id);
+    
+    /**
+     * 포인트 차감
+     * @param user_id
+     * @param user_point
+     */
+    void updateUserPoint(String user_id, int user_point);
 }

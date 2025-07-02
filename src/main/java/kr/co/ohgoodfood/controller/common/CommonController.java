@@ -69,4 +69,5 @@ public class CommonController {
 	public String intro() {
 		return "/common/intro";
 	}
+
 }

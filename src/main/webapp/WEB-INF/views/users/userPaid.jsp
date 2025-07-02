@@ -55,6 +55,10 @@
                             <input id="totalQuantity" type="hidden" name="quantity" value="1">
                         </div>
                     </div>
+                    <div class="userPointDiv">
+                        <p>&ensp;&ensp;포인트 (보유: ${userPoint} p)</p>&ensp;&ensp;&ensp;
+                        <input class="userPoint" type="text" name="user_point" oninput="this.value = this.value.replace(/[^0-9]/g, '')" value="0">
+                    </div>
                     <div class="productPrice">
                         <p class="productPriceText">
                             &ensp;&ensp;결제 금액 
@@ -155,8 +159,13 @@
             if($("#totalQuantity").val() > 1 ){
                 $("#totalQuantity").val($("#totalQuantity").val()-1);
                 $(".productQuantity").html($("#totalQuantity").val());
-                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()).toLocaleString('ko-KR') + " 원");
-                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val());
+                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
+                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
+                if (parseInt($(".userPoint").val()) > parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
+                    $(".userPoint").val(0);
+                    $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
+                    $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
+                }
             }
         })
 
@@ -164,8 +173,28 @@
             if($("#totalQuantity").val() < "${productDetail.amount}" ){
                 $("#totalQuantity").val(parseInt($("#totalQuantity").val())+1);
                 $(".productQuantity").html($("#totalQuantity").val());
-                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()).toLocaleString('ko-KR') + " 원");
-                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val());
+                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
+                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
+                if (parseInt($(".userPoint").val()) > parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
+                    $(".userPoint").val(0);
+                    $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
+                    $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
+                }
+            }
+        })
+
+        $(".userPoint").on("input",function(){
+            $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
+            $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
+            if (parseInt($(".userPoint").val()) > parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
+                $(".userPoint").val(0);
+                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
+                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
+            }
+            if($(".userPoint").val() > parseInt("${userPoint}")){
+                $(".userPoint").val(0);
+                $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
+                $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
             }
         })
 
@@ -194,7 +223,8 @@
                     store_id: "${productDetail.store_id}",
                     quantity: $("#totalQuantity").val(),
                     product_no: "${productDetail.product_no}",
-                    paid_price: $("#totalPrice").val()
+                    paid_price: $("#totalPrice").val(),
+                    paid_point: $(".userPoint").val()
                 },
                 dataType: "json",
                 success: function(res){

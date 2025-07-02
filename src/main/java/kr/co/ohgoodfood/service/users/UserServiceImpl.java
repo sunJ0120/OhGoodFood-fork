@@ -484,4 +484,11 @@ public class UserServiceImpl implements UsersService{
     public String getStoreImg(String store_id) {
         return userMapper.selectStoreImg(store_id);
     }
+
+    /* 포인트 조회 */
+    @Override
+    public int getUserPoint(String user_id) {
+        return (Integer)userMapper.selectUserPoint(user_id) == null ? 0 : userMapper.selectUserPoint(user_id);
+    }
+
 }

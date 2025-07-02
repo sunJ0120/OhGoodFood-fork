@@ -2,7 +2,7 @@ package kr.co.ohgoodfood.service.common;
 
 public interface PayService {
     // 주문,결제 정보 삽입
-    public boolean insertOrderAndPaid(String user_id, String store_id, int product_no, int quantity, int paid_price, String orderId);
+    public boolean insertOrderAndPaid(String user_id, String store_id, int product_no, int quantity, int paid_price, String orderId, int paid_point);
     // 주문,결제 상태 업데이트
     public boolean updateOrderStatusAndPaidStatus(String orderId);
     // 상품 재고에서 주문 개수만큼 차감 가능 여부 확인
@@ -19,4 +19,6 @@ public interface PayService {
     public boolean getStoreStatusByPaidCode(String paid_code);
     // Paid_code로 주문 번호 가져오기
     public int getOrderNoByPaidCode(String paid_code);
+    // Paid_code로 포인트 차감
+    public boolean updateUserPointByPaidCode(String paid_code);
 }
