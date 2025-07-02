@@ -4,15 +4,8 @@
 
 <c:choose>
     <c:when test="${empty userOrderList}">
-        <div class="emptyModal">
-            <div class="modalWrapper">
-                <img src="${pageContext.request.contextPath}/img/user_cat.png" alt="고양이" class="emptyModalEmoji"/>
-                <div class="modalBox">
-                    <div class="modalContent">
-                        <div class="orderStatusModal">전체</div> 주문내역<br>검색 결과가 없습니다.
-                    </div>
-                </div>
-            </div>
+        <div class="modalWrapper">
+            <img src="${pageContext.request.contextPath}/img/user_emptyOrderListCatModal.png" alt="고양이" class="catModal"/>
         </div>
     </c:when>
     <c:otherwise>

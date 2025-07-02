@@ -74,7 +74,7 @@ public class CommonController {
 	@GetMapping("/intro") // 인트로 페이지
 	public String intro() {
 		return "/common/intro";
-	}
+  }
 	
     // 상태 코드에 따른 에러 페이지 반환
     @RequestMapping("/error")
