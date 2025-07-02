@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +11,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storelogin.css">
-    
 </head>
 <body>
      <div id="wrapper">
@@ -16,7 +18,7 @@
             <div class="header-container">
                 <img src="${pageContext.request.contextPath}/img/storeohgoodfood_logo.png" alt="Logo Image">
                 <div class="icon-container">
-                        <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
+                    <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
                 </div>
             </div>
         </header>
@@ -34,16 +36,38 @@
 			                    <a href="/findpwd">비밀번호 찾기</a> |
 			                    <a href="/jointype">회원가입</a>
 			                </div>
-			                <div class="main-line"></div>
+							<div class="snsHeader">
+								<div class="main-line"></div>
+								<div class="snsTitle">SNS LOGIN</div>
+								<div class="main-line"></div>
+							</div>
+			                
 			                <div class="sns-login-box">
-			                    <div class="sns-login-title">SNS로그인</div>
-			                    <img src="${pageContext.request.contextPath}/img/storekakaologin.png" alt="카카오로그인" />
-			                </div>
+								<div class="kakao">
+									<img src="${pageContext.request.contextPath}/img/kakao.png" alt="카카오 아이콘" class="kakaoIcon">
+									<div class="kakaoTitle">카카오로 로그인</div>
+								</div>
+								<div class="naver">
+									<img src="${pageContext.request.contextPath}/img/naver.png" alt="네이버 아이콘" class="kakaoIcon">
+									<div class="naverTitle">네이버로 로그인</div>
+								</div>
+							</div>
+							<div class="main-line2"></div>
 			            </div>
 			        </div>
 			    </div>
 			</form>
         </main>
+		<!-- 승인 대기 모달 -->
+		<c:if test="${showConfirmationModal}">
+			<div id="confirmationModal" class="modal">
+				<div class="modal-content">
+					<h2>사장님 계정 승인 대기중입니다.</h2>
+					<p>관리자의 승인이 완료되면 로그인 하실 수 있습니다.<br>조금만 기다려 주세요!</p>
+					<button onclick="closeModal()">확인</button>
+				</div>
+			</div>
+		</c:if>
      </div>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
      <script>
@@ -51,29 +75,31 @@
 	   	    $('#loginForm').on('submit', function(e) {
 	   	        const id = $('#userId').val().trim();
 	   	        const password = $('#userPwd').val().trim();
-	   	        console.log('logincheck 실행됨', id, password);
 	   	        if(id === '') {
-	   	            alert('아이디 입력바람');
+	   	            alert('아이디를 입력하세요');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if(password === '') {
-	   	            alert('비밀번호 입력바람');
+	   	            alert('비밀번호를 입력하세요');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if(id.length > 15) {
-	   	            alert('아이디는 15자 이하로 입력바람');
+	   	            alert('아이디는 15자 이하로 입력하세요');
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
 	   	        if (!/^[a-zA-Z0-9]+$/.test(id)) {
-	   	            alert("아이디는 영문자와 숫자만 입력 가능함");
+	   	            alert("아이디는 영문자와 숫자만 입력 가능합니다.");
 	   	            e.preventDefault();
 	   	            return;
 	   	        }
-	   	    });
+	   	    });			
 	     });
+		 $(document).on('click', '#confirmationModal button', function () {
+			$('#confirmationModal').hide();
+		});
      </script>
 </body>
 </html>

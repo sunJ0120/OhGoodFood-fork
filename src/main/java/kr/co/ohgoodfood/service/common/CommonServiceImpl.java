@@ -24,11 +24,13 @@ public class CommonServiceImpl implements CommonService{
 		return commonMapper.loginAccount(id, md5(pwd));
 	}
 
-	// 가게 로그인
+
+	// 가게 사장 로그인
 	@Override
 	public Store loginStore(String id, String pwd) {
 		return commonMapper.loginStore(id, md5(pwd));
 	}
+
 	// MD5 암호화 메서드 추가
 	private String md5(String input) {
 		try {

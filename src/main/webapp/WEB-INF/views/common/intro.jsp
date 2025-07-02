@@ -18,7 +18,7 @@
      
      <script>
         // 3초 뒤에 /user/main으로 이동
-        //session 값에 ㄸ라서 /user/main 혹은 /store/main으로
+        // session 값에 따라서 /user/main 혹은 /store/main으로 이동
         let url = "";
         <c:choose>
             <c:when test="${not empty user}">

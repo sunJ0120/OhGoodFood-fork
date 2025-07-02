@@ -9,7 +9,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta charset="utf-8" />
 
-<link rel="stylesheet" href="../../../css/storemain.css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/storemain.css" />
 <title>Ohgoodfood</title>
 </head>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -41,47 +41,55 @@
 							</div>
 						</div>
 					</div>
-
+					<!-- 전화번호 아이콘, 가게 전화번호 -->
 					<span class="NumberIcon">
 						<img src="${pageContext.request.contextPath}/img/store_number.png" alt="전화 아이콘">
 					</span> 
 					<span class="storeNumber">${store.store_telnumber}</span>
 				</div>
 			</div>
-			 <!-- 이미지 슬라이더 -->
+			 <!-- 이미지 슬라이더 영역 -->
 			<div class="store-image-slider">
 				<div class="slider-track">
+					<!-- 가게 이미지 반복 출력 -->
 					<c:forEach var="img" items="${images}">
 						<img
 							src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${img.store_img}"
 							alt="Store Image" class="slider-img">
 					</c:forEach>
 				</div>
+				<!-- 이미지 하단 인디케이터 -->
 				<div class="slider-indicators"></div>
 			</div>
+
 			<!-- 오픈/마감 버튼 -->
 			<div class="sale-status">
 			    <div class="view-toggle">
+					<!-- 현재 상태에 따라 active class 적용 -->
 			        <button id="open" class="view-button <c:if test="${store.store_status == 'Y'}">active</c:if>">오픈하기</button>
 			        <button id="close" class="view-button <c:if test="${store.store_status == 'N'}">active</c:if>">마감하기</button>
 			    </div>
 			</div>
+
 			<!-- 판매 정보 영역 -->
 			<div class="sale-info">
 				<p>오굿백 구성 후에 오픈 버튼을 눌러주세요 ~</p>
 				<div class="info-title">
-					<img src="../../../img/store_bag.png" alt="오굿백 아이콘">
+					<img src="${pageContext.request.contextPath}/img/store_bag.png" alt="오굿백 아이콘">
 					<p>오굿백</p>
 				</div>
 				
-				<!-- 상품 상세정보 폼 -->
+				<!-- 상품 상세정보 입력 -->
 				<div class="info-content">
-					<p>${product.product_explain}</p>
 					<form>
-						<!-- 픽업 날짜 -->
+						<!-- 상품 설명 -->
+						<textarea class="product_explain" maxlength="50" placeholder="오굿백 설명을 작성해주세요">${product.product_explain}</textarea>
+
+						<!-- 픽업 날짜 선택 -->
 						<div class="form-group">
 							<label class="label">픽업 날짜</label> <span class="divider">|</span>
 							<div class="btn-container">
+								<!-- 오늘/내일 버튼 -->
 							    <button type="button" class="pickup-btn ${isToday ? 'active' : ''}" data-value="today">오늘</button>
 							    <button type="button" class="pickup-btn ${!isToday ? 'active' : ''}" data-value="tomorrow">내일</button>
 							</div>
@@ -95,7 +103,7 @@
 							       id="pickup-time-input" 
 							       class="time-input" readonly />
 
-							<img src="../../../img/store_time.png" alt="시계 아이콘" class="timer-icon" id="timer-icon">
+							<img src="${pageContext.request.contextPath}/img/store_time.png" alt="시계 아이콘" class="timer-icon" id="timer-icon">
 
 							 <!-- 시간 설정 모달 -->
 							<div id="time-modal" class="modal">
@@ -103,61 +111,39 @@
 									<span class="close-modal" id="close-modal">&times;</span>
 									<h3>픽업 시간 선택</h3>
 
-									<select id="pickup-time">
-										<option value="09:00">09:00</option>
-										<option value="09:30">09:30</option>
-										<option value="10:00">10:00</option>
-										<option value="10:30">10:30</option>
-										<option value="11:00">11:00</option>
-										<option value="11:30">11:30</option>
-										<option value="12:00">12:00</option>
-										<option value="12:30">12:30</option>
-										<option value="13:00">13:00</option>
-										<option value="13:30">13:30</option>
-										<option value="14:00">14:00</option>
-										<option value="14:30">14:30</option>
-										<option value="15:00">15:00</option>
-										<option value="15:30">15:30</option>
-										<option value="16:00">16:00</option>
-										<option value="16:30">16:30</option>
-										<option value="17:00">17:00</option>
-										<option value="17:30">17:30</option>
-										<option value="18:00">18:00</option>
-										<option value="18:30">18:30</option>
-										<option value="19:00">19:00</option>
-										<option value="19:30">19:30</option>
-										<option value="20:00">20:00</option>
-										<option value="20:30">20:30</option>
-										<option value="21:00">21:00</option>
-										<option value="21:30">21:30</option>
-										<option value="22:00">22:00</option>
-									</select>
+									<select id="pickup-time"> </select>
+									<select id="pickup-end-time"></select>
+
 									<button id="pickup-time-confirm" type="button">확인</button>
 								</div>
 							</div>
 						</div>
+
 						<!-- 원래 가격 -->
 						<div class="form-group">
 							<label class="label">원래 가격</label> <span class="divider">|</span>
 							<input type="number" value="${product.origin_price}" class="time-input" placeholder="가격을 입력하세요" min="0" step="100">
 						</div>
+
 						<!-- 오굿백 가격 -->
 						<div class="form-group">
 							<label class="label">오굿백 가격</label> <span class="divider">|</span>
 							<input type="number" value="${product.sale_price}" class="time-input" placeholder="가격을 입력하세요" min="0" step="100">
 						</div>
+						
 						<!-- 오굿백 수량 -->
 						<div class="form-group">
 							<label class="label">오굿백 수량</label> <span class="divider">|</span>
 							<div class="quantity-container">
-								<img src="../../../img/store_minus.png" alt="빼기 아이콘" class="quantity-icon" id="minus-btn">
+								<img src="${pageContext.request.contextPath}/img/store_minus.png" alt="빼기 아이콘" class="quantity-icon" id="minus-btn">
 								<div class="count" id="count-value">${product.amount}개</div>
-								<img src="../../../img/store_plus.png" alt="더하기 아이콘" class="quantity-icon" id="plus-btn">
+								<img src="${pageContext.request.contextPath}/img/store_plus.png" alt="더하기 아이콘" class="quantity-icon" id="plus-btn">
 							</div>
 						</div>
 					</form>
 				</div>				
 			</div>
+
 			<!-- 오픈/마감 확인 모달 -->
 			<div class="confirm-modal-container" id="confirmModal" style="display:none;">
 				   <div class="confirm-modal-content">
@@ -174,7 +160,9 @@
 	</div>
 </body>
 <script>
+	// storeStatus: 현재 가게 오픈/마감 상태
 	let storeStatus = '${store.store_status}'; // 서버에서 store_status 값 가져옴
+	
 	$(window).on('load', function () {
         // 이미지 슬라이더(터치, 드래그)
         const $track = $('.slider-track');
@@ -302,59 +290,181 @@
         updateIndicators();
         updateSlider(true);
 
-     	// 오픈, 마감 버튼 클릭 이벤트
-        $('.view-button').click(function () {
-		    const buttonId = $(this).attr('id');
-		
-		    // 현재 상태와 같은 버튼 클릭시 무시
-		    if ((storeStatus === 'Y' && buttonId === 'open') || 
-		        (storeStatus === 'N' && buttonId === 'close')) {
-		        // 이미 현재 상태이면 무시
-		        return;
-		    }
-		
-		    let message = (buttonId === 'open') ? '정말 오픈하시겠습니까?' : '정말 마감하시겠습니까?';
-		    $('#confirmMessage').text(message);
-		    $('#confirmModal').fadeIn(200);
-		
-		    $('#confirmYes').off('click').on('click', function () {
-		        $.ajax({
-		            url: '/store/updateStatus',
-		            type: 'POST',
-		            data: { status: (buttonId === 'open') ? 'Y' : 'N' },
-		            success: function () {
-		                $('.view-button').removeClass('active');
-		                $('#' + buttonId).addClass('active');
-		                
-		                // 서버에서 상태 바꿨으니까 JS storeStatus 값도 변경
-		                storeStatus = (buttonId === 'open') ? 'Y' : 'N';
-		             	
-		                // 마감시 필드 초기화
-		                if (buttonId === 'close') {
-		                    $('input[type="number"]').val('');
-		                    $('#pickup-time-input').val('');
-		                    $('.pickup-btn').removeClass('active');
-		                    count = 1;
-		                    $('#count-value').text(count + '개');
-		                }
-		                
-		                $('#confirmModal').fadeOut(200);
-		            },
-		            error: function () {
-		                alert('서버 오류가 발생했습니다.');
-		            }
-		        });
-		    });
-		
-		    $('#confirmNo').off('click').on('click', function () {
-		        $('#confirmModal').fadeOut(200);
-		    });
+		// 오픈 버튼 클릭 시 상품 insert + 상태 변경 처리
+		$('#open').click(function () {
+		if (storeStatus === 'Y') return;
+
+		// 상품 관련 필드들 추출
+		const productExplain = $('textarea.product_explain').val().trim();
+		const pickupDateType = $('.pickup-btn.active').data('value');
+		const pickupTimeRange = $('#pickup-time-input').val();
+		const originPrice = $('input').eq(1).val();
+		const salePrice = $('input').eq(2).val();
+		const amountText = $('#count-value').text();
+		const amount = parseInt(amountText.replace('개', ''));
+
+		const [startTime, endTime] = pickupTimeRange.split(' ~ ');
+
+		if (!pickupDateType || !pickupTimeRange || !originPrice || !salePrice || !amount || !productExplain) {
+			$('#confirmMessage').text("모든 필드를 입력해주세요.");
+			$('#confirmNo').hide(); // 취소 버튼 숨김
+			$('#confirmYes').off('click').on('click', function () {
+				$('#confirmModal').fadeOut(200);
+			});
+			$('#confirmModal').fadeIn(200);
+			return;
+		}
+
+		$('#confirmMessage').text("정말 오픈하시겠습니까?");
+		$('#confirmModal').fadeIn(200);
+
+		$('#confirmYes').off('click').on('click', function () {
+			$.ajax({
+				url: '/store/createProduct',
+				type: 'POST',
+				data: {
+					productExplain,
+					pickupDateType,
+					pickupStartTime: $('#pickup-time').val(),
+					pickupEndTime: $('#pickup-end-time').val(),
+					originPrice,
+					salePrice,
+					amount
+				},
+				success: function (res) {
+					if (res === 'closedToday') {
+						// 오늘 이미 마감된 경우
+						$('#confirmMessage').text("금일 마감되었습니다.");
+						$('#confirmNo').hide();
+						$('#confirmYes').off('click').on('click', function () {
+							$('#confirmModal').fadeOut(200);
+						});
+						$('#confirmModal').fadeIn(200);
+						return;
+					}
+					if (res === 'success') {
+						storeStatus = 'Y';
+						$('#open').addClass('active');
+						$('#close').removeClass('active');
+
+						// 즉시 비활성화
+						$('textarea.product_explain').prop('readonly', true);
+						$('input[type="number"]').prop('readonly', true);
+						$('#pickup-time-input').prop('readonly', true);
+
+						$('.pickup-btn').css({ 'opacity': '0.5', 'cursor': 'not-allowed' }).off('click');
+						$('#minus-btn, #plus-btn').css({ 'opacity': '0.5', 'cursor': 'not-allowed' }).off('click');
+						$('#timer-icon').css({ 'opacity': '0.5', 'cursor': 'not-allowed' }).off('click');
+
+					} else {
+						alert("오픈 중 오류가 발생했습니다.");
+					}
+					$('#confirmModal').fadeOut(200);
+				},
+
+			});
+		});
+
+		$('#confirmNo').off('click').on('click', function () {
+			$('#confirmModal').fadeOut(200);
+		});
+	});
+
+
+		// 마감 버튼 클릭 시 단순 상태 변경
+	$('#close').click(function () {
+		if (storeStatus === 'N') return;
+
+		// 서버에 미확정 주문 있는지 조회
+		$.ajax({
+			url: '/store/checkOrderStatus', 
+			type: 'GET',
+			success: function (count) {
+				if (count > 0) {
+					// 모달 띄우기
+					$('#confirmMessage').text("미확정 주문이 있습니다.");
+					$('#confirmYes').text("주문내역").off('click').on('click', function () {
+						window.location.href = '/store/reservation';
+					});
+					$('#confirmNo').text("닫기").show().off('click').on('click', function () {
+						$('#confirmModal').fadeOut(200);
+					});
+					$('#confirmModal').fadeIn(200);
+					return;
+				}
+
+				// 없으면 기존 마감하기 실행
+				$('#confirmMessage').text("정말 마감하시겠습니까?");
+				$('#confirmYes').text("확인").off('click').on('click', function () {
+					$.ajax({
+						url: '/store/updateStatus',
+						type: 'POST',
+						data: { status: 'N' },
+						success: function () {
+							storeStatus = 'N';
+							$('#close').addClass('active');
+							$('#open').removeClass('active');
+							// 필드 초기화 
+							$('textarea.product_explain').val('').prop('readonly', false);
+							$('input[type="number"]').val('').prop('readonly', false);
+							$('#pickup-time-input').val('').prop('readonly', false);
+							$('.pickup-btn').removeClass('active').css('opacity', '').css('cursor', 'pointer');
+							$('#minus-btn, #plus-btn').css('opacity', '').css('cursor', 'pointer');
+							$('#timer-icon').css('opacity', '').css('cursor', 'pointer');
+							count = 1;
+							$('#count-value').text(count + '개');
+							
+							generatePickupOptions();
+													
+							$('#minus-btn').off('click').on('click', function () {
+								if (count > 1) {
+									count--;
+									$('#count-value').text(count + '개');
+								}
+							});
+							$('#plus-btn').off('click').on('click', function () {
+								count++;
+								$('#count-value').text(count + '개');
+							});
+							$('.pickup-btn').off('click').on('click', function () {
+								$('.pickup-btn').removeClass('active');
+								$(this).addClass('active');
+
+								$('#pickup-time-input').val('');
+  									generatePickupOptions();
+							});
+							$('#timer-icon').off('click').on('click', function () {
+								$('#time-modal').css('display', 'flex');
+							});
+							$('#confirmModal').fadeOut(200);
+							},
+							error: function () {
+								alert('서버 오류가 발생했습니다.');
+								$('#confirmModal').fadeOut(200);
+							}
+						});
+					});
+
+					$('#confirmNo').text("취소").off('click').on('click', function () {
+						$('#confirmModal').fadeOut(200);
+					});
+
+					$('#confirmModal').fadeIn(200);
+				},
+				error: function () {
+					alert('주문 상태 확인 중 오류가 발생했습니다.');
+				}
+			});
 		});
 
         // 픽업 날짜 버튼 이벤트
         $('.pickup-btn').click(function () {
             $('.pickup-btn').removeClass('active');
             $(this).addClass('active');
+
+			//픽업 시간 필드 초기화
+			$('#pickup-time-input').val('');
+			generatePickupOptions();
         });
 
         // 오굿백 수량 증감 버튼
@@ -374,9 +484,19 @@
         });
 
         // 알람 모달
-        $('#timer-icon').click(function () {
-            $('#time-modal').css('display', 'flex');
-        });
+		$('#timer-icon').click(function () {
+		// 픽업 날짜가 선택되어 있는지 확인
+		const pickupDateType = $('.pickup-btn.active').data('value');
+		if (!pickupDateType) {
+			alert('먼저 픽업 날짜를 선택해주세요.');
+			return;
+		}
+		// 모달 열 때 select 활성화
+		$('#pickup-time').prop('disabled', false);
+		$('#pickup-end-time').prop('disabled', false);
+		generatePickupOptions();
+		$('#time-modal').css('display', 'flex');
+	});
         $('#close-modal').click(function () {
             $('#time-modal').css('display', 'none');
         });
@@ -388,20 +508,21 @@
 
         // 픽업 시간 모달
         $('#pickup-time-confirm').click(function () {
-            const start = $('#pickup-time').val(); // 예: "09:30"
-            if (start) {
-                // 시간 계산
-                const [h, m] = start.split(':').map(Number);
-                let endH = h + 1;
-                let endM = m;
-                if (endH > 23) endH = endH - 24; // 24시 넘어가면 0시로
-                // 두 자리수로 포맷
-                const end = `\${String(endH).padStart(2, '0')}:\${String(endM).padStart(2, '0')}`;
-                
-                $('#pickup-time-input').val(`${start} ~ ${end}`);
-            }
-            $('#time-modal').css('display', 'none');
-        });
+			const start = $('#pickup-time').val();
+			const end = $('#pickup-end-time').val();
+			if(start && end) {
+				$('#pickup-time-input').val(start + ' ~ ' + end);
+			}
+			if (start && end) {
+				$('#pickup-time-input').val(start + ' ~ ' + end);
+			} else {
+				alert("픽업 시작시간과 종료시간을 모두 선택해주세요.");
+				return;
+			}
+
+			$('#time-modal').css('display', 'none');
+		});
+
         
 	     // 주소 팝업
         $('#address-short').click(function() {
@@ -414,21 +535,132 @@
             $('#addressModal').fadeOut(200);
         });
 
-        $('#timer-icon').click(function () {
-            $('#time-modal').css('display', 'flex');
-        });
-
         $('#closeTimeModal').click(function () {
             $('#time-modal').css('display', 'none');
         });
         
     	// 페이지 로드할 때 마감상태(N)이면 필드 초기화
         if (storeStatus === 'N') {
+        	$('textarea.product_explain').val('');
             $('input[type="number"]').val('');
             $('#pickup-time-input').val('');
             $('.pickup-btn').removeClass('active');
+           
             count = 1;
             $('#count-value').text(count + '개');
+        }
+
+		if (storeStatus === 'Y') {
+			// 설명 텍스트 비활성화
+			$('textarea.product_explain').prop('readonly', true);
+
+			// 숫자 입력 비활성화
+			$('input[type="number"]').prop('readonly', true);
+
+			// 픽업 시간 입력 비활성화
+			$('#pickup-time-input').prop('readonly', true);
+
+			// 픽업 날짜 버튼 비활성화
+			$('.pickup-btn').css({ 'opacity': '0.5', 'cursor': 'not-allowed' }).off('click');
+
+			// 수량 버튼 비활성화
+			$('#minus-btn, #plus-btn').css({ 'opacity': '0.5', 'cursor': 'not-allowed' }).off('click');
+
+			// 시계 아이콘 클릭 방지
+			$('#timer-icon').css({ 'opacity': '0.5', 'cursor': 'not-allowed' }).off('click');
+		}
+
+		// 픽업 시작 시간 옵션 생성 함수
+		function generatePickupOptions() {
+			const pickupDateType = $('.pickup-btn.active').data('value');
+
+			let now = new Date();
+			let startHour, startMinute;
+
+			if (pickupDateType === 'tomorrow') {
+				// 내일이면 무조건 오픈시간 06:00부터
+				startHour = 6;
+				startMinute = 0;
+			} else {
+				// 오늘이면 현재 시간 기준 +3시간 후로 설정
+				now.setMinutes(now.getMinutes() + 180);
+				startHour = now.getHours();
+				startMinute = now.getMinutes();
+
+				// 30분 단위로 올림
+				if (startMinute > 0 && startMinute < 30) startMinute = 30;
+				else if (startMinute > 30) {
+					startMinute = 0;
+					startHour++;
+					if (startHour > 23) startHour = 0;
+				}
+			}
+
+			const pickupTimeSelect = $('#pickup-time');
+			const pickupEndTimeSelect = $('#pickup-end-time');
+
+			pickupTimeSelect.empty();
+			pickupEndTimeSelect.empty();
+
+            // 시작 시간: 06:00부터
+            const openHour = 6;
+            // 종료 시간: 23:30까지
+            const closeHour = 23;
+			const closeMinute = 30;
+
+			for (let h = openHour; h <= 22; h++) {
+				for (let m = 0; m < 60; m += 30) {
+					if (h < startHour || (h === startHour && m < startMinute)) continue;
+					const hourStr = String(h).padStart(2, '0');
+					const minuteStr = String(m).padStart(2, '0');
+					const optionValue = hourStr + ':' + minuteStr;
+					pickupTimeSelect.append($('<option>').val(optionValue).text(optionValue));
+				}
+			}
+
+			pickupTimeSelect.off('change').on('change', function () {
+				generatePickupEndOptions($(this).val());
+			});
+
+			if (pickupTimeSelect.children().length > 0) {
+				const firstStart = pickupTimeSelect.children().first().val();
+				pickupTimeSelect.val(firstStart);
+				generatePickupEndOptions(firstStart);
+			} else {
+				pickupTimeSelect.prop('disabled', true);
+				pickupEndTimeSelect.prop('disabled', true);
+			}
+		}
+
+
+		// 종료 시간 옵션 생성 함수
+        function generatePickupEndOptions(startTime) {
+            const [startH, startM] = startTime.split(':').map(Number);
+
+            const pickupEndTimeSelect = $('#pickup-end-time');
+            pickupEndTimeSelect.empty();
+
+            // 시작 시간: 06:00, 종료 시간: 23:30
+            const openHour = 6;
+            const closeHour = 23;
+            const closeMinute = 30; // 23:30까지
+
+            // 종료 시간은 시작 시간 + 최소 60분 부터 시작
+            let startMinutesTotal = startH * 60 + startM + 60;
+            const endMinutesTotal = closeHour * 60 + closeMinute;
+
+            for (let totalM = startMinutesTotal; totalM <= endMinutesTotal; totalM += 30) {
+                let h = Math.floor(totalM / 60);
+                let m = totalM % 60;
+
+                if (h > closeHour || (h === closeHour && m > closeMinute)) break;
+
+                const hourStr = String(h).padStart(2, '0');
+                const minuteStr = String(m).padStart(2, '0');
+                const optionValue = hourStr + ':' + minuteStr;
+
+                pickupEndTimeSelect.append($('<option>').val(optionValue).text(optionValue));
+            }
         }
 
     });
