@@ -25,8 +25,10 @@ public class CommonController {
 	
 	@PostMapping("/login")
 	public String login(HttpServletRequest request, HttpSession sess, Model model) {
-		String id = request.getParameter("id"); // 아이디 파라미터
-		String pwd = request.getParameter("pwd");  // 비밀번호 파라미터
+		String id = request.getParameter("id"); // 아이디 파라미터로
+		String pwd = request.getParameter("pwd"); // 비번 파라미터로 가져옴
+		sess.invalidate();
+		sess = request.getSession(true);
 		Account account = commonService.loginAccount(id, pwd);
 		if (account != null) {
 			sess.setAttribute("user", account);
@@ -67,4 +69,10 @@ public class CommonController {
 	public String intro() {
 		return "/common/intro";
 	}
+	
+    @GetMapping("/logout") // 로그아웃 
+    public String logout(HttpSession session) {
+        session.invalidate();                    // 세션 무효화
+        return "redirect:/login";                // 로그인 페이지로 리다이렉트
+    }
 }

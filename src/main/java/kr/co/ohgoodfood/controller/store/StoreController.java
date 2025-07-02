@@ -26,10 +26,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam; 
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import kr.co.ohgoodfood.dto.Alarm;
+
 import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.Product;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
+import kr.co.ohgoodfood.service.common.CommonService;
 import kr.co.ohgoodfood.service.store.StoreService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +46,7 @@ import lombok.extern.slf4j.Slf4j;
 public class StoreController {
 
 	private final StoreService storeService;
+	private final CommonService commonService;
 
 	// 회원가입 페이지 이동
 	@GetMapping("/signup")
@@ -392,8 +398,36 @@ public class StoreController {
 	public String showAlarm(HttpSession sess, Model model) {
 		Store login = (Store) sess.getAttribute("store");
 
+		List<Alarm> alarms = commonService.getAlarm(login.getStore_id());
+		model.addAttribute("alarms", alarms);
+
 		// 로그인 되어 있으면 alarm.jsp로
 		return "store/alarm";
+	}
+
+	// 알람 읽음 처리
+	@PostMapping("/alarmread")
+	@ResponseBody
+	public boolean readAlarm(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+		commonService.updateAlarm(login.getStore_id());
+		return true;
+	}
+
+	// 알람 디스플레이 숨김 처리
+	@PostMapping("/alarmhide")
+	@ResponseBody
+	public boolean hideAlarm(@RequestParam("alarm_no") int alarm_no) {
+		commonService.hideAlarm(alarm_no);
+		return true;
+	}
+
+	// 안 읽은 알람 확인
+	@PostMapping("/alarmcheck")
+	@ResponseBody
+	public boolean checkUnreadAlarm(HttpSession sess, Model model) {
+		Store login = (Store) sess.getAttribute("store");
+		return commonService.checkUnreadAlarm(login.getStore_id()) > 0;
 	}
 
 	// 마이페이지 조회

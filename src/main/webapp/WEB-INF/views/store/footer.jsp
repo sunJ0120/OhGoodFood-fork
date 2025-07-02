@@ -55,5 +55,19 @@
                 }).css('pointer-events', 'none'); // 마우스도 막기 (선택사항)
             }
         });
+
+        // 새로운 알람이 있을 때 알람 이미지 변경
+        $.ajax({
+            type: "POST",
+            url: "/store/alarmcheck",
+            success: function(res){
+                if(res == true || res === "true"){
+                    $(".alarmIcon").attr('src', '${pageContext.request.contextPath}/img/storealarm_active.png');
+                }
+            }
+
+        });
     });
+
 </script>
+

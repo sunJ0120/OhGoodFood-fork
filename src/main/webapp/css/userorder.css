@@ -1,3 +1,12 @@
+@font-face {
+     font-family: 'nanumesquareneo';
+     src: url('font/NanumSquareNeo-aLt.ttf');
+}
+
+@font-face {
+     font-family: 'nanumesquareneo_b';
+     src: url('font/NanumSquareNeo-bRg.ttf');
+}
 main {
     padding: 0 20px;
     max-width: 440px;
@@ -31,7 +40,7 @@ main {
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
-    font-family: "NanumSquare Neo-Bold", sans-serif;
+    font-weight: bold;
     font-size: 14px;
 
     gap: 4px;
@@ -69,16 +78,14 @@ main {
 
 .tabBoxWrapper {
     border: 1px solid #99a99b;
-    border-radius: 0 0 10px 10px;
     overflow: hidden;
     max-height: 665px;
     width: 100%;
-    padding: 10px;
-
-    box-sizing: border-box;
+    padding-bottom: 10px;
 }
 
 .topWrapper {
+    position: relative;
     flex: 1;
     overflow-y: auto;
     min-height: 0;
@@ -97,9 +104,11 @@ main {
 }
 
 .productWrapper {
+    position: relative;
     padding-top: 16px;
     background-color: #F5F3EA;
     box-sizing: border-box;
+    height: 100%;
 }
 
 .productList {
@@ -107,7 +116,7 @@ main {
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    margin-bottom: 20px;
+    box-sizing: border-box;
 }
 
 .productCard {
@@ -133,7 +142,7 @@ main {
 }
 
 .salePrice {
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-weight: bold;
     font-size: 18px;
     color: #333;
 }
@@ -169,7 +178,7 @@ main {
     border-radius: 8px;
     font-size: 13px;
     color: black;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 }
@@ -180,32 +189,42 @@ main {
 }
 
 .orderHeaderText{
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
     padding-right: 12pt;
+    width: 100%;
 }
 
 .orderHeaderWrapper{
+    width: 100%;
+    display: flex;
     border: none;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding: 10pt 0;
 }
 
 .title {
+    justify-content: flex-start;
     display: inline-flex;
     align-items: center;
+    color: #535353;
     gap : 3pt;
 }
 
 .orderHeaderText .title {
     font-size: 15pt;
-    font-family: "nanumesquareneo_b", sans-serif;
     font-weight: bold;
 }
 
 .orderHeaderText .subtitle {
     font-size: 13pt;
     color: #99A99B;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
+
+    justify-content: center;
+    align-content: center;
 }
 
 /*orderCard 관련*/
@@ -215,7 +234,7 @@ main {
     padding: 16px;
     background-color: #fdfdf5;
     margin-bottom: 20px;
-    font-family: 'Pretendard', sans-serif;
+    /*font-weight: normal;*/
 }
 
 .orderTop {
@@ -228,7 +247,6 @@ main {
 
 .orderTop .storeName{
     font-size: 18px;
-    font-family: "nanumesquareneo_b", sans-serif;
     font-weight: bold;
 }
 
@@ -246,13 +264,17 @@ main {
     color: white;
 }
 
-/* 이거 container 넘는거 해결 필요. */
 .orderMiddle {
     display: flex;
     align-items: flex-start;
     width: 100%;
     margin-top: 16px;
     gap: 16px;
+}
+
+.imgWrapper{
+    width: 120px;
+    height: 90px;
 }
 
 .productImg {
@@ -272,7 +294,7 @@ main {
 .orderNoticeWrapper {
     width: 100%;
     display: flex;
-    /*justify-content: flex-end;*/
+    justify-content: center;
     align-items: center;
     gap: 8px;
 }
@@ -281,6 +303,8 @@ main {
     color: #dd8888;
     font-size: 14px;
     margin-top: 12px;
+    text-align: center;
+    text-decoration: underline;
 }
 
 .orderBrown{
@@ -320,6 +344,10 @@ main {
     font-size: 15px;
     margin-top: 12px;
     font-weight: bold;
+}
+
+.orderReviewDone {
+    background-color: #B5A295; /* 연한 색으로 표현.. 왜인지 지금 오퍼시티 안먹혀서 */
 }
 
 .hidden {
@@ -371,4 +399,49 @@ main {
     align-items: center;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.postStyle{
+    display: block;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* 결과 없음 모달 관련 요소들 */
+.emptyModal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.modalWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.modalBox {
+    background: white;
+    border-radius: 10pt;
+    padding: 50px 50px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.modalContent {
+    color: #99A99B;
+}
+
+.emptyModalEmoji {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(calc(-50% + 70px), -70%);
+}
+
+.orderStatusModal {
+    display: inline;
 }

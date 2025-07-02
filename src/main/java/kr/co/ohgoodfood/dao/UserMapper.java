@@ -12,8 +12,6 @@ import java.util.List;
  * 사용자 관련 주요 CRUD 및 조회 기능을 정의하는 MyBatis Mapper 인터페이스
  * - 메인 화면 & 북마크 조회
  * - 주문 내역 조회 및 상태 변경
- * - 결제 전 처리
- * - 알림 조회 및 상태 변경
  * - 마이페이지 조회
  */
 @Mapper
@@ -27,6 +25,13 @@ public interface UserMapper {
     List<MainStore> selectAllStore(@Param("filter") UserMainFilter userMainFilter);
 
     /**
+     * 사용자 지도 영역에 핀을 클릭했을때 가게 정보 조회
+     *
+     * @param userMainFilter   필터 DTO
+     * @return                 필터 적용된 MainStore 요소
+     */
+    MainStore selectOneStoreByStoreId(@Param("filter") UserMainFilter userMainFilter);
+    /**
      * 사용자 북마크 화면에서 표시할 가게 목록을 조회
      *
      * @param user_id          조회 대상 user_id
@@ -38,11 +43,21 @@ public interface UserMapper {
      * 사용자의 특정 북마크를 삭제 처리
      *
      * @param user_id          조회 대상 user_id
-     * @param bookmark_no      삭제할 북마크 고유번호
+     * @param store_id         user_id + store_id 조합으로 삭제
      * @return                 영향받은 행(row) 수
      */
     int deleteBookmark(@Param("user_id") String user_id,
-                        @Param("bookmark_no") int bookmark_no);
+                       @Param("store_id") String store_id);
+
+    /**
+     * 사용자 북마크 추가
+     *
+     * @param user_id          조회 대상 user_id
+     * @param store_id         북마크에 추가할 store 정보
+     * @return                 영향받은 행(row) 수
+     */
+    int insertBookmark(@Param("user_id") String user_id,
+                       @Param("store_id") String store_id);
 
     /**
      * 사용자의 모든 주문내역을 출력
@@ -53,89 +68,18 @@ public interface UserMapper {
     List<UserOrder> selectOrderList(@Param("filter") UserOrderFilter userOrderFilter);
 
     /**
-     * 📌 차후 수정 예정.
-     * 사용자가 주문을 취소할 때 호출
+     * 사용자가 주문 상태를 변경해야 할때 사용한다.
      *
-     * @param order_status  변경할 주문 상태
-     * @param canceld_from  취소한 사람
-     * @param order_no      주문번호
-     * @param user_id       user_id
+     * @param userOrderRequest 필터 DTO
      */
-    void updateOrderCanceldByUser(@Param("order_status") String order_status,
-                                  @Param("canceld_from") String canceld_from,
-                                  @Param("order_no") int order_no,
-                                  @Param("user_id") String user_id);
+    int updateOrderStatus(@Param("order_request") UserOrderRequest userOrderRequest);
 
     /**
-     * 📌 차후 수정 예정.
-     * 주문이 확정된 이후 상태 변경 및 픽업 코드를 설정
+     * 사용자 주문 취소시, Product의 amount를 복원하기 위함이다.
      *
-     * @param order_status  변경할 주문 상태
-     * @param order_code    픽업 코드
-     * @param order_no      주문번호
-     * @param user_id       user_id
+     * @param userOrderRequest 필터 DTO
      */
-    void updateOrderConfirmed(@Param("order_status") String order_status,
-                              @Param("order_code") String order_code,
-                              @Param("order_no") int order_no,
-                              @Param("user_id") String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 픽업 완료 후 주문 상태를 업데이트
-     *
-     * @param order_status  변경할 주문 상태
-     * @param order_no      주문번호
-     * @param user_id       user_id
-     */
-    void updateOrderPickup(@Param("order_status") String order_status,
-                           @Param("order_no") int order_no,
-                           @Param("user_id") String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 결제 진행을 위해 특정 상품의 주문 정보를 조회
-     *
-     * @param product_no  조회할 상품 번호
-     * @return           UserOrder DTO
-     */
-    UserOrder selectUserOrderPay(int product_no);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 결제 전 상품 수량과 가게 오픈 상태를 확인
-     *
-     * @param product_no  조회할 상품 번호
-     * @return           OrderPayCheck
-     */
-    OrderPayCheck selectUserOrderPayCheck(int product_no);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 사용자별 전체 알림 목록을 조회
-     *
-     * @param user_id  user_id
-     * @return         Alarm 리스트
-     */
-    List<Alarm> selectAlarmList(String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * 사용자의 모든 알림을 읽음 처리
-     *
-     * @param user_id user_id
-     */
-    void updateAlarmRead(String user_id);
-
-    /**
-     * 📌 차후 수정 예정.
-     * X가 눌린 or 기한이 지난 알림을 숨김 처리
-     *
-     * @param user_id  사용자 ID
-     * @param alarm_no 숨김 처리할 알림 번호
-     */
-    void updateAlarmHidden(@Param("user_id") String user_id,
-                           @Param("alarm_no") int alarm_no);
+    int restoreProductAmount(@Param("order_request") UserOrderRequest userOrderRequest);
 
     /**
     * 세션의 user_id 로 MyPage DTO 전체를 조회 
@@ -178,4 +122,34 @@ public interface UserMapper {
         @Param("startIdx") int startIdx,
         @Param("size")     int size
     );
+    
+    /**
+     * 리뷰 insert
+     * 주문 번호 파라미터로 받아 리뷰 작성
+     * @param orderNo
+     * @return
+     */
+	ReviewForm selectReviewFormByOrderNo(int orderNo);
+	
+	/**
+	 * 리뷰 update
+	 * @param form
+	 */
+    void insertReview(ReviewForm form);
+
+    /**
+     * 가게 이미지 하나 가져오기
+     * @param store_id
+     * @return
+     */
+    String selectStoreImg(String store_id);
+    
+    /**
+     * 북마크 여부
+     * @param user_id
+     * @param store_id
+     * @return
+     */
+    int isBookmarked(@Param("user_id") String user_id, @Param("store_id") String store_id);
+
 }

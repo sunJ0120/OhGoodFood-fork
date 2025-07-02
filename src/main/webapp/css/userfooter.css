@@ -1,3 +1,12 @@
+@font-face {
+     font-family: 'nanumesquareneo';
+     src: url('font/NanumSquareNeo-aLt.ttf');
+}
+
+@font-face {
+     font-family: 'nanumesquareneo_b';
+     src: url('font/NanumSquareNeo-bRg.ttf');
+}
 footer{
     position: absolute;
     left: 0;
@@ -34,9 +43,10 @@ footer{
     align-items: center;
     height: 55px;
     width: 68px;
+
     border-radius: 8px;
     cursor: pointer;
 }
-.menuItem.active {
-    background-color: #F5F3EA; 
+.menuContainer a.active .menuItem {
+    background-color: #F5F3EA;
 }

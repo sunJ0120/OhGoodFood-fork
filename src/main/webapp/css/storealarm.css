@@ -66,11 +66,11 @@ main{
     box-sizing: border-box;
 }
 /*오늘 알람인 경우*/
-.alarm-item.today-alarm {
+.alarm-item.new-alarm {
     background: #fff;
     font-family: 'nanumesquareneo_b';
 }
-.alarm-item.today-alarm .alarm-status{
+.alarm-item.new-alarm .alarm-status{
     color: #D8A8AB;
 }
 .alarm-header{
@@ -88,5 +88,12 @@ main{
 }
 .alarm-content {
     font-size: 13px;
+}
+.no-alarm-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+    align-items: center;
 }
 
