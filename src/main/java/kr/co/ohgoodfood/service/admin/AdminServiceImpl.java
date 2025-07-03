@@ -71,6 +71,12 @@ public class AdminServiceImpl implements AdminService {
 		return adminMapper.getThisMonthOrderCountTotal();
 	}
 
+	// 금일 전체 주문 건수 조회
+	@Override
+	public int getTodayOrderCount() {
+		return adminMapper.getTodayOrderCountTotal();
+	}
+
 	// 미승인 점포 수 조회
 	@Override
 	public int getUnapprovedStoreCount() {
@@ -408,5 +414,17 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public int checkAdminLogin(Admin admin) {
 		return adminMapper.checkAdminLogin(admin);
+	}
+
+	// 금월 신규 회원 수 조회
+	@Override
+	public int getThisMonthNewUserCount() {
+		return adminMapper.getThisMonthNewUserCount();
+	}
+
+	// 금월 신규 매장 수 조회
+	@Override
+	public int getThisMonthNewStoreCount() {
+		return adminMapper.getThisMonthNewStoreCount();
 	}
 }

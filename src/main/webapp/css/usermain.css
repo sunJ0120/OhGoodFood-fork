@@ -1,3 +1,12 @@
+@font-face {
+     font-family: 'nanumesquareneo';
+     src: url('font/NanumSquareNeo-aLt.ttf');
+}
+
+@font-face {
+     font-family: 'nanumesquareneo_b';
+     src: url('font/NanumSquareNeo-bRg.ttf');
+}
 main {
     padding: 0 20px;
     max-width: 440px;
@@ -24,7 +33,7 @@ main {
     border: none;
     outline: none;
     font-size: 14px;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-family: 'nanumesquareneo';
     background-color: transparent;
     color: #7C7C7C;
 }
@@ -48,7 +57,7 @@ main {
 
 .filterButtons {
     display: flex;
-    gap: 8px;
+    justify-content: space-between; /* 간격을 균일하게 정렬 */
     padding: 1px 0px;
     flex-wrap: wrap;
 }
@@ -57,14 +66,13 @@ main {
     display: flex;
     align-items: center;
     justify-content: center;
-    /*min-width: 120px;*/
+    font-family: 'nanumesquareneo_b';
 
-    padding: 6px 10px;
+    padding: 10px 10px;
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
-    font-family: "NanumSquare Neo-Bold", sans-serif;
     font-size: 14px;
 
     gap: 4px;
@@ -79,7 +87,7 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 12px;
+    padding: 10px 10px;
     gap: 6px;
     box-sizing: border-box;
 
@@ -102,10 +110,9 @@ main {
 
 .tabBoxWrapper {
     border: 1px solid #99a99b;
-    border-radius: 0 0 10px 10px;
     overflow: hidden;
     width: 100%;
-    margin: 20px 0 0 0;
+    margin: 15px 0 0 0;
 }
 
 .tabSelector {
@@ -147,8 +154,44 @@ main {
 }
 
 .productWrapper {
+    position: relative;
     padding: 16px 12px;
     background-color: #F5F3EA;
+    height: 100%;
+}
+
+.mapWrapper{
+    position: relative;
+    padding: 16px 12px;
+    background-color: #F5F3EA;
+    height: 100%;
+}
+
+.storePinModalWrapper{
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 100; /* 버튼 보다 아래 */
+}
+
+.storePinModal {
+    position: relative;     /* wrapper가 위치를 담당하므로 relative */
+    width: 100%;
+    max-width: 355px;
+    margin: 0 10px;
+
+    pointer-events: all;    /* 클릭을 받아야 하므로 wrapper 투과 처리 보완 */
+    background-color: #fff;
+    cursor: pointer;
+
+    max-height: 50%;
+    overflow-y: auto;
+    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10pt;
 }
 
 .productList {
@@ -166,6 +209,13 @@ main {
     margin-bottom: 16px;
     width: 100%;
     max-width: 355px;
+
+    cursor: pointer;
+}
+
+.productCard * {
+    cursor: inherit;       /* 부모의 pointer 상속 */
+    user-select: none;
 }
 
 .cardImage {
@@ -187,7 +237,7 @@ main {
     bottom: 8px;
     left: 12px;
     color: white;
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-family: 'nanumesquareneo_b';
     display: flex;
     align-items: center;
     gap: 6px;
@@ -209,7 +259,7 @@ main {
 }
 
 .productNameWrapper {
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-family: 'nanumesquareneo_b';
     font-size: 20px;
     color: #535353;
     margin: 0;
@@ -229,8 +279,7 @@ main {
     align-items: center;
     justify-content: center;
 
-    font-family: "NanumSquare Neo-Regular", sans-serif;
-    font-weight: 400;
+    font-weight: normal;
     background-color: #8b6d5c;
     color: #fff;
     padding: 2px 10px;
@@ -244,7 +293,7 @@ main {
 .productDetail,
 .pickupTime {
     margin: 0;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
     font-size: 13px;
     color: #333;
 }
@@ -260,7 +309,7 @@ main {
     align-items: flex-end;
     text-align: right;
     white-space: nowrap;
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-family: 'nanumesquareneo_b';
     align-self: flex-end;
 }
 
@@ -270,12 +319,11 @@ main {
 }
 
 .salePrice {
-    font-family: "nanumesquareneo_d", sans-serif;
+    font-family: 'nanumesquareneo_b';
     font-size: 18px;
     color: #333;
 }
 
-/* 📌 soldout 될 경우 이 속성을 추가하도록 변경해야 한다.*/
 .storeImage.soldout{
     opacity: 0.6;
 }
@@ -320,7 +368,7 @@ main {
     border-radius: 8px;
     font-size: 13px;
     color: black;
-    font-family: "nanumesquareneo_b", sans-serif;
+    font-weight: normal;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
 }
@@ -328,4 +376,73 @@ main {
 .dropdownModal .item.active {
     background-color: #D8A8AB;
     color: white;
+}
+
+.modalWrapper {
+    position: relative;
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.catModal{
+    margin-bottom: 40pt;
+}
+
+.hidden {
+    display: none;
+}
+
+.btnSetCenter{
+    display: inline-flex;
+    gap: 8px; /* 자식 요소 간격 */
+
+    position: absolute;
+    bottom: 16px;       /* 지도 하단에서 띄울 기본 거리 */
+    right: 16px;        /* 오른쪽 여백 */
+    padding: 10px 12px;
+    background: #99A99B;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: bottom 0.2s ease; /* 부드러운 애니메이션 */
+    z-index: 200;        /* 모달보다 위로 */
+}
+
+.btnText{
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    font-family: 'nanumesquareneo';
+    color: white;
+}
+
+.btnIcon{
+    /* 원하는 크기로 고정 */
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btnIcon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 모달이 열렸을 때 버튼을 모달 높이만큼 위로 올리기 위함 */
+.mapWrapper.modalOpen .btnSetCenter {
+    bottom: calc(200px);
+}
+
+.myLocationTemplateWindow{
+    display: block;
+    width: 140px;
+    /*align-items: center;*/
+    /*justify-content: center;*/
+    text-align: center;
 }

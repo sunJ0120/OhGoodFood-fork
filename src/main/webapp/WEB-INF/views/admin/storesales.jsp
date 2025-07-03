@@ -145,7 +145,7 @@
                                     <td>${thisMonthSales != null ? thisMonthSales : 0}</td>
                                     <td>
                                         <c:if test="${lastYearSales != 0 && lastYearSales != null}">
-                                            ${((thisYearSales - lastYearSales) / lastYearSales * 100)}%
+                                            ${((thisYearSales - lastYearSales) / lastYearSales * 100).intValue()}%
                                         </c:if>
                                         <c:if test="${lastYearSales == 0 || lastYearSales == null}">
                                             -
@@ -171,7 +171,7 @@
                                     <td>${lastYearOrderCount != null ? lastYearOrderCount : 0}</td>
                                     <td>
                                         <c:if test="${lastYearOrderCount != 0 && lastYearOrderCount != null}">
-                                            ${((thisYearOrderCount - lastYearOrderCount) / lastYearOrderCount * 100)}%
+                                            ${((thisYearOrderCount - lastYearOrderCount) / lastYearOrderCount * 100).intValue()}%
                                         </c:if>
                                         <c:if test="${lastYearOrderCount == 0 || lastYearOrderCount == null}">
                                             -

@@ -4,88 +4,228 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.ohgoodfood.dao.UserMapper">
-    <!--
-    User용 Mapper 객체
-        - user가 사용하는 매퍼 정리
-    📌 고민점
-        - 어느 페이지에서 사용하는지에 따라 main과 같은 구분자를 붙여서 사용해야 할지 고민입니다.
-    -->
-
     <!-- selectAllStore mapper -->
-    <!-- selectAllStore mapper, main과 BookMark의 카드에서 동시에 이용한다. -->
-    <select id="selectAllStore" resultType="kr.co.ohgoodfood.dto.MainStore">
+    <!-- selectAllStore mapper, main에서 이용한다. -->
+    <select id="selectAllStore" parameterType="map" resultType="kr.co.ohgoodfood.dto.MainStore">
         SELECT
-            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery, s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others AS category_others, s.closed_at AS closed_at,
-            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.origin_price AS origin_price, p.sale_price AS sale_price, p.reservation_end AS reservation_end, p.amount AS amount,
-            MIN(i.store_img) AS store_img,
-            b.bookmark_no AS bookmark_no,
-        CASE WHEN b.bookmark_no IS NOT NULL THEN true ELSE false END AS bookmark
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at, s.latitude AS latitude, s.longitude AS longitude,
+            pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
+            img.first_img AS store_img
         FROM Store s
-            JOIN Product p ON s.store_id = p.store_id
-            JOIN Image i ON i.store_id = s.store_id
-            LEFT JOIN Bookmark b ON b.store_id = s.store_id AND b.user_id = #{user_id}
-        GROUP BY s.store_id, s.store_name;
+            LEFT JOIN Product pf
+            ON pf.store_id = s.store_id
+            AND DATE(pf.reservation_end) = CURDATE()
+        LEFT JOIN (
+            SELECT
+                store_id,
+                MIN(store_img) AS first_img
+            FROM Image
+        GROUP BY store_id
+        ) img ON img.store_id = s.store_id
+        <where>
+            s.confirmed = 'Y'
+            <if test="filter.store_status != null">
+                AND s.store_status = #{filter.store_status} AND pf.amount >= #{filter.amount}
+            </if>
+            <if test="filter.pickup_start != null">
+                AND DATE(pf.pickup_start) = #{filter.pickup_start}
+            </if>
+            <if test="filter.category_bakery != null">
+                AND s.category_bakery = #{filter.category_bakery}
+            </if>
+            <if test="filter.category_fruit != null">
+                AND s.category_fruit = #{filter.category_fruit}
+            </if>
+            <if test="filter.category_salad != null">
+                AND s.category_salad = #{filter.category_salad}
+            </if>
+            <if test="filter.category_others != null">
+                AND s.category_others = #{filter.category_others}
+            </if>
+            <!-- 위도/경도 필터링: 반경 500m, 검색어가 들어갔을때는 위도 경도 필터링 안걸리게 한다. -->
+            <if test="filter.latitude != null and filter.longitude != null and (filter.search == null or filter.search == '')">
+                AND s.latitude  BETWEEN #{filter.latitude}  - 0.027 AND #{filter.latitude}  + 0.027
+                AND s.longitude BETWEEN #{filter.longitude} - 0.034 AND #{filter.longitude} + 0.034
+            </if>
+            <!-- 가게 이름, 가게 대표 메뉴, 가게 주소, 가게 상세 검색 필터링 추가 -->
+            <if test="filter.search != null and filter.search != ''">
+                AND (
+                    s.store_name LIKE CONCAT('%', #{filter.search}, '%')
+                    OR s.store_menu LIKE CONCAT('%', #{filter.search}, '%')
+                    OR pf.product_explain LIKE CONCAT('%', #{filter.search}, '%')
+                )
+            </if>
+        </where>
+        ORDER BY (s.store_status = 'N') ASC;
+    </select>
+
+    <!-- selectOneStoreByStoreId mapper, main map에서 이용한다. -->
+    <select id="selectOneStoreByStoreId" parameterType="map" resultType="kr.co.ohgoodfood.dto.MainStore">
+        SELECT
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at, s.latitude AS latitude, s.longitude AS longitude,
+            pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
+            img.first_img AS store_img
+        FROM Store s
+        LEFT JOIN Product pf
+            ON pf.store_id = s.store_id
+            AND DATE(pf.reservation_end) = CURDATE()
+        LEFT JOIN (
+            SELECT
+                store_id,
+                MIN(store_img) AS first_img
+            FROM Image
+            GROUP BY store_id
+        ) img ON img.store_id = s.store_id
+        <where>
+            s.confirmed = 'Y'
+            <if test="filter.store_status != null">
+                AND s.store_status = #{filter.store_status} AND pf.amount >= #{filter.amount}
+            </if>
+            <if test="filter.pickup_start != null">
+                AND DATE(pf.pickup_start) = #{filter.pickup_start}
+            </if>
+            <if test="filter.category_bakery != null">
+                AND s.category_bakery = #{filter.category_bakery}
+            </if>
+            <if test="filter.category_fruit != null">
+                AND s.category_fruit = #{filter.category_fruit}
+            </if>
+            <if test="filter.category_salad != null">
+                AND s.category_salad = #{filter.category_salad}
+            </if>
+            <if test="filter.category_others != null">
+                AND s.category_others = #{filter.category_others}
+            </if>
+            <!-- 위도/경도 필터링: 반경 500m, 검색어가 들어갔을때는 위도 경도 필터링 안걸리게 한다. -->
+            <if test="filter.latitude != null and filter.longitude != null and (filter.search == null or filter.search == '')">
+                AND s.latitude  BETWEEN #{filter.latitude}  - 0.027 AND #{filter.latitude}  + 0.027
+                AND s.longitude BETWEEN #{filter.longitude} - 0.034 AND #{filter.longitude} + 0.034
+            </if>
+            <!-- 가게 이름, 가게 대표 메뉴, 가게 주소, 가게 상세 검색 필터링 추가 -->
+            <if test="filter.search != null and filter.search != ''">
+                AND (
+                    s.store_name LIKE CONCAT('%', #{filter.search}, '%')
+                    OR s.store_menu LIKE CONCAT('%', #{filter.search}, '%')
+                    OR pf.product_explain LIKE CONCAT('%', #{filter.search}, '%')
+                )
+            </if>
+            <!-- 가게 id로 필터링해서 하나만 가져와야 하는 경우 -->
+            AND s.store_id = #{filter.store_id}
+        </where>
+        ORDER BY (s.store_status = 'N') ASC;
+    </select>
+
+    <!-- selectAllBookmark mapper, bookmark에서 이용한다. -->
+    <select id="selectAllBookmark" resultType="kr.co.ohgoodfood.dto.Bookmark">
+        SELECT
+            s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at,
+            pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
+            img.first_img AS store_img
+        FROM Bookmark b
+        JOIN Store s ON s.store_id = b.store_id
+            LEFT JOIN Product pf
+            ON pf.store_id = s.store_id
+            AND DATE(pf.reservation_end) = CURDATE()
+        LEFT JOIN (
+            SELECT
+                store_id,
+                MIN(store_img) AS first_img
+            FROM Image
+        GROUP BY store_id
+        ) img ON img.store_id = s.store_id
+        <where>
+            s.confirmed = 'Y'
+            AND b.user_id = #{user_id}
+        </where>
+        ORDER BY (s.store_status = 'N') ASC;
     </select>
 
     <!-- deleteBookmark mapper -->
     <delete id="deleteBookmark" parameterType="map">
         DELETE FROM Bookmark
-        WHERE bookmark_no = #{bookmark_no}
+        WHERE store_id = #{store_id}
         AND user_id = #{user_id};
+    </delete>
+
+    <!-- insertBookmark mapper -->
+    <delete id="insertBookmark" parameterType="map">
+        INSERT INTO Bookmark (user_id, store_id)
+        VALUES (#{user_id}, #{store_id});
     </delete>
 
     <!-- selectOrderList mapper -->
     <select id="selectOrderList" resultType="kr.co.ohgoodfood.dto.UserOrder">
-        SELECT s.store_name AS store_name, s.store_id AS store_id,
+        SELECT
+            pa.paid_no AS paid_no, pa.paid_price AS paid_price, pa.paid_status AS paid_status,
+            s.store_name AS store_name, s.store_id AS store_id,
             p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price,
-            o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.cancled_from AS cancled_from, o.order_code AS order_code,
-            MIN(i.store_img) AS store_img
+            o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.canceld_from AS canceld_from,
+            o.order_code AS order_code, o.user_id AS user_id,
+            MIN(i.store_img) AS store_img,
+            p.reservation_end AS reservation_end,
+            CASE WHEN COUNT(r.review_no) > 0 THEN 1 ELSE 0 END AS has_review
         FROM Store s
         JOIN Product p ON s.store_id = p.store_id
-        JOIN Image i ON i.store_id = s.store_id
-        JOIN Orders o ON o.store_id = s.store_id
-        WHERE o.user_id = #{user_id}
-        GROUP BY s.store_id, s.store_name;
+        JOIN Image   i ON i.store_id = s.store_id
+        JOIN Orders  o  ON o.product_no = p.product_no
+        JOIN Paid    pa ON pa.order_no = o.order_no
+        LEFT JOIN Review r ON r.order_no = o.order_no
+        <where>
+            <!-- user_id는 무조건 있어야 하므로, null 아닐 때 조건은 제거. -->
+            AND o.user_id = #{filter.user_id}
+            <!-- ready는 제외 -->
+            AND o.order_status != 'ready'
+            <if test="filter.order_status != null">
+                <choose>
+                    <!-- order_status가 List일 때 IN 절 -->
+                    <when test="filter.order_status instanceof java.util.List">
+                        AND o.order_status IN
+                        <foreach item="status"
+                                 collection="filter.order_status"
+                                 open="("
+                                 separator=","
+                                 close=")">
+                            #{status}
+                        </foreach>
+                    </when>
+                    <!-- 단일값일때 처리 -->
+                    <otherwise>
+                        AND o.order_status = #{filter.order_status}
+                    </otherwise>
+                </choose>
+            </if>
+        </where>
+        GROUP BY
+        pa.paid_no, pa.paid_price, pa.paid_status,
+        s.store_name, s.store_id,
+        p.product_no, p.pickup_start, p.pickup_end, p.sale_price,
+        o.order_no, o.ordered_at, o.quantity,
+        o.order_status, o.canceld_from, o.order_code, o.user_id;
     </select>
 
-    <!-- selectOrderListWithFilter mapper -->
-    <select id="selectOrderListWithFilter" resultType="kr.co.ohgoodfood.dto.UserOrder">
-        SELECT s.store_name AS store_name, s.store_id AS store_id,
-            p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price,
-            o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.cancled_from AS cancled_from, o.order_code AS order_code,
-            MIN(i.store_img) AS store_img
-        FROM Store s
-        JOIN Product p ON s.store_id = p.store_id
-        JOIN Image i ON i.store_id = s.store_id
-        JOIN Orders o ON o.store_id = s.store_id
-        WHERE o.user_id = #{user_id} AND order_status = #{order_status}
-        GROUP BY s.store_id, s.store_name;
-    </select>
-
-    <!-- updateOrderCancledByUser mapper-->
-    <update id="updateOrderCancledByUser" parameterType="map">
+    <!-- updateOrderStatus mapper-->
+    <update id="updateOrderStatus" parameterType="kr.co.ohgoodfood.dto.UserOrderRequest">
         UPDATE Orders
-            SET order_status = #{order_status},
-            cancled_from =  #{cancled_from}
-        WHERE order_no = #{order_no}
-        AND user_id = #{user_id};
+        <set>
+            <if test="order_request.order_status != null">
+                order_status = #{order_request.order_status},
+            </if>
+            <if test="order_request.order_status == 'cancel'">
+                canceld_from = #{order_request.canceld_from},
+            </if>
+            <if test="order_request.order_status == 'confirmed'">
+                order_code = #{order_request.order_code},
+            </if>
+        </set>
+        WHERE order_no = #{order_request.order_no}
+        AND user_id = #{order_request.user_id};
     </update>
 
-    <!-- updateOrderConfirmed mapper-->
-    <update id="updateOrderConfirmed" parameterType="map">
-        UPDATE Orders
-            SET order_status = #{order_status},
-            order_code = #{order_code}
-        WHERE order_no = #{order_no}
-        AND user_id = #{user_id};
-    </update>
-
-    <!-- updateOrderPickUp mapper-->
-    <update id="updateOrderPickup" parameterType="map">
-        UPDATE Orders
-            SET order_status = #{order_status}
-        WHERE order_no = #{order_no}
-        AND user_id = #{user_id};
+    <!-- restoreProductAmount mapper-->
+    <update id="restoreProductAmount" parameterType="kr.co.ohgoodfood.dto.UserOrderRequest">
+        UPDATE Product
+        SET amount = amount + #{order_request.quantity}
+        WHERE product_no = #{order_request.product_no}
     </update>
 
     <!-- selectUserOrderPay mapper-->
@@ -129,5 +269,217 @@
         UPDATE Alarm SET alarm_displayed = 'N'
         WHERE alarm_no = #{alarm_no}
         AND receive_id = #{user_id};
+    </update>
+
+    <!-- selectMypage mapper -->
+    <select id="selectUserInfo" parameterType="string" resultType="kr.co.ohgoodfood.dto.UserMypage">
+	    SELECT
+	      user_id       AS user_id,
+	      user_nickname AS user_nickname
+	    FROM Account
+	    WHERE user_id = #{user_id}
+  	</select>
+	<select id="selectUserReviews" parameterType="string"  resultType="kr.co.ohgoodfood.dto.Review">
+	    SELECT
+	      r.review_no          AS review_no,
+	      r.review_content     AS review_content,
+	      r.writed_at          AS writed_at,
+	      r.review_img         AS review_img,
+	      a.user_nickname      AS user_nickname,
+	      p.origin_price       AS origin_price,
+	      p.sale_price         AS sale_price,
+	      s.store_id           AS store_id,
+	      s.store_name         AS store_name,
+	      s.store_menu         AS store_menu,
+	      ( SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = s.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      )                    AS store_img
+	    FROM Review r
+	    JOIN Account a ON r.user_id = a.user_id
+	    JOIN Store   s ON r.store_id = s.store_id
+	    JOIN (SELECT p.origin_price AS origin_price, p.sale_price AS sale_price, o.user_id AS user_id, o.order_no AS order_no
+	    FROM Product p
+	    JOIN Orders o ON p.product_no = o.product_no) p ON r.order_no = p.order_no
+		 WHERE r.user_id = #{user_id} AND r.is_blocked="N"
+		 ORDER BY r.writed_at DESC
+  	</select>
+  	
+  	<!--  selectProductDetail mapper -->
+  	<select id="selectProductInfo" parameterType="int" resultType="kr.co.ohgoodfood.dto.ProductDetail">
+        SELECT
+            s.store_id         AS store_id,
+            s.store_name       AS store_name,
+            s.store_menu       AS store_menu,
+            s.opened_at        AS opened_at,
+            s.closed_at        AS closed_at,
+            s.category_bakery  AS category_bakery,
+            s.category_fruit   AS category_fruit,
+            s.category_salad   AS category_salad,
+            s.category_others  AS category_others,
+            s.store_address    AS store_address,
+            s.store_telnumber  AS store_telnumber,
+            s.store_explain      AS store_explain,
+            p.product_no       AS product_no,
+            p.pickup_start     AS pickup_start,
+            p.pickup_end       AS pickup_end,
+            p.origin_price     AS origin_price,
+            p.sale_price       AS sale_price,
+            p.reservation_end  AS reservation_end,
+            p.product_explain  AS product_explain,
+            p.amount           AS amount,
+        CASE
+            WHEN p.amount = 0 THEN 'SOLD_OUT'              -- enum 상수명
+            WHEN DATE(p.pickup_start) = CURDATE() THEN 'TODAY'
+            WHEN DATE(p.pickup_start) = DATE_ADD(CURDATE(), INTERVAL 1 DAY) THEN 'TOMORROW'
+            ELSE 'CLOSED'
+        END AS pickupStatus
+        FROM Store s
+        JOIN Product p ON s.store_id = p.store_id
+        WHERE p.product_no    = #{product_no}
+        AND s.store_status   = 'Y'
+    </select>
+
+    <!-- 제품 이미지 전체 목록 조회: 해당 상품의 모든 이미지 URL 리스트 -->
+    <select id="selectProductImages" parameterType="int" resultType="string">
+		  SELECT i.store_img
+		    FROM Image i
+		    JOIN Product p ON i.store_id = p.store_id
+		   WHERE p.product_no = #{product_no}
+		   ORDER BY i.img_no
+    </select>
+	<!-- 북마크 -->
+	<select id="isBookmarked" resultType="int">
+	    SELECT COUNT(*) FROM Bookmark
+	    WHERE user_id = #{user_id}
+	      AND store_id = #{store_id}
+	</select>
+    <!-- 제품 리뷰 리스트 조회: 해당 매장(store_id) 기준으로 모든 리뷰 조회 --> 
+    <select id="selectProductReviews" parameterType="int" resultType="kr.co.ohgoodfood.dto.Review"> 
+        SELECT
+            a.user_nickname  AS user_nickname,
+            r.review_no      AS review_no,
+            r.review_content AS review_content,
+            r.writed_at      AS writed_at,
+            r.review_img     AS review_img,
+            ( SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = r.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      )                    AS store_img
+            
+        FROM Review r
+        JOIN Account a ON r.user_id = a.user_id
+        WHERE r.store_id = (
+            SELECT p.store_id
+              FROM Product p
+             WHERE p.product_no = #{product_no}
+        )
+          AND r.is_blocked = 'N'
+        ORDER BY r.writed_at DESC
+    </select>
+    
+	<!-- 아이디 중복 조회 -->
+	<select id="countByUserId" parameterType="string" resultType="int">
+		  SELECT COUNT(*) FROM (
+		    SELECT user_id  AS id FROM Account WHERE user_id  = #{user_id}
+		    UNION ALL
+		    SELECT store_id AS id FROM Store   WHERE store_id = #{user_id}
+		  ) t
+	</select>
+
+  	<!-- 신규 회원 INSERT -->
+	<insert id="insertUser" parameterType="kr.co.ohgoodfood.dto.UserSignup">
+		INSERT INTO Account
+		  (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement)
+		VALUES
+		  (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y")
+	</insert>
+	  
+	<!-- 모든 리뷰 모아보기 -->
+	<select id="getAllReviews" parameterType="string" resultType="kr.co.ohgoodfood.dto.Review">
+	   SELECT
+	      r.review_no          AS review_no,
+	      r.review_content     AS review_content,
+	      r.writed_at          AS writed_at,
+	      r.review_img         AS review_img,
+	      a.user_nickname      AS user_nickname,
+	      p.origin_price       AS origin_price,
+	      p.sale_price         AS sale_price,
+	      s.store_id           AS store_id,
+	      s.store_name         AS store_name,
+	      s.store_menu         AS store_menu,
+	      ( SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = s.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      )                    AS store_img
+	    FROM Review r
+	    JOIN Account a ON r.user_id = a.user_id
+	    JOIN Store   s ON r.store_id = s.store_id
+	    JOIN (SELECT p.origin_price AS origin_price, p.sale_price AS sale_price, o.user_id AS user_id, o.order_no AS order_no
+	    FROM Product p
+	    JOIN Orders o ON p.product_no = o.product_no) p ON r.order_no = p.order_no
+	    WHERE r.is_blocked="N"
+	    ORDER BY r.writed_at DESC
+	 </select>
+ 	
+ 	<!-- order_no 로 주문·상품·가게 정보 조회 -->
+	<select id="selectReviewFormByOrderNo" parameterType="int" resultType="kr.co.ohgoodfood.dto.ReviewForm">
+		SELECT
+		  o.quantity                  AS quantity,
+		  p.sale_price                AS sale_price,
+		  s.store_name                AS store_name,
+		  s.store_id				  AS store_id,
+		  a.user_id 				  AS user_id,
+		  a.user_nickname			  AS user_nickname,
+		  o.order_no				  AS order_no,
+		  ( SELECT i.store_img
+	          FROM Image i
+	         WHERE i.store_id = s.store_id
+	         ORDER BY i.img_no
+	         LIMIT 1
+	      )                    AS store_img,
+		  (p.sale_price * o.quantity) AS total_price
+		FROM Orders o
+		JOIN Product p ON o.product_no = p.product_no
+		JOIN Store   s ON p.store_id   = s.store_id
+		JOIN Account a ON o.user_id = a.user_id
+		WHERE o.order_no = #{order_no}
+	</select>
+
+	<!-- 리뷰 쓰기 update -->
+	<insert id="insertReview"  parameterType="kr.co.ohgoodfood.dto.ReviewForm" useGeneratedKeys="true" keyProperty="review_no">
+	    INSERT INTO Review
+	      ( review_content , is_blocked , writed_at , review_img , user_id , store_id , order_no )
+	    VALUES
+	      ( #{review_content} , "N"  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
+	</insert>
+
+    <!-- 가게 이미지 하나 가져오기 -->
+    <select id="selectStoreImg" parameterType="string" resultType="string">
+        SELECT store_img
+        FROM Image
+        WHERE store_id = #{store_id}
+        ORDER BY img_no
+        LIMIT 1
+    </select>
+
+    <!-- 포인트 조회 -->
+    <select id="selectUserPoint" parameterType="string" resultType="int">
+        SELECT IFNULL(user_point, 0) as user_point
+        FROM Account
+        WHERE user_id = #{user_id}
+    </select>
+
+    <!-- 포인트 차감 -->
+    <update id="updateUserPoint" parameterType="map">
+        UPDATE Account
+        SET user_point = user_point - #{user_point}
+        WHERE user_id = #{user_id}
     </update>
 </mapper>

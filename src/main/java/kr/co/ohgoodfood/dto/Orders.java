@@ -2,13 +2,11 @@ package kr.co.ohgoodfood.dto;
 
 
 import java.sql.Timestamp;
-
 import lombok.Data;
 
 @Data
 public class Orders {
     private int order_no;
-
 
     private Timestamp ordered_at;
     private int quantity;
@@ -17,7 +15,8 @@ public class Orders {
     private String user_id;
     private String store_id;
     private String order_code;
-    private String canceld_from;
+    private String canceld_from ; //이거 db랑 맞춰야 합니다,,!
+    private int product_no;
 
     private int s_order_no;
     private Timestamp s_ordered_at;
@@ -31,6 +30,14 @@ public class Orders {
     private int page;
     private int startIdx;
 
+    private String store_img;
+    private Timestamp pickup_start;
+    private Timestamp pickup_end;
+    private Timestamp reservation_end;
+    private String pickup_status; 
+    private int sale_price;
+    private Timestamp reservation_start; // reservation.jsp 에서 reservation_end -1시간 위해서
+    
     public Orders() {
         this.page = 1;
     }

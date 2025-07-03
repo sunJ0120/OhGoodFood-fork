@@ -13,7 +13,7 @@ public class Review {
     private String review_img;
     private String user_id;
     private String store_id;
-    private int oreder_no;
+    private int order_no; // [gaeun] oreder_no로 되어있어 수정했습니다.
 
     private int s_review_no;
     private int s_user_id;
@@ -31,6 +31,9 @@ public class Review {
     // 대표 이미지 (Image 서브쿼리)
     private String store_img;
 
+    // 유저 닉네임
+    private String user_nickname;
+    
     private String s_type;
     private String s_value;
 
@@ -41,7 +44,7 @@ public class Review {
         this.page = 1;
     }
 
-    public void setStartIdx() {
-        this.startIdx = (this.page - 1) * 7;
+    public int getStartIdx(){
+        return (page - 1) * 7;
     }
 }

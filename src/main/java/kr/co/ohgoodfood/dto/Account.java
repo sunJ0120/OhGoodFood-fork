@@ -1,10 +1,6 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Timestamp;
-import java.sql.Date;
-import java.time.LocalDateTime;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.Data;
 
@@ -24,6 +20,7 @@ public class Account {
     private String s_user_id;
     private String s_user_nickname;
     private String s_user_name;
+    private int user_point;
 
     private int page;
     private int startIdx;

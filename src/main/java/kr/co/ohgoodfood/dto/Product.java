@@ -8,7 +8,6 @@ import lombok.Data;
 public class Product {
     private int product_no;
     private String store_id;
-
     private Timestamp pickup_start;
     private Timestamp pickup_end;
     private Timestamp reservation_end;
