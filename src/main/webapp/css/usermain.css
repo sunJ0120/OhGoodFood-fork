@@ -33,7 +33,7 @@ main {
     border: none;
     outline: none;
     font-size: 14px;
-    font-family: 'nanumesquareneo';
+    font-family: 'nanumesquareneo_b';
     background-color: transparent;
     color: #7C7C7C;
 }
@@ -253,13 +253,13 @@ main {
 }
 
 .productTexts {
+    font-family: 'nanumesquareneo_b';
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
 .productNameWrapper {
-    font-family: 'nanumesquareneo_b';
     font-size: 20px;
     color: #535353;
     margin: 0;
@@ -270,7 +270,7 @@ main {
     flex-direction: row;
 }
 
-.productName{
+.productName strong{
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
 
@@ -279,7 +279,6 @@ main {
     align-items: center;
     justify-content: center;
 
-    font-weight: normal;
     background-color: #8b6d5c;
     color: #fff;
     padding: 2px 10px;
@@ -315,10 +314,10 @@ main {
 
 .originalPrice {
     font-size: 12px;
-    color: #999;
+    color: #8B6D5C;
 }
 
-.salePrice {
+.salePrice strong{
     font-family: 'nanumesquareneo_b';
     font-size: 18px;
     color: #333;
@@ -343,6 +342,7 @@ main {
     box-sizing: border-box;
 
     top: 100%;
+    font-family: 'nanumesquareneo_b';
     background-color: white;
     border: 1px solid #8B6D5C;
     border-radius: 8px;
@@ -367,7 +367,7 @@ main {
     margin: 0 12px;
     border-radius: 8px;
     font-size: 13px;
-    color: black;
+    color: #8B6D5C;
     font-weight: normal;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
@@ -415,7 +415,7 @@ main {
     text-align: center;
     align-items: center;
     justify-content: center;
-    font-family: 'nanumesquareneo';
+    font-family: 'nanumesquareneo_b';
     color: white;
 }
 
@@ -439,10 +439,8 @@ main {
     bottom: calc(200px);
 }
 
-.myLocationTemplateWindow{
+.myLocationTemplateWindow strong{
     display: block;
     width: 140px;
-    /*align-items: center;*/
-    /*justify-content: center;*/
     text-align: center;
 }

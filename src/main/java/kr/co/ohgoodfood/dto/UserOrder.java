@@ -30,5 +30,6 @@ public class UserOrder extends MainStore{
     //Paid 테이블에서 가져오는 정보
     private int paid_no;
     private int paid_price;
+    private int paid_point; // 포인트 사용 기능 추가로 field 추가
     private String paid_status; //결제 상태, Y or N
 }

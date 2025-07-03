@@ -48,7 +48,9 @@
                         <div class="bookmarkWrapper">
                           <img src="${pageContext.request.contextPath}/img/user_bookmark.png" class="bookmarkImage">
                         </div>
-                        <div class="productName">${bookmark.store_name}</div>
+                        <div class="productName">
+                          <strong>${bookmark.store_name}</strong>
+                        </div>
                       </div>
                       <div class="badge">
                     <span class="statusText">
@@ -93,7 +95,10 @@
                           </p>
 
                           <p class="pickupTime">
-                            <span class="todayPickupText">${bookmark.pickup_status.displayName}</span>
+                              <span class="todayPickupText">
+                                  <strong>${bookmark.pickup_status.displayName}
+                                  </strong>
+                              </span>
                             <span class="pickupStartText">
                             <c:if test="${not empty bookmark.pickup_start}">
                               <fmt:formatDate value="${bookmark.pickup_start}" pattern="HH:mm"/>
@@ -117,7 +122,7 @@
 
                           <c:if test="${bookmark.sale_price != null}">
                         <span class="salePrice">
-                          <fmt:formatNumber value="${bookmark.sale_price}" pattern="#,###" />₩
+                          <strong><fmt:formatNumber value="${bookmark.sale_price}" pattern="#,###" />₩</strong>
                         </span>
                           </c:if>
 
