@@ -246,9 +246,21 @@ public class UserServiceImpl implements UsersService{
         // userOrder에 pickup_status와 block_cancel 상태를 저장.
         for(UserOrder userOrder : orderList){
             userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
+            //주문에 해당하는 포인트를 적립
+            userOrder.setPoint(getOrderPoint(userOrder));
             userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getPickup_status(), userOrder.getReservation_end()));
         }
         return orderList;
+    }
+
+    /**
+     * 사용자의 구매 금액별 포인트를 설정하기 위한 메서드
+     *
+     * @param userOrder          : orderList 화면에 뿌릴 객체
+     * @return                   : 구매 금액의 1%에 해당하는 point
+     */
+    public int getOrderPoint(UserOrder userOrder){
+        return (int) (userOrder.getPaid_price() * 0.01);
     }
 
     /**
@@ -472,4 +484,11 @@ public class UserServiceImpl implements UsersService{
     public String getStoreImg(String store_id) {
         return userMapper.selectStoreImg(store_id);
     }
+
+    /* 포인트 조회 */
+    @Override
+    public int getUserPoint(String user_id) {
+        return (Integer)userMapper.selectUserPoint(user_id) == null ? 0 : userMapper.selectUserPoint(user_id);
+    }
+
 }

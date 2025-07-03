@@ -45,7 +45,9 @@
                            data-store-id="${bookmark.store_id}">
                     <div class="productNameWrapper">
                       <div class="productBookmarkWrapper">
-                        <img src="${pageContext.request.contextPath}/img/user_bookmark.png" class="bookmarkImage">
+                        <div class="bookmarkWrapper">
+                          <img src="${pageContext.request.contextPath}/img/user_bookmark.png" class="bookmarkImage">
+                        </div>
                         <div class="productName">${bookmark.store_name}</div>
                       </div>
                       <div class="badge">

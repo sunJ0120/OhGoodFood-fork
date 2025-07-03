@@ -50,15 +50,8 @@
         <div class="productWrapper">
           <c:choose>
             <c:when test="${empty userOrderList}">
-              <div class="emptyModal">
-                <div class="modalWrapper">
-                  <img src="${pageContext.request.contextPath}/img/user_cat.png" alt="고양이" class="emptyModalEmoji"/>
-                  <div class="modalBox">
-                    <div class="modalContent">
-                      <div class="orderStatusModal">전체</div> 주문내역<br>검색 결과가 없습니다.
-                    </div>
-                  </div>
-                </div>
+              <div class="modalWrapper">
+                <img src="${pageContext.request.contextPath}/img/user_emptyOrderListCatModal.png" alt="고양이" class="catModal"/>
               </div>
             </c:when>
             <c:otherwise>
@@ -153,7 +146,7 @@
 
                       <button type="button" class="orderBrown hidden orderReview"
                               onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
-                        리뷰 쓰기
+                        리뷰 쓰기 (${userOrder.point}P)
                       </button>
 
                       <div class="orderBrown hidden orderReviewDone">
@@ -248,8 +241,7 @@
       contentType: 'application/json',
       data: JSON.stringify(filterParams),
       success: function (responseHtml) {
-        //로그 찍기
-        console.log("[AJAX 응답] 서버에서 받은 HTML:", responseHtml);
+
         $('.productWrapper').html(responseHtml);
         //프레그먼트에 버튼 hidden 설정
         adjustOrderButtons();
@@ -320,46 +312,86 @@
 </script>
 <%-- [filter] category filter modal toggle js --%>
 <script>
+  let $dropdownToggle = $(".dropdownToggle");
+  let $dropdownModal = $("#dropdownModal");
+  let isVisible = $dropdownModal.css("display") === "block";
+
+  // toggle로 모달 열기
+  function openDropdown() {
+    $dropdownModal.css("display", "block");
+    isVisible = !isVisible; //반대로 바꾸기
+  }
+  // toggle로 모달 닫기
+  function closeDropdown() {
+    $dropdownModal.css("display", "none");
+    isVisible = !isVisible; //반대로 바꾸기
+  }
+  // toggle open 상태에 따라 화살표 변경하기
+  function toggleDropDownArrow($categoryFilterBtn){
+    let iconPath;
+
+    // 아이콘 결정, 현재 modal이 보이는 상태일 경우 up으로
+    if (isVisible) {
+      iconPath = $categoryFilterBtn.hasClass("active")
+              ? "/img/user_arrow_up_icon_active.png"
+              : "/img/user_arrow_up_icon.png";
+    } else {
+      // 현재 modal이 보이지 않는 상태일 경우 down
+      iconPath = $categoryFilterBtn.hasClass("active")
+              ? "/img/user_arrow_down_icon_active.png"
+              : "/img/user_arrow_down_icon.png";
+    }
+    $dropdownToggle.attr("src", '${pageContext.request.contextPath}' + iconPath);
+  }
+
   $(document).ready(function () {
-    const contextPath = "${pageContext.request.contextPath}";
-    const $dropdownToggle = $(".dropdownToggle");
-    const $dropdownModal = $("#dropdownModal");
     const $btnText = $("#btnText");
     const $categoryFilterBtn = $(".categoryFilterBtn");
-    const $orderStatusTitle = $(".orderStatusTitle");
+    const $filterButtons = $(".filterBtn");
 
-    $dropdownToggle.on("click", function (e) {
+    $categoryFilterBtn.on("click", function (e) {
       e.stopPropagation(); // 부모 클릭 방지
-      const isVisible = $dropdownModal.css("display") === "block";
-      $dropdownModal.css("display", isVisible ? "none" : "block");
+      if(!isVisible){
+        openDropdown();
+      }else{ //열려있음
+        closeDropdown();
+      }
+      toggleDropDownArrow($categoryFilterBtn); //모달 상태에 따라 토글 이미지 변경
     });
 
-    // 항목 클릭 시 버튼 텍스트 바꾸고 닫기
+    // 필터링 항목 클릭 시, 버튼 텍스트 및 컬러 상태 바꾸기
     $dropdownModal.find('.item').each(function () {
       $(this).on("click", function () {
         $dropdownModal.find('.item').removeClass("active");
         $(this).addClass("active");
 
         $categoryFilterBtn.addClass("active");
-        $dropdownToggle.attr("src", contextPath + "/img/user_arrow_down_icon_active.png"); //이미지 흰색 토글로 변경
-        console.log("클릭됨:", $(this).text());
         $btnText.text($(this).text());
 
-        const text = $(this).text().trim().replace(/주문$/, '');
-        $orderStatusTitle.text(text);
+        toggleDropDownArrow($categoryFilterBtn);  //모달 상태에 따라 토글 이미지 변경
       });
     });
 
-    //이벤트 전이 방지
-    $dropdownModal.on("click", function (e) {
-      e.stopPropagation();
+    $filterButtons.each(function () {
+      $(this).on("click", function () {
+        //현재 클릭된 버튼 active 추가, toggle 방식으로 두번 누르면 active 없게끔 한다.
+        $(this).toggleClass("active");
+      });
     });
+  });
 
-    // document 클릭하면 모달 닫기
-    // 필터 선택 상태는 그대로 유지하게끔 .active는 남게 구성
-    $(document).on("click", function () {
-      $dropdownModal.css("display", "none");
-    });
+  // 모달 내부 클릭 시 전파 차단
+  $dropdownModal.on("click", function(e){
+    e.stopPropagation();
+  });
+
+  // 문서 어디든 클릭했을 때
+  $(document).on("click", function () {
+    const $categoryFilterBtn = $(".categoryFilterBtn");
+    if (isVisible) {
+      closeDropdown();
+      toggleDropDownArrow($categoryFilterBtn);
+    }
   });
 </script>
 <%-- orderStatus and canceldFrom에 따라서 뱃지 색상 바꾸기 --%>

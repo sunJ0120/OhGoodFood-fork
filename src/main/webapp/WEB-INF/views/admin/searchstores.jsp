@@ -130,6 +130,7 @@
                                 <th>사업자 번호</th>
                                 <th>주소</th>
                                 <th>전화 번호</th>
+                                <th>가입일</th>
                                 <th>승인 여부</th>
                             </tr>
                             <c:forEach var="vo" items="${map.list}">
@@ -140,6 +141,7 @@
                                     <td>${vo.business_number}</td>
                                     <td>${vo.store_address}</td>
                                     <td>${vo.store_telnumber}</td>
+                                    <td><fmt:formatDate value="${vo.join_date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                     <td>${vo.confirmed}</td>
                                 </tr>
                             </c:forEach>
@@ -151,7 +153,7 @@
                                 <li><a href="searchstores?page=${map.startPage-1 }&s_type=${store.s_type}&s_value=${store.s_value}"> << </a></li>
                             </c:if>
                             <c:forEach var="p" begin="${map.startPage}" end="${map.endPage}">
-                                <c:if test="${p == account.page}">
+                                <c:if test="${p == store.page}">
                                 <li><a href='#;' class='current'>${p}</a></li>
                                 </c:if>
                                 <c:if test="${p != store.page}">

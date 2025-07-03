@@ -44,7 +44,10 @@ public interface UsersService {
 
     //[Controller 로직] 주문내역 Controller 연결 로직
     List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter);
-
+    
+    //[판별 로직] 구매 금액별 point를 계산하기 위한 메서드
+    int getOrderPoint(UserOrder userOrder);
+    
     //[판별 로직] reservation_end 한 시간 전에 주문취소를 막아두기 위한 상태 판별 로직
     boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp reservation_end);
 
@@ -93,5 +96,7 @@ public interface UsersService {
     /* 가게 이미지 하나 가져오기 */
     String getStoreImg(String store_id);
 
+    /* 포인트 조회 */
+    int getUserPoint(String user_id);
 
 }

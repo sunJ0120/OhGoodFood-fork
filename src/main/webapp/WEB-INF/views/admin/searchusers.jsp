@@ -136,7 +136,7 @@
                                     <td>${vo.user_id}</td>
                                     <td>${vo.user_name}</td>
                                     <td>${vo.user_nickname}</td>
-                                    <td>${vo.join_date}</td>
+                                    <td><fmt:formatDate value="${vo.join_date}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                     <td>${vo.phone_number}</td>
                                     <td>${vo.location_agreement}</td>
                                 </tr>
