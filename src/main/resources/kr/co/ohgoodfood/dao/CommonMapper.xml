@@ -42,7 +42,7 @@
 		SELECT COUNT(*) FROM Alarm
 		WHERE receive_id=#{id} AND alarm_read = 'N'
 	</select>
-	
+
 	<!-- 네이버 소셜로그인 -->
 	<insert id="insertNaverUser" parameterType="kr.co.ohgoodfood.dto.Account">
         INSERT INTO Account (

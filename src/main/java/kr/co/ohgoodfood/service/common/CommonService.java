@@ -1,7 +1,6 @@
 package kr.co.ohgoodfood.service.common;
 
 import java.util.List;
-
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.KakaoUser;
 import kr.co.ohgoodfood.dto.Alarm;
@@ -43,5 +42,4 @@ public interface CommonService {
 
 	// 사용자가 없으면 자동 회원가입, 있으면 해당 객체 정보 리턴
 	Account autoLoginOrRegister(KakaoUser kakaoUser);
-
 }

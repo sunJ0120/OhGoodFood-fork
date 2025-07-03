@@ -30,7 +30,7 @@
           <div class="order-card-body">
               <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${vo.store_img}" alt="오굿백" class="order-card-img">
               <div class="order-card-info">
-                  <div class="order-card-info-person"><b>예약자 :</b> ${vo.user_id}</div>
+                  <div class="order-card-info-person"><b>예약자 :</b> ${vo.user_nickname}</div>
                   <div class="order-card-info-time"><b>픽업 시간 :</b> 
                   	<fmt:formatDate value="${vo.pickup_start}" pattern="HH:mm" /> ~ 
                            	<fmt:formatDate value="${vo.pickup_end}" pattern="HH:mm" />	

@@ -1,10 +1,8 @@
 package kr.co.ohgoodfood.dao;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.KakaoUser;
 import kr.co.ohgoodfood.dto.Alarm;

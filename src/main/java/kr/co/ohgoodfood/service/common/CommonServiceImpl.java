@@ -8,18 +8,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
-import java.util.List;
 import java.util.Map;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import kr.co.ohgoodfood.dao.CommonMapper;
 import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.KakaoUser;
+import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Store;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 
 @Service
 @RequiredArgsConstructor

@@ -3,10 +3,8 @@ package kr.co.ohgoodfood.controller.common;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
@@ -14,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.KakaoUser;
 import kr.co.ohgoodfood.dto.Store;
@@ -28,13 +25,12 @@ public class CommonController {
 	
 	private final CommonService commonService;
 	
-	@Value("${kakao.rest.apiKey}")
-	private String kakaoClientId;
-
-	@Value("${kakao.redirect-uri}")
-	private String kakaoRedirectUri;
+	 @Value("${kakao.rest.apiKey}")
+	 private String kakaoClientId;
 	 
-	 
+	 @Value("${kakao.redirect-uri}")
+	 private String kakaoRedirectUri;
+	
 	// 로그인 페이지 리턴
 	@GetMapping("/login") 
 	public String login(Model model) {
@@ -89,7 +85,7 @@ public class CommonController {
 	public String intro() {
 		return "/common/intro";
 	}
-	
+
 	@GetMapping("/oauth/kakaocallback")
 	public String kakaoCallback(@RequestParam("code") String code, HttpSession session) {
 		// 카카오 로그인 클릭시 리다이렉트uri로 이동하고 code 받음
@@ -101,14 +97,10 @@ public class CommonController {
         }
 		Account account = commonService.autoLoginOrRegister(kakaoUser);
 		//회원정보가 없으면 자동 회원가입, 있으면 해당 객체정보 리턴
-
         session.setAttribute("user", account);
         return "redirect:/user/main";
 	}
-	
-	
-	
-	
+
     @Value("${naver.client_id}")
     private String clientId;
     
@@ -174,5 +166,6 @@ public class CommonController {
 	        return "store/alert";
 	    }
 	}
+
 }
 
