@@ -391,6 +391,7 @@ public class UsersController {
         ProductDetail detail = usersService.getProductDetail(productNo);
         detail.setStore_img(usersService.getStoreImg(detail.getStore_id()));
         model.addAttribute("productDetail", detail);
+        model.addAttribute("userPoint", usersService.getUserPoint(((Account)session.getAttribute("user")).getUser_id()));
         return "users/userPaid";
     }
 

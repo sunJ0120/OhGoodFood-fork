@@ -16,8 +16,8 @@
 
     <!-- 결제 정보 삽입 -->
     <insert id="insertPaid" parameterType="kr.co.ohgoodfood.dto.Paid">
-        INSERT INTO Paid (paid_type, paid_price, paid_time, paid_status, user_id, order_no, paid_code)
-        VALUES ("tosspayments", #{paid_price}, SYSDATE(), #{paid_status}, #{user_id}, #{order_no}, #{paid_code});
+        INSERT INTO Paid (paid_type, paid_price, paid_time, paid_status, user_id, order_no, paid_code, paid_point)
+        VALUES ("tosspayments", #{paid_price}, SYSDATE(), #{paid_status}, #{user_id}, #{order_no}, #{paid_code}, #{paid_point});
     </insert>
 
     <!-- 상품 재고 가져오기 -->
@@ -75,4 +75,9 @@
     <select id="getOrderNoByPaidCode" parameterType="String" resultType="int">
         SELECT order_no FROM Paid WHERE paid_code = #{paid_code};
     </select>
+
+    <!-- paid_code로 포인트 차감 -->
+    <update id="updateUserPointByPaidCode" parameterType="String">
+        UPDATE Account SET user_point = user_point - (SELECT paid_point FROM Paid WHERE paid_code = #{paid_code}) WHERE user_id = (SELECT user_id FROM Paid WHERE paid_code = #{paid_code});
+    </update>
 </mapper>

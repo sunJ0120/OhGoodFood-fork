@@ -56,8 +56,10 @@ public interface UsersService {
 
     /* 사용자 기본 정보 한 건 조회*/
     UserMypage getUserInfo(String userId);
+    
     /* 리뷰 리스트 여러 건 조회 */
     List<Review> getUserReviews(String userId);
+    
     /* 마이페이지 전체 조립 (유저정보+리뷰리스트) */
     UserMypage getMypage(String userId);
     
@@ -96,5 +98,7 @@ public interface UsersService {
     /* 가게 이미지 하나 가져오기 */
     String getStoreImg(String store_id);
 
+    /* 포인트 조회 */
+    int getUserPoint(String user_id);
 
 }

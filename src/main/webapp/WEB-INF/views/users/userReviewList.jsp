@@ -24,6 +24,9 @@
       <%@ include file="/WEB-INF/views/users/header.jsp" %>
   <!-- 리뷰 리스트 템플릿 -->
   <div type="text/template" id="static-template">
+    <div>
+    <span class="reviewmoa">리뷰 모아보기</span><span class="reviewmoa2">| 모든 리뷰를 확인할 수 있어요.</span>
+  </div>
     <div class="reviewList">
         <div class="overlap">
         <c:forEach var="review" items="${reviews}">

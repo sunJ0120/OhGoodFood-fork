@@ -23,17 +23,14 @@
                   <img src="${pageContext.request.contextPath}/img/user_user.png" alt="내 정보 아이콘" class="infoIcon" />
                   내 정보
                   <span class="actionButtons">
-                    <img src="${pageContext.request.contextPath}/img/user_refactor.png" alt="수정하기 아이콘"
-                      class="modifyIcon" />
-                    <button type="button" class="modifyBtn">수정하기</button>
-                    <img src="${pageContext.request.contextPath}/img/user_refactor.png" alt="탈퇴하기 아이콘"
-                      class="outIcon" />
-                    <button type="button" class="outBtn">탈퇴하기</button>
+                    <img src="${pageContext.request.contextPath}/img/user_point.png" alt="포인트 아이콘"
+                      class="pointIcon" />
+                    <span class="point">${userMypage.user_point}P</span> 
                   </span>
                 </h2>
                 <div class="infoForm">
                   <div class="infoItem">
-                    <span class="valueText">${userMypage.user_id}</span>
+                    <span id="user_id" class="valueText">${userMypage.user_id}</span>
                   </div>
                   <div class="infoItem">
                     <span class="valueText">${userMypage.user_nickname}</span>
@@ -109,6 +106,22 @@
 
             <%@ include file="/WEB-INF/views/users/footer.jsp" %>
         </div>
-      </body>
 
+        <script>
+          window.addEventListener('DOMContentLoaded', function () {
+            const userIdSpan = document.getElementById('user_id');
+            if (!userIdSpan) return;
+
+            const rawId = userIdSpan.textContent.trim();
+
+            if (rawId.startsWith('naver_id')) {
+              userIdSpan.textContent = 'NAVER 로그인';
+            } else if (rawId.startsWith('kakao_id')) {
+              userIdSpan.textContent = 'KAKAO 로그인';
+            } else {
+              // 아무것도 안 함 → 기존 아이디 그대로 표시
+            }
+          });
+        </script>
+      </body>
       </html>

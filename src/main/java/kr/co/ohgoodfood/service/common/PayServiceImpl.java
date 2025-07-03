@@ -21,7 +21,7 @@ public class PayServiceImpl implements PayService {
     @Transactional
     @Override
     public boolean insertOrderAndPaid(String user_id, String store_id, int product_no, 
-            int quantity, int paid_price, String orderId) {
+            int quantity, int paid_price, String orderId, int paid_point) {
         try {
             Orders orders = new Orders();
             orders.setUser_id(user_id);
@@ -36,6 +36,7 @@ public class PayServiceImpl implements PayService {
             paid.setPaid_price(paid_price);
             paid.setPaid_status("N");
             paid.setPaid_code(orderId);
+            paid.setPaid_point(paid_point);
             payMapper.insertOrder(orders);
             paid.setOrder_no(orders.getOrder_no());
             payMapper.insertPaid(paid);
@@ -112,5 +113,16 @@ public class PayServiceImpl implements PayService {
     @Override
     public int getOrderNoByPaidCode(String paid_code) {
         return payMapper.getOrderNoByPaidCode(paid_code);
+    }
+
+    // paid_code로 포인트 차감
+    @Override
+    public boolean updateUserPointByPaidCode(String paid_code) {
+        try {
+            payMapper.updateUserPointByPaidCode(paid_code);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 }

@@ -294,9 +294,10 @@
     <!-- selectMypage mapper -->
     <select id="selectUserInfo" parameterType="string" resultType="kr.co.ohgoodfood.dto.UserMypage">
 	    SELECT
-	      user_id       AS user_id,
-	      user_nickname AS user_nickname
-	    FROM Account
+	      user_id                 AS user_id,
+	      user_nickname           AS user_nickname,
+ 		  COALESCE(user_point, 0) AS user_point	    
+ 		  FROM Account
 	    WHERE user_id = #{user_id}
   	</select>
 	<select id="selectUserReviews" parameterType="string"  resultType="kr.co.ohgoodfood.dto.Review">
@@ -479,6 +480,13 @@
 	    VALUES
 	      ( #{review_content} , "N"  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
 	</insert>
+	
+	<!-- 결제 금액의 1% 적립 -->
+	<update id="updateUserPoint" parameterType="kr.co.ohgoodfood.dto.ReviewForm">
+	    UPDATE Account
+	    SET user_point = COALESCE(user_point, 0) + FLOOR(#{total_price} * 0.01)
+	    WHERE user_id = #{user_id}
+	</update>
 
     <!-- 가게 이미지 하나 가져오기 -->
     <select id="selectStoreImg" parameterType="string" resultType="string">
@@ -488,4 +496,18 @@
         ORDER BY img_no
         LIMIT 1
     </select>
+
+    <!-- 포인트 조회 -->
+    <select id="selectUserPoint" parameterType="string" resultType="int">
+        SELECT IFNULL(user_point, 0) as user_point
+        FROM Account
+        WHERE user_id = #{user_id}
+    </select>
+
+    <!-- 포인트 차감 -->
+    <update id="updateUserPoint" parameterType="map">
+        UPDATE Account
+        SET user_point = user_point - #{user_point}
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>
