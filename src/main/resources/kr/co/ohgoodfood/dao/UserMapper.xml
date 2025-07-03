@@ -220,7 +220,8 @@
             WHEN 'pickup'      THEN 3
             WHEN 'cancel'      THEN 4
             ELSE 5
-        END;
+        END,
+        o.ordered_at DESC;
     </select>
 
     <!-- updateOrderStatus mapper-->
