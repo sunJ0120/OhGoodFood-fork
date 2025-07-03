@@ -56,7 +56,10 @@ public class AdminController {
 		model.addAttribute("thisYearOrderCount", adminService.getThisYearOrderCount());
 		model.addAttribute("previousMonthOrderCount", adminService.getPreviousMonthOrderCount());
 		model.addAttribute("thisMonthOrderCount", adminService.getThisMonthOrderCount());
+		model.addAttribute("todayOrderCount", adminService.getTodayOrderCount());
 		model.addAttribute("unapprovedStoreCount", adminService.getUnapprovedStoreCount());
+		model.addAttribute("thisMonthNewUserCount", adminService.getThisMonthNewUserCount());
+		model.addAttribute("thisMonthNewStoreCount", adminService.getThisMonthNewStoreCount());
 		return "admin/main";
 	}
 

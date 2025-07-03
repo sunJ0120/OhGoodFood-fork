@@ -86,6 +86,7 @@ public class CommonController {
 		return "/common/intro";
 	}
 
+
 	@GetMapping("/oauth/kakaocallback")
 	public String kakaoCallback(@RequestParam("code") String code, HttpSession session) {
 		// 카카오 로그인 클릭시 리다이렉트uri로 이동하고 code 받음
@@ -166,6 +167,7 @@ public class CommonController {
 	        return "store/alert";
 	    }
 	}
+
 
 }
 

@@ -141,7 +141,7 @@
                                     <td>${vo.user_id}</td>
                                     <td>${vo.store_id}</td>
                                     <td>${vo.review_content}</td>
-                                    <td>${vo.writed_at}</td>
+                                    <td><fmt:formatDate value="${vo.writed_at}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                     <td>
                                         <input type="hidden" name="review_no" value="${vo.review_no}">
                                         <select name="is_blocked">

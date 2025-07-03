@@ -35,6 +35,8 @@ public interface AdminMapper {
     public int getPreviousMonthOrderCountTotal();
     // 이번 달 주문 건수 조회 
     public int getThisMonthOrderCountTotal();
+    // 금일 주문 건수 조회 
+    public int getTodayOrderCountTotal();
     // 미승인 가게 수 조회 
     public int getUnapprovedStoreCountTotal();
     // 단일 회원 목록 조회 
@@ -109,4 +111,8 @@ public interface AdminMapper {
     public void blockReview(Review review);
     // Admin 로그인 체크 
     public int checkAdminLogin(Admin admin);
+    // 금월 신규 회원 수 조회 
+    public int getThisMonthNewUserCount();
+    // 금월 신규 매장 수 조회 
+    public int getThisMonthNewStoreCount();
 }

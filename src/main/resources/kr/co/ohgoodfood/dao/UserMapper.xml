@@ -468,4 +468,18 @@
         ORDER BY img_no
         LIMIT 1
     </select>
+
+    <!-- 포인트 조회 -->
+    <select id="selectUserPoint" parameterType="string" resultType="int">
+        SELECT IFNULL(user_point, 0) as user_point
+        FROM Account
+        WHERE user_id = #{user_id}
+    </select>
+
+    <!-- 포인트 차감 -->
+    <update id="updateUserPoint" parameterType="map">
+        UPDATE Account
+        SET user_point = user_point - #{user_point}
+        WHERE user_id = #{user_id}
+    </update>
 </mapper>

@@ -1,6 +1,8 @@
 package kr.co.ohgoodfood.dto;
 
 import java.sql.Time;
+import java.sql.Timestamp;
+
 import lombok.Data;
 
 @Data
@@ -25,6 +27,7 @@ public class Store {
     private String category_others;
     private double latitude;
     private double longitude;
+    private Timestamp join_date;
 
     private String s_store_id;
   

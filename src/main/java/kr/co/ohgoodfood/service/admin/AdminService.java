@@ -37,6 +37,9 @@ public interface AdminService {
     // 이번 달 전체 주문 건수 조회
     public int getThisMonthOrderCount();
 
+    // 금일 전체 주문 건수 조회
+    public int getTodayOrderCount();
+
     // 미승인 가게 수 조회
     public int getUnapprovedStoreCount();
 
@@ -123,4 +126,10 @@ public interface AdminService {
 
     // Admin 로그인 체크
     public int checkAdminLogin(Admin admin);
+
+    // 금월 신규 회원 수 조회
+    public int getThisMonthNewUserCount();
+
+    // 금월 신규 매장 수 조회
+    public int getThisMonthNewStoreCount();
 }

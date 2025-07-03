@@ -44,7 +44,7 @@ public class Review {
         this.page = 1;
     }
 
-    public void setStartIdx() {
-        this.startIdx = (this.page - 1) * 7;
+    public int getStartIdx(){
+        return (page - 1) * 7;
     }
 }

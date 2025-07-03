@@ -140,7 +140,7 @@
                                     <td>${vo.receive_id}</td>
                                     <td>${vo.alarm_title}</td>
                                     <td>${vo.alarm_contents}</td>
-                                    <td>${vo.sended_at}</td>
+                                    <td><fmt:formatDate value="${vo.sended_at}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                     <td>
                                         <input type="hidden" name="alarm_no" value="${vo.alarm_no}">
                                         <select name="alarm_read">

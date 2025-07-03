@@ -144,8 +144,8 @@
                                     <td>${vo.store_id}</td>
                                     <td>${vo.quantity}</td>
                                     <td>${vo.s_price}</td>
-                                    <td>${vo.ordered_at}</td>
-                                    <td>${vo.picked_at}</td>
+                                    <td><fmt:formatDate value="${vo.ordered_at}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+                                    <td><fmt:formatDate value="${vo.picked_at}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                     <td>
                                         <input type="hidden" name="order_no" value="${vo.order_no}">
                                         <select name="order_status">

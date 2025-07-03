@@ -65,7 +65,8 @@ public class MvcConfig implements WebMvcConfigurer {
 	// addViewController의 url로 진입 시 setViewName으로 포워딩
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/home").setViewName("home");
+		registry.addViewController("/").setViewName("/common/login");
+		registry.addViewController("/home").setViewName("/common/login");
 	}
 
 	// HikariCP
@@ -154,7 +155,7 @@ public class MvcConfig implements WebMvcConfigurer {
 	@Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(5); // 원하는 스레드 수
+        scheduler.setPoolSize(10); // 원하는 스레드 수
         scheduler.setThreadNamePrefix("my-scheduler-");
         scheduler.setWaitForTasksToCompleteOnShutdown(true); // 종료 대기 여부
         scheduler.setAwaitTerminationSeconds(30); // 대기 시간
