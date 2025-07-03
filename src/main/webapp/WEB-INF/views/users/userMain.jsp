@@ -70,7 +70,6 @@
           <div class="mapWrapper" style="display: none;">
             <%-- 지도 안에 있는 modal --%>
             <div class="storePinModalWrapper"></div>
-            <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapAppKey}&libraries=clusterer"></script>
             <%-- 이 위치에서 검색 버튼 --%>
               <button class="btnSetCenter">
                 <span class="btnText">이 위치에서 검색</span>
@@ -87,6 +86,7 @@
   </div>
   <%-- JQuery CDN --%>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapAppKey}&libraries=clusterer"></script>
   <%-- filter 이벤트 --%>
   <script>
     let $dropdownModal = $("#dropdownModal");
@@ -470,8 +470,7 @@
 
         const isActive = !!filterParams[mapKey];
         $('#btnText').text(isActive ? selected : '음식 종류'); //active 아니면 음식 종류로 변경
-        <%--$('.dropdownToggle').attr('src', '${pageContext.request.contextPath}' +--%>
-        <%--                (isActive ? '/img/user_arrow_down_icon_active.png' : '/img/user_arrow_down_icon.png'));--%>
+        
         //active 상태에 따라 .active class 해제
         if (isActive) {
           $('.categoryFilterBtn').addClass('active');

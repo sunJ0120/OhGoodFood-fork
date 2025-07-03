@@ -82,7 +82,7 @@ public class CommonServiceImpl implements CommonService {
 		}
 
 		// 콜백 URI (네이버 API 등록 시 설정한 redirect URI)
-		String redirectUri = "http://localhost:8090/naver/callback";
+		String redirectUri = "https://ohgoodfood.com/naver/callback";
 
 		// 네이버 OAuth 서버에 Access Token 요청 URL 구성
 		String tokenUrl = "https://nid.naver.com/oauth2.0/token" + "?grant_type=authorization_code" + "&client_id="

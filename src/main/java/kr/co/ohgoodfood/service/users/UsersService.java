@@ -49,7 +49,7 @@ public interface UsersService {
     int getOrderPoint(UserOrder userOrder);
     
     //[판별 로직] reservation_end 한 시간 전에 주문취소를 막아두기 위한 상태 판별 로직
-    boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp reservation_end);
+    boolean getOrderBlockCancel(String order_status, Timestamp reservation_end);
 
     //[Controller 로직] 주문내역 취소 Controller 연결 로직
     boolean updateUserOrderCancel(UserOrderRequest userOrderRequest);
