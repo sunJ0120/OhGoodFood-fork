@@ -1,13 +1,17 @@
 package kr.co.ohgoodfood.controller.common;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-
+import org.springframework.web.bind.annotation.RequestParam;
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.KakaoUser;
 import kr.co.ohgoodfood.dto.Store;
@@ -87,14 +91,81 @@ public class CommonController {
 		// 카카오 로그인 클릭시 리다이렉트uri로 이동하고 code 받음
 		//이 code로 가지고 access_token 요청
 		KakaoUser kakaoUser = commonService.getKakaoUserInfo(code); 
-		//code 넘겨서 access_token 받고 사용자 객체 저장p
+		//code 넘겨서 access_token 받고 사용자 객체 저장
         if (kakaoUser == null) {
             return "redirect:/login";
         }
 		Account account = commonService.autoLoginOrRegister(kakaoUser);
 		//회원정보가 없으면 자동 회원가입, 있으면 해당 객체정보 리턴
-		
         session.setAttribute("user", account);
         return "redirect:/user/main";
 	}
+
+    @Value("${naver.client_id}")
+    private String clientId;
+    
+	// 네이버 소셜로그인(네이버 인증 URL 생성 후 리다이렉트)
+	@GetMapping("/naver/login")
+	public String naverLogin(HttpSession session) throws Exception {
+	    // 네이버에 등록된 Redirect URI
+	    String redirectUri = "http://localhost:8090/naver/callback";
+
+	    // CSRF 방지를 위한 임의의 상태(state) 값 생성
+	    String state = UUID.randomUUID().toString();
+
+	    // 생성한 state를 세션에 저장 (콜백에서 검증)
+	    session.setAttribute("naver_state", state);
+
+	    // Redirect URI를 URL 인코딩
+	    String encodedRedirectUri = URLEncoder.encode(redirectUri, StandardCharsets.UTF_8.toString());
+
+	    // 네이버 인증 URL 생성
+	    String naverAuthUrl = "https://nid.naver.com/oauth2.0/authorize"
+	            + "?response_type=code"
+	            + "&client_id=" + clientId
+	            + "&redirect_uri=" + encodedRedirectUri
+	            + "&state=" + state;
+
+	    // 확인용 로그
+	    System.out.println("Naver Login URL: " + naverAuthUrl);
+
+	    // 7) 네이버 로그인 페이지로 리다이렉트
+	    return "redirect:" + naverAuthUrl;
+	}
+
+	// 네이버 소셜로그인 콜백 처리 (사용자 정보 요청 및 세션 저장)
+	@GetMapping("/naver/callback")
+	public String naverCallback(@RequestParam String code,     // 네이버가 보내준 인증 코드
+	                            @RequestParam String state,    // 네이버가 보내준 state
+	                            HttpSession session,           // 현재 세션
+	                            Model model) {                 // 에러 메시지 출력용
+	    // 세션에 저장된 state 가져오기
+	    String sessionState = (String) session.getAttribute("naver_state");
+
+	    try {
+	        // 서비스 로직 호출: Access Token → 사용자 정보 → DB 처리
+	        Account account = commonService.processNaverLogin(code, state, sessionState);
+
+	        // 로그인 성공 시 세션에 유저 정보 저장
+	        session.setAttribute("user", account);
+
+	        // 메인 인트로 페이지로 리다이렉트
+	        return "redirect:/intro";
+
+	    } catch (IllegalStateException e) {
+	        // state 값 불일치 (CSRF 의심)
+	        model.addAttribute("msg", "잘못된 접근입니다. state 값이 일치하지 않습니다.");
+	        model.addAttribute("url", "/login");
+	        return "store/alert";
+
+	    } catch (Exception e) {
+	        // 기타 예외 발생
+	        e.printStackTrace();
+	        model.addAttribute("msg", "네이버 로그인 처리 중 오류가 발생했습니다.");
+	        model.addAttribute("url", "/login");
+	        return "store/alert";
+	    }
+	}
+
 }
+
