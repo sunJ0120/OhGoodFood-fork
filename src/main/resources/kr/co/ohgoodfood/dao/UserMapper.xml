@@ -415,9 +415,9 @@
   	<!-- 신규 회원 INSERT -->
 	<insert id="insertUser" parameterType="kr.co.ohgoodfood.dto.UserSignup">
 		INSERT INTO Account
-		  (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement)
+		  (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement, user_point)
 		VALUES
-		  (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y")
+		  (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y", 500)
 	</insert>
 	  
 	<!-- 모든 리뷰 모아보기 -->
