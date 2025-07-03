@@ -50,7 +50,7 @@ header {
 
 /* 페이지 제목 */
 .review {
-  font-family: 'nanumesquareneo_b';
+  font-family: 'nanumesquareneo';
   font-size: 20px;
   margin: 32px 20px 15px 20px;
   padding: 0;
@@ -70,7 +70,7 @@ header {
   align-items: center;
 }
 
-/* 1) 상품 카드 */
+/* 상품 카드 */
 .productCard {
   width: 350px;
   display: flex;
@@ -170,7 +170,7 @@ header {
   font-size: 0.95rem;
 }
 
-/* 3) 사진 업로드 */
+/* 사진 업로드 */
 .reviewPhoto .photoabKel {
   margin-bottom: 4px;
   width: 325px;
@@ -217,6 +217,7 @@ header {
   font-size: 22px;
   border-radius: 8px;
   margin-top: 15px;
+  font-family: 'nanumesquareneo_b';
 }
 
 /* 활성화된 리뷰 등록하기 버튼 스타일 */
@@ -231,6 +232,7 @@ header {
   border-radius: 8px;
   margin-top: 15px;
   /* 테두리도 활성 색으로 */
+  font-family: 'nanumesquareneo_b';
 }
 
 .modal-overlay {

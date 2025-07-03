@@ -15,6 +15,7 @@ public class UserMypage {
     // Account table에서 가져오는 정보들
     private String       user_id;
     private String       user_nickname;
+    private int 		 user_point;
 
     // Review table에서 가져오는 정보들
     private List<Review> reviews;

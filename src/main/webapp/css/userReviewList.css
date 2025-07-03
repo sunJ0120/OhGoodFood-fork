@@ -7,12 +7,32 @@
   src: url('font/NANUMSQUARENEO-bRG.ttf');
 }
 
+.reviewmoa{
+    justify-content: flex-start;
+    display: inline-flex;
+    align-items: center;
+    color: #535353;
+    gap: 3pt;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 20px;
+    margin-top: 25px;
+}
+.reviewmoa2{
+    justify-content: flex-start;
+    display: inline-flex;
+    align-items: center;
+    color: #535353;
+    gap: 3pt;
+    font-size: 17px;
+    margin-left: 12px;
+}
 /* 전체 박스 */
 .reviewList .overlap {
   position: relative;
-  width: 386px;
-  height: 685px;
-  padding: 12px 11px; 
+  width: 380px;
+  height: 650px;
+  padding: 12px 10px; 
   background-color: #f5f3ea;
   border: 1px solid #99a99b;
   margin: 0 auto;

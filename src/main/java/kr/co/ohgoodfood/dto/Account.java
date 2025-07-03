@@ -14,13 +14,13 @@ public class Account {
     private Timestamp join_date;
     private String user_status;
     private String location_agreement;
+    private int user_point; 
 
     private String s_type;
     private String s_value;
     private String s_user_id;
     private String s_user_nickname;
     private String s_user_name;
-    private int user_point;
 
     private int page;
     private int startIdx;

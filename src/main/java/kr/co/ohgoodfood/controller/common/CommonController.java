@@ -5,13 +5,21 @@ import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RequestParam;
+
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.KakaoUser;
 import kr.co.ohgoodfood.dto.Store;
@@ -20,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
+@ControllerAdvice // 전역 예외처리
 @PropertySource("classpath:db.properties")
 public class CommonController {
 	
@@ -84,7 +93,27 @@ public class CommonController {
 	@GetMapping("/intro") // 인트로 페이지
 	public String intro() {
 		return "/common/intro";
-	}
+  }
+	
+    // 상태 코드에 따른 에러 페이지 반환
+    @RequestMapping("/error")
+    public String handleException(HttpServletRequest request) {
+        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
+
+        if (statusCode != null) {
+            if (statusCode == 404) {
+                return "common/error404";
+            } else if (statusCode == 500) {
+                return "common/error500";
+            } else if (statusCode == 403) {
+                return "common/error403";
+            } else if (statusCode == 400) {
+                return "common/error400";
+            }
+        }
+
+        return "common/error";
+    }
 
 
 	@GetMapping("/oauth/kakaocallback")

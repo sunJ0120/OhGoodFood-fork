@@ -57,25 +57,16 @@ body{
   display: flex;
   align-items: center;
   gap: 8px;
-  /* 아이콘과 버튼 사이 간격 */
-}
-
-/* 버튼 앞의 아이콘 */
-.modifyIcon,
-.outIcon {
-  width: 20px;
-  height: 20px;
 }
 
 /* 버튼 스타일 통일 */
-.modifyBtn,
-.outBtn {
+.pointIcon {
   background: none;
   border: none;
   padding: 0;
   font-family: 'nanumesquareneo', sans-serif;
-  font-size: 0.9rem;
-  color: #999;
+  font-size: 16px;
+  color: #404040;
   cursor: pointer;
   display: flex;
   align-items: center;

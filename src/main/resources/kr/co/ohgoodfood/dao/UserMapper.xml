@@ -55,8 +55,14 @@
                     OR pf.product_explain LIKE CONCAT('%', #{filter.search}, '%')
                 )
             </if>
+            <!-- ORDER BY 순서 : 오픈, 매진, 마감순 정렬 -->
         </where>
-        ORDER BY (s.store_status = 'N') ASC;
+        ORDER BY
+        CASE
+            WHEN s.store_status = 'Y' AND amount >  0 THEN 1
+            WHEN s.store_status = 'Y' AND amount =  0 THEN 2
+            ELSE 3
+        END;
     </select>
 
     <!-- selectOneStoreByStoreId mapper, main map에서 이용한다. -->
@@ -110,9 +116,8 @@
                 )
             </if>
             <!-- 가게 id로 필터링해서 하나만 가져와야 하는 경우 -->
-            AND s.store_id = #{filter.store_id}
+            AND s.store_id = #{filter.store_id};
         </where>
-        ORDER BY (s.store_status = 'N') ASC;
     </select>
 
     <!-- selectAllBookmark mapper, bookmark에서 이용한다. -->
@@ -136,8 +141,14 @@
         <where>
             s.confirmed = 'Y'
             AND b.user_id = #{user_id}
+            <!-- ORDER BY 순서 : 오픈, 매진, 마감순 정렬 -->
         </where>
-        ORDER BY (s.store_status = 'N') ASC;
+        ORDER BY
+            CASE
+            WHEN s.store_status = 'Y' AND amount >  0 THEN 1
+            WHEN s.store_status = 'Y' AND amount =  0 THEN 2
+            ELSE 3
+        END;
     </select>
 
     <!-- deleteBookmark mapper -->
@@ -156,7 +167,7 @@
     <!-- selectOrderList mapper -->
     <select id="selectOrderList" resultType="kr.co.ohgoodfood.dto.UserOrder">
         SELECT
-            pa.paid_no AS paid_no, pa.paid_price AS paid_price, pa.paid_status AS paid_status,
+            pa.paid_no AS paid_no, pa.paid_price AS paid_price, pa.paid_status AS paid_status, pa.paid_point AS paid_point,
             s.store_name AS store_name, s.store_id AS store_id,
             p.product_no AS product_no, p.pickup_start AS pickup_start, p.pickup_end AS pickup_end, p.sale_price AS sale_price,
             o.order_no AS order_no, o.ordered_at AS ordered_at, o.quantity AS quantity, o.order_status AS order_status, o.canceld_from AS canceld_from,
@@ -194,13 +205,23 @@
                     </otherwise>
                 </choose>
             </if>
+            <!-- ORDER BY 순서 : 확정진행중, 확정완료, 픽업완료, 취소순 -->
         </where>
         GROUP BY
-        pa.paid_no, pa.paid_price, pa.paid_status,
-        s.store_name, s.store_id,
-        p.product_no, p.pickup_start, p.pickup_end, p.sale_price,
-        o.order_no, o.ordered_at, o.quantity,
-        o.order_status, o.canceld_from, o.order_code, o.user_id;
+            pa.paid_no, pa.paid_price, pa.paid_status,
+            s.store_name, s.store_id,
+            p.product_no, p.pickup_start, p.pickup_end, p.sale_price,
+            o.order_no, o.ordered_at, o.quantity,
+            o.order_status, o.canceld_from, o.order_code, o.user_id
+        ORDER BY
+        CASE o.order_status
+            WHEN 'reservation' THEN 1
+            WHEN 'confirmed'   THEN 2
+            WHEN 'pickup'      THEN 3
+            WHEN 'cancel'      THEN 4
+            ELSE 5
+        END,
+        o.ordered_at DESC;
     </select>
 
     <!-- updateOrderStatus mapper-->
@@ -274,9 +295,10 @@
     <!-- selectMypage mapper -->
     <select id="selectUserInfo" parameterType="string" resultType="kr.co.ohgoodfood.dto.UserMypage">
 	    SELECT
-	      user_id       AS user_id,
-	      user_nickname AS user_nickname
-	    FROM Account
+	      user_id                 AS user_id,
+	      user_nickname           AS user_nickname,
+ 		  COALESCE(user_point, 0) AS user_point	    
+ 		  FROM Account
 	    WHERE user_id = #{user_id}
   	</select>
 	<select id="selectUserReviews" parameterType="string"  resultType="kr.co.ohgoodfood.dto.Review">
@@ -394,9 +416,9 @@
   	<!-- 신규 회원 INSERT -->
 	<insert id="insertUser" parameterType="kr.co.ohgoodfood.dto.UserSignup">
 		INSERT INTO Account
-		  (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement)
+		  (user_id, user_pwd, user_nickname, user_name, phone_number, join_date, user_status, location_agreement, user_point)
 		VALUES
-		  (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y")
+		  (#{user_id}, #{user_pwd}, #{user_nickname}, #{user_name}, #{phone_number}, SYSDATE(), "Y", "Y", 500)
 	</insert>
 	  
 	<!-- 모든 리뷰 모아보기 -->
@@ -459,6 +481,13 @@
 	    VALUES
 	      ( #{review_content} , "N"  , NOW() , #{review_img} , #{user_id} , #{store_id} , #{order_no} )
 	</insert>
+	
+	<!-- 결제 금액의 1% 적립 -->
+	<update id="addUserPoint" parameterType="kr.co.ohgoodfood.dto.ReviewForm">
+	    UPDATE Account
+	    SET user_point = COALESCE(user_point, 0) + FLOOR(#{total_price} * 0.01)
+	    WHERE user_id = #{user_id}
+	</update>
 
     <!-- 가게 이미지 하나 가져오기 -->
     <select id="selectStoreImg" parameterType="string" resultType="string">

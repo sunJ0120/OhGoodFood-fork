@@ -225,24 +225,18 @@ main {
     padding: 16px;
     background-color: #fdfdf5;
     margin-bottom: 20px;
-    /*font-weight: normal;*/
 }
 
 .orderTop {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: normal;
-    font-size: 16px;
-}
-
-.orderTop .storeName{
-    font-size: 18px;
     font-family: 'nanumesquareneo_b';
+    font-size: 15px;
 }
 
 .orderStatus {
-    background-color: #d9c2c2;
+    background-color: #d8a8ab;
     padding: 4px 10px;
     border-radius: 20px;
     color: white;
@@ -279,7 +273,7 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .orderNoticeWrapper {
@@ -315,6 +309,8 @@ main {
     font-size: 15px;
     margin-top: 12px;
     font-family: 'nanumesquareneo_b';
+    display: inline-block;
+    cursor: pointer;
 }
 
 .orderWhite{
@@ -335,10 +331,12 @@ main {
     font-size: 15px;
     margin-top: 12px;
     font-family: 'nanumesquareneo_b';
+    display: inline-block;
+    cursor: pointer;
 }
 
 .orderReviewDone {
-    background-color: #B5A295; /* 연한 색으로 표현.. 왜인지 지금 오퍼시티 안먹혀서 */
+    background-color: #B5A295;
 }
 
 .hidden {
@@ -363,12 +361,13 @@ main {
     width: 100%;
 }
 
-.orderInfo .orderAmount, .orderInfo .orderTime, .orderInfo .orderPaid{
+.orderInfo .orderAmount, .orderInfo .orderTime, .orderInfo .orderPaid, .orderInfo .orderPaidPoint{
     font-size: 14px;
+
     font-family: 'nanumesquareneo_b';
 }
 
-.orderInfo .orderAmountValue, .orderInfo .orderTimeValue, .orderInfo .orderPaidValue{
+.orderInfo .orderAmountValue, .orderInfo .orderTimeValue, .orderInfo .orderPaidValue, .orderInfo .orderPaidPointValue{
     font-size: 14px;
     justify-content: space-between; /* 왼쪽: label / 오른쪽: value */
 }

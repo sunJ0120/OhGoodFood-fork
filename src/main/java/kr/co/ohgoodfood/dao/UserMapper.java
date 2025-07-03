@@ -132,11 +132,12 @@ public interface UserMapper {
 	ReviewForm selectReviewFormByOrderNo(int orderNo);
 	
 	/**
-	 * 리뷰 update
+	 * 리뷰, 포인트 update
 	 * @param form
 	 */
     void insertReview(ReviewForm form);
-
+	void addUserPoint(ReviewForm form);
+	
     /**
      * 가게 이미지 하나 가져오기
      * @param store_id
