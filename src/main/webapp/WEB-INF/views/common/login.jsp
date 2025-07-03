@@ -17,9 +17,6 @@
         <header>
             <div class="header-container">
                 <img src="${pageContext.request.contextPath}/img/storeohgoodfood_logo.png" alt="Logo Image">
-                <div class="icon-container">
-                    <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
-                </div>
             </div>
         </header>
         <main>
@@ -43,14 +40,18 @@
 							</div>
 			                
 			                <div class="sns-login-box">
-								<div class="kakao">
-									<img src="${pageContext.request.contextPath}/img/kakao.png" alt="카카오 아이콘" class="kakaoIcon">
-									<div class="kakaoTitle">카카오로 로그인</div>
-								</div>
-								<div class="naver">
-									<img src="${pageContext.request.contextPath}/img/naver.png" alt="네이버 아이콘" class="kakaoIcon">
-									<div class="naverTitle">네이버로 로그인</div>
-								</div>
+				                <a href="https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}&response_type=code" style="text-decoration: none;">
+									<div class="kakao">
+										<img src="${pageContext.request.contextPath}/img/kakao.png" alt="카카오 아이콘" class="kakaoIcon">
+										<div class="kakaoTitle">카카오로 로그인</div>
+									</div>
+								</a>
+								<a href="${pageContext.request.contextPath}/naver/login" style="text-decoration: none;">
+									<div class="naver">
+										<img src="${pageContext.request.contextPath}/img/naver.png" alt="네이버 아이콘" class="kakaoIcon">
+										<div class="naverTitle">네이버로 로그인</div>
+									</div>
+								</a>
 							</div>
 							<div class="main-line2"></div>
 			            </div>

@@ -28,8 +28,10 @@
 	<!-- 주문(미확정, 확정, 취소) 조회 -->
 	<select id="getOrders" resultType="kr.co.ohgoodfood.dto.Orders">
 		SELECT 
-			o.*, p.*, i.store_img
+			o.*, p.*, i.store_img, pa.*, ac.user_nickname as user_nickname
 		FROM Orders o
+		JOIN Paid pa
+			ON o.order_no = pa.order_no
 		JOIN Product p 
 			ON o.product_no = p.product_no
 		LEFT JOIN (
@@ -41,6 +43,7 @@
 				GROUP BY store_id
 			)			
 		)i ON o.store_id = i.store_id
+		JOIN Account ac ON o.user_id = ac.user_id
 		<where>
 			o.store_id=#{storeId} 
 			<choose>
@@ -108,36 +111,19 @@
 		WHERE order_no=#{id}
 	</update>
 	
-	<!-- 주문상태(확정, 픽업) 조회  -->
-	<select id="getConfirmedOrPickupOrders" parameterType="String" resultType="kr.co.ohgoodfood.dto.Orders">
-	    SELECT o.*, p.*, i.store_img
-	    FROM Orders o
-	    JOIN Product p ON o.store_id = p.store_id
-	    LEFT JOIN (
-	        SELECT store_id, store_img
-	        FROM Image
-	        WHERE img_no IN (
-	            SELECT MIN(img_no)
-	            FROM Image
-	            GROUP BY store_id
-	        )
-	    ) i ON o.store_id = i.store_id
-	    WHERE o.store_id = #{id}
-	      AND o.order_status IN ('confirmed', 'pickup')
-	    ORDER BY o.ordered_at DESC
-	</select>
-	
 	<!-- 내 가게 기간 매출 조회 -->
 	<select id="getSales" resultType="kr.co.ohgoodfood.dto.StoreSales">
 		SELECT
 			o.store_id AS store_id,
-			SUM(o.quantity * p.sale_price) AS sales,
+			SUM(IFNULL(pa.paid_price, 0) + IFNULL(pa.paid_point, 0)) AS sales,
 			#{start} AS start_date,
 			#{end} AS end_date,
 			COUNT(*) as count
 		FROM Orders o
+		JOIN Paid pa
+			ON o.order_no = pa.order_no
 		JOIN Product p
-		ON o.product_no = p.product_no
+			ON o.product_no = p.product_no
 		WHERE o.store_id=#{store_id}
 		AND o.order_status='pickup'
 		AND DATE(o.ordered_at) BETWEEN #{start} AND #{end}
@@ -151,14 +137,14 @@
 		store_explain, store_telnumber, store_status, opened_at, closed_at,
 		store_pwd,
 		owner_name, category_bakery, category_fruit, category_salad,
-		category_others, latitude, longitude
+		category_others, latitude, longitude, join_date
 		) VALUES (
 		#{store_id}, #{confirmed}, #{business_number}, #{store_address},
 		#{store_name},
 		#{store_menu}, #{store_explain}, #{store_telnumber}, #{store_status},
 		#{opened_at}, #{closed_at}, #{store_pwd}, #{owner_name},
 		#{category_bakery}, #{category_fruit}, #{category_salad},
-		#{category_others}, #{latitude}, #{longitude}
+		#{category_others}, #{latitude}, #{longitude}, SYSDATE()
 		)
 	</insert>
 	

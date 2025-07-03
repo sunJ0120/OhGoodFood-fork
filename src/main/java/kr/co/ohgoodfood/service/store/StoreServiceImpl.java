@@ -178,7 +178,7 @@ public class StoreServiceImpl implements StoreService {
 		// 픽업 날짜 계산 (오늘/내일)
 		LocalDate pickupDate = pickupDateType.equals("today")
 			? LocalDate.now()
-			: LocalDate.now().plusDays(1);
+			: LocalDate.now().plusDays(1); 
 		
 		// pickup_start(픽업 시작 시간), pickup_end(픽업 종료 시간)
 		LocalDateTime pickupStart = LocalDateTime.of(pickupDate, LocalTime.parse(pickupStartTime));
@@ -189,8 +189,8 @@ public class StoreServiceImpl implements StoreService {
 		if (pickupDateType.equals("today")) {
 			reservationEnd = pickupStart.minusHours(1);
 		} else {
-			reservationEnd = LocalDateTime.of(LocalDate.now(), store.getClosed_at().toLocalTime());
-		}
+			reservationEnd = LocalDateTime.of(LocalDate.now(), store.getClosed_at().toLocalTime().minusHours(1));
+		} 
 		
 		// 상품 객체 생성 및 저장
 		Product product = new Product();
@@ -204,7 +204,7 @@ public class StoreServiceImpl implements StoreService {
 		product.setProduct_explain(productExplain); 
 
 		mapper.insertProduct(product);
-	}
+	} 
 	
 	// 오늘 이미 마감된 내역이 있는지 확인
 	@Override

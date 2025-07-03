@@ -42,4 +42,63 @@
 		SELECT COUNT(*) FROM Alarm
 		WHERE receive_id=#{id} AND alarm_read = 'N'
 	</select>
+
+	<!-- 네이버 소셜로그인 -->
+	<insert id="insertNaverUser" parameterType="kr.co.ohgoodfood.dto.Account">
+        INSERT INTO Account (
+            user_id,
+            user_name,
+            user_nickname,
+            user_pwd,
+            phone_number,
+            join_date,
+            user_status,
+            location_agreement
+        ) VALUES (
+            #{user_id},
+            #{user_name},
+            #{user_nickname},
+            #{user_pwd},
+            #{phone_number},
+            NOW(),
+           	'Y',        <!-- Active 상태 -->
+            'Y'         <!-- 위치 동의 여부 기본값 Y로 설정 -->
+        )
+    </insert>
+    
+    <!-- user_id로 계정 조회 -->
+    <select id="getAccountById" parameterType="String" resultType="kr.co.ohgoodfood.dto.Account">
+        SELECT * FROM Account WHERE user_id = #{user_id}
+    </select>
+    
+    <!-- 네이버 유저 정보 업데이트 -->
+	<update id="updateNaverUser" parameterType="kr.co.ohgoodfood.dto.Account">
+	    UPDATE Account
+	    SET
+	        user_name = #{user_name},
+	        user_nickname = #{user_nickname},
+	        phone_number = #{phone_number}
+	    WHERE user_id = #{user_id}
+	</update>
+	
+	<!-- 카카오 객체 검색 -->
+	<select id="findById" resultType="kr.co.ohgoodfood.dto.Account">
+        SELECT * FROM Account WHERE user_id = #{userId}
+    </select>
+
+    <!-- 카카오 회원 가입 -->
+    <insert id="insertKakaoUser">
+    INSERT INTO Account (
+        user_id, user_name, user_nickname, user_pwd, phone_number, join_date, user_status, location_agreement
+    ) VALUES (
+        #{id}, #{nickname}, #{nickname}, 'kakao_login', #{email}, NOW(), 'Y', 'Y'
+    )
+    </insert>
+
+    <!-- 카카오 유저 정보 업데이트 -->
+    <update id="updateInfo">
+    	UPDATE Account 
+    	SET user_name=#{nickname}, user_nickname=#{nickname}, phone_number=#{email}
+    	WHERE user_id=#{id}
+    </update>
 </mapper>
