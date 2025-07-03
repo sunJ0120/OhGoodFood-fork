@@ -1,3 +1,12 @@
+@font-face {
+     font-family: 'nanumesquareneo';
+     src: url('font/NanumSquareNeo-aLt.ttf');
+}
+
+@font-face {
+     font-family: 'nanumesquareneo_b';
+     src: url('font/NanumSquareNeo-bRg.ttf');
+}
 main {
     padding: 0 20px;
     max-width: 440px;
@@ -20,8 +29,10 @@ main {
 }
 
 .productWrapper {
+    position: relative;
     padding: 16px 12px;
     background-color: #F5F3EA;
+    height: 100%;
 }
 
 .productList {
@@ -56,8 +67,13 @@ main {
     height: 93px;
 }
 
-.storeImage {
+.imgWrapper{
+    width: 100px;
+    height: 100px;
     margin-right: 12px;
+}
+
+.storeImage {
     width: 100px;
     height: 100px;
     object-fit: cover;
@@ -142,7 +158,7 @@ main {
     gap: 4px;
 
     font-size: 11pt;
-    font-family: "nanumesquareneo_c", sans-serif;
+    font-weight: normal;
     color: black;
 }
 
@@ -191,4 +207,38 @@ main {
 .productCard {
     position: relative;
     cursor: pointer;
+}
+
+/* 결과 없음 모달 관련 요소들 */
+.emptyModal {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.modalWrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.modalBox {
+    background: white;
+    border-radius: 10pt;
+    padding: 50px 50px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.modalContent {
+    color: #99A99B;
+}
+
+.emptyModalEmoji {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(calc(-50% + 70px), -70%);
 }

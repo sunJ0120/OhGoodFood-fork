@@ -4,7 +4,7 @@
 }
 @font-face {
   font-family: 'nanumesquareneo_b';
-  src: url('font/NANUMSQUARENEO-BRG.ttf');
+  src: url('font/NANUMSQUARENEO-bRG.ttf');
 }
 
 /* 전체 박스 */
@@ -35,7 +35,7 @@
   margin-bottom: 20px; /* 카드 사이 간격 */
   border: 2px solid #E5DFD5;
   border-radius: 10px;
-  box-sizing: border-box;
+  padding-bottom: 10px;
 }
 
 /* 리뷰어 이름 */
@@ -48,6 +48,7 @@
   line-height: 20px;
   color: #000;
   white-space: nowrap;
+  margin-top: -5px;
 }
 
 /* 리뷰 날짜 */
@@ -61,6 +62,7 @@
   color: #000;
   text-align: right;
   white-space: nowrap;
+  margin-top: -5px;
 }
 
 /* 리뷰 이미지 */
@@ -68,10 +70,12 @@
   position: absolute;
   top: 29px;
   left: 27px;
-  width: 124px;
+  width: 125px;
   height: 85px;
   object-fit: cover;
   border-radius: 10px;
+  margin-top: -5px;
+  border: 1px solid #E5DFD5;
 }
 
 /* 구분선 */
@@ -79,10 +83,11 @@
   position: absolute;
   top: 40px;
   left: 167px;
-  width: 190px;
+  width: 195px;
   height: 1px;
   border: 2px solid #E5DFD5;
   background-color: #717171;
+  margin-top: -3px;
 }
 
 /* 리뷰 본문 */
@@ -92,9 +97,10 @@
   left: 167px;
   width: 192px;
   font-weight: 400;
-  font-size: 11px;
-  line-height: 17px;
+  font-size: 12px;
+  line-height: 14px;
   color: #000;
+  margin-top: 0px;
 }
 
 /* 가게 박스 */
@@ -107,7 +113,6 @@
   background-color: #f5f3ea;
   border: 1px solid #8B6D5C;
   border-radius: 10px;
-  margin-top: -5px;
 }
 
 /* 가게 이름 */
@@ -130,6 +135,8 @@
   height: 44px;
   object-fit: cover;
   border-radius: 10px;
+  margin-left: 5px;
+  border: 1px solid #8B6D5C;
 }
 
 /* 메뉴 텍스트 */
@@ -155,7 +162,7 @@
 .reviewList .originPrice {
   display: block;
   font-weight: 700;
-  font-size: 8px;
+  font-size: 10px;
   color: #8B6D5C;
   text-decoration: line-through;
   text-align: right;
@@ -166,7 +173,7 @@
 .reviewList .salePrice {
   display: block;
   font-weight: 800;
-  font-size: 13px;
+  font-size: 15px;
   color: #535353;
   text-align: right;
 }
