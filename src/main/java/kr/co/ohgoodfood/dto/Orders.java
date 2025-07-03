@@ -42,6 +42,7 @@ public class Orders {
     private String paid_type;
     private int paid_price;
     private int paid_point;
+    private String user_nickname;
     
     public Orders() {
         this.page = 1;
