@@ -130,9 +130,11 @@
                                 <th>고객 ID</th>
                                 <th>가게 ID</th>
                                 <th>주문 번호</th>
-                                <th>결제액</th>
+                                <th>실결제액</th>
+                                <th>사용포인트</th>
                                 <th>결제 시각</th>
                                 <th>결제 유형</th>
+                                <th>결제 코드</th>
                                 <th>결제 상태</th>
                                 <th>취소 이유</th>
                             </tr>
@@ -143,20 +145,20 @@
                                     <td>${vo.s_store_id}</td>
                                     <td>${vo.order_no}</td>
                                     <td>${vo.paid_price}</td>
-                                    <td>${vo.paid_time}</td>
+                                    <td>${vo.paid_point}</td>
+                                    <td><fmt:formatDate value="${vo.paid_time}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
                                     <td>${vo.paid_type}</td>
+                                    <td>${vo.paid_code}</td>
                                     <td>
                                         <input type="hidden" name="paid_no" value="${vo.paid_no}">
                                         <select name="paid_status">
-                                            <option value="Y" ${vo.paid_status == 'Y' ? 'selected' : ''}>결제</option>
-                                            <option value="N" ${vo.paid_status == 'N' ? 'selected' : ''}>취소</option>
+                                            <option value="Y" ${vo.paid_status == 'Y' ? 'selected' : ''}>Y</option>
+                                            <option value="N" ${vo.paid_status == 'N' ? 'selected' : ''}>N</option>
                                         </select>
                                     </td>
                                     <td>
                                         <select name="fail_reason">
                                             <option value="X" ${vo.fail_reason == 'X' ? 'selected' : ''}>X</option>
-                                            <option value="잔액부족" ${vo.fail_reason == '잔액부족' ? 'selected' : ''}>잔액부족</option>
-                                            <option value="카드사거부" ${vo.fail_reason == '카드사거부' ? 'selected' : ''}>카드사거부</option>
                                             <option value="환불" ${vo.fail_reason == '환불' ? 'selected' : ''}>환불</option>
                                             <option value="기타" ${vo.fail_reason == '기타' ? 'selected' : ''}>기타</option>
                                         </select>

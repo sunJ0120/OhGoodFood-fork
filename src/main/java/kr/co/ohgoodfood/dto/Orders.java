@@ -38,6 +38,12 @@ public class Orders {
     private int sale_price;
     private Timestamp reservation_start; // reservation.jsp 에서 reservation_end -1시간 위해서
     
+    private int paid_no;
+    private String paid_type;
+    private int paid_price;
+    private int paid_point;
+    private String user_nickname;
+    
     public Orders() {
         this.page = 1;
     }
