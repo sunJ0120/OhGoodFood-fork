@@ -120,7 +120,7 @@
                                 <td>${thisMonthSales}</td>
                                 <td>
                                 <c:if test="${lastYearSales != 0}">
-                                    ${((thisYearSales - lastYearSales) / lastYearSales * 100)}%
+                                    ${((thisYearSales - lastYearSales) / lastYearSales * 100).intValue()}%
                                 </c:if>
                                 <c:if test="${lastYearSales == 0}">
                                     -
@@ -140,15 +140,15 @@
                                 <th>전년 대비 증가율</th>
                             </tr>
                             <tr class="tableValue">
-                                <td>${lastYearOrderCount}</td>
-                                <td>${thisYearOrderCount}</td>
-                                <td>${previousMonthOrderCount}</td>
+                                <td>${todayOrderCount}</td>
                                 <td>${thisMonthOrderCount}</td>
+                                <td>${thisYearOrderCount}</td>
+                                <td>${lastYearOrderCount}</td>
                                 <td>
-                                <c:if test="${previousMonthOrderCount != 0}">
-                                    ${((thisMonthOrderCount - previousMonthOrderCount) / previousMonthOrderCount * 100)}%
+                                <c:if test="${lastYearOrderCount != 0}">
+                                    ${((thisYearOrderCount - lastYearOrderCount) / lastYearOrderCount * 100).intValue()}%
                                 </c:if>
-                                <c:if test="${previousMonthOrderCount == 0}">
+                                <c:if test="${lastYearOrderCount == 0}">
                                     -
                                 </c:if>
                                 </td>
@@ -159,10 +159,21 @@
                         <p>미승인 점포</p>
                         <table border="1" class="notConfirmedStoreTable">
                             <tr>
-                                <th>전년 매출</th>
+                                <th>미승인 점포 수</th>
                             </tr>
                             <tr class="tableValue">
                                 <td>${unapprovedStoreCount} 건</td>
+                            </tr>
+                        </table>
+                        <p class="newRegisterText">금월 신규 가입</p>
+                        <table border="1" class="newRegister">
+                            <tr>
+                                <th>금월 신규 회원 수</th>
+                                <th>금월 신규 매장 수</th>
+                            </tr>
+                            <tr class="tableValue">
+                                <td>${thisMonthNewUserCount} 건</td>
+                                <td>${thisMonthNewStoreCount} 건</td>
                             </tr>
                         </table>
                     </div>

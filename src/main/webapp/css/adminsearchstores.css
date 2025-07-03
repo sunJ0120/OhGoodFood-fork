@@ -19,7 +19,7 @@ tr > th:nth-child(3), tr > td:nth-child(3) {
     height: 77px;
 }
 tr > th:nth-child(4), tr > td:nth-child(4) {
-    width: 280px;
+    width: 150px;
     height: 77px;
 }
 tr > th:nth-child(5), tr > td:nth-child(5) {
@@ -27,10 +27,16 @@ tr > th:nth-child(5), tr > td:nth-child(5) {
     height: 77px;
 }
 tr > th:nth-child(6), tr > td:nth-child(6) {
-    width: 270px;
+    width: 240px;
     height: 77px;
 }
 tr > th:nth-child(7), tr > td:nth-child(7) {
+    width: 150px;
+    height: 77px;
+    word-wrap: break-word;
+    white-space: normal;
+}
+tr > th:nth-child(8), tr > td:nth-child(8) {
     width: 100px;
     height: 77px;
 }

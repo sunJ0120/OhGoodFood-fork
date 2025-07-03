@@ -28,3 +28,19 @@
 .tableValue {
     font-size: 20px;
 }
+.newRegisterText {
+    font-size: 35px;
+    height: 50px;
+    position: absolute;
+    left: 682px !important;
+    top: 50px;
+}
+.newRegister{
+    position: absolute;
+    left: 682px !important;
+    top: 120px;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 25px;
+}
