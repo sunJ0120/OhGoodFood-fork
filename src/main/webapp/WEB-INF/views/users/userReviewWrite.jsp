@@ -102,7 +102,7 @@
 
                 <script>
                     $(function () {
-                        // ① 토글에 필요한 jQuery 변수 선언
+                        // 토글에 필요한 jQuery 변수 선언
                         const $textarea = $('#reviewText');
                         const $fileInput = $('#photoFile');
                         const $btnSubmit = $('#btnSubmit');

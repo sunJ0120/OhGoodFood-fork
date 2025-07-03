@@ -82,18 +82,18 @@ body {
 
 /* 북마크 */
 .bookmarkBtn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    z-index: 10;
-    cursor: pointer;
+     position: absolute;
+     top: 10px;
+     right: 10px;
+     background: none;
+     border: none;
+     z-index: 10;
+     cursor: pointer;
 }
 
 .bookmarkBtn img {
-    width: 30px;
-    height: 31px;
+     width: 30px;
+     height: 31px;
 }
 
 /* 컨테이너 */
@@ -315,7 +315,7 @@ body {
 /* categorySection 리스트 스타일 */
 .categorySection {
      list-style: none;
-     padding: 12px;
+     /* padding: 12px; */
      max-width: 357px;
      height: 210px;
      background: #F5F3EA;
@@ -334,6 +334,8 @@ body {
      margin-top: 10px;
      border-bottom: 1px solid #E8E8E8;
      gap: 8px;
+     overflow: visible;
+
 }
 
 .categorySection .infoRow:last-child {
@@ -355,7 +357,7 @@ body {
 .categorySection .pickupdiv {
      color: #99A99B;
      font-size: 14px;
-     margin: 0 6px;
+     margin-left: -6px;
 }
 
 /* 값 */
@@ -372,6 +374,8 @@ body {
      align-items: center;
      justify-content: space-between;
      margin-bottom: 8px;
+     margin-top: 10px;
+
 }
 
 .categorySection .addLabel {
@@ -381,13 +385,17 @@ body {
      margin-left: 15px;
 }
 
+/* 주소 텍스트 말줄임 */
 .categorySection .addValue {
-     font-size: 14px;
-     color: #666666;
-     text-align: left;
-     margin-left: 3px;
-     flex: 1;
-     word-break: break-word;
+     position: relative;
+     display: inline-block;
+     width: 145px;
+     white-space: nowrap;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     vertical-align: middle;
+     cursor: default;
+     color: #333;
 }
 
 /* 하단 노트 */
@@ -464,6 +472,7 @@ body {
 .statusBadge.soldout {
      background: #8B5E3C;
      color: #FFFFFF;
+     margin-left: 15px;
 }
 
 /* 판매중 상태 */
@@ -471,6 +480,7 @@ body {
      background: #D8A8AB;
      color: #FFFFFF;
      margin-top: 3px;
+     margin-left: 15px;
 }
 
 .statusBadgeText {
@@ -601,8 +611,8 @@ body {
 }
 
 .emptyModalEmoji {
-        margin-top: 30px;
-    margin-left: 45px;
+     margin-top: 30px;
+     margin-left: 45px;
 }
 
 
