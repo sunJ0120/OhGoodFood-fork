@@ -28,10 +28,12 @@
                                     <button class="bookmarkBtn" data-bookmarked="${productDetail.bookmarked}">
                                         <c:choose>
                                             <c:when test="${productDetail.bookmarked}">
-                                                <img src="${pageContext.request.contextPath}/img/user_bookmark.png" alt="북마크" />
+                                                <img src="${pageContext.request.contextPath}/img/user_bookmark.png"
+                                                    alt="북마크" />
                                             </c:when>
                                             <c:otherwise>
-                                                <img src="${pageContext.request.contextPath}/img/user_empty_bookmark.png" alt="북마크" />
+                                                <img src="${pageContext.request.contextPath}/img/user_empty_bookmark.png"
+                                                    alt="북마크" />
                                             </c:otherwise>
                                         </c:choose>
                                     </button>
@@ -106,9 +108,9 @@
                                                     <span class="infoLabel">카테고리</span>
                                                     <span class="pickupdiv">|</span>
                                                     <span class="infoValue">
-                                                        <c:if test="${productDetail.category_bakery=='Y'}">베이커리 </c:if>
-                                                        <c:if test="${productDetail.category_fruit=='Y'}">과일 </c:if>
-                                                        <c:if test="${productDetail.category_salad=='Y'}">샐러드 </c:if>
+                                                        <c:if test="${productDetail.category_bakery=='Y'}">베이커리 |</c:if>
+                                                        <c:if test="${productDetail.category_fruit=='Y'}">과일 |</c:if>
+                                                        <c:if test="${productDetail.category_salad=='Y'}">샐러드 |</c:if>
                                                         <c:if test="${productDetail.category_others=='Y'}">기타</c:if>
                                                     </span>
                                                 </li>
@@ -129,7 +131,9 @@
                                                 </li>
                                                 <div class="addRow">
                                                     <span class="addLabel">📍</span>
-                                                    <span class="addValue">${productDetail.store_address}</span>
+                                                    <span class="addValue" title="${productDetail.store_address}">
+                                                        ${productDetail.store_address}
+                                                    </span>
                                                     <span class="addLabel">📞</span>
                                                     <span class="addValue">${productDetail.store_telnumber}</span>
                                                 </div>

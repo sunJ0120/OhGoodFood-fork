@@ -468,14 +468,12 @@ public class UserServiceImpl implements UsersService{
             form.setReview_img(fileName);
         }
     	
-        System.out.println("[DEBUG] user_id = " + form.getUser_id());
-        System.out.println("[DEBUG] total_price = " + form.getTotal_price());
         
         // 리뷰 저장
         userMapper.insertReview(form);
         
         // 포인트 적립
-        userMapper.updateUserPoint(form);
+        userMapper.addUserPoint(form);
     }
     // AWS S3 인스턴스 반환
     	private AmazonS3 amazonS3() {
