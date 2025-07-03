@@ -31,10 +31,12 @@
     </insert>
     
     <!-- 카카오 유저 정보 업데이트 -->
-    <update id="updateInfo">
-    	UPDATE Account 
-    	SET user_name=#{nickname}, user_nickname=#{nickname}, phone_number=#{email}
-    	WHERE user_id=#{id}
-    </update>
+    <update id="updateKakaoUser" parameterType="map">
+	    UPDATE Account
+	    SET user_name = #{nickname},
+	        user_nickname = #{nickname},
+	        phone_number = #{email}
+	    WHERE user_id = #{id}
+	</update>
 
 </mapper>

@@ -26,8 +26,10 @@
 	<!-- 주문(미확정, 확정, 취소) 조회 -->
 	<select id="getOrders" resultType="kr.co.ohgoodfood.dto.Orders">
 		SELECT 
-			o.*, p.*, i.store_img
+			o.*, p.*, i.store_img, pa.*
 		FROM Orders o
+		JOIN Paid pa
+			ON o.order_no = pa.order_no
 		JOIN Product p 
 			ON o.product_no = p.product_no
 		LEFT JOIN (
@@ -105,25 +107,6 @@
 		SET order_status=#{type}, picked_at=NOW()
 		WHERE order_no=#{id}
 	</update>
-	
-	<!-- 주문상태(확정, 픽업) 조회  -->
-	<select id="getConfirmedOrPickupOrders" parameterType="String" resultType="kr.co.ohgoodfood.dto.Orders">
-	    SELECT o.*, p.*, i.store_img
-	    FROM Orders o
-	    JOIN Product p ON o.store_id = p.store_id
-	    LEFT JOIN (
-	        SELECT store_id, store_img
-	        FROM Image
-	        WHERE img_no IN (
-	            SELECT MIN(img_no)
-	            FROM Image
-	            GROUP BY store_id
-	        )
-	    ) i ON o.store_id = i.store_id
-	    WHERE o.store_id = #{id}
-	      AND o.order_status IN ('confirmed', 'pickup')
-	    ORDER BY o.ordered_at DESC
-	</select>
 	
 	<!-- 내 가게 기간 매출 조회 -->
 	<select id="getSales" resultType="kr.co.ohgoodfood.dto.StoreSales">

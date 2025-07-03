@@ -74,7 +74,7 @@ public class CommonController {
 		// 카카오 로그인 클릭시 리다이렉트uri로 이동하고 code 받음
 		//이 code로 가지고 access_token 요청
 		KakaoUser kakaoUser = commonService.getKakaoUserInfo(code); 
-		//code 넘겨서 access_token 받고 사용자 객체 저장
+		//code 넘겨서 access_token 받고 사용자 객체 저장p
         if (kakaoUser == null) {
             return "redirect:/login";
         }

@@ -43,9 +43,6 @@ public interface StoreMapper {
 	// 주문을 픽업상태로 변경
 	public int pickupOrders(@Param("id") int id, @Param("type") String type);
 
-	// 주문이 확정 혹은 픽업 상태인 것만 조회
-	public List<Orders> getConfirmedOrPickupOrders(@Param("id") String id);
-
 	// 내 가게 기간 매출 조회
 	public StoreSales getSales(@Param("store_id") String store_id, @Param("start") String start, @Param("end") String end);
 

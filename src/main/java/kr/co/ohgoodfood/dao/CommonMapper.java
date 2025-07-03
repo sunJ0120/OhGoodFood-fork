@@ -23,5 +23,5 @@ public interface CommonMapper {
 	public void insertKakaoUser(KakaoUser user);
 
 	// 카카오 로그인시 사용자 정보 업데이트
-	public int updateInfo(@Param("id") String id, @Param("nickname") String nickname, @Param("email") String email);
+	public int updateKakaoUser(@Param("id") String id, @Param("nickname") String nickname, @Param("email") String email);
 }

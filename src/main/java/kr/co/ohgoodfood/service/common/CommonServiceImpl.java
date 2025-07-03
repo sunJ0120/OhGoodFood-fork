@@ -122,7 +122,7 @@ public class CommonServiceImpl implements CommonService{
                     String email = kakaoAccount.getOrDefault("email", "none@example.com").toString();
            
                     // 카카오 로그인 시 매번 nickname, email 들고와서 갱신
-                    int r = commonMapper.updateInfo(id, nickname, email);
+                    int r = commonMapper.updateKakaoUser(id, nickname, email);
                     if(r > 0) {
                     	return new KakaoUser(id, nickname, email, accessToken);
                     }else {

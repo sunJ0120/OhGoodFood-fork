@@ -8,7 +8,9 @@ import lombok.Data;
 public class Paid {
     private int paid_no;
     private String paid_type;
-    private String paid_price;
+    private int paid_price;
+    private int paid_point;
+    
     private Timestamp paid_time;
     private String paid_status;
     private String fail_reason;

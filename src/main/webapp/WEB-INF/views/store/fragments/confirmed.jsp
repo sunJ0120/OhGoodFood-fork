@@ -53,7 +53,7 @@
 							~
 							<fmt:formatDate value="${vo.pickup_end}" pattern="HH:mm" />
 			               </div>
-			               <div class="order-card-info-ctime"><b>결제 금액 :</b> ${vo.quantity * vo.sale_price}₩</div>
+			               <div class="order-card-info-ctime"><b>결제 금액 :</b> ${vo.paid_price + vo.paid_point}₩</div>
 			               <div class="order-card-btns">
 			                   <button class="order-btn-pickup">픽업코드 : ${vo.order_code}</button>
 			               </div>
