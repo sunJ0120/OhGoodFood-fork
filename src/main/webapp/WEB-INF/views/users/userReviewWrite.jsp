@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+        <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
             <!DOCTYPE html>
@@ -176,6 +176,26 @@
                                 $btnSubmit.prop('disabled', true).removeClass('active');
                             }
                         }
+
+                        // 버튼 중복 방지 이벤트
+
+                        let isSubmitting = false;
+
+                        $('.reviewForm').on('submit', function (e) {
+                            if (isSubmitting) {
+                                e.preventDefault(); // 중복 제출 차단
+                                return;
+                            }
+
+                            isSubmitting = true;
+                            $btnSubmit.prop('disabled', true).text('등록 중...');
+
+                            // 실패 대비 fallback (3초 후 다시 활성화)
+                            setTimeout(() => {
+                                isSubmitting = false;
+                                $btnSubmit.prop('disabled', false).text('리뷰 등록하기');
+                            }, 3000);
+                        });
 
                         // 초기 상태 체크
                         updateSubmitState();
