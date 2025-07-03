@@ -14,7 +14,9 @@
             <div class="header-container">
                 <img src="${pageContext.request.contextPath}/img/storeohgoodfood_logo.png" alt="Logo Image">
                 <div class="icon-container">
-                        <img src="${pageContext.request.contextPath}/img/storelogin.png" alt="로그인" class="icon">
+                	<a href="${pageContext.request.contextPath}/login">
+                        <img src="${pageContext.request.contextPath}/img/store_login.png" alt="로그인" class="icon">
+                    </a>
                 </div>
             </div>
         </header>

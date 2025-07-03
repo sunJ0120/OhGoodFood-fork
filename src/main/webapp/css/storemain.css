@@ -30,10 +30,12 @@ main{
     padding:20px;
     
 }
-.main-header{
-    margin-top:20px;
-    margin-bottom:10px;
+.main-header {
+    margin-top: 20px;
+    margin-bottom: 10px;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
     justify-content: space-between;
 }
 .storeName{
@@ -45,16 +47,17 @@ main{
 .storeInfo{
     display: flex;
     gap:10px;
-    font-size: 13px;
+    font-size: 15px;
     font-family: 'nanumesquareneo_b';
     align-items: center;
 }
 .storeAddress {
   display: inline-block;
-    max-width: 120px;
+    max-width: 190px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    cursor: pointer;
 }
 .store-image-slider {
     width: 400px; /* 이미지 한 장의 너비 */
@@ -130,7 +133,7 @@ main{
     border: 1px solid #8B6D5C;
     border-top: none;
     border-radius: 0 0 10px 10px;
-    height: 380px;
+    height: 365px;
     padding: 20px;
     padding-top: 10px;
 }
@@ -145,7 +148,7 @@ main{
     display:flex;
     align-items: center;
     gap: 10px;
-    margin-top:20px;
+    margin-top:10px;
 }
 
 .info-title img{
@@ -162,6 +165,7 @@ main{
 .info-content{
     padding:20px;
     padding-top:0px;
+    margin-top: -10px;
 }
 .info-content p{
     color: black;
@@ -169,11 +173,23 @@ main{
 /*폼 데이터*/
 .info-content form{
     margin-top:20px;
-    font-family: 'nanumesquareneo_b';
+    font-family: 'nanumesquareneo_b'; 
     display:flex;
     flex-direction: column;
-    gap:15px;
+    gap: 15px;
     
+}
+.product_explain{
+    width: 265px;
+    height: 30px;
+    resize: none;
+    border-radius: 10px;
+    background: transparent;
+    border: 1px solid #8B6D5C;
+    padding: 10px 20px 10px 20px;
+    line-height: 1.5;
+    font-size: 16px;
+    font-family: 'nanumesquareneo';
 }
 .form-group{
     display:flex;
@@ -364,3 +380,34 @@ input[type="text"], input[type="number"] {
 
 #confirmYes { background-color: #8B6D5C; color: #fff; }
 #confirmNo { background-color: #ccc; color: #333; }
+
+/*픽업 시간 선택*/
+select#pickup-time{
+  border-radius: 5px;
+  height: 35px;
+  width: 75px;
+  font-family: 'nanumesquareneo_b';
+  padding: 5px;
+  margin-right: 5px;
+}
+select#pickup-end-time{
+  border-radius: 5px;
+  height: 35px;
+  width: 75px;
+  font-family: 'nanumesquareneo_b';
+  padding: 5px;
+  margin-right: 5px;
+}
+button#pickup-time-confirm {
+    height: 35px;
+    border-radius: 5px;
+    width: 50px;
+    background: #8B6D5C;
+    color: white;
+    border: none;
+}
+select#pickup-time option:checked,
+select#pickup-end-time option:checked {
+  background-color: #8B6D5C;  /* 선택된 옵션 배경색 */
+  color: #FFFFFF;             /* 선택된 옵션 글자색 */
+}

@@ -17,6 +17,7 @@ public class Paid {
     private String refund_request;
     private String user_id;
     private int order_no;
+    private String paid_code;
 
     private int s_paid_no;
     private int s_paid_time;

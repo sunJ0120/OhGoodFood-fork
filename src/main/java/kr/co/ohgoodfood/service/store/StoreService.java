@@ -12,6 +12,7 @@ import kr.co.ohgoodfood.dto.StoreSales;
 
 public interface StoreService {
 
+	// 가게 회원 정보 등록
 	public int insert(Store vo);
 
 	// 내 가게 리뷰보기
@@ -47,20 +48,36 @@ public interface StoreService {
 	// 주문 코드 생성
 	public int createOrderCode(int id, String string);
 
+	// 아이디 중복 여부 확인
 	public boolean isDuplicateId(String store_id);
 	
-	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, HttpServletRequest request) throws Exception;
+	// 가게 회원가입 처리 (주소, 이미지 포함)
+	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, String store_menu2, String store_menu3, HttpServletRequest request) throws Exception;
 	
+	// 단일 이미지 AWS S3 업로드 및 DB 저장
 	public void saveImage(String storeId, MultipartFile file, HttpServletRequest request) throws Exception;
 	
+	// 가게 상세 정보 조회 (마이페이지)
 	public Store getStoreDetail(String store_id);
 
+	// 가게 카테고리 정보 수정
 	public void updateStoreCategory(Store vo);
 	
+	// 가게 이미지 리스트 조회
 	public List<Image> getImagesByStoreId(String store_id);
 	
+	// 가게별 최신 상품 조회(메인용)
 	public Product getProductByStoreId(String store_id);
 	
+	// 가게 상태값 업데이트 (오픈/마감)
 	public void updateStoreStatus(String store_id, String status);
+	
+	// 상품 등록 및 픽업 정보 포함 오픈 처리
+	public void createProduct(Store store, String productExplain, String pickupDateType, String pickupStartTime, String pickupEndTime, int originPrice, int salePrice, int amount);
 
+	// 가게 미확정 주문 수 확인
+	public int checkOrderStatus(String store_id);
+	
+	// 오늘 픽업 마감 여부
+	public boolean isTodayReservationClosed(String store_id);
 }

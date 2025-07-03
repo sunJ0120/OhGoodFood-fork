@@ -2,29 +2,29 @@ package kr.co.ohgoodfood.service.store;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.security.MessageDigest;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.StoreMapper;
-
 import kr.co.ohgoodfood.dto.Alarm;
-import kr.co.ohgoodfood.dto.Orders;
-import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Image;
+import kr.co.ohgoodfood.dto.Orders;
 import kr.co.ohgoodfood.dto.Product;
+import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.Store;
 import kr.co.ohgoodfood.dto.StoreSales;
 import lombok.RequiredArgsConstructor;
@@ -34,25 +34,24 @@ import lombok.RequiredArgsConstructor;
 public class StoreServiceImpl implements StoreService {
 
 	private final AwsS3Config awsS3Config;
-
 	private final StoreMapper mapper;
 
-	// 회원가입(DB에 단순 insert)
+	// 회원가입
 	@Override
 	public int insert(Store vo) {
 		return mapper.insert(vo);
-	}
+	} 
 
 	// 아이디 중복확인
 	@Override
 	public boolean isDuplicateId(String store_id) {
-		Store store = mapper.findById(store_id); // paramMap 없이 바로 전달
+		Store store = mapper.findById(store_id);
 		return store != null;
 	}
 
 	// 회원가입 처리 (주소/이미지 포함)
 	@Override
-	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail,
+	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, String store_menu2, String store_menu3,
 			HttpServletRequest request) throws Exception {
 
 		// 비밀번호 암호화
@@ -60,9 +59,9 @@ public class StoreServiceImpl implements StoreService {
 		if (rawPwd != null && !rawPwd.isEmpty()) {
 			vo.setStore_pwd(md5(rawPwd));
 		}
-
+ 
 		// 주소 합치기 (주소가 null일 가능성도 체크)
-		if (vo.getStore_address() == null) {
+		if (vo.getStore_address() == null) { 
 			vo.setStore_address("");
 		}
 		if (storeAddressDetail != null && !storeAddressDetail.trim().isEmpty()) {
@@ -78,6 +77,20 @@ public class StoreServiceImpl implements StoreService {
 		// confirmed, store_status 기본값 N
 		vo.setConfirmed("N");
 		vo.setStore_status("N");
+		
+		// 대표메뉴 합치기
+		String menu1 = vo.getStore_menu() != null ? vo.getStore_menu().trim() : "";
+		String menu2 = store_menu2 != null ? store_menu2.trim() : "";
+		String menu3 = store_menu3 != null ? store_menu3.trim() : "";
+
+		// 빈 문자열 제거 후 " | "로 join
+		String combinedMenu = Stream.of(menu1, menu2, menu3)
+		.map(String::trim)
+		.filter(s -> s != null && !s.isEmpty())
+		.collect(Collectors.joining(" | "))
+		.trim();
+
+		vo.setStore_menu(combinedMenu);
 
 		// insert 실행
 		mapper.insert(vo);
@@ -90,6 +103,7 @@ public class StoreServiceImpl implements StoreService {
 				}
 			}
 		}
+
 	}
 
 	// 이미지 AWS S3에 업로드하고 DB에 기록
@@ -99,9 +113,10 @@ public class StoreServiceImpl implements StoreService {
 		metadata.setContentType(file.getContentType());
 		metadata.setContentLength(file.getSize());
 
-		// 공개 읽기 설정
+		// s3에 이미지 업로그
 		amazonS3().putObject(new PutObjectRequest(awsS3Config.getBucket(), fileName, file.getInputStream(), metadata)); // 공개 읽기 설정
 
+		// DB에 이미지 정보 저장
 		Image image = new Image();
 		image.setStore_id(storeId);
 		image.setStore_img(fileName);
@@ -113,7 +128,7 @@ public class StoreServiceImpl implements StoreService {
         return awsS3Config.amazonS3();
     }
 
-	// MD5 암호화 메서드 추가
+	// MD5 암호화 메서드 
 	private String md5(String input) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
@@ -134,14 +149,19 @@ public class StoreServiceImpl implements StoreService {
 	    return mapper.findImagesByStoreId(store_id);
 	}
 	
-	
 	// 매장 상품 조회 (메인화면용) 
 	@Override
 	public Product getProductByStoreId(String store_id) {
-	    return mapper.findProductByStoreId(store_id);
+	    return mapper.findLatestProductByStoreId(store_id);
 	}
 	
-	// 가게 상태 업데이트
+	// 미확정 주문 개수 조회
+	@Override
+	public int checkOrderStatus(String storeId) {
+		return mapper.checkOrderStatus(storeId);
+	}
+
+	// 가게 상태 업데이트 (오픈/마감)
 	@Override
 	public void updateStoreStatus(String store_id, String status) {
 	    Map<String, Object> param = new HashMap<>();
@@ -151,8 +171,49 @@ public class StoreServiceImpl implements StoreService {
 	    mapper.updateStoreStatus(param);
 	}
 	
-	// 마이페이지
-	// store_i로 마이페이지 조회
+	// 상품 등록 및 오픈 처리
+	public void createProduct(Store store, String productExplain, String pickupDateType, String pickupStartTime, String pickupEndTime,
+                          int originPrice, int salePrice, int amount) {
+
+		// 픽업 날짜 계산 (오늘/내일)
+		LocalDate pickupDate = pickupDateType.equals("today")
+			? LocalDate.now()
+			: LocalDate.now().plusDays(1);
+		
+		// pickup_start(픽업 시작 시간), pickup_end(픽업 종료 시간)
+		LocalDateTime pickupStart = LocalDateTime.of(pickupDate, LocalTime.parse(pickupStartTime));
+		LocalDateTime pickupEnd = LocalDateTime.of(pickupDate, LocalTime.parse(pickupEndTime));
+		
+		// reservation_end(예약 마감 시간) 계산
+		LocalDateTime reservationEnd;
+		if (pickupDateType.equals("today")) {
+			reservationEnd = pickupStart.minusHours(1);
+		} else {
+			reservationEnd = LocalDateTime.of(LocalDate.now(), store.getClosed_at().toLocalTime());
+		}
+		
+		// 상품 객체 생성 및 저장
+		Product product = new Product();
+		product.setStore_id(store.getStore_id());
+		product.setPickup_start(Timestamp.valueOf(pickupStart));
+		product.setPickup_end(Timestamp.valueOf(pickupEnd));
+		product.setReservation_end(Timestamp.valueOf(reservationEnd));
+		product.setOrigin_price(originPrice);
+		product.setSale_price(salePrice);
+		product.setAmount(amount);
+		product.setProduct_explain(productExplain); 
+
+		mapper.insertProduct(product);
+	}
+	
+	// 오늘 이미 마감된 내역이 있는지 확인
+	@Override
+	public boolean isTodayReservationClosed(String storeId) {
+	    int count = mapper.checkTodayReservationEnd(storeId);
+	    return count > 0;
+	}
+	
+	// 마이페이지 가게 상세 정보 조회
 	@Override
 	public Store getStoreDetail(String store_id) {
 		return mapper.findById(store_id);
@@ -161,13 +222,12 @@ public class StoreServiceImpl implements StoreService {
 	// 마이페이지 카테고리 정보 수정
 	@Override
 	public void updateStoreCategory(Store store) {
-		// 1. 카테고리 체크박스 null 처리 (체크 안되면 null로 넘어옴)
+		// 카테고리 체크박스 null 처리 (체크 안되면 null로 넘어옴)
 		store.setCategory_bakery(store.getCategory_bakery() != null ? "Y" : "N");
 		store.setCategory_salad(store.getCategory_salad() != null ? "Y" : "N");
 		store.setCategory_fruit(store.getCategory_fruit() != null ? "Y" : "N");
 		store.setCategory_others(store.getCategory_others() != null ? "Y" : "N");
-
-		// 2. DB 업데이트
+		
 		mapper.updateStore(store);
 
 	}

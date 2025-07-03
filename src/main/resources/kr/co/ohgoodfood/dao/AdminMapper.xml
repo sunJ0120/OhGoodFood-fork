@@ -383,7 +383,7 @@
 	<select id="checkAdminLogin" parameterType="kr.co.ohgoodfood.dto.Admin" resultType="int">
 		SELECT COUNT(*)
 		FROM Admin
-		WHERE admin_id = #{admin_id} AND admin_pwd = #{admin_pwd}
+		WHERE admin_id = #{admin_id} AND admin_pwd = MD5(#{admin_pwd})
 	</select>
 
 </mapper>

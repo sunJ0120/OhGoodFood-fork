@@ -27,7 +27,6 @@ public enum StringSplitUtils {
                 .filter(s -> !s.isEmpty())
                 .collect(Collectors.toList());
 
-        log.info("StringSplitUtils에서 list : {}", list);
         return list;
     }
 }

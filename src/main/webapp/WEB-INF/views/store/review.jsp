@@ -17,8 +17,11 @@
     <%@ include file="/WEB-INF/views/store/header.jsp"%>
     <main>
         <div class="review-section">
-            <div class="review-title">${store.store_name}</div>
-            <div class="review-subtitle">| 구매자들의 오굿백 리뷰를 확인해보세요~</div>
+			<div class="reviewHeader">
+            	<div class="review-title">${store.store_name}</div>
+            	<div class="review-subtitle">| 구매자들의 오굿백 리뷰를 확인해보세요~</div>
+			</div>
+			<div class="reviewListBox"></div>
             <div class="review-list">
             	<c:choose>
             		<c:when test="${empty reviews}">
@@ -39,11 +42,11 @@
 		                    	</c:choose>
 		                        <div class="review-content">
 		                            <div class="review-header">
-		                                <span class="review-name">${vo.user_id}</span>
 		                                <span class="review-date">
 		                                	<fmt:formatDate value="${vo.writed_at}" pattern="yyyy.MM.dd" />
 		                                </span>
 		                            </div>
+									<span class="review-name">${vo.user_nickname}</span>
 		                            <div class="review-text">
 		                                ${vo.review_content}
 		                            </div>

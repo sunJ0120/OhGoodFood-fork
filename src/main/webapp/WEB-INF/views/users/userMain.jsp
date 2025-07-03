@@ -10,399 +10,614 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/usermain.css">
 </head>
 <body>
-<div id="wrapper">
-  <%-- header include --%>
-  <%@ include file="/WEB-INF/views/users/header.jsp" %>
-
-  <main>
-    <%-- 검색바 --%>
-    <section class="searchBar">
-      <div class="searchWrapper">
-        <input type="text" placeholder="검색어를 입력하세요." class="searchInput">
-        <button class="searchBtn">
-          <img src="${pageContext.request.contextPath}/img/search_icon.png" alt="검색">
-        </button>
-      </div>
-    </section>
-
-    <%-- 필터 버튼 --%>
-    <section class="filterButtons">
-      <div class="filterDropdown">
-        <button class="categoryFilterBtn">
-          <span id="btnText">음식 종류</span>
-          <img src="${pageContext.request.contextPath}/img/user_arrow_down_icon.png" alt="드롭다운" class="dropdownToggle">
-        </button>
-        <div class="dropdownModal" id="dropdownModal" style="display: none;">
-          <ul>
-            <li><div class="item">빵 & 디저트</div></li>
-            <li><div class="item">샐러드</div></li>
-            <li><div class="item">과일</div></li>
-            <li><div class="item">그 외</div></li>
-          </ul>
+  <div id="wrapper">
+    <%-- header include --%>
+    <%@ include file="/WEB-INF/views/users/header.jsp" %>
+    <main>
+      <%-- 검색바 --%>
+      <section class="searchBar">
+        <div class="searchWrapper">
+          <input type="text" placeholder="검색어를 입력하세요." class="searchInput">
+          <button class="searchBtn">
+            <img src="${pageContext.request.contextPath}/img/search_icon.png" alt="검색">
+          </button>
         </div>
-      </div>
-      <button class="filterBtn">예약 가능만</button>
-      <button class="filterBtn pickup">오늘 픽업</button>
-      <button class="filterBtn pickup">내일 픽업</button>
-    </section>
+      </section>
 
-    <%-- 상품 리스트 --%>
-    <div class="tabBoxWrapper">
-      <div class="tabSelector">
-        <button class="tabBtn active">리스트</button>
-        <button class="tabBtn">지도</button>
-      </div>
-      <%-- topWrapper로 한 번더 감싸서 스크롤 적용 --%>
-      <div class="topWrapper">
-        <div class="productWrapper">
-          <section class="productList">
-            <c:forEach var="mainStore" items = "${mainStoreList}" >
-              <article class="productCard" data-product-no="${mainStore.product_no}">
-                <div class="cardImage">
-                  <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${mainStore.store_img}" alt="상품 이미지" class="storeImage" />
-                  <div class="cardLabel">
-                    <div class="productNameWrapper">
-                      <div class="productName">
-                          ${mainStore.store_name}
-                      </div>
-                      <div class="badge">
-                        <span class="statusText">${mainStore.pickup_status.displayName}</span>
-                        <span class="timeText">
-                          <c:choose>
-                            <c:when test="${mainStore.pickup_status.name() == 'SOLD_OUT'}">
-                              (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
-                            </c:when>
-
-                            <c:when test="${mainStore.pickup_status.name() == 'CLOSED'}">
-                              (<fmt:formatDate value="${mainStore.closed_at}" pattern="HH:mm" type="time"/>)
-                            </c:when>
-
-                            <c:when test="${mainStore.pickup_status.name() == 'TOMORROW'}">
-                              <c:if test="${mainStore.amount > 5}">(+5)</c:if>
-                              <c:if test="${mainStore.amount <= 5}">(${mainStore.amount})</c:if>
-                            </c:when>
-
-                            <c:when test="${mainStore.pickup_status.name() == 'TODAY'}">
-                              <c:if test="${mainStore.amount > 5}">(+5)</c:if>
-                              <c:if test="${mainStore.amount <= 5}">(${mainStore.amount})</c:if>
-                            </c:when>
-                          </c:choose>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="cardInfo">
-                  <div class="productTexts">
-
-                    <p class="productDesc">
-                      <c:forEach var="category" items="${mainStore.category_list}" varStatus="status">
-                        ${category}<c:if test="${!status.last}"> | </c:if>
-                      </c:forEach>
-                    </p>
-
-                    <p class="productDesc">
-                      <c:if test="${not empty mainStore.mainmenu_list}">
-                      <c:forEach var="mainmenu" items="${mainStore.mainmenu_list}" varStatus="status">
-                        ${mainmenu}<c:if test="${!status.last}"> | </c:if>
-                      </c:forEach>
-                    </c:if>
-                    </p>
-
-                    <p class="pickupTime">픽업 시간 |
-                      <strong>
-                        <span class="todayPickupText">${mainStore.pickup_status.displayName}</span>
-                        <span class="pickupStartText">
-                          <c:if test="${not empty mainStore.pickup_start}">
-                              <fmt:formatDate value="${mainStore.pickup_start}" pattern="HH:mm"/>
-                            ~
-                          </c:if>
-                        </span>
-                        <span class="pickupEndText">
-                          <c:if test="${not empty mainStore.pickup_end}">
-                              <fmt:formatDate value="${mainStore.pickup_end}" pattern="HH:mm"/>
-                          </c:if>
-                        </span>
-                      </strong>
-                    </p>
-                  </div>
-                  <div class="priceBox">
-                    <c:if test="${mainStore.origin_price != null}">
-                      <del class="originalPrice">
-                        <fmt:formatNumber value="${mainStore.origin_price}" pattern="#,###" />₩
-                      </del>
-                    </c:if>
-
-                    <c:if test="${mainStore.sale_price != null}">
-                      <span class="salePrice">
-                        <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
-                      </span>
-                    </c:if>
-                  </div>
-                </div>
-              </article>
-            </c:forEach>
-          </section>
+      <%-- 필터 버튼 --%>
+      <section class="filterButtons">
+        <div class="filterDropdown">
+          <button class="categoryFilterBtn">
+            <span id="btnText">음식 종류</span>
+            <img src="${pageContext.request.contextPath}/img/user_arrow_down_icon.png" alt="드롭다운" class="dropdownToggle">
+          </button>
+          <div class="dropdownModal" id="dropdownModal" style="display: none;">
+            <ul>
+              <li><div class="item">빵 & 디저트</div></li>
+              <li><div class="item">샐러드</div></li>
+              <li><div class="item">과일</div></li>
+              <li><div class="item">그 외</div></li>
+            </ul>
+          </div>
         </div>
+        <button class="filterBtn reservationPossible">예약 가능만</button>
+        <button class="filterBtn pickup">오늘 픽업</button>
+        <button class="filterBtn pickup">내일 픽업</button>
+      </section>
+
+      <%-- 상품 리스트 --%>
+      <div class="tabBoxWrapper">
+        <div class="tabSelector">
+          <button class="tabBtn active">리스트</button>
+          <button class="tabBtn">지도</button>
+        </div>
+        <%-- topWrapper로 한 번더 감싸서 스크롤 적용 --%>
+        <div class="topWrapper">
+          <div class="productWrapper">
+              <div class="emptyModal">
+                  <div class="modalWrapper">
+                      <img src="${pageContext.request.contextPath}/img/user_cat.png" alt="고양이" class="emptyModalEmoji"/>
+                      <div class="modalBox">
+                          <div class="modalContent">
+                              위치 정보를 조회하고 있습니다...<br>
+                              잠시만 기다려 주세요!
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
           <%-- 지도 api 영역 --%>
           <div class="mapWrapper" style="display: none;">
-            <p>여기에 지도 들어갈 예정입니다~</p>
+            <%-- 지도 안에 있는 modal --%>
+            <div class="storePinModalWrapper"></div>
+            <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapAppKey}&libraries=clusterer"></script>
+            <%-- 이 위치에서 검색 버튼 --%>
+            <button class="btnSetCenter">이 위치에서 검색</button>
           </div>
+        </div>
       </div>
-    </div>
-  </main>
+    </main>
+    <%-- footer include --%>
+    <%@ include file="/WEB-INF/views/users/footer.jsp" %>
+  </div>
+  <%-- JQuery CDN --%>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <%-- filter 이벤트 --%>
+  <script>
+    $(document).ready(function () {
+      const $dropdownToggle = $(".dropdownToggle");
+      const $dropdownModal = $("#dropdownModal");
+      const $btnText = $("#btnText");
+      const $categoryFilterBtn = $(".categoryFilterBtn");
+      const $filterButtons = $(".filterBtn");
 
-  <%-- footer include --%>
-  <%@ include file="/WEB-INF/views/users/footer.jsp" %>
-</div>
-<%-- JQuery CDN --%>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-  $(document).ready(function () {
-    const $dropdownToggle = $(".dropdownToggle");
-    const $dropdownModal = $("#dropdownModal");
-    const $btnText = $("#btnText");
-    const $categoryFilterBtn = $(".categoryFilterBtn");
-
-    $dropdownToggle.on("click", function (e) {
-      e.stopPropagation(); // 부모 클릭 방지
-      const isVisible = $dropdownModal.css("display") === "block";
-      $dropdownModal.css("display", isVisible ? "none" : "block");
-    });
-
-    // 항목 클릭 시 버튼 텍스트 바꾸고 닫기
-    $dropdownModal.find('.item').each(function () {
-      $(this).on("click", function () {
-        $dropdownModal.find('.item').removeClass("active");
-        $(this).addClass("active");
-
-        $categoryFilterBtn.addClass("active");
-        $dropdownToggle.attr("src", "${contextPath}/img/user_arrow_down_icon_active.png"); //이미지 흰색 토글로 변경
-        console.log("클릭됨:", $(this).text());
-        $btnText.text($(this).text());
-      });
-    });
-
-    //이벤트 전이 방지
-    $dropdownModal.on("click", function (e) {
-      e.stopPropagation();
-    });
-
-    // document 클릭하면 모달 닫기
-    // 필터 선택 상태는 그대로 유지하게끔 .active는 남게 구성
-    $(document).on("click", function () {
-      $dropdownModal.css("display", "none");
-    });
-  });
-</script>
-<%-- [filter] atc filter js --%>
-<script>
-  $(document).ready(function () {
-    const $filterButtons = $(".filterBtn");
-
-    $filterButtons.each(function () {
-      $(this).on("click", function () {
-        //현재 클릭된 버튼 active 추가, toggle 방식으로 두번 누르면 active 없게끔 한다.
-        $(this).toggleClass("active");
-      });
-    });
-  });
-</script>
-<%-- [main] main map 화면 전환 js --%>
-<script>
-  $(document).ready(function () {
-    const $tabBtn = $(".tabBtn");
-    const $productWrapper = $(".productWrapper");
-    const $mapWrapper = $(".mapWrapper");
-
-    $tabBtn.each(function () {
-      $(this).on("click", function () {
-        $tabBtn.removeClass("active");
-        $(this).addClass("active");
-
-        // 어떤 버튼이 눌렸느냐에 따라 화면을 전환한다.
-        if ($(this).text() === "리스트") {
-          $productWrapper.show();
-          $mapWrapper.hide();
-        } else if ($(this).text() === "지도") {
-          $productWrapper.hide();
-          $mapWrapper.show();
+      $dropdownToggle.on("click", function (e) {
+        let iconPath;
+        e.stopPropagation(); // 부모 클릭 방지
+        const isVisible = $dropdownModal.css("display") === "block";
+        //모달 보여주기/숨기기
+        $dropdownModal.css("display", isVisible ? "none" : "block");
+        // 아이콘 결정, 현재 modal이 보이는 상태일 경우 up으로
+        if (isVisible) {
+          iconPath = $categoryFilterBtn.hasClass("active")
+                  ? "/img/user_arrow_down_icon_active.png"
+                  : "/img/user_arrow_down_icon.png";
+        } else {
+          // 현재 modal이 보이지 않는 상태일 경우 down
+          iconPath = $categoryFilterBtn.hasClass("active")
+                  ? "/img/user_arrow_up_icon_active.png"
+                  : "/img/user_arrow_up_icon.png";
         }
+        $dropdownToggle.attr("src", '${pageContext.request.contextPath}' + iconPath);
       });
-    });
-  });
-</script>
-<%--[main] 픽업 상태에 따라 뱃지 색상 변경 & 카드 오퍼시티 변경 --%>
-<script>
-  $(document).ready(function () {
-    applyBadgeStyles(); // 페이지 처음 로드 시 적용
-  });
 
-  function applyBadgeStyles() {
-    $(".statusText").each(function () {
-      const text = $(this).text().trim();
-      const badge = $(this).closest(".badge");
-      const cardImage = $(this).closest(".cardImage");
-      const storeImage = cardImage.find(".storeImage");
+      // 필터링 항목 클릭 시, 버튼 텍스트 및 컬러 상태 바꾸기
+      $dropdownModal.find('.item').each(function () {
+        $(this).on("click", function () {
+          $dropdownModal.find('.item').removeClass("active");
+          $(this).addClass("active");
 
-      if (text === "오늘픽업" || text === "내일픽업") {
-        badge.css("background-color", "#D8A8AB");
-        badge.css("color", "white");
-        storeImage.removeClass("soldout");
-      } else {
-        badge.css("background-color", "#8B6D5C");
-        badge.css("color", "white");
-        storeImage.addClass("soldout");
-      }
-    });
-  }
-</script>
-<%--[main] filterBtn에 따라 필터링 적용, ajax 적용 --%>
-<script>
-  let filterParams = {}; // 최종적으로 전송할 JSON 객체
-
-  // 사용자 편의성을 위해, 검색시 enter도 가능하게 변경
-  $(document).ready(function() {
-    // 검색 버튼 클릭
-    $('.searchBtn').on('click', function () {
-      const keyword = $('.searchInput').val().trim();
-      // 이전에 filterParams.search 에 저장된 값(없으면 빈 문자열)
-      const prev = filterParams.search || '';
-
-      // 변화가 없다면(둘 다 빈칸이거나, 둘 다 같은 키워드) 요청 차단
-      if (keyword === prev) {
-        return;
-      }
-
-      // 이전과 변화가 있을 경우에만 실행
-      if (keyword) {
-        // 키워드가 있으면 필터에 넣기
-        filterParams.search = keyword;
-      } else {
-        delete filterParams.search;
-      }
-      sendFilterRequest();
-    });
-
-    // 입력창에서 엔터 키 눌렀을 때
-    $('.searchInput').on('keydown', function(e) {
-      if (e.key === 'Enter' || e.keyCode === 13) {
-        e.preventDefault();            // 엔터로도 같은 로직
-        $('.searchBtn').click();       // 클릭 이벤트 트리거, sendFilterRequest();로 이동
-      }
-    });
-
-    // 카테고리 클릭 시
-    $('.dropdownModal .item').on('click', function() {
-      const selectedCategory = $(this).text().trim();
-
-      // 카테고리 키
-      const categoryMap = {
-        '빵 & 디저트': 'category_bakery',
-        '샐러드': 'category_salad',
-        '과일': 'category_fruit',
-        '그 외': 'category_etc'
-      };
-
-      //선택된 것을 Y로 매칭
-      const key = categoryMap[selectedCategory];
-
-      if (filterParams[key] === 'Y') {
-        // 클릭한 걸 다시 누르면 전체 필터 해제 & 전체 보여주기 기능 추가
-        delete filterParams[key];
-        $('#btnText').text('음식 종류');       // 버튼 텍스트를 기본값인 음식 종류로 다시 변경
-        $('.dropdownModal .item').removeClass('active'); // 모든 active 해제 (색상 해제를 위해)
-        $('.categoryFilterBtn').removeClass('active'); // categoryFilterBtn (토글)의 active도 삭제
-        $('.dropdownToggle').attr('src', `${contextPath}/img/user_arrow_down_icon.png`); //toggle의 이미지 변경
-
-      } else {
-        // 기존 category_* 키 제거
-        Object.keys(filterParams).forEach(k => {
-          if (k.startsWith('category_')) delete filterParams[k];
+          $categoryFilterBtn.addClass("active");
+          $dropdownToggle.attr("src", "${pageContext.request.contextPath}/img/user_arrow_down_icon_active.png"); //이미지 흰색 토글로 변경
+          $btnText.text($(this).text());
         });
+      });
 
-        // 새 카테고리 설정
-        filterParams[key] = 'Y';
-        $('#btnText').text(selectedCategory);
+      //이벤트 전이 방지
+      $dropdownModal.on("click", function (e) {
+        e.stopPropagation();
+      });
+
+      // document 클릭하면 모달 닫기
+      // 필터 선택 상태는 그대로 유지하게끔 .active는 남게 구성
+      $(document).on("click", function () {
+        $dropdownModal.css("display", "none");
+      });
+
+      $filterButtons.each(function () {
+        $(this).on("click", function () {
+          //현재 클릭된 버튼 active 추가, toggle 방식으로 두번 누르면 active 없게끔 한다.
+          $(this).toggleClass("active");
+        });
+      });
+    });
+  </script>
+  <%-- kakao 지도 호출 --%>
+  <%-- [main] main map 화면 전환 js --%>
+  <script>
+    //지도가 처음 뜬건지 확인하기 위한 init 변수
+    let isInit = false;
+    //지도
+    let map;
+    //카카오 지도에서 받아온 위도, 경도 담긴 변수
+    let coords;
+    //위치 정보 허용 안할 경우, 우리 사업장 위치로 지정되도록 변수 지정 (ANT 빌딩)
+    let staticLatitude  = 37.5593799298988;
+    let staticLongitude = 126.922667641634;
+
+    //내 현재 위치 (위도, 경도)
+    let myLatitude;
+    let myLongitude;
+
+    //현재 띄워진 마커를 담는 전역 리스트
+    let storeMarkers = [];
+    // 필터링 적용시 최종적으로 전송할 JSON 객체
+    let filterParams = {};
+
+    // 이전에 클릭된 마커 참조
+    let selectedMarker = null;
+    // 이전에 클릭된 마커의 pos 정보
+    let selectedMarkerPos = null;
+
+    // 매진, 마감 가게 핀 (갈색)
+    let closePin = "${pageContext.request.contextPath}/img/user_close_pin.png";
+    // 오늘픽업, 내일픽업 핀 (핑크색)
+    let openPin  = "${pageContext.request.contextPath}/img/user_open_pin.png";
+    // cluster 처리를 위한 전역변수, 전역으로 선언만 해둔다.
+    let clusterer = null;
+
+    //center 위치 변경 되었을때 사용할 마커 초기화 함수
+    function clearStoreMarkers() {
+      if (clusterer) {
+        clusterer.clear();    // 클러스터안의 모든 마커를 비워야 한다.
       }
-      sendFilterRequest(); // AJAX 호출
+      storeMarkers.forEach(m => m.setMap(null));  // 지도에서 제거
+      storeMarkers = []; // 마커 초기화
+    }
+
+    //1km반경 가게 위도, 경도 정보를 이용해서 마커 그리는 함수
+    function drawStoreMarkers() {
+      const positions = getProductListLatLong(); //위도 경도, storeId, storeStatus, amount 정보가 담김
+      positions.forEach(pos => {
+        const imageSize  = new kakao.maps.Size(30, 30); //기본 pin 크기는 30 * 30
+        const imgSrc     = (pos.store_status === 'Y' && pos.amount > 0) ? openPin : closePin;
+        const markerImg  = new kakao.maps.MarkerImage(imgSrc, imageSize);
+        const marker     = new kakao.maps.Marker({ //marker 생성을 위해서는, map 정보와 latlng객체와 마커 이미지가 필요하다.
+          map:      map,
+          position: pos.latlng,
+          image:    markerImg
+        });
+        storeMarkers.push(marker); //marker를 전역으로 저장해두는 storeMarkers에 만들어진 marker 객체들 전부 담는다.
+        markerClickEventSetter(marker,pos); //marker를 그린 다음에 마커에 이벤트를 setting 하기 위함이다.
+      });
+      // 마커 생성이 끝난 뒤에 한 번 호출해서 클러스터에 담기 위함이다.
+      // clusterer 가 준비된 경우에만 실행하도록 한다.
+      if (clusterer) {
+        clusterer.addMarkers(storeMarkers); //cluster 객체에 담아뒀던 marker 모음을 넣어서 클러스터 생성
+      }
+    }
+
+    //마커 크기 원래대로 reset 하는 함수, 다른 marker를 눌러서 reset해야 할 경우 동작
+    function resetSelectedMarker(){
+      // 현재 클릭된 마커 크기를 원래대로 되돌린다.
+      const imgSrc = (selectedMarkerPos.store_status === 'Y' && selectedMarkerPos.amount > 0) ? openPin : closePin;
+      selectedMarker.setImage(new kakao.maps.MarkerImage(imgSrc, new kakao.maps.Size(30, 30)));
+
+      // 기존에 선택된 마커들 없애기, 이제 선택됐던 마커가 없어야 하므로 초기화한다.
+      selectedMarker = null;
+      selectedMarkerPos = null;
+    }
+
+    //마커에 클릭 이벤트 주입, 리스트 요소를 주입
+    function markerClickEventSetter(marker,pos){
+      // 클릭 이벤트 등록
+      kakao.maps.event.addListener(marker, 'click', function() {
+
+        //기존에 클릭한 마커가 있을 경우, 상태 reset
+        if (selectedMarker) {
+          resetSelectedMarker();
+        }
+
+        //현재 클릭된 마커 크기를 키운다. 큰 마커는 40 * 40
+        const newSrc = (pos.store_status === 'Y' && pos.amount > 0) ? openPin : closePin;
+        marker.setImage(new kakao.maps.MarkerImage(newSrc, new kakao.maps.Size(40, 40)));
+
+        //현재 선택된 마커로 선택 마커를 업데이트 한다.
+        selectedMarker = marker;
+        selectedMarkerPos = pos;
+
+        //pin을 클릭했을때 가게 정보카드에 들어갈 정보를 가져오기 위한 ajax
+        $.ajax({
+          url: '${pageContext.request.contextPath}/user/map/pin',
+          type: 'GET',
+          data: { store_id : pos.store_id },
+          success: function(html) {
+            $('.storePinModalWrapper').html(html);
+              //ajax로 fragment 변경할 경우, 기존에 사용하던 이벤트들을 한 번 더 불러와야 한다.
+              //뱃지 상태 변경
+              applyBadgeStyles();
+              //모달 클릭 이벤트
+              storePinModalClickEvent();
+          },
+          error: function(xhr, status, err) {
+            console.error("AJAX 오류", status, err);
+          }
+        });
+      });
+    }
+
+    // 현재 1km 방면의 전체 가게 리스트의 위도 경도, storeId, storeStatus, amount를 담아서 positions객체를 생성하기 위한 함수
+    function getProductListLatLong(){
+      let positions = [];
+
+      $('.productWrapper .productCard').each(function() {
+        let $productCard = $(this);
+
+        let latitude = parseFloat($productCard.data('latitude'));
+        let longitude = parseFloat($productCard.data('longitude'));
+
+        let storeId = $productCard.data('storeId');
+        let storeStatus = $productCard.data('storeStatus'); //JQuery는 camelCase로 매핑한다.
+        let amount = $productCard.data('amount');
+
+        //위도, 경도가 있을 경우 진행한다.
+        if (!isNaN(latitude) && !isNaN(longitude)){
+          positions.push({
+            store_id : storeId,
+            store_status : storeStatus,
+            amount : amount,
+            latlng: new kakao.maps.LatLng(latitude, longitude) //카카오 맵을 사용하기 위해서는 latlng 객체로 위도 경도를 감싸야 한다.
+          });
+        }
+      });
+      return positions;
+    }
+    // 내 위치 마커를 표시하기 위한 함수
+    function makeMyLocationMarker(latitude, longitude) {
+      let imageSrc    = '${pageContext.request.contextPath}/img/user_my_pin.png',
+              imageSize   = new kakao.maps.Size(50, 50),
+              imageOption = { offset: new kakao.maps.Point(25, 50) },
+              markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption),
+              markerPosition = new kakao.maps.LatLng(latitude, longitude);
+
+      let marker = new kakao.maps.Marker({
+        position: markerPosition,
+        image: markerImage
+      });
+      marker.setMap(map); //내 위치 마커를 map에 setting
+    }
+
+    // 브라우저에서 위치를 가져오는 Promise 래퍼
+    // navigator.geolocation를 이용해서 내 WIFI 정보로 내위치를 가져온다.
+    function getCurrentLocation() {
+      return new Promise((resolve, reject) => {
+        if (!navigator.geolocation) {
+          return reject(new Error('Geolocation 미지원'));
+        }
+        navigator.geolocation.getCurrentPosition(
+                pos => resolve(pos.coords),
+                err => reject(err),
+                { enableHighAccuracy: true, //GPS 우선 사용
+                  timeout: 5000
+                }
+        );
+      });
+    }
+
+    // 카카오 맵 초기에 한 번 그리기 위함이다.
+    function initDrawMap(latitude, longitude) {
+      const mapWrapper = document.querySelector('.mapWrapper');
+      const center = new kakao.maps.LatLng(latitude, longitude);
+      map = new kakao.maps.Map(mapWrapper, {
+        center: center,
+        level: 3
+      });
+
+      // map이 준비된 다음에, 클러스터러도 한 번만 생성하도록 한다.
+      clusterer = new kakao.maps.MarkerClusterer({
+        map: map,
+        averageCenter: true,
+        minLevel: 5, //클러스터 생성 기준 레벨은 5
+        disableClickZoom: true // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정 (1레벨씩 확대하는 기능을 클릭 이벤트로 등록하기 위함이다.)
+      });
+
+      // 클러스터 클릭 이벤트를 등록한다.
+      kakao.maps.event.addListener(clusterer, 'clusterclick', function(cluster) {
+        // 현 지도 레벨보다 1단계 확대한 레벨
+        const level = map.getLevel() - 1;
+        // 클러스터 중심을 앵커로 삼아 레벨을 조정
+        map.setLevel(level, { anchor: cluster.getCenter() });
+      });
+
+      // 초기화 완료이므로, 초기화 판별 여부 변수를 true로 지정
+      isInit = true;
+    }
+
+    // filterBtn에 따라 필터링 적용, ajax 적용
+    $(function() {
+      // 검색 버튼을 클릭할시, 검색어를 filterParams에 추가
+      $('.searchBtn').on('click', function () {
+        const keyword = $('.searchInput').val().trim();
+        const prev = filterParams.search || '';
+        if (keyword === prev) { //이전에 검색했던 키워드이거나, 빈칸일 경우 초기화
+          return;
+        }
+
+        if (keyword) {
+          filterParams.search = keyword;
+        } else {
+          delete filterParams.search;
+        }
+
+        sendFilterRequest();
+      });
+
+      // 엔터 키로 검색이 가능하도록 설정
+      $('.searchInput').on('keydown', function(e) {
+        if (e.key === 'Enter' || e.keyCode === 13) {
+          e.preventDefault();
+          $('.searchBtn').click();
+        }
+      });
+
+      // 토글 필터링 공용 함수, filterParams에 담는 기능과 두 번 클릭시 filter에서 remove 하는 기능을 담고 있다.
+      // groupToggle의 경우, 오늘 픽업과 내일 픽업은 같은 그룹이라 동시 선택을 하지 못하도록 + category는 하나만 선택할 수 있도록 하기 위함이다.
+      function toggleCommonFilter(key, val, $btn, groupToggle = null){
+
+        // 단일 케이스와 복수 케이스를 통일된 배열로 변환한다.
+        const keys = Array.isArray(key) ? key : [key];
+        const vals = Array.isArray(val) ? val : [val];
+
+        // 현재 filterParams 에 해당 키 & 값이 모두 적용돼 있는지 체크한다.
+        const allOn = keys.every((k, i) => filterParams[k] === vals[i]);
+
+        if (allOn) {
+          // 모두 적용중 일경우 한꺼번에 해제한다.
+          keys.forEach(k => delete filterParams[k]);
+          $btn.removeClass('active');
+        }else {
+          // 동시 선택을 막아야 하는 경우, 그룹의 active를 지운다.
+          if (groupToggle) {
+            // 그룹에 해당하는 버튼들의 .active 전부 해제
+            $(groupToggle).removeClass('active');
+            // filterParams 중 같은 key 그룹(접두사)인 항목들을 삭제해서 동시 선택 방지, 배열값을 처리하도록 구성한다.
+            const prefix = keys[0].split('_')[0];
+            Object.keys(filterParams)
+                    .filter(k => k.split('_')[0] === prefix)
+                    .forEach(k => delete filterParams[k]);
+          }
+          //선택된 filterParams에 key + val들을 추가한다.
+          keys.forEach((k, i) => { filterParams[k] = vals[i]; });
+          //선택된 $btn에 active 추가
+          $btn.addClass('active');
+        }
+      }
+
+      // 카테고리 토글 검색
+      $('.dropdownModal .item').on('click', function() {
+        const $this    = $(this);
+        const selected = $this.text().trim();
+        const mapKey   = {
+          '빵 & 디저트':'category_bakery',
+          '샐러드':'category_salad',
+          '과일':'category_fruit',
+          '그 외':'category_etc'
+        }[selected];
+
+        //카테고리의 경우, 하나만 선택하도록 구성
+        toggleCommonFilter(mapKey, 'Y', $this, '.dropdownModal .item');
+
+        const isActive = !!filterParams[mapKey];
+        $('#btnText').text(isActive ? selected : '음식 종류'); //active 아니면 음식 종류로 변경
+        $('.dropdownToggle').attr('src', '${pageContext.request.contextPath}' +
+                        (isActive ? '/img/user_arrow_down_icon_active.png' : '/img/user_arrow_down_icon.png'));
+
+        //active 상태에 따라 .active class 해제
+        if (isActive) {
+          $('.categoryFilterBtn').addClass('active');
+        } else {
+          $('.categoryFilterBtn').removeClass('active');
+        }
+
+        sendFilterRequest(); //검색 AJAX로 연결
+      });
+
+      // 예약 가능, 오늘 & 내일 픽업 필터 클릭
+      $('.filterBtn').on('click', function () {
+        const $this = $(this);
+        const txt = $this.text().trim();
+        if (txt === '예약 가능만') {
+          //예약 가능만의 경우는 두 가지 조건이 다 들어갸아 하므로 배열로 정의한다.
+          const keys = ['store_status', 'amount'];
+          const vals = ['Y', 1];
+
+          toggleCommonFilter(keys, vals, $this,'.filterBtn.reservationPossible');
+
+        } else if (txt === '오늘 픽업' || txt === '내일 픽업') {
+          const key = 'pickup_start';
+          const d = new Date();
+          if (txt === '내일 픽업') {
+            d.setDate(d.getDate() + 1);
+          }
+          const val = d.toISOString().slice(0, 10); //내일 픽업 값을 먼저 조정한 다음에 slice
+
+          toggleCommonFilter(key, val, $this,'.filterBtn.pickup');
+        }
+        sendFilterRequest();
+      });
     });
 
-    // 필터 버튼 클릭 시
-    $('.filterBtn').on('click', function () {
-      const $this = $(this);
-      const filterText = $this.text().trim();
-
-      if (filterText === '예약 가능만') {
-        const key = 'store_status';
-        const value = 'Y';
-
-        if (filterParams[key] === value) {
-          delete filterParams[key];
-          $this.removeClass('active');
-        } else {
-          filterParams[key] = value;
-          $this.addClass('active');
-        }
-      } else if (filterText === '오늘 픽업' || filterText === '내일 픽업') {
-        const key = 'pickup_start';
-        const date = new Date();
-
-        if (filterText === '내일 픽업') date.setDate(date.getDate() + 1);
-        const formatted = date.toISOString().slice(0, 10);
-
-        // 토글
-        if (filterParams[key] === formatted) {
-          // 이미 존재할 경우 삭제한다.
-          delete filterParams[key];
-          $this.removeClass('active');
-        } else {
-          filterParams[key] = formatted;
-          $('.filterBtn.pickup').removeClass('active'); // 오늘/내일 둘 다 해제
-          $this.addClass('active'); //현재 클릭한 버튼에 다시 active 추가
-        }
-      }
-      sendFilterRequest(); // AJAX 요청
-    });
-
-    // 공통 AJAX 요청 함수
-    // JSON BODY가 들어가야 하기 때문에 POST로 요청한다.
+    // AJAX 요청 (fragment 방식)
     function sendFilterRequest() {
       $.ajax({
         url: '${pageContext.request.contextPath}/user/filter/store',
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(filterParams),
-        //fragment 방식 사용, DOM을 다시 그리자니 너무 노가다라...
-        success: function (responseHtml) {
-          //로그 찍기
-          console.log("[AJAX 응답] 서버에서 받은 HTML:", responseHtml);
-          $('.productWrapper').html(responseHtml);
-          applyBadgeStyles(); //오퍼시티 적용
+        success: function(html) {
+          $('.productWrapper').html(html);
+
+          //기존 마커 지우기
+          clearStoreMarkers();
+          //새 마커 추가
+          drawStoreMarkers();
+          //뱃지 상태 변경
+          applyBadgeStyles();
+          //카드 클릭 이벤트
+          productCardClickEvent();
         },
-        error: function (xhr, status, error) {
-          console.error("[AJAX 오류 발생]");
-          console.error("status:", status);
-          console.error("HTTP 상태 코드:", xhr.status);
-          console.error("응답 텍스트:", xhr.responseText);
-          console.error("error 객체:", error);
+        error: function(xhr, status, err) {
+          console.error("AJAX 오류", status, err);
         }
       });
     }
-  });
-</script>
-<%-- Product card 누르면 상세 이동 --%>
-<script>
-  $(function(){
-    $('.productCard').on('click', function(){
-      const no = $(this).data('product-no');
 
-      console.log("product-no : " + no);
+    // 페이지 로드 시, 가장 먼저 위치 권한 요청 → fragment 교체
+    $(document).ready(async function () {
+      const $tabBtn         = $(".tabBtn");
+      const $productWrapper = $(".productWrapper");
+      const $mapWrapper     = $(".mapWrapper");
+      const $storePinModalWrapper = $('.storePinModalWrapper'); // center 변경 버튼 눌렀을때 modal 닫기 위함이다.
+
+      //위치 정보 허용에 따른 위도 경도값 지정
+      try {
+        coords = await getCurrentLocation();   // 위치 허용 다이얼로그 뜸
+        myLatitude = coords.latitude;
+        myLongitude = coords.longitude;
+      } catch (e) {
+        console.warn('위치 정보 로드 실패:', e.message);
+        myLatitude  = staticLatitude;
+        myLongitude = staticLongitude;
+      }
+      // 위치정보 세팅 후 최초 fragment 로드
+      filterParams.latitude  = myLatitude;
+      filterParams.longitude = myLongitude;
+
+      sendFilterRequest();
+
+      // 탭 전환 시
+      $tabBtn.each(function () {
+        $(this).on("click", function () {
+          $tabBtn.removeClass("active");
+          $(this).addClass("active");
+
+          if ($(this).text() === "리스트") {
+            $productWrapper.show();
+            $mapWrapper.hide();
+          } else {
+            $productWrapper.hide();
+            $mapWrapper.show();
+          }
+
+          // 맵은 최초 한 번만 초기화
+          if (!isInit) {
+            initDrawMap(myLatitude, myLongitude);
+            makeMyLocationMarker(myLatitude, myLongitude); //내 위치 마커
+
+            //기존 마커 지우기
+            clearStoreMarkers();
+            //새 마커 추가
+            drawStoreMarkers();
+          } else {
+            // 이후에는 레이아웃만 다시 그리기(relayout)
+            map.relayout();
+            map.setCenter(map.getCenter());
+          }
+
+          //이 위치에서 검색 버튼 클릭 했을때, center를 변경하기 위함이다.
+          $('.btnSetCenter').on('click', function(){
+            //현재 지도의 바뀐 중심 좌표 가져오기
+            const center = map.getCenter();
+
+            const changeLatitude = center.getLat();
+            const changeLongitude = center.getLng();
+
+            // 현재 filterParams에 들어가는 latitude 덮어쓰기.
+            filterParams.latitude  = changeLatitude;
+            filterParams.longitude = changeLongitude;
+
+            $storePinModalWrapper.addClass('hidden'); // center 바뀌면, 열려있던 modal을 닫는다.
+            $mapWrapper.removeClass('modalOpen'); // 버튼 다시 아래로 내리기
+            sendFilterRequest();
+          });
+        });
+      });
+    });
+  </script>
+  <%--[main] 픽업 상태에 따라 뱃지 색상 변경 & 카드 오퍼시티 변경 --%>
+  <script>
+    function applyBadgeStyles() {
+      $(".statusText").each(function () {
+        const text = $(this).text().trim();
+        const badge = $(this).closest(".badge");
+        const cardImage = $(this).closest(".cardImage");
+        const storeImage = cardImage.find(".storeImage");
+
+        if (text === "오늘픽업" || text === "내일픽업") {
+          badge.css("background-color", "#D8A8AB");
+          badge.css("color", "white");
+          storeImage.removeClass("soldout");
+        } else {
+          badge.css("background-color", "#8B6D5C");
+          badge.css("color", "white");
+          storeImage.addClass("soldout");
+        }
+      });
+    }
+  </script>
+  <%-- Product card 누르면 상세 이동 --%>
+  <script>
+  function productCardClickEvent() {
+    $('.productCard').on('click', function(){
+      const store_status = $(this).data('storeStatus');
+      const no = $(this).data('productNo');
+
+      if (store_status === 'N') {
+        alert('아직 오픈 전입니다!');
+        return;  // 클릭 처리 종료
+      }
+
       const ctx = '${pageContext.request.contextPath}';
       window.location.href = ctx + '/user/productDetail?product_no=' + no;
     });
-  });
-</script>
+  }
+  </script>
+  <%-- pin에 있는 storePinModal 누르면 상세 이동 --%>
+  <script>
+      function storePinModalClickEvent() {
+          const $mapWrapper = $('.mapWrapper');
+          const $wrapper = $('.storePinModalWrapper');
+          $wrapper.removeClass('hidden'); //새로운 핀 클리기 히든 해제
+          const $modal = $wrapper.find('.storePinModal');
+
+          $mapWrapper.addClass('modalOpen'); //modalOpen 후 높이 변경하는 이벤트 추가
+          $modal.on('click', function(){
+              const store_status = $(this).data('storeStatus');
+              const no = $(this).data('productNo');
+
+              if (store_status === 'N') {
+                  alert('아직 오픈 전입니다!');
+                  return;  // 클릭 처리 종료
+              }
+              const ctx = '${pageContext.request.contextPath}';
+              window.location.href = ctx + '/user/productDetail?product_no=' + no;
+          });
+
+          //모달 내부 클릭 전파 방지
+          $modal.off('click.modalInside').on('click.modalInside', function(e){
+              e.stopPropagation();
+          });
+      }
+  </script>
 </body>
 </html>

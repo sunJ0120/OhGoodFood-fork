@@ -29,9 +29,9 @@
                          data-name="review" alt="리뷰" class="menu-icon">
                 </a>
             </div>
-            <div class="menu-item <%= uri.contains("/store/reservation") ? "active" : "" %>">
+            <div class="menu-item <%= uri.contains("/store/order") ? "active" : "" %>">
                 <a href="/store/reservation">
-                    <img src="${pageContext.request.contextPath}/img/store_order<%= uri.contains("/store/reservation") ? "_active" : "" %>.png"
+                    <img src="${pageContext.request.contextPath}/img/store_order<%= uri.contains("/store/order") ? "_active" : "" %>.png"
                          data-name="order" alt="주문" class="menu-icon">
                 </a>
             </div>
@@ -44,3 +44,30 @@
         </div>
     </div>
 </footer>
+
+<script>
+    $(document).ready(function () {
+        const currentPath = window.location.pathname;
+        $('.menu-container a').each(function () {
+            if ($(this).attr('href') === currentPath) {
+                $(this).on('click', function (e) {
+                    e.preventDefault(); // 클릭 막기
+                }).css('pointer-events', 'none'); // 마우스도 막기 (선택사항)
+            }
+        });
+
+        // 새로운 알람이 있을 때 알람 이미지 변경
+        $.ajax({
+            type: "POST",
+            url: "/store/alarmcheck",
+            success: function(res){
+                if(res == true || res === "true"){
+                    $(".alarmIcon").attr('src', '${pageContext.request.contextPath}/img/storealarm_active.png');
+                }
+            }
+
+        });
+    });
+
+</script>
+
