@@ -13,6 +13,14 @@
   <div id="wrapper">
     <%-- header include --%>
     <%@ include file="/WEB-INF/views/users/header.jsp" %>
+
+    <%-- 내 위치 말풍선 윈도우 --%>
+    <template class="myLocationTemplate">
+      <div class="myLocationTemplateWindow">
+        📌내 위치
+      </div>
+    </template>
+
     <main>
       <%-- 검색바 --%>
       <section class="searchBar">
@@ -54,16 +62,8 @@
         <%-- topWrapper로 한 번더 감싸서 스크롤 적용 --%>
         <div class="topWrapper">
           <div class="productWrapper">
-              <div class="emptyModal">
-                  <div class="modalWrapper">
-                      <img src="${pageContext.request.contextPath}/img/user_cat.png" alt="고양이" class="emptyModalEmoji"/>
-                      <div class="modalBox">
-                          <div class="modalContent">
-                              위치 정보를 조회하고 있습니다...<br>
-                              잠시만 기다려 주세요!
-                          </div>
-                      </div>
-                  </div>
+              <div class="modalWrapper">
+                  <img src="${pageContext.request.contextPath}/img/user_locationCatModal.png" alt="고양이" class="catModal"/>
               </div>
           </div>
           <%-- 지도 api 영역 --%>
@@ -72,7 +72,12 @@
             <div class="storePinModalWrapper"></div>
             <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoMapAppKey}&libraries=clusterer"></script>
             <%-- 이 위치에서 검색 버튼 --%>
-            <button class="btnSetCenter">이 위치에서 검색</button>
+              <button class="btnSetCenter">
+                <span class="btnText">이 위치에서 검색</span>
+                <span class="btnIcon">
+                  <img src="${pageContext.request.contextPath}/img/user_location_icon.png" alt="내 위치 아이콘">
+                </span>
+              </button>
           </div>
         </div>
       </div>
@@ -84,31 +89,52 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <%-- filter 이벤트 --%>
   <script>
+    let $dropdownModal = $("#dropdownModal");
+    let isVisible = $dropdownModal.css("display") === "block";
+    let $dropdownToggle = $(".dropdownToggle");
+
+    // toggle로 모달 열기
+    function openDropdown() {
+      $dropdownModal.css("display", "block");
+    }
+    // toggle로 모달 닫기
+    function closeDropdown() {
+      $dropdownModal.css("display", "none");
+    }
+
+    // toggle open 상태에 따라 화살표 변경하기
+    function toggleDropDownArrow($categoryFilterBtn){
+      let iconPath;
+
+      // 아이콘 결정, 현재 modal이 보이는 상태일 경우 up으로
+      if (isVisible) {
+        iconPath = $categoryFilterBtn.hasClass("active")
+                ? "/img/user_arrow_up_icon_active.png"
+                : "/img/user_arrow_up_icon.png";
+      } else {
+        // 현재 modal이 보이지 않는 상태일 경우 down
+        iconPath = $categoryFilterBtn.hasClass("active")
+                ? "/img/user_arrow_down_icon_active.png"
+                : "/img/user_arrow_down_icon.png";
+      }
+
+      $dropdownToggle.attr("src", '${pageContext.request.contextPath}' + iconPath);
+    }
+
     $(document).ready(function () {
-      const $dropdownToggle = $(".dropdownToggle");
-      const $dropdownModal = $("#dropdownModal");
       const $btnText = $("#btnText");
       const $categoryFilterBtn = $(".categoryFilterBtn");
       const $filterButtons = $(".filterBtn");
 
-      $dropdownToggle.on("click", function (e) {
-        let iconPath;
+      $categoryFilterBtn.on("click", function (e) {
         e.stopPropagation(); // 부모 클릭 방지
-        const isVisible = $dropdownModal.css("display") === "block";
-        //모달 보여주기/숨기기
-        $dropdownModal.css("display", isVisible ? "none" : "block");
-        // 아이콘 결정, 현재 modal이 보이는 상태일 경우 up으로
-        if (isVisible) {
-          iconPath = $categoryFilterBtn.hasClass("active")
-                  ? "/img/user_arrow_down_icon_active.png"
-                  : "/img/user_arrow_down_icon.png";
-        } else {
-          // 현재 modal이 보이지 않는 상태일 경우 down
-          iconPath = $categoryFilterBtn.hasClass("active")
-                  ? "/img/user_arrow_up_icon_active.png"
-                  : "/img/user_arrow_up_icon.png";
+        if(!isVisible){
+          openDropdown();
+        }else{ //열려있음
+          closeDropdown();
         }
-        $dropdownToggle.attr("src", '${pageContext.request.contextPath}' + iconPath);
+        isVisible = !isVisible; //반대로 바꾸기
+        toggleDropDownArrow($categoryFilterBtn); //모달 상태에 따라 토글 이미지 변경
       });
 
       // 필터링 항목 클릭 시, 버튼 텍스트 및 컬러 상태 바꾸기
@@ -118,20 +144,10 @@
           $(this).addClass("active");
 
           $categoryFilterBtn.addClass("active");
-          $dropdownToggle.attr("src", "${pageContext.request.contextPath}/img/user_arrow_down_icon_active.png"); //이미지 흰색 토글로 변경
           $btnText.text($(this).text());
+
+          toggleDropDownArrow($categoryFilterBtn);  //모달 상태에 따라 토글 이미지 변경
         });
-      });
-
-      //이벤트 전이 방지
-      $dropdownModal.on("click", function (e) {
-        e.stopPropagation();
-      });
-
-      // document 클릭하면 모달 닫기
-      // 필터 선택 상태는 그대로 유지하게끔 .active는 남게 구성
-      $(document).on("click", function () {
-        $dropdownModal.css("display", "none");
       });
 
       $filterButtons.each(function () {
@@ -140,6 +156,20 @@
           $(this).toggleClass("active");
         });
       });
+    });
+
+    // 모달 내부 클릭 시 전파 차단
+    $dropdownModal.on("click", function(e){
+      e.stopPropagation();
+    });
+
+    // 문서 어디든 클릭했을 때
+    $(document).on("click", function () {
+      if (isVisible) {
+        closeDropdown();
+        isVisible = false;
+        toggleDropDownArrow($categoryFilterBtn);
+      }
     });
   </script>
   <%-- kakao 지도 호출 --%>
@@ -175,6 +205,7 @@
     let openPin  = "${pageContext.request.contextPath}/img/user_open_pin.png";
     // cluster 처리를 위한 전역변수, 전역으로 선언만 해둔다.
     let clusterer = null;
+    let $categoryFilterBtn = $(".categoryFilterBtn");
 
     //center 위치 변경 되었을때 사용할 마커 초기화 함수
     function clearStoreMarkers() {
@@ -295,6 +326,26 @@
         image: markerImage
       });
       marker.setMap(map); //내 위치 마커를 map에 setting
+
+      //내 위치 마커에 마우스 호버 이벤트 (추가기능)
+      let myLocationTemplate = document.querySelector('.myLocationTemplate');
+      let iwContent = myLocationTemplate.innerHTML;
+
+      //인포 윈도우를 생성한다.
+      let infowindow = new kakao.maps.InfoWindow({
+        content : iwContent
+      });
+
+      // 마커에 마우스오버 이벤트를 등록
+      kakao.maps.event.addListener(marker, 'mouseover', function() {
+        infowindow.open(map, marker);
+      });
+
+      // 마커에 마우스아웃 이벤트를 등록
+      kakao.maps.event.addListener(marker, 'mouseout', function() {
+        // 마우스 아웃시 인포 윈도우를 제거
+        infowindow.close();
+      });
     }
 
     // 브라우저에서 위치를 가져오는 Promise 래퍼
@@ -419,9 +470,8 @@
 
         const isActive = !!filterParams[mapKey];
         $('#btnText').text(isActive ? selected : '음식 종류'); //active 아니면 음식 종류로 변경
-        $('.dropdownToggle').attr('src', '${pageContext.request.contextPath}' +
-                        (isActive ? '/img/user_arrow_down_icon_active.png' : '/img/user_arrow_down_icon.png'));
-
+        <%--$('.dropdownToggle').attr('src', '${pageContext.request.contextPath}' +--%>
+        <%--                (isActive ? '/img/user_arrow_down_icon_active.png' : '/img/user_arrow_down_icon.png'));--%>
         //active 상태에 따라 .active class 해제
         if (isActive) {
           $('.categoryFilterBtn').addClass('active');
@@ -429,6 +479,7 @@
           $('.categoryFilterBtn').removeClass('active');
         }
 
+        toggleDropDownArrow($categoryFilterBtn);
         sendFilterRequest(); //검색 AJAX로 연결
       });
 
