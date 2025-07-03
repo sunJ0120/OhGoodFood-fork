@@ -97,8 +97,8 @@ main {
 }
 
 .bookmarkWrapper{
-    width: 28px;
-    height: 28px;
+    width: 23px;
+    height: 23px;
     overflow: hidden;
 }
 
@@ -123,13 +123,13 @@ main {
 }
 
 .productName {
-    font-size: 14pt;
+    font-size: 13pt;
     font-family: 'nanumesquareneo_b';
     color: black;
 }
 
-.todayPickupText{
-    font-family: 'nanumesquareneo_b';
+.todayPickupText strong{
+    color: #5A4632;
 }
 
 /* 배지 (내일/오늘 텍스트) */
@@ -137,7 +137,7 @@ main {
     background-color: #A68C6F;
     color: #FFFFFF;
     font-size: 11px;
-    padding: 4px 12px;
+    padding: 4px 10px;
     border-radius: 10px;
 }
 
@@ -148,6 +148,7 @@ main {
 }
 
 .statusText{
+    font-family: 'nanumesquareneo_b';
     font-size: 11pt;
 }
 
@@ -178,6 +179,7 @@ main {
 
     margin: 0;
     line-height: 1.4;
+    font-family: 'nanumesquareneo_b';
 
     white-space: nowrap;
     overflow: hidden;
@@ -187,6 +189,7 @@ main {
 /* 픽업 시간 */
 .pickupTime {
     margin: 8px 0 0;
+    font-family: 'nanumesquareneo_b';
 }
 
 .pickupTime span {
@@ -208,7 +211,7 @@ main {
     font-weight: normal;
 }
 
-.salePrice {
+.salePrice strong{
     font-size: 15px;
     color: #5A4632;
     font-family: 'nanumesquareneo_b';

@@ -64,7 +64,9 @@
                            data-block-cancel="${userOrder.block_cancel}"
                            data-has-review="${userOrder.has_review}">
                     <div class="orderTop">
-                      <div class="storeName">${userOrder.store_name}</div>
+                      <div class="storeName">
+                        <strong>${userOrder.store_name}</strong>
+                      </div>
                       <div class="headerLeftWrapper">
                         <div class="orderStatus">
                           <c:choose>
@@ -105,35 +107,37 @@
                       </div>
                     </div>
                     <hr>
-
                     <div class="orderMiddle">
-
                       <div class="imgWrapper">
                         <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
                       </div>
-
                       <div class="orderInfoWrapper">
                         <div class="orderInfo">
                           <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.quantity}개</span></div>
                           <div class="orderInfoSub"><div class="orderTime">픽업 시간 : </div>
                             <span class="orderTimeValue">
-                        <span class="pickupStartText">
-                        <c:if test="${not empty userOrder.pickup_start}">
-                          <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
-                          ~
-                        </c:if>
-                      </span>
-                      <span class="pickupEndText">
-                        <c:if test="${not empty userOrder.pickup_end}">
-                          <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
-                        </c:if>
-                      </span>
-                      </span>
+                              <span class="pickupStartText">
+                                <c:if test="${not empty userOrder.pickup_start}">
+                                  <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
+                                  ~
+                                </c:if>
+                              </span>
+                              <span class="pickupEndText">
+                                <c:if test="${not empty userOrder.pickup_end}">
+                                  <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
+                                </c:if>
+                              </span>
+                            </span>
                           </div>
                           <div class="orderInfoSub"><div class="orderPaid">결제 금액 : </div>
                             <span class="orderPaidValue">
-                        <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
-                      </span>
+                              <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
+                            </span>
+                          </div>
+                          <div class="orderInfoSub"><div class="orderPaidPoint">사용 포인트 : </div>
+                            <span class="orderPaidPointValue">
+                              <fmt:formatNumber value="${userOrder.paid_point}" pattern="#,###" />P
+                            </span>
                           </div>
                         </div>
                       </div>

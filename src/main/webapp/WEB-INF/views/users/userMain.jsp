@@ -17,7 +17,7 @@
     <%-- 내 위치 말풍선 윈도우 --%>
     <template class="myLocationTemplate">
       <div class="myLocationTemplateWindow">
-        📌내 위치
+        <strong>📌내 위치</strong>
       </div>
     </template>
 

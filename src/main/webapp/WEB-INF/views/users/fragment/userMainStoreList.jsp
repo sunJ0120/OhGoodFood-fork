@@ -25,7 +25,7 @@
             <div class="cardLabel">
               <div class="productNameWrapper">
                 <div class="productName">
-                    ${mainStore.store_name}
+                  <strong>${mainStore.store_name}</strong>
                 </div>
                 <div class="badge">
                   <span class="statusText">${mainStore.pickup_status.displayName}</span>
@@ -90,7 +90,7 @@
 
               <c:if test="${mainStore.sale_price != null}">
                       <span class="salePrice">
-                        <fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩
+                        <strong><fmt:formatNumber value="${mainStore.sale_price}" pattern="#,###" />₩</strong>
                       </span>
               </c:if>
             </div>
