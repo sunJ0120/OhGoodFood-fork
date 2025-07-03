@@ -2,6 +2,8 @@ package kr.co.ohgoodfood.controller.common;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -46,6 +48,25 @@ public class CommonController {
 		model.addAttribute("kakaoClientId", kakaoClientId);
 		model.addAttribute("kakaoRedirectUri", kakaoRedirectUri);
 		return "common/login";
+	}
+
+	@GetMapping("/")
+	public String toLogin() {
+		return "redirect:/login";
+	}
+
+	@GetMapping("/home")
+	public String toLogin2() {
+		return "redirect:/login";
+	}
+	
+	// 로그인 페이지 접속 시 카카오와 네이버 키 값 전송
+	@PostMapping("/login/kakao")
+	public Map<String, Object> loginKakao(Model model) {
+		Map<String, Object> result = new HashMap<>();
+		result.put("kakaoClientId", kakaoClientId);
+		result.put("kakaoRedirectUri", kakaoRedirectUri);
+		return result;
 	}
 	
 	@PostMapping("/login")
@@ -138,7 +159,7 @@ public class CommonController {
 	@GetMapping("/naver/login")
 	public String naverLogin(HttpSession session) throws Exception {
 	    // 네이버에 등록된 Redirect URI
-	    String redirectUri = "http://localhost:8090/naver/callback";
+	    String redirectUri = "https://ohgoodfood.com/naver/callback";
 
 	    // CSRF 방지를 위한 임의의 상태(state) 값 생성
 	    String state = UUID.randomUUID().toString();

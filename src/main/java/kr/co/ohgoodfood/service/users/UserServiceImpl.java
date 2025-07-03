@@ -63,7 +63,8 @@ public class UserServiceImpl implements UsersService{
 
         // 카테고리 이름과 pickup 상태를 저장
         for(MainStore mainStore : mainStoreList){
-            mainStore.setPickup_status(getPickupDateStatus(mainStore));
+            PickupStatus pickupStatus = getPickupDateStatus(mainStore);
+            mainStore.setPickup_status(pickupStatus == null ? PickupStatus.CLOSED : pickupStatus);
             mainStore.setCategory_list(getCategoryList(mainStore));
             mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
         }
@@ -123,6 +124,9 @@ public class UserServiceImpl implements UsersService{
         if("N".equals(mainStore.getStore_status())){
             return PickupStatus.CLOSED;
         }else{
+            if(mainStore.getPickup_start() == null){
+                return PickupStatus.CLOSED;
+            }
             LocalDate pickupDate = mainStore.getPickup_start().toLocalDateTime().toLocalDate();
             // [매진] - amount = 0
             if(mainStore.getAmount() == 0){
@@ -133,12 +137,15 @@ public class UserServiceImpl implements UsersService{
                     return PickupStatus.TODAY;
                 }
                 // [내일픽업] 현재 날짜 + 1과 같음
-                if (pickupDate.isEqual(today.plusDays(1))) {
+                // else if (pickupDate.isEqual(today.plusDays(1))) {
+                //     return PickupStatus.TOMORROW;
+                // }
+                else {
                     return PickupStatus.TOMORROW;
                 }
             }
         }
-        throw new IllegalStateException();
+        // throw new IllegalStateException();
     }
 
     /**
@@ -248,11 +255,10 @@ public class UserServiceImpl implements UsersService{
             userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
             //주문에 해당하는 포인트를 적립
             userOrder.setPoint(getOrderPoint(userOrder));
-            userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getPickup_status(), userOrder.getReservation_end()));
+            userOrder.setBlock_cancel(getOrderBlockCancel(userOrder.getOrder_status(), userOrder.getReservation_end()));
         }
         return orderList;
     }
-
     /**
      * 사용자의 구매 금액별 포인트를 설정하기 위한 메서드
      *
@@ -267,12 +273,12 @@ public class UserServiceImpl implements UsersService{
      * pickup_status가 오늘픽업 혹은 내일 픽업인 경우에, (즉, confirmed 상태) 한 시간 전에 취소 block 상태를 만들기 위함입니다.
      * reservation_end -1이 NOW일때를 계산합니다.
      *
-     * @param pickup_status      : 블락 판별에 필요한 pickup_status (confirmed 인 경우, 즉 오늘픽업이나 내일 픽업인 경우에만 진행)
+     * @param order_status       : order_status가 reservation인 경우에만 진행한다.
      * @param reservation_end    : 예약 마감 한시간 전을 계산하기 위한 reservation_end
      * @return                   : block_cancel 값을 설정하기 위해 boolean return
      */
-    public boolean getOrderBlockCancel(PickupStatus pickup_status, Timestamp reservation_end){
-        if(pickup_status.equals(PickupStatus.TODAY) || pickup_status.equals(PickupStatus.TOMORROW)){
+    public boolean getOrderBlockCancel(String order_status, Timestamp reservation_end){
+        if(order_status.equals("reservation")){
             Timestamp now = new Timestamp(System.currentTimeMillis());
 
             long oneHourInMillis = 60L * 60L * 1000L; //한시간 계산

@@ -134,27 +134,27 @@ public class StoreController {
 	}
 	
 	// 토글에서 확정주문 클릭시 -> 확정 주문 내역 조회
-	@GetMapping("/confirmed") 
-	public String getConfirmedOrders(HttpSession sess, Model model) {
-		Store login = (Store) sess.getAttribute("store");
-		if (login == null) {
-			model.addAttribute("msg", "로그인이 필요합니다.");
-			model.addAttribute("url", "/login");
-			return "store/alert";
-		}
+	// @GetMapping("/confirmed") 
+	// public String getConfirmedOrders(HttpSession sess, Model model) {
+	// 	Store login = (Store) sess.getAttribute("store");
+	// 	if (login == null) {
+	// 		model.addAttribute("msg", "로그인이 필요합니다.");
+	// 		model.addAttribute("url", "/login");
+	// 		return "store/alert";
+	// 	}
 
-		List<Orders> lists = storeService.getConfirmedOrPickupOrders(login.getStore_id());
+	// 	// List<Orders> lists = storeService.getConfirmedOrPickupOrders(login.getStore_id());
 		
-		for(Orders order : lists) {
-			if("pickup".equals(order.getOrder_status())) {
-				order.setPickup_status("complete");
-			}else {
-				order.setPickup_status("today");
-			}
-		}
-		model.addAttribute("order", lists);
-		return "/store/confirmedorder";
-	}
+	// 	for(Orders order : lists) {
+	// 		if("pickup".equals(order.getOrder_status())) {
+	// 			order.setPickup_status("complete");
+	// 		}else {
+	// 			order.setPickup_status("today");
+	// 		}
+	// 	}
+	// 	model.addAttribute("order", lists);
+	// 	return "/store/confirmedorder";
+	// }
 	
 	// 확정 주문 내역에서 체크 표시 클릭시 픽업 상태로 변경
 	@PostMapping("/confirmed/{id}/pickup")

@@ -40,7 +40,7 @@
 							</div>
 			                
 			                <div class="sns-login-box">
-				                <a href="https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}&response_type=code" style="text-decoration: none;">
+				                <a class="kakaoLink" href="https://kauth.kakao.com/oauth/authorize?client_id=${kakaoClientId}&redirect_uri=${kakaoRedirectUri}&response_type=code" style="text-decoration: none;">
 									<div class="kakao">
 										<img src="${pageContext.request.contextPath}/img/kakao.png" alt="카카오 아이콘" class="kakaoIcon">
 										<div class="kakaoTitle">카카오로 로그인</div>
@@ -97,6 +97,15 @@
 	   	            return;
 	   	        }
 	   	    });			
+
+			// $.ajax({
+			// 	method:"POST",
+			// 	url:"/login/kakao",
+			// 	success: function(res){
+			// 		$(".kakaoLink").attr('href','https://kauth.kakao.com/oauth/authorize?client_id='+res.kakaoClientId+'&redirect_uri='+res.kakaoRedirectUri+'&response_type=code');
+			// 	}
+			// })
+
 	     });
 		 $(document).on('click', '#confirmationModal button', function () {
 			$('#confirmationModal').hide();

@@ -218,4 +218,19 @@
 		store_explain = #{store_explain}
 		WHERE store_id = #{store_id}
 	</update>
+	
+	<!-- Order_no로 Paid 조회 후 paid_point를 Account 에 환불 -->
+	<update id="refundUserPoint" parameterType="int">
+		UPDATE Account SET user_point = user_point + (SELECT p.paid_point
+		FROM Orders o 
+		JOIN Paid p ON o.order_no = p.order_no
+		JOIN Account a ON a.user_id = o.user_id
+		WHERE o.order_no = #{id})
+	</update>
+
+	<!-- 주문 취소 시 Product 의 amount 증가 -->
+	<update id="increaseProductAmount" parameterType="int">
+		UPDATE Product SET amount = amount + (SELECT quantity FROM Orders WHERE order_no = #{id})
+		WHERE product_no = (SELECT product_no FROM Orders WHERE order_no = #{id})
+	</update>
 </mapper>

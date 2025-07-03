@@ -40,7 +40,7 @@ public interface StoreService {
 	public int confirmPickupOrders(int id, String type);
 
 	// 주문상태가 확정 혹은 픽업을 조회
-	public List<Orders> getConfirmedOrPickupOrders(String id);
+	// public List<Orders> getConfirmedOrPickupOrders(String id);
 
 	// 내 가게 매출 조회
 	public StoreSales getSales(String store_id, String start, String end);

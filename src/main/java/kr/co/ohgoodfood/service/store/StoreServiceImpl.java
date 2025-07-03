@@ -262,6 +262,8 @@ public class StoreServiceImpl implements StoreService {
 	//미확정 주문 -> 주문 취소
 	@Override
 	public int cancleOrders(int id, String type) {
+		mapper.refundUserPoint(id);
+		mapper.increaseProductAmount(id);
 		return mapper.cancleOrders(id, type);
 	}
 	
@@ -342,11 +344,11 @@ public class StoreServiceImpl implements StoreService {
 		return mapper.confirmOrders(id, type);
 	}
 	
-	// 'confirmed', 'pickup'인 주문 조회
-	@Override
-	public List<Orders> getConfirmedOrPickupOrders(String id) {
-		return mapper.getConfirmedOrPickupOrders(id);
-	}
+	// // 'confirmed', 'pickup'인 주문 조회
+	// @Override
+	// public List<Orders> getConfirmedOrPickupOrders(String id) {
+	// 	return mapper.getConfirmedOrPickupOrders(id);
+	// }
 	
 	// 기간 매출 조회
 	@Override
