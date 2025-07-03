@@ -27,10 +27,6 @@
                     <img src="${pageContext.request.contextPath}/img/store_person.png" alt="마이페이지" class="personIcon">
                     <div class="myInfo">내 정보</div>
                 </div>
-                <div class="deleteAccount-group">
-                    <img src="${pageContext.request.contextPath}/img/store_deleteAccount.png" alt="탈퇴하기" class="deleteAccountIcon">
-                    <button class="deleteAccount">탈퇴하기</button>
-                </div>
             </div>
 
             <!-- 아이디, 사업자등록번호 -->
