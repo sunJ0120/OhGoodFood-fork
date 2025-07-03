@@ -70,4 +70,35 @@
     <select id="getAccountById" parameterType="String" resultType="kr.co.ohgoodfood.dto.Account">
         SELECT * FROM Account WHERE user_id = #{user_id}
     </select>
+    
+    <!-- 네이버 유저 정보 업데이트 -->
+	<update id="updateNaverUser" parameterType="kr.co.ohgoodfood.dto.Account">
+	    UPDATE Account
+	    SET
+	        user_name = #{user_name},
+	        user_nickname = #{user_nickname},
+	        phone_number = #{phone_number}
+	    WHERE user_id = #{user_id}
+	</update>
+	
+	<!-- 카카오 객체 검색 -->
+	<select id="findById" resultType="kr.co.ohgoodfood.dto.Account">
+        SELECT * FROM Account WHERE user_id = #{userId}
+    </select>
+
+    <!-- 카카오 회원 가입 -->
+    <insert id="insertKakaoUser">
+    INSERT INTO Account (
+        user_id, user_name, user_nickname, user_pwd, phone_number, join_date, user_status, location_agreement
+    ) VALUES (
+        #{id}, #{nickname}, #{nickname}, 'kakao_login', #{email}, NOW(), 'Y', 'Y'
+    )
+    </insert>
+
+    <!-- 카카오 유저 정보 업데이트 -->
+    <update id="updateInfo">
+    	UPDATE Account 
+    	SET user_name=#{nickname}, user_nickname=#{nickname}, phone_number=#{email}
+    	WHERE user_id=#{id}
+    </update>
 </mapper>
