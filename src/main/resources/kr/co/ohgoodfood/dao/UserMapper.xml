@@ -462,7 +462,7 @@
 	</insert>
 	
 	<!-- 결제 금액의 1% 적립 -->
-	<update id="updateUserPoint" parameterType="kr.co.ohgoodfood.dto.ReviewForm">
+	<update id="addUserPoint" parameterType="kr.co.ohgoodfood.dto.ReviewForm">
 	    UPDATE Account
 	    SET user_point = COALESCE(user_point, 0) + FLOOR(#{total_price} * 0.01)
 	    WHERE user_id = #{user_id}
