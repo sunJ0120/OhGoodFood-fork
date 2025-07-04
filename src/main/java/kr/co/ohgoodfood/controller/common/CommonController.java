@@ -59,11 +59,7 @@ public class CommonController {
 	public String toLogin2() {
 		return "redirect:/login";
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> bbbefbfee6e5d59b1cafcb1b097ce1a3d648658a
 	// 로그인 페이지 접속 시 카카오와 네이버 키 값 전송
 	@PostMapping("/login/kakao")
 	public Map<String, Object> loginKakao(Model model) {
@@ -72,11 +68,7 @@ public class CommonController {
 		result.put("kakaoRedirectUri", kakaoRedirectUri);
 		return result;
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> bbbefbfee6e5d59b1cafcb1b097ce1a3d648658a
 	@PostMapping("/login")
 	public String login(HttpServletRequest request, HttpSession sess, Model model) {
 		String id = request.getParameter("id"); // 아이디 파라미터로
@@ -166,13 +158,9 @@ public class CommonController {
 	// 네이버 소셜로그인(네이버 인증 URL 생성 후 리다이렉트)
 	@GetMapping("/naver/login")
 	public String naverLogin(HttpSession session) throws Exception {
-<<<<<<< HEAD
-		// 네이버에 등록된 Redirect URI
-		String redirectUri = "https://ohgoodfood.com/naver/callback";
-=======
+
 	    // 네이버에 등록된 Redirect URI
 	    String redirectUri = "https://ohgoodfood.com/naver/callback";
->>>>>>> bbbefbfee6e5d59b1cafcb1b097ce1a3d648658a
 
 		// CSRF 방지를 위한 임의의 상태(state) 값 생성
 		String state = UUID.randomUUID().toString();
