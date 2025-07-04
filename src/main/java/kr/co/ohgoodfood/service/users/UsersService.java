@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.MainStoreDTO;
 import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.UserMainFilter;

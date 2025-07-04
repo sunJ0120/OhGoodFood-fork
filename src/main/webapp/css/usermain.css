@@ -68,12 +68,15 @@ main {
     justify-content: center;
     font-family: 'nanumesquareneo_b';
 
-    padding: 10px 5px;
+    /* 상하 패딩 고정 10px / 좌우 패딩 유동적 */
+    padding-block: 10px;
+    padding-inline: clamp(4px, calc((100vw - 375px) * (5 / 65) + 5px), 10px);
+
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 12px;
 
     gap: 4px;
 }

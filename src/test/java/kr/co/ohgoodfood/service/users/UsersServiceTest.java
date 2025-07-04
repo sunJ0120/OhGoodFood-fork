@@ -1,17 +1,11 @@
 package kr.co.ohgoodfood.service.users;
 
 //import kr.co.ohgoodfood.dao.TestMapper;
-import kr.co.ohgoodfood.dto.MainStore;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * UserService의 핵심 로직 메서드들을 검증하는 단위 테스트 클래스.

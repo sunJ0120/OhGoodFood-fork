@@ -1,11 +1,9 @@
 package kr.co.ohgoodfood.dto;
 
+import java.util.List;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.List;
 
 /**
  * [DTO] MainStore
@@ -16,32 +14,13 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class MainStore {
+public class MainStoreDTO {
     //Store table에서 가져오는 정보들
-    private String store_id;
-    private String store_name;
-    private String store_menu;
-    private String store_status;
-    private String category_bakery;
-    private String category_fruit;
-    private String category_salad;
-    private String category_others;
-    private Time closed_at;
-    private String confirmed;
-    private Double latitude;
-    private Double longitude;
-
+    private Store store;
     //Product table에서 가져오는 정보들
-    private int product_no;
-    private Timestamp pickup_start;
-    private Timestamp pickup_end;
-    private int origin_price;
-    private int sale_price;
-    private Timestamp reservation_end;
-    private int amount;
-
+    private Product product;
     //Image table에서 가져오는 정보들
-    private String store_img;
+    private Image image;
 
     //[추가 정보] DB에는 없는 추가 정보
     private PickupStatus pickup_status; //오늘픽업인지 내일 픽업인지 마감인지를 저장

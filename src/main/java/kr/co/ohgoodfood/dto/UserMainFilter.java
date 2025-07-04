@@ -33,7 +33,7 @@ public class UserMainFilter {
     //오늘예약 & 내일 예약 토글
     //필터링 사용할때, LocalDate 사용하면 계속 에러나서 LocalDate 사용
     private LocalDate pickup_start;
-    //검색어
+    //[추가] 검색어
     private String search;
 
     //위도, 경도

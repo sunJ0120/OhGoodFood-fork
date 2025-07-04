@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import kr.co.ohgoodfood.dao.UserMainMapper;
 import kr.co.ohgoodfood.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
 import kr.co.ohgoodfood.dto.Account;
 import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.MainStore;
+import kr.co.ohgoodfood.dto.MainStoreDTO;
 import kr.co.ohgoodfood.dto.PickupStatus;
 import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.Review;

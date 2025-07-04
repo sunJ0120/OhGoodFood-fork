@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 
 @Data
 @NoArgsConstructor
-public class UserOrder extends MainStore{
+public class UserOrder extends MainStore {
     //Order table에서 가져오는 정보들
     private int order_no;
     private Timestamp ordered_at;
