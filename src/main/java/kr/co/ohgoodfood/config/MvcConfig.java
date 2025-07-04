@@ -63,11 +63,11 @@ public class MvcConfig implements WebMvcConfigurer {
 
 	// 비지니스 로직이 없는 페이지의 경우
 	// addViewController의 url로 진입 시 setViewName으로 포워딩
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("/common/login");
-		registry.addViewController("/home").setViewName("/common/login");
-	}
+	// @Override
+	// public void addViewControllers(ViewControllerRegistry registry) {
+	// 	registry.addViewController("/").setViewName("/common/login");
+	// 	registry.addViewController("/home").setViewName("/common/login");
+	// }
 
 	// HikariCP
 	@Bean

@@ -76,4 +76,10 @@ public interface StoreMapper {
 
 	// 오늘 마감 여부 확인
 	public int checkTodayReservationEnd(String storeId);
+
+	// User Point 환불
+	public void refundUserPoint(int id);
+
+	// 주문 취소 시 Product 의 amount 증가
+	public void increaseProductAmount(int id);
 }

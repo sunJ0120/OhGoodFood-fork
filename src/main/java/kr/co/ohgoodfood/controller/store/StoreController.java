@@ -132,6 +132,7 @@ public class StoreController {
 			return "failed";
 		}
 	}
+<<<<<<< HEAD
 
 	// 토글에서 확정주문 클릭시 -> 확정 주문 내역 조회
 	// @GetMapping("/confirmed")
@@ -145,6 +146,21 @@ public class StoreController {
 
 	// 	// List<Orders> lists = storeService.getConfirmedOrPickupOrders(login.getStore_id());
 
+=======
+	
+	// 토글에서 확정주문 클릭시 -> 확정 주문 내역 조회
+	// @GetMapping("/confirmed") 
+	// public String getConfirmedOrders(HttpSession sess, Model model) {
+	// 	Store login = (Store) sess.getAttribute("store");
+	// 	if (login == null) {
+	// 		model.addAttribute("msg", "로그인이 필요합니다.");
+	// 		model.addAttribute("url", "/login");
+	// 		return "store/alert";
+	// 	}
+
+	// 	// List<Orders> lists = storeService.getConfirmedOrPickupOrders(login.getStore_id());
+		
+>>>>>>> bbbefbfee6e5d59b1cafcb1b097ce1a3d648658a
 	// 	for(Orders order : lists) {
 	// 		if("pickup".equals(order.getOrder_status())) {
 	// 			order.setPickup_status("complete");
@@ -155,7 +171,11 @@ public class StoreController {
 	// 	model.addAttribute("order", lists);
 	// 	return "/store/confirmedorder";
 	// }
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> bbbefbfee6e5d59b1cafcb1b097ce1a3d648658a
 	// 확정 주문 내역에서 체크 표시 클릭시 픽업 상태로 변경
 	@PostMapping("/confirmed/{id}/pickup")
 	@ResponseBody

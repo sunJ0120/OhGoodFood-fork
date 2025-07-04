@@ -161,7 +161,7 @@
                 $(".productQuantity").html($("#totalQuantity").val());
                 $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                 $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
-                if (parseInt($(".userPoint").val()) > parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
+                if (parseInt($(".userPoint").val()) >= parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
                     $(".userPoint").val(0);
                     $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                     $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
@@ -175,7 +175,7 @@
                 $(".productQuantity").html($("#totalQuantity").val());
                 $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                 $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
-                if (parseInt($(".userPoint").val()) > parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
+                if (parseInt($(".userPoint").val()) >= parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
                     $(".userPoint").val(0);
                     $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                     $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
@@ -186,12 +186,12 @@
         $(".userPoint").on("input",function(){
             $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
             $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
-            if (parseInt($(".userPoint").val()) > parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
+            if (parseInt($(".userPoint").val()) >= parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()){
                 $(".userPoint").val(0);
                 $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                 $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
             }
-            if($(".userPoint").val() > parseInt("${userPoint}")){
+            if(parseInt($(".userPoint").val()) >= parseInt("${userPoint}")){
                 $(".userPoint").val(0);
                 $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                 $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
@@ -235,8 +235,8 @@
                             amount: res.amount,
                             orderId: res.orderId,
                             orderName: "오굿백 테스트 상품",
-                            successUrl: "http://localhost:8090/payment/success",
-                            failUrl: "http://localhost:8090/payment/fail"
+                            successUrl: "https://ohgoodfood.com/payment/success",
+                            failUrl: "https://ohgoodfood.com/payment/fail"
                         });
                     } else {
                         alert("주문이 불가능합니다. 메인으로 돌아주세요")
