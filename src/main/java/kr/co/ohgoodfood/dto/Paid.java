@@ -10,7 +10,7 @@ public class Paid {
     private String paid_type;
     private int paid_price;
     private int paid_point;
-    
+
     private Timestamp paid_time;
     private String paid_status;
     private String fail_reason;
@@ -18,7 +18,6 @@ public class Paid {
     private String user_id;
     private int order_no;
     private String paid_code;
-    private int paid_point;
 
     private int s_paid_no;
     private int s_paid_time;

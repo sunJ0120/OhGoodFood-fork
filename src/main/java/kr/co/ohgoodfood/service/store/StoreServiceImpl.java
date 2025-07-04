@@ -40,7 +40,7 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int insert(Store vo) {
 		return mapper.insert(vo);
-	} 
+	}
 
 	// 아이디 중복확인
 	@Override
@@ -52,16 +52,16 @@ public class StoreServiceImpl implements StoreService {
 	// 회원가입 처리 (주소/이미지 포함)
 	@Override
 	public void registerStore(Store vo, MultipartFile[] storeImageFiles, String storeAddressDetail, String store_menu2, String store_menu3,
-			HttpServletRequest request) throws Exception {
+							  HttpServletRequest request) throws Exception {
 
 		// 비밀번호 암호화
 		String rawPwd = vo.getStore_pwd();
 		if (rawPwd != null && !rawPwd.isEmpty()) {
 			vo.setStore_pwd(md5(rawPwd));
 		}
- 
+
 		// 주소 합치기 (주소가 null일 가능성도 체크)
-		if (vo.getStore_address() == null) { 
+		if (vo.getStore_address() == null) {
 			vo.setStore_address("");
 		}
 		if (storeAddressDetail != null && !storeAddressDetail.trim().isEmpty()) {
@@ -77,7 +77,7 @@ public class StoreServiceImpl implements StoreService {
 		// confirmed, store_status 기본값 N
 		vo.setConfirmed("N");
 		vo.setStore_status("N");
-		
+
 		// 대표메뉴 합치기
 		String menu1 = vo.getStore_menu() != null ? vo.getStore_menu().trim() : "";
 		String menu2 = store_menu2 != null ? store_menu2.trim() : "";
@@ -85,10 +85,10 @@ public class StoreServiceImpl implements StoreService {
 
 		// 빈 문자열 제거 후 " | "로 join
 		String combinedMenu = Stream.of(menu1, menu2, menu3)
-		.map(String::trim)
-		.filter(s -> s != null && !s.isEmpty())
-		.collect(Collectors.joining(" | "))
-		.trim();
+				.map(String::trim)
+				.filter(s -> s != null && !s.isEmpty())
+				.collect(Collectors.joining(" | "))
+				.trim();
 
 		vo.setStore_menu(combinedMenu);
 
@@ -122,11 +122,11 @@ public class StoreServiceImpl implements StoreService {
 		image.setStore_img(fileName);
 		mapper.insertImage(image);
 	}
-	
+
 	// AWS S3 인스턴스 반환
 	private AmazonS3 amazonS3() {
-        return awsS3Config.amazonS3();
-    }
+		return awsS3Config.amazonS3();
+	}
 
 	// MD5 암호화 메서드 
 	private String md5(String input) {
@@ -146,15 +146,15 @@ public class StoreServiceImpl implements StoreService {
 	// 가게별 이미지 리스트 조회
 	@Override
 	public List<Image> getImagesByStoreId(String store_id) {
-	    return mapper.findImagesByStoreId(store_id);
+		return mapper.findImagesByStoreId(store_id);
 	}
-	
+
 	// 매장 상품 조회 (메인화면용) 
 	@Override
 	public Product getProductByStoreId(String store_id) {
-	    return mapper.findLatestProductByStoreId(store_id);
+		return mapper.findLatestProductByStoreId(store_id);
 	}
-	
+
 	// 미확정 주문 개수 조회
 	@Override
 	public int checkOrderStatus(String storeId) {
@@ -164,34 +164,34 @@ public class StoreServiceImpl implements StoreService {
 	// 가게 상태 업데이트 (오픈/마감)
 	@Override
 	public void updateStoreStatus(String store_id, String status) {
-	    Map<String, Object> param = new HashMap<>();
-	    param.put("store_id", store_id);
-	    param.put("status", status);
-	    
-	    mapper.updateStoreStatus(param);
+		Map<String, Object> param = new HashMap<>();
+		param.put("store_id", store_id);
+		param.put("status", status);
+
+		mapper.updateStoreStatus(param);
 	}
-	
+
 	// 상품 등록 및 오픈 처리
 	public void createProduct(Store store, String productExplain, String pickupDateType, String pickupStartTime, String pickupEndTime,
-                          int originPrice, int salePrice, int amount) {
+							  int originPrice, int salePrice, int amount) {
 
 		// 픽업 날짜 계산 (오늘/내일)
 		LocalDate pickupDate = pickupDateType.equals("today")
-			? LocalDate.now()
-			: LocalDate.now().plusDays(1); 
-		
+				? LocalDate.now()
+				: LocalDate.now().plusDays(1);
+
 		// pickup_start(픽업 시작 시간), pickup_end(픽업 종료 시간)
 		LocalDateTime pickupStart = LocalDateTime.of(pickupDate, LocalTime.parse(pickupStartTime));
 		LocalDateTime pickupEnd = LocalDateTime.of(pickupDate, LocalTime.parse(pickupEndTime));
-		
+
 		// reservation_end(예약 마감 시간) 계산
 		LocalDateTime reservationEnd;
 		if (pickupDateType.equals("today")) {
 			reservationEnd = pickupStart.minusHours(1);
 		} else {
 			reservationEnd = LocalDateTime.of(LocalDate.now(), store.getClosed_at().toLocalTime().minusHours(1));
-		} 
-		
+		}
+
 		// 상품 객체 생성 및 저장
 		Product product = new Product();
 		product.setStore_id(store.getStore_id());
@@ -201,18 +201,18 @@ public class StoreServiceImpl implements StoreService {
 		product.setOrigin_price(originPrice);
 		product.setSale_price(salePrice);
 		product.setAmount(amount);
-		product.setProduct_explain(productExplain); 
+		product.setProduct_explain(productExplain);
 
 		mapper.insertProduct(product);
-	} 
-	
+	}
+
 	// 오늘 이미 마감된 내역이 있는지 확인
 	@Override
 	public boolean isTodayReservationClosed(String storeId) {
-	    int count = mapper.checkTodayReservationEnd(storeId);
-	    return count > 0;
+		int count = mapper.checkTodayReservationEnd(storeId);
+		return count > 0;
 	}
-	
+
 	// 마이페이지 가게 상세 정보 조회
 	@Override
 	public Store getStoreDetail(String store_id) {
@@ -227,17 +227,17 @@ public class StoreServiceImpl implements StoreService {
 		store.setCategory_salad(store.getCategory_salad() != null ? "Y" : "N");
 		store.setCategory_fruit(store.getCategory_fruit() != null ? "Y" : "N");
 		store.setCategory_others(store.getCategory_others() != null ? "Y" : "N");
-		
+
 		mapper.updateStore(store);
 
 	}
-	
+
 	//가게 리뷰조회
 	@Override
 	public List<Review> getReviews(String storeId) {
 		return mapper.getReviews(storeId);
 	}
-	
+
 	//가게 주문내역 조회(미확정, 확정, 취소)
 	@Override
 	public List<Orders> getOrders(String storeId, String type, String selectedDate) {
@@ -252,19 +252,21 @@ public class StoreServiceImpl implements StoreService {
 		}
 		return list;
 	}
-	
+
 	//미확정 주문 -> 확정 주문으로 바꾸기
 	@Override
 	public int confirmOrders(int id, String type) {
 		return mapper.confirmOrders(id, type);
 	}
-	
+
 	//미확정 주문 -> 주문 취소
 	@Override
 	public int cancleOrders(int id, String type) {
+		mapper.refundUserPoint(id);
+		mapper.increaseProductAmount(id);
 		return mapper.cancleOrders(id, type);
 	}
-	
+
 	//사용자에게 알림 보내는 로직
 	@Override
 	public int createUserAlarm(int no, String type) {
@@ -274,7 +276,7 @@ public class StoreServiceImpl implements StoreService {
 		String userId = order.getUser_id();
 		String title = "";
 		String content = "";
-		
+
 		// type에 따라서 알람 제목, 내용 분기처리
 		if("confirmed".equals(type)) {
 			title = "확정 완료";
@@ -286,7 +288,7 @@ public class StoreServiceImpl implements StoreService {
 			title = "픽업 완료";
 			content = storeName + " 픽업을 완료하였습니다.";
 		}
-		
+
 		Alarm alarm = new Alarm();
 		alarm.setAlarm_title(title);
 		alarm.setAlarm_contents(content);
@@ -296,7 +298,7 @@ public class StoreServiceImpl implements StoreService {
 		alarm.setAlarm_read("N");
 		return mapper.insertAlarm(alarm);
 	}
-	
+
 	//가게 사장에게 알림 보내는 로직
 	@Override
 	public int createStoreAlarm(int no, String type) {
@@ -305,21 +307,21 @@ public class StoreServiceImpl implements StoreService {
 		String storeId = order.getStore_id();
 		String title = "";
 		String content = "";
-		
+
 		if("confirmed".equals(type)) {
 			title = "확정 완료";
-			content = order.getOrdered_at() + " " + order.getUser_id() + 
+			content = order.getOrdered_at() + " " + order.getUser_id() +
 					" 님의 오굿백" + order.getQuantity() + "개 예약";
 		}else if("cancel".equals(type)) {
 			title = "취소 완료";
-			content = order.getOrdered_at() + " " + order.getUser_id() + 
+			content = order.getOrdered_at() + " " + order.getUser_id() +
 					" 님의 오굿백" + order.getQuantity() + "개 예약";
 		}else if("pickup".equals(type)) {
 			title = "픽업 완료";
-			content = order.getOrdered_at() + " " + order.getUser_id() + 
+			content = order.getOrdered_at() + " " + order.getUser_id() +
 					" 님의 오굿백" + order.getQuantity() + "개 예약";
 		}
-		
+
 		Alarm alarm = new Alarm();
 		alarm.setAlarm_title(title);
 		alarm.setAlarm_contents(content);
@@ -329,36 +331,36 @@ public class StoreServiceImpl implements StoreService {
 		alarm.setAlarm_read("N");
 		return mapper.insertAlarm(alarm);
 	}
-	
+
 	//확정 주문내역에서 주문건 픽업완료 처리
 	@Override
 	public int pickupOrders(int id, String type) {
 		return mapper.pickupOrders(id, type);
 	}
-	
+
 	// 확정 주문내역에서 주문을 다시 'confirmed'로 바꾸는 로직
 	@Override
 	public int confirmPickupOrders(int id, String type) {
 		return mapper.confirmOrders(id, type);
 	}
-	
-	// 'confirmed', 'pickup'인 주문 조회
-	@Override
-	public List<Orders> getConfirmedOrPickupOrders(String id) {
-		return mapper.getConfirmedOrPickupOrders(id);
-	}
-	
+
+	// // 'confirmed', 'pickup'인 주문 조회
+	// @Override
+	// public List<Orders> getConfirmedOrPickupOrders(String id) {
+	// 	return mapper.getConfirmedOrPickupOrders(id);
+	// }
+
 	// 기간 매출 조회
 	@Override
 	public StoreSales getSales(String store_id, String start, String end) {
 		return mapper.getSales(store_id, start, end);
 	}
-	
+
 	// 주문코드 랜덤으로 생성
 	@Override
 	public int createOrderCode(int id, String type) {
 		Random rand = new Random();
-	    int randomCode = rand.nextInt(900000) + 100000;
+		int randomCode = rand.nextInt(900000) + 100000;
 		return mapper.createOrderCode(id, type, randomCode);
 	}
 }
