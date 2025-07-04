@@ -19,11 +19,11 @@
       <div class="orderHeaderText">
         <span class="title">
           <div class="orderStatusTitle">
-            전체
+            전체 주문
           </div>
-           주문 내역
+           내역
         </span>
-        <span class="subtitle"> | 지난 주문 기록</span>
+        <span class="subtitle"> | 주문 기록</span>
       </div>
 
       <%-- 필터 버튼 --%>
@@ -231,6 +231,9 @@
 
       // 버튼 텍스트 갱신
       $('#btnText').text(selectedCategory);
+
+      // 헤더 텍스트 갱신
+      $('.orderStatusTitle').text(selectedCategory);
 
       // AJAX 호출
       sendFilterRequest();

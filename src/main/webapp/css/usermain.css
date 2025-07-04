@@ -68,7 +68,7 @@ main {
     justify-content: center;
     font-family: 'nanumesquareneo_b';
 
-    padding: 10px 10px;
+    padding: 10px 5px;
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
@@ -87,11 +87,10 @@ main {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 10px;
     gap: 6px;
     box-sizing: border-box;
 
-    width: 125px;
+    width: 115px;
 }
 
 .dropdownToggle {
