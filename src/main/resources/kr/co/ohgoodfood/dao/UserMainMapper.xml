@@ -4,24 +4,26 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http:/mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.ohgoodfood.dao.UserMainMapper">
-    <resultMap id="MainStoreDTO" type="MainStoreDTO">
+    <!-- id는 resultMap의 식별자, type은 결과를 채워넣을 DTO 클래스 -->
+    <resultMap id="MainStoreDTO" type="kr.co.ohgoodfood.dto.MainStoreDTO">
         <!-- store 연관관계 매핑 -->
-        <association property="store" javaType="Store">
+        <association property="store" javaType="kr.co.ohgoodfood.dto.Store">
             <id     column="store_id"          property="store_id"/>
             <result column="store_name"        property="store_name"/>
             <result column="store_status"      property="store_status"/>
             <result column="store_menu"      property="store_menu"/>
-            <result column="category_bakery"   property="categories_bakery"/>
+            <result column="category_bakery"   property="category_bakery"/>
             <result column="category_fruit"   property="category_fruit"/>
             <result column="category_salad"   property="category_salad"/>
             <result column="category_others"   property="category_others"/>
+            <result column="closed_at"   property="closed_at"/>
             <result column="confirmed"   property="confirmed"/>
             <result column="latitude"   property="latitude"/>
             <result column="longitude"   property="longitude"/>
         </association>
 
         <!-- product 연관관계 매핑 -->
-        <association property="product" javaType="Product">
+        <association property="product" javaType="kr.co.ohgoodfood.dto.Product">
             <id     column="product_no"          property="product_no"/>
             <result column="pickup_start"        property="pickup_start"/>
             <result column="pickup_end"      property="pickup_end"/>
@@ -33,13 +35,13 @@
         </association>
 
         <!-- Image 연관관계 매핑 -->
-        <association property="image" javaType="Image">
+        <association property="image" javaType="kr.co.ohgoodfood.dto.Image">
             <result column="store_img"   property="store_img"/>
         </association>
     </resultMap>
 
     <!-- selectAllStore mapper, main에서 이용한다. -->
-    <select id="selectAllStore" parameterType="map" resultMap="MainStore">
+    <select id="selectAllStore" parameterType="map" resultMap="MainStoreDTO">
         SELECT
             s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at, s.latitude AS latitude, s.longitude AS longitude,
             pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,
@@ -97,7 +99,7 @@
     </select>
 
     <!-- selectOneStoreByStoreId mapper, main map에서 이용한다. -->
-    <select id="selectOneStoreByStoreId" parameterType="map" resultMap="MainStore">
+    <select id="selectOneStoreByStoreId" parameterType="map" resultMap="MainStoreDTO">
         SELECT
             s.store_id AS store_id, s.store_name AS store_name, s.store_menu AS store_menu, s.store_status AS store_status, s.category_bakery AS category_bakery,s.category_fruit AS category_fruit, s.category_salad AS category_salad, s.category_others  AS category_others, s.closed_at AS closed_at,
             pf.product_no AS product_no, pf.pickup_start AS pickup_start,pf.pickup_end AS pickup_end, pf.origin_price AS origin_price, pf.sale_price AS sale_price, pf.product_explain AS product_explain, pf.reservation_end AS reservation_end, pf.amount AS amount,

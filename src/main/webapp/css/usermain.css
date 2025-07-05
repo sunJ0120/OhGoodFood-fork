@@ -342,6 +342,7 @@ main {
     width: 100%;
     position: absolute;
     box-sizing: border-box;
+    font-size: 12px;
 
     top: 100%;
     font-family: 'nanumesquareneo_b';
@@ -368,7 +369,6 @@ main {
     padding: 6px 12px;
     margin: 0 12px;
     border-radius: 8px;
-    font-size: 13px;
     color: #8B6D5C;
     font-weight: normal;
     transition: all 0.2s ease-in-out;

@@ -18,12 +18,6 @@ import kr.co.ohgoodfood.dto.UserMypage;
  * - 유지 보수 및 확장 편의성을 위해 interface로 구성한다.
  */
 public interface UsersService {
-    //[Controller 로직] 메인화면 Controller 연결 로직
-    List<MainStore> getMainStoreList(UserMainFilter userMainFilter);
-
-    //[Controller 로직] Map에서 클릭한 pin 정보 Controller 연결 로직
-    MainStore getMainStoreOne(UserMainFilter userMainFilter);
-
     //[Controller 로직] 북마크 Controller 연결 로직
     List<Bookmark> getBookmarkList(String user_id);
 

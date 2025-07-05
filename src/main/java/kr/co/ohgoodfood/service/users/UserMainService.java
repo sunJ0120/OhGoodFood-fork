@@ -22,7 +22,7 @@ public interface UserMainService {
     public MainStoreDTO getMainStoreOne(UserMainFilter userMainFilter);
 
     //[판별 로직] 오늘 픽업, 내일 픽업, 마감 판별 연결 로직
-    public PickupStatus getPickupDateStatus(String store_status, Timestamp pickup_start, int amount);
+    public PickupStatus getPickupDateStatus(String store_status, Timestamp pickup_start, Integer amount);
 
     //[판별 로직] 카테고리 List<String> 저장 로직
     public List<String> getCategoryList(Store store);

@@ -51,46 +51,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
     private final AwsS3Config awsS3Config;
-
-    /**
-     * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
-     *
-     * @param userMainFilter : 필터링을 위한 객체가 담겨있다.
-     * @return               : mainStoreList (MainStore DTO의 리스트 객체)
-     */
-    @Override
-    public List<MainStore> getMainStoreList(UserMainFilter userMainFilter) {
-        List<MainStore> mainStoreList = userMapper.selectAllStore(userMainFilter);
-
-        // 카테고리 이름과 pickup 상태를 저장
-        for(MainStore mainStore : mainStoreList){
-            PickupStatus pickupStatus = getPickupDateStatus(mainStore);
-            mainStore.setPickup_status(pickupStatus == null ? PickupStatus.CLOSED : pickupStatus);
-            mainStore.setCategory_list(getCategoryList(mainStore));
-            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
-        }
-        return mainStoreList;
-    }
-
-    /**
-     * 지도에 표시할 가게 정보를 가져오는 method
-     *
-     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. main에서 사용하는걸 그대로 사용한다
-     * @return               : mainStore
-     */
-    //selectOneStoreByStoreId
-    @Override
-    public MainStore getMainStoreOne(UserMainFilter userMainFilter){
-
-        MainStore mainStore = userMapper.selectOneStoreByStoreId(userMainFilter);
-
-        mainStore.setPickup_status(getPickupDateStatus(mainStore));
-        mainStore.setCategory_list(getCategoryList(mainStore));
-        mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
-
-        return mainStore;
-    }
-
     /**
      * 사용자가 가진 북마크 리스트를 가져오는 method
      *

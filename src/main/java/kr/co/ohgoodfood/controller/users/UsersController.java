@@ -57,41 +57,6 @@ public class UsersController {
     private String kakaoMapAppKey;
 
     /**
-     * 사용자 메인 화면을 조회하고, 가게 목록을 뷰에 바인딩한다.
-     *
-     * @param userMainFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
-     * @param model          뷰에 전달할 데이터(Model)
-     * @return               포워딩할 JSP 뷰 이름 ("users/userMain")
-     */
-    @GetMapping("/main")
-    public String userMain(@ModelAttribute UserMainFilter userMainFilter,
-                           Model model){
-
-        List<MainStore> mainStoreList = usersService.getMainStoreList(userMainFilter);
-        model.addAttribute("kakaoMapAppKey", kakaoMapAppKey);
-        model.addAttribute("mainStoreList", mainStoreList);
-
-        return "users/userMain";
-    }
-
-    /**
-     * AJAX 필터링 결과에 따른 가게 목록을 조회하고 뷰 프래그먼트만 반환한다.
-     *
-     * @param userMainFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
-     * @param model          뷰에 전달할 데이터(Model)
-     * @return               가게 카드 목록만 포함한 JSP 프래그먼트 ("users/fragment/userMainStoreList")
-     */
-    @PostMapping("/filter/store")
-    public String filterStoreList(@RequestBody UserMainFilter userMainFilter,
-                                  Model model){
-
-        List<MainStore> mainStoreList = usersService.getMainStoreList(userMainFilter);
-        model.addAttribute("mainStoreList", mainStoreList);
-        // JSP fragment만 리턴
-        return "users/fragment/userMainStoreList";
-    }
-
-    /**
      * 해당 user가 가진 북마크 리스트를 조회한다.
      *
      * @param userMainFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
@@ -239,22 +204,22 @@ public class UsersController {
         return "redirect:/user/orderList";
     }
 
-    /**
-     * map에서 pin 선택한 가게의 정보를 AJAX로 조회하고 뷰 프래그먼트만 반환한다.
-     *
-     * @param userMainFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
-     * @return               가게 정보를 포함한 JSP 프래그먼트 ("users/fragment/userMapPinStore")
-     */
-    @GetMapping("/map/pin")
-    public String getMapPinStore(@ModelAttribute UserMainFilter userMainFilter,
-                                 Model model){
-
-        MainStore mainStore = usersService.getMainStoreOne(userMainFilter);
-        model.addAttribute("mainStore", mainStore);
-
-        //fragment return
-        return "users/fragment/userMapPinStore";
-    }
+//    /**
+//     * map에서 pin 선택한 가게의 정보를 AJAX로 조회하고 뷰 프래그먼트만 반환한다.
+//     *
+//     * @param userMainFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
+//     * @return               가게 정보를 포함한 JSP 프래그먼트 ("users/fragment/userMapPinStore")
+//     */
+//    @GetMapping("/map/pin")
+//    public String getMapPinStore(@ModelAttribute UserMainFilter userMainFilter,
+//                                 Model model){
+//
+//        MainStore mainStore = usersService.getMainStoreOne(userMainFilter);
+//        model.addAttribute("mainStore", mainStore);
+//
+//        //fragment return
+//        return "users/fragment/userMapPinStore";
+//    }
 
     /**
      *  사용자 회원가입

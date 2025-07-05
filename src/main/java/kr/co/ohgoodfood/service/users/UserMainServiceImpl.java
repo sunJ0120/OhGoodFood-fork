@@ -30,8 +30,8 @@ public class UserMainServiceImpl implements UserMainService {
     /**
      * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
      *
-     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. ()
-     * @return               : MainStoreDTOList (MainStore DTO의 리스트 객체)
+     * @param userMainFilter    : 필터링을 위한 객체가 담겨있다. ()
+     * @return                  : MainStoreDTOList (MainStore DTO의 리스트 객체)
      */
     @Override
     public List<MainStoreDTO> getMainStoreList(UserMainFilter userMainFilter) {
@@ -42,41 +42,52 @@ public class UserMainServiceImpl implements UserMainService {
         for(MainStoreDTO mainStore : mainStoreList){
             PickupStatus pickup_status;
             try{
-                pickup_status = getPickupDateStatus(
-                        mainStore.getStore().getStore_status(),
-                        mainStore.getProduct().getPickup_start(),
-                        mainStore.getProduct().getAmount()
-                );
+                //product가 없음, 마감 상태 getProduct().으로 접근할때 nullpointerException을 막기 위함이다.
+                if(mainStore.getProduct() == null){
+                    pickup_status = PickupStatus.CLOSED;
+                }else{
+                    pickup_status = getPickupDateStatus(
+                            mainStore.getStore().getStore_status(),
+                            mainStore.getProduct().getPickup_start(),
+                            mainStore.getProduct().getAmount()
+                    );
+                }
             } catch (InvalidPickupDataException e){
-                log.error("픽업 상태 계산 실패(storeId={}): {}",
+                log.info("픽업 상태 계산 실패(storeId={}): {}",
                         mainStore.getStore().getStore_id(), e.getMessage());
-                //이상 데이터 값의 경우, continue로 숨김처리
+                //이상 데이터 값의 경우, continue로 숨김처리 및 pickup_status 계산 안함
                 continue;
             }
             mainStore.setPickup_status(pickup_status);
             mainStore.setCategory_list(getCategoryList(mainStore.getStore()));
             mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore().getStore_menu(), "\\s*\\|\\s*"));
         }
+
         return mainStoreList;
     }
 
     /**
      * 지도에 표시할 가게 정보를 가져오는 method
      *
-     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. main에서 사용하는걸 그대로 사용한다
-     * @return               : MainStoreDTO
+     * @param userMainFilter    : 필터링을 위한 객체가 담겨있다. main에서 사용하는걸 그대로 사용한다
+     * @return                  : MainStoreDTO
      */
     //selectOneStoreByStoreId
     @Override
     public MainStoreDTO getMainStoreOne(UserMainFilter userMainFilter){
         MainStoreDTO mainStore = userMainMapper.selectOneStoreByStoreId(userMainFilter);
+        PickupStatus pickup_status;
 
-        //단일건의 경우, 따로 예외처리 하거나 null을 return 하지 않고 ControllerAdvice에서 처리하도록 한다.
-        PickupStatus pickup_status = getPickupDateStatus(
-                mainStore.getStore().getStore_status(),
-                mainStore.getProduct().getPickup_start(),
-                mainStore.getProduct().getAmount()
-        );
+        if(mainStore.getProduct() == null){
+            pickup_status = PickupStatus.CLOSED;
+        }else{
+            //단일건의 경우, 따로 예외처리 하거나 null을 return 하지 않고 ControllerAdvice에서 처리하도록 한다.
+            pickup_status = getPickupDateStatus(
+                    mainStore.getStore().getStore_status(),
+                    mainStore.getProduct().getPickup_start(),
+                    mainStore.getProduct().getAmount()
+            );
+        }
 
         mainStore.setPickup_status(pickup_status);
         mainStore.setCategory_list(getCategoryList(mainStore.getStore()));
@@ -88,25 +99,25 @@ public class UserMainServiceImpl implements UserMainService {
     /**
      * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감 상태를 판별합니다.
      *
-     * @param store_status          : store가 현재 오픈 상태인지 판단
-     * @param pickup_start          : store가 오늘 픽업인지, 내일 픽업인지를 판단
-     * @param amount                : store가 매진인지 판단
+     * @param store_status      : store가 현재 오픈 상태인지 판단
+     * @param pickup_start      : store가 오늘 픽업인지, 내일 픽업인지를 판단
+     * @param amount            : store가 매진인지 판단, nullable 이므로 컬렉션 객체로 만든다.
      *
-     * @return                      : PickupStatus ENUM 객체
+     * @return                  : PickupStatus ENUM 객체
      */
     @Override
-    public PickupStatus getPickupDateStatus(String store_status, Timestamp pickup_start, int amount) {
+    public PickupStatus getPickupDateStatus(String store_status, Timestamp pickup_start, Integer amount) {
+        //parameter가 null인경우, nullpointerException이 발생하므로, Integer로 감싼다.
         LocalDate today = LocalDate.now();
+
         // [마감] - store_status = N
-        if("N".equals(store_status)){
+        if(store_status.equals("N")){
             return PickupStatus.CLOSED;
         }else{
             LocalDate pickupDate;
             if (pickup_start == null) {
-                //null에러일 경우, 에러 메세지 없이 로깅
                 throw new InvalidPickupDataException(store_status, pickup_start, amount);
             }
-
             //한번 null 위험 처리를 하고나면, 그 다음부터는 time_stamp 형식 예외 등의 로직만 잡으므로, 더 안전하게 체크가 가능하다.
             try{
                 pickupDate = pickup_start.toLocalDateTime().toLocalDate();
@@ -116,7 +127,7 @@ public class UserMainServiceImpl implements UserMainService {
             }
 
             // [매진] - amount = 0
-            if(amount == 0){
+            if(amount == null || amount == 0){
                 return PickupStatus.SOLD_OUT;
             }else{
                 // [오늘픽업] 현재 날짜와 같음
@@ -126,7 +137,6 @@ public class UserMainServiceImpl implements UserMainService {
                      return PickupStatus.TOMORROW;
                 }
             }
-
         }
         throw new InvalidPickupDataException(store_status, pickup_start, amount); //custom exception 던지기
     }
@@ -135,8 +145,8 @@ public class UserMainServiceImpl implements UserMainService {
      * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
      * 서버에서는 리스트에 담아서 보내도록 한다.
      *
-     * @param store              : store dto 내부에 있는 cateogory_ 값에 따라 list를 구현하기 위함이다.
-     * @return                   : 카테고리 이름이 담긴 List
+     * @param store             : store dto 내부에 있는 cateogory_ 값에 따라 list를 구현하기 위함이다.
+     * @return                  : 카테고리 이름이 담긴 List
      */
     @Override
     public List<String> getCategoryList(Store store) {

@@ -10,27 +10,12 @@ import java.util.List;
  * UserMapper
  *
  * 사용자 관련 주요 CRUD 및 조회 기능을 정의하는 MyBatis Mapper 인터페이스
- * - 메인 화면 & 북마크 조회
+ * - 북마크 조회
  * - 주문 내역 조회 및 상태 변경
  * - 마이페이지 조회
  */
 @Mapper
 public interface UserMapper {
-    /**
-     * 사용자 메인 화면 영역에 표시할 가게 목록을 조회
-     *
-     * @param userMainFilter   필터 DTO
-     * @return                 필터 적용된 MainStore 리스트
-     */
-    List<MainStore> selectAllStore(@Param("filter") UserMainFilter userMainFilter);
-
-    /**
-     * 사용자 지도 영역에 핀을 클릭했을때 가게 정보 조회
-     *
-     * @param userMainFilter   필터 DTO
-     * @return                 필터 적용된 MainStore 요소
-     */
-    MainStore selectOneStoreByStoreId(@Param("filter") UserMainFilter userMainFilter);
     /**
      * 사용자 북마크 화면에서 표시할 가게 목록을 조회
      *
