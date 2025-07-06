@@ -51,25 +51,6 @@ import lombok.extern.slf4j.Slf4j;
 public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
     private final AwsS3Config awsS3Config;
-    /**
-     * 사용자가 가진 북마크 리스트를 가져오는 method
-     *
-     * @param user_id           : 현재 세션에 접속한 사용자 id
-     * @return                  : bookmarkList (Bookmark DTO의 리스트 객체)
-     */
-    @Override
-    public List<Bookmark> getBookmarkList(String user_id){
-        List<Bookmark> bookmarkList = userMapper.selectAllBookmark(user_id);
-
-        // 여기에 카테고리 이름과 pickup 상태를 저장
-        for(Bookmark bookmark : bookmarkList){
-            bookmark.setPickup_status(getPickupDateStatus(bookmark));
-            bookmark.setCategory_list(getCategoryList(bookmark));
-            bookmark.setMainmenu_list(StringSplitUtils.splitMenu(bookmark.getStore_menu(), "/"));
-        }
-
-        return bookmarkList;
-    }
 
     /**
      * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감 상태를 판별합니다.
@@ -161,44 +142,6 @@ public class UserServiceImpl implements UsersService{
         }
 
         return category_list;
-    }
-
-    /**
-     * 북마크를 삭제하기 위한 기능이다.
-     *
-     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
-     * @return                   : 실행 결과 행 수에 따라 Boolean
-     */
-    @Override
-    public boolean deleteUserBookMark(BookmarkFilter bookmarkFilter) {
-        String user_id = bookmarkFilter.getUser_id();
-        String store_id = bookmarkFilter.getStore_id();
-
-        int cnt = userMapper.deleteBookmark(user_id, store_id);
-
-        if (cnt == 1) {
-            return true;
-        }
-        return false; //delete 실패!
-    }
-
-    /**
-     * 북마크를 추가하기 위한 기능이다.
-     *
-     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
-     * @return                   : 결과 행 수에 따라 Boolean
-     */
-    @Override
-    public boolean insertUserBookMark(BookmarkFilter bookmarkFilter) {
-        String user_id = bookmarkFilter.getUser_id();
-        String store_id = bookmarkFilter.getStore_id();
-
-        int cnt = userMapper.insertBookmark(user_id, store_id);
-
-        if (cnt == 1) {
-            return true;
-        }
-        return false; //insert 실패!
     }
 
     /**

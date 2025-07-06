@@ -18,9 +18,6 @@ import kr.co.ohgoodfood.dto.UserMypage;
  * - 유지 보수 및 확장 편의성을 위해 interface로 구성한다.
  */
 public interface UsersService {
-    //[Controller 로직] 북마크 Controller 연결 로직
-    List<Bookmark> getBookmarkList(String user_id);
-
     //[판별 로직] 오늘 픽업, 내일 픽업, 마감 판별 연결 로직
     PickupStatus getPickupDateStatus(MainStore mainStore);
 
@@ -29,12 +26,6 @@ public interface UsersService {
 
     //[판별 로직] 카테고리 List<String> 저장 로직
     List<String> getCategoryList(MainStore mainStore);
-
-    //[Controller 로직] 북마크 삭제 Controller 연결 로직
-    boolean deleteUserBookMark(BookmarkFilter bookmarkFilter);
-
-    //[Controller 로직] 북마크 추가 Controller 연결 로직
-    boolean insertUserBookMark(BookmarkFilter bookmarkFilter);
 
     //[Controller 로직] 주문내역 Controller 연결 로직
     List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter);

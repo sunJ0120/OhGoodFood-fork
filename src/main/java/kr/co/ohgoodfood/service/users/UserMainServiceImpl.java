@@ -8,9 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +23,7 @@ import java.util.List;
 @Service
 public class UserMainServiceImpl implements UserMainService {
     private final UserMainMapper userMainMapper;
+    private final UserCommonService userCommonService;
 
     /**
      * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
@@ -46,7 +44,7 @@ public class UserMainServiceImpl implements UserMainService {
                 if(mainStore.getProduct() == null){
                     pickup_status = PickupStatus.CLOSED;
                 }else{
-                    pickup_status = getPickupDateStatus(
+                    pickup_status = userCommonService.getPickupDateStatus(
                             mainStore.getStore().getStore_status(),
                             mainStore.getProduct().getPickup_start(),
                             mainStore.getProduct().getAmount()
@@ -59,7 +57,7 @@ public class UserMainServiceImpl implements UserMainService {
                 continue;
             }
             mainStore.setPickup_status(pickup_status);
-            mainStore.setCategory_list(getCategoryList(mainStore.getStore()));
+            mainStore.setCategory_list(userCommonService.getCategoryList(mainStore.getStore()));
             mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore().getStore_menu(), "\\s*\\|\\s*"));
         }
 
@@ -82,7 +80,7 @@ public class UserMainServiceImpl implements UserMainService {
             pickup_status = PickupStatus.CLOSED;
         }else{
             //단일건의 경우, 따로 예외처리 하거나 null을 return 하지 않고 ControllerAdvice에서 처리하도록 한다.
-            pickup_status = getPickupDateStatus(
+            pickup_status = userCommonService.getPickupDateStatus(
                     mainStore.getStore().getStore_status(),
                     mainStore.getProduct().getPickup_start(),
                     mainStore.getProduct().getAmount()
@@ -90,84 +88,9 @@ public class UserMainServiceImpl implements UserMainService {
         }
 
         mainStore.setPickup_status(pickup_status);
-        mainStore.setCategory_list(getCategoryList(mainStore.getStore()));
+        mainStore.setCategory_list(userCommonService.getCategoryList(mainStore.getStore()));
         mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore().getStore_menu(), "\\s*\\|\\s*"));
 
         return mainStore;
-    }
-
-    /**
-     * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감 상태를 판별합니다.
-     *
-     * @param store_status      : store가 현재 오픈 상태인지 판단
-     * @param pickup_start      : store가 오늘 픽업인지, 내일 픽업인지를 판단
-     * @param amount            : store가 매진인지 판단, nullable 이므로 컬렉션 객체로 만든다.
-     *
-     * @return                  : PickupStatus ENUM 객체
-     */
-    @Override
-    public PickupStatus getPickupDateStatus(String store_status, Timestamp pickup_start, Integer amount) {
-        //parameter가 null인경우, nullpointerException이 발생하므로, Integer로 감싼다.
-        LocalDate today = LocalDate.now();
-
-        // [마감] - store_status = N
-        if(store_status.equals("N")){
-            return PickupStatus.CLOSED;
-        }else{
-            LocalDate pickupDate;
-            if (pickup_start == null) {
-                throw new InvalidPickupDataException(store_status, pickup_start, amount);
-            }
-            //한번 null 위험 처리를 하고나면, 그 다음부터는 time_stamp 형식 예외 등의 로직만 잡으므로, 더 안전하게 체크가 가능하다.
-            try{
-                pickupDate = pickup_start.toLocalDateTime().toLocalDate();
-            } catch (Exception e){
-                //에러 로그를 보존한채 넘긴다.
-                throw new InvalidPickupDataException(store_status, pickup_start, amount, e);
-            }
-
-            // [매진] - amount = 0
-            if(amount == null || amount == 0){
-                return PickupStatus.SOLD_OUT;
-            }else{
-                // [오늘픽업] 현재 날짜와 같음
-                if (pickupDate.isEqual(today)) {
-                    return PickupStatus.TODAY;
-                } else if (pickupDate.isEqual(today.plusDays(1))) { //[내일픽업] 현재 날짜 + 1과 같음
-                     return PickupStatus.TOMORROW;
-                }
-            }
-        }
-        throw new InvalidPickupDataException(store_status, pickup_start, amount); //custom exception 던지기
-    }
-
-    /**
-     * |(구분자) 구분은 확장성을 위해 프론트 단에 위임
-     * 서버에서는 리스트에 담아서 보내도록 한다.
-     *
-     * @param store             : store dto 내부에 있는 cateogory_ 값에 따라 list를 구현하기 위함이다.
-     * @return                  : 카테고리 이름이 담긴 List
-     */
-    @Override
-    public List<String> getCategoryList(Store store) {
-        List<String> category_list = new ArrayList<>();
-
-        if(store.getCategory_bakery().equals("Y")){
-            category_list.add(StoreCategory.BAKERY.getDisplayName());
-        }
-
-        if(store.getCategory_fruit().equals("Y")){
-            category_list.add(StoreCategory.FRUIT.getDisplayName());
-        }
-
-        if(store.getCategory_salad().equals("Y")){
-            category_list.add(StoreCategory.SALAD.getDisplayName());
-        }
-
-        if(store.getCategory_others().equals("Y")){
-            category_list.add(StoreCategory.ETC.getDisplayName());
-        }
-
-        return category_list;
     }
 }
