@@ -26,7 +26,7 @@
         WHERE reservation_end = STR_TO_DATE(#{formattedDate}, '%Y-%m-%d %H:%i:%s')) p 
         JOIN (SELECT o.store_id AS store_id, o.user_id AS user_id, o.order_status AS order_status, o.order_no AS order_no, o.product_no AS product_no
         FROM Orders o
-        WHERE DATE(ordered_at) = DATE(#{formattedDate}) AND order_status = 'reservation') o
+        WHERE order_status = 'reservation') o
         ON p.store_id = o.store_id and p.product_no = o.product_no;
     </select>
     
@@ -57,7 +57,7 @@
         WHERE pickup_end = STR_TO_DATE(#{formattedDate}, '%Y-%m-%d %H:%i:%s')) p 
         JOIN (SELECT o.store_id AS store_id, o.user_id AS user_id, o.order_status AS order_status, o.order_no AS order_no, o.product_no AS product_no
         FROM Orders o
-        WHERE DATE(ordered_at) = DATE(#{formattedDate}) AND order_status = 'confirmed') o
+        WHERE order_status = 'confirmed') o
         ON p.store_id = o.store_id and p.product_no = o.product_no;
     </select>
 
@@ -69,7 +69,7 @@
         WHERE pickup_start = STR_TO_DATE(#{formattedDate}, '%Y-%m-%d %H:%i:%s')) p 
         JOIN (SELECT o.store_id AS store_id, o.user_id AS user_id, o.order_status AS order_status, o.order_no AS order_no, o.product_no AS product_no
         FROM Orders o
-        WHERE DATE(ordered_at) = DATE(#{formattedDate}) AND order_status = 'confirmed') o
+        WHERE order_status = 'confirmed') o
         ON p.store_id = o.store_id and p.product_no = o.product_no;
     </select>
 

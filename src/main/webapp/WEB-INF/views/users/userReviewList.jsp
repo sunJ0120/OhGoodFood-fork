@@ -14,8 +14,8 @@
 
   <!-- 리뷰 리스트 전용 CSS -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userReviewList.css" />
-
-  <title>Review List</title>
+  <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
+  <title>Ohgoodfood</title>
 </head>
 
 <body>

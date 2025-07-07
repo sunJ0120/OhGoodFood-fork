@@ -10,7 +10,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>주소 지도 보기</title>
+    <title>Ohgoodfood</title>
+    <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=390425b8fc20d1d5e18621db85fd5551&libraries=services"></script>
     <style>
         body { margin: 0; font-family: Arial; }

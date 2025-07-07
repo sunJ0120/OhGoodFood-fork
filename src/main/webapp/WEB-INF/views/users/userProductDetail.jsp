@@ -12,8 +12,8 @@
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
                 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userProductDetail.css" />
-
-                <title>productDetail</title>
+                <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
+                <title>Ohgoodfood</title>
             </head>
 
             <body>
