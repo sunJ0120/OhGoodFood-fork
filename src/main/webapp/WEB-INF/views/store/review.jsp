@@ -8,9 +8,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>러프도우 리뷰</title>
+    <title>Ohgoodfood</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storereview.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
 </head>
 <body>
 <div id="wrapper">

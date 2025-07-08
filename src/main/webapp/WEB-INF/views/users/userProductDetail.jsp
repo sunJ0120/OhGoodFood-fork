@@ -12,8 +12,8 @@
                 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
                 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userProductDetail.css" />
-
-                <title>productDetail</title>
+                <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
+                <title>Ohgoodfood</title>
             </head>
 
             <body>
@@ -131,7 +131,8 @@
                                                 </li>
                                                 <div class="addRow">
                                                     <span class="addLabel">📍</span>
-                                                    <span class="addValue" title="${productDetail.store_address}">
+                                                    <span class="addValue address-popup"
+                                                        data-addr="${productDetail.store_address}">
                                                         ${productDetail.store_address}
                                                     </span>
                                                     <span class="addLabel">📞</span>
@@ -314,6 +315,16 @@
                                 }
                             });
                         }
+
+                        // 지도에 가게 주소 팝업창 표시
+                        $('.address-popup').on('click', function () {
+                            const address = $(this).data('addr');
+                            window.open(
+                                '/popup/storeAddress.jsp?addr=' + encodeURIComponent(address),
+                                '주소지도보기',
+                                'width=600,height=500'
+                            );
+                        });
                     });
                 </script>
             </body>

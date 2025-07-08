@@ -7,6 +7,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OhGoodFood</title>
+  <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userorder.css">
 </head>
 <body>
@@ -19,11 +20,11 @@
       <div class="orderHeaderText">
         <span class="title">
           <div class="orderStatusTitle">
-            전체
+            전체 주문
           </div>
-           주문 내역
+           내역
         </span>
-        <span class="subtitle"> | 지난 주문 기록</span>
+        <span class="subtitle"> | 주문 기록</span>
       </div>
 
       <%-- 필터 버튼 --%>
@@ -231,6 +232,9 @@
 
       // 버튼 텍스트 갱신
       $('#btnText').text(selectedCategory);
+
+      // 헤더 텍스트 갱신
+      $('.orderStatusTitle').text(selectedCategory);
 
       // AJAX 호출
       sendFilterRequest();
