@@ -1,5 +1,7 @@
 package kr.co.ohgoodfood.config;
 
+import java.util.concurrent.Executor;
+
 import javax.sql.DataSource;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -13,7 +15,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -152,6 +156,7 @@ public class MvcConfig implements WebMvcConfigurer {
 		return config;
 	}
 
+	// 스케쥴러 쓰레드 풀 설정
 	@Bean
     public ThreadPoolTaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -161,4 +166,16 @@ public class MvcConfig implements WebMvcConfigurer {
         scheduler.setAwaitTerminationSeconds(30); // 대기 시간
         return scheduler;
     }
+
+	// 비동기 처리 쓰레드 풀 설정
+	// @Bean(name = "taskExecutor")
+    // public Executor taskExecutor() {
+    //     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    //     executor.setCorePoolSize(5);      // 기본 5개 스레드
+    //     executor.setMaxPoolSize(10);      // 최대 10개
+    //     executor.setQueueCapacity(100);   // 큐 대기 허용
+    //     executor.setThreadNamePrefix("Async-");
+    //     executor.initialize();
+    //     return executor;
+    // }
 }

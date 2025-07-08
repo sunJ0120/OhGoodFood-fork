@@ -20,6 +20,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.StoreMapper;
+import kr.co.ohgoodfood.dao.UserMapper;
 import kr.co.ohgoodfood.dto.Alarm;
 import kr.co.ohgoodfood.dto.Image;
 import kr.co.ohgoodfood.dto.Orders;
@@ -35,6 +36,7 @@ public class StoreServiceImpl implements StoreService {
 
 	private final AwsS3Config awsS3Config;
 	private final StoreMapper mapper;
+	private final UserMapper userMapper;
 
 	// 회원가입
 	@Override
@@ -46,7 +48,8 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public boolean isDuplicateId(String store_id) {
 		Store store = mapper.findById(store_id);
-		return store != null;
+		int count = userMapper.countByUserId(store_id);
+		return store != null || count > 0;
 	}
 
 	// 회원가입 처리 (주소/이미지 포함)
