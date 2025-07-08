@@ -10,7 +10,6 @@ nav_order: 1
     <img src="assets/images/썸네일.png" style="display: block; margin: 0 auto;" />
 </a>
 
-
 <p style="text-align: center;">이미지를 클릭하면 OhGoodFood 플랫폼으로 이동합니다.</p>
 
 ## 🔗 목차
@@ -28,9 +27,7 @@ nav_order: 1
 
 <h2 id="프로젝트-소개">🖐🏻 프로젝트 소개</h2>
 <br>
-<a href="https://ohgoodfood.com">
-    <img src="assets/images/프로젝트 소개.png" style="display: block; margin: 0 auto;" />
-</a>
+<img src="assets/images/프로젝트 소개.png" style="display: block; margin: 0 auto;" />
 
 (임시글) 일단 사진으로 필요한 부분들 다 넣었는데, 추가적으로 설명 추가해도 좋을 것 같습니다.
 
@@ -60,9 +57,7 @@ nav_order: 1
 
 <h2 id="팀-소개">👥 팀 소개</h2>
 
-<a href="https://ohgoodfood.com">
-    <img src="assets/images/팀소개 init.png" style="display: block; margin: 0 auto;" />
-</a>
+<img src="assets/images/팀소개.png" style="display: block; margin: 0 auto;" />
 
 ----------------------------
 
