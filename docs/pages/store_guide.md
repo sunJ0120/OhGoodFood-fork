@@ -32,7 +32,7 @@ nav_order: 2
 
 |                                             로그인                                              |                                             인트로                                              |                                              메인화면                                               |
 |:--------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------:|
-| <img src="/assets/images/store/1-1.png" alt="로그인" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/1-3.png" alt="인트로" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/1-2.png" alt="메인화면" style="display: block; margin: 0 auto;" /> 
+| <img src="{{ site.baseurl }}/assets/images/store/1-1.png" alt="로그인" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/1-3.png" alt="인트로" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/1-2.png" alt="메인화면" style="display: block; margin: 0 auto;" /> 
 
 - 사장님 계정이 있는 경우 로그인을 진행하고, 계정이 없는 경우 회원가입을 진행합니다.
 - 로그인 후 인트로 화면이 나오고, 몇 초 후에 사장님 전용 메인 화면으로 연결됩니다.
@@ -41,9 +41,9 @@ nav_order: 2
 
 <h3 id="가게-등록-요청-및-승인"> 2️⃣ 회원 가입 & 가게 등록 요청 및 승인 </h3>
 
-|                                          사장님으로 가입하기                                          |                                             회원가입                                             |                                           계정승인 대기창                                            |
-|:--------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------:|
-| <img src="/assets/images/store/2-1.png" alt="로그인" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/2-2.png" alt="인트로" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/2-3.png" alt="메인화면" style="display: block; margin: 0 auto;" /> 
+|                                                      사장님으로 가입하기                                                       |                                             회원가입                                             |                                           계정승인 대기창                                            |
+|:---------------------------------------------------------------------------------------------------------------------:|:--------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------:|
+| <img src="{{ site.baseurl }}/assets/images/store/2-1.png" alt="사장님으로 가입하기" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/2-2.png" alt="인트로" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/2-3.png" alt="메인화면" style="display: block; margin: 0 auto;" /> 
 
 
 - 계정이 없는 경우, 플랫폼 메인 페이지에서 **회원가입 > 사업자용 회원가입**을 진행합니다.
@@ -58,7 +58,7 @@ nav_order: 2
 
 |                                             가게 오픈하기                                              |                                             오굿백 가이드                                              |                                             오픈 확인                                             |
 |:------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------:|
-| <img src="/assets/images/store/3-1.png" alt="가게 오픈하기" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/3-2.png" alt="오굿백 가이드" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/3-3.png" alt="오픈 확인" style="display: block; margin: 0 auto;" /> 
+| <img src="{{ site.baseurl }}/assets/images/store/3-1.png" alt="가게 오픈하기" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/3-2.png" alt="오굿백 가이드" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/3-3.png" alt="오픈 확인" style="display: block; margin: 0 auto;" /> 
 
 
 <h3 id="상품-등록하기"> 3️⃣ 상품 등록하기 </h3>
@@ -101,7 +101,7 @@ nav_order: 2
 
 |                                            사장님 마이페이지                                             |                                           사장님 마이페이지 수정                                           |                                             매출 확인                                              |
 |:------------------------------------------------------------------------------------------------:|:------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------:|
-| <img src="/assets/images/store/7-1.png" alt="사장님 마이페이지" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/7-2.png" alt="사장님 마이페이지 수정" style="display: block; margin: 0 auto;" /> | <img src="/assets/images/store/7-3.png" alt="매출 확인" style="display: block; margin: 0 auto;" /> 
+| <img src="{{ site.baseurl }}/assets/images/store/7-1.png" alt="사장님 마이페이지" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/7-2.png" alt="사장님 마이페이지 수정" style="display: block; margin: 0 auto;" /> | <img src="{{ site.baseurl }}/assets/images/store/7-3.png" alt="매출 확인" style="display: block; margin: 0 auto;" /> 
 
 
 - 가게 소개글, 연락처, 운영 시간 등은 **사장님 마이페이지**에서 수정이 가능합니다.
@@ -117,7 +117,7 @@ nav_order: 2
     - 예약 접수/취소 알림 알림
     - 예약 확정 임박/완료 알림
     - 픽업 시간 알림
-- 본 기능은 서버 내 `Spring Scheduler`를 통해 주기적으로 실행됩니다.
+- 본 기능은 서버 내 **Spring Scheduler**를 통해 주기적으로 실행됩니다.
 
 ---
 
