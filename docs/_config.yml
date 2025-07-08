@@ -3,6 +3,7 @@ description: A starter template for a Jeykll site using the Just the Docs theme!
 theme: just-the-docs
 
 url: https://OhGoodTeam.github.io/OhGoodFood
+baseurl: "/OhGoodFood" # github에 올리면 이미지 안 뜨는 문제 해결을 위해 baseUrl 설정
 
 plugins:
   - jekyll-default-layout
