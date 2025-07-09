@@ -1,5 +1,9 @@
-# Ohgoodfood
-![image](https://github.com/user-attachments/assets/3a256130-789b-4b20-b158-7f429e61fd44)
+# 🥖 Ohgoodfood
+<a href="https://ohgoodfood.com/" >
+<img src="https://github.com/user-attachments/assets/3a256130-789b-4b20-b158-7f429e61fd44">
+</a>
+
+<p align="center">이미지를 클릭하면 OhGoodFood 플랫폼으로 이동합니다.</p>
 
 ## 🔗 목차
 - [프로젝트 소개](#프로젝트-소개)
@@ -110,6 +114,8 @@
 
 <a id="보안"></a>
 ## 🕶️ 보안
+- **SQL Injection 방지** : MyBatis `#{}` 플레이스홀더(PreparedStatement) 사용  
+- **XSS 방지** : 출력 시 HTML 이스케이프 적용
 
 <a id="빌드-방법"></a>
 ## 🚀 빌드 방법
@@ -117,5 +123,7 @@
 <a id="참고-자료"></a>
 ## 📖 참고 자료
 
+- [공식 가이드라인 문서](https://ohgoodteam.github.io/OhGoodFood/)
 - [5조은 푸드 Figma](https://www.figma.com/design/f2ieVUQKNfVIqfFrbhewRq/1%EC%B0%A8%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-5%EC%A1%B0%EC%9D%80%ED%91%B8%EB%93%9C-?node-id=0-1&t=LuMCejmAHiOSvYMK-1)
 - [Notion 개발 문서](https://www.notion.so/1-200008e1b24b808889becafb6796e3cb?source=copy_link)
+- [최종 발표 PPT](https://www.canva.com/design/DAGscPRea8Y/DAbihV2EW7xIso0zTB5fFw/view?utm_content=DAGscPRea8Y&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h74728b40d1)
