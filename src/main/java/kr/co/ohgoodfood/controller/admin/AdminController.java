@@ -106,7 +106,7 @@ public class AdminController {
 	@PostMapping("/admin/updatestore")
 	public String updateStore(@RequestParam("s_store_id") String[] storeIds,
 			@RequestParam(value = "s_confirmed", required = false) String[] confirmed) {
-
+				
 		try {
 			// 체크박스가 체크된 가게 ID들만 Y로 업데이트
 			for (int i = 0; i < storeIds.length; i++) {

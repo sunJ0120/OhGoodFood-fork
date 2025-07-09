@@ -244,9 +244,24 @@
 
 				// 이미지 선택시 최대 5개 제한
 				$("#storeImage").on("change", function () {
-					if (this.files.length > 5) {
+					const files = this.files;
+					const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg']; // 허용할 MIME 타입 목록
+
+					// 1. 파일 개수 체크
+					if (files.length > 5) {
 						alert("최대 5개의 이미지만 선택할 수 있습니다.");
-						this.value = "";
+						this.value = ""; // 초기화
+						return;
+					}
+
+					// 2. 파일 확장자(MIME 타입) 체크
+					for (let i = 0; i < files.length; i++) {
+						const file = files[i];
+						if (!allowedTypes.includes(file.type)) {
+							alert("JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.");
+							this.value = ""; // 전체 파일 초기화
+							return;
+						}
 					}
 				});
 
