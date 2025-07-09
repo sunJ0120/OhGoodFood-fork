@@ -114,7 +114,7 @@
                         </select>
                     </div>
                     <div class="filterValue">
-                        <input class="searchBox" type="text" name="s_value" value="${orders.s_value != null ? orders.s_value : ''}">
+                        <input class="searchBox" type="text" name="s_value" value="${paid.s_value != null ? paid.s_value : ''}">
                         <div class="magnifying">
                             <input class="magnifyingButton" type="submit" value="">
                         </div>
@@ -221,6 +221,17 @@
                 $(this).find(".submenu").css("display", "none");
             }
         );
+
+        $(document).ready(function() {
+            <c:choose>
+                <c:when test="${not empty error}">
+                    alert("${error}");
+                </c:when>
+                <c:when test="${not empty success}">
+                    alert("${success}"); 
+                </c:when>
+            </c:choose>
+        });
     </script>
 </body>
 </html>
