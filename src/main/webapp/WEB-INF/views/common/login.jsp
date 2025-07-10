@@ -23,7 +23,7 @@
         <main>
             <form id="loginForm" action="/login" method="post">
 			    <div class="main-head-container" id="main-image">
-			        <img src="${pageContext.request.contextPath}/img/storegroup.png" alt="Family" width="446px" height="317px">
+			        <img class="main-img" src="${pageContext.request.contextPath}/img/storegroup.png" alt="Family" width="446px" height="317px">
 			        <div class="main-body-container">
 			            <div class="main-middle-container">
 			                <input type="text" placeholder="id" id="userId" name="id">

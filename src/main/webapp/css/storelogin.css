@@ -48,9 +48,13 @@ main{
 .menu-container{
     display: flex;
 }
+.main-img{
+    width: 440px;
+}
 .main-body-container {
     left: 0;
     height: 600px; 
+    width: 440px;
     background-color: #99A99B;
     z-index: 0;
     margin-top: -40px;  

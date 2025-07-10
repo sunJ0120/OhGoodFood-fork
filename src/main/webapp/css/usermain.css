@@ -67,14 +67,12 @@ main {
     align-items: center;
     justify-content: center;
     font-family: 'nanumesquareneo_b';
-
-    padding: 10px 5px;
+    padding: 10px 10px;
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
     font-size: 14px;
-
     gap: 4px;
 }
 
@@ -89,8 +87,7 @@ main {
     align-items: center;
     gap: 6px;
     box-sizing: border-box;
-
-    width: 115px;
+    width: 125px;
 }
 
 .dropdownToggle {

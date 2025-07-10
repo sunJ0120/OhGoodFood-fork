@@ -33,18 +33,16 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /*min-width: 120px;*/
-
-    padding: 10px 5px;
+    /* min-width: 120px; */
+    padding: 10px 10px;
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
     font-family: 'nanumesquareneo_b';
     font-size: 14px;
-
     box-sizing: border-box;
-    width: 115px;
+    width: 125px;
     gap: 6px;
 }
 
@@ -205,7 +203,7 @@ main {
 }
 
 .orderHeaderText .title {
-    font-size: 13pt;
+    font-size: 15pt;
     font-family: 'nanumesquareneo_b';
 }
 
