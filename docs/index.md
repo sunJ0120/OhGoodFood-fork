@@ -29,7 +29,15 @@ nav_order: 1
 <br>
 <img src="assets/images/프로젝트 소개.png" style="display: block; margin: 0 auto;" />
 
-(임시글) 일단 사진으로 필요한 부분들 다 넣었는데, 추가적으로 설명 추가해도 좋을 것 같습니다.
+한 해 전 세계에서 버려지는 음식물이 **10억 5,000만 톤**에 달합니다.  
+이는 전체 온실가스 배출량의 **10%**를 차지하는 큰 문제입니다.
+
+만약 **마감 임박 식품을 저렴하게 구매**할 수 있다면,  
+소비자는 합리적이고 가치 있는 소비를,  
+판매자는 재고 처리 비용을 줄일 수 있습니다.  
+불필요한 폐기는 줄이고, 환경 오염과 비용 낭비를 막을 수 있습니다.
+
+새로운 소비 패러다임 **OhGoodFood**와 함께 모두에게 더 나은 가치를 선사하세요!
 
 ----------------------------
 
@@ -127,20 +135,57 @@ nav_order: 1
 
 <h2 id="빌드-방법">🚀 빌드 방법</h2>
 
-(임시글) 빌드 방법은 sts, intellij 두가지로 정리할까 고민중입니다~
-(그..프로그램 이용해서 띄우는 것 까지는 동일한데, 아마 메이븐 프로젝트 export 하는 방법이 좀 달라요)
+### 1. Prerequisites (필요 환경)
+
+> Java 11  
+> Maven 4.0.0  
+> STS(Spring Tool Suite) 또는 IntelliJ IDEA  
+
+### 2. 우리 프로젝트 git clone
+
+```java
+git clone https://github.com/OhGoodTeam/OhGoodFood.git
+cd repo;
+```
+
+- clone 해서 repo로 이동
+- main repo를 기준으로 합니다.
+
+### 3. Maven 실행하기
+
+3.1. STS
+
+- 프로젝트 우클릭 → run as → maven clean → build sucess 
+
+3.2. IntelliJ
+
+- File → Open → `pom.xml` 선택
+- 오른쪽 Maven 창에서 Sync/Reload All Maven Projects
+
+### 4.  Maven Export
+
+4.1. STS
+
+- 프로젝트 우클릭 → Run As → Maven clean → Maven Install
+- 루트디렉토리/target 에 war파일 생성 → Tomcat 배포시 ROOT.war로 이름 변경 후 배포
+
+4.2. IntelliJ IDEA
+
+- File → Project Structure → Artifacts
+- Name : `ohgoodfood:war`, Type `Web Application Archive` → OK
+- target 폴더에 `ohgoodfood.war` 파일 생성 완료
 
 ----------------------------
 
 <h2 id="협업-규칙">🤝 협업 규칙</h2>
 
 ### 🥖 Branch 규칙
-- 메인 브랜치와 개인 이름별 브랜치를 구분하여 사용한다
-- main : 배포 가능한 상태의 코드만을 관리하는 브랜치
-- dev  : main 배포 전 전체 기능 통합 test 브랜치
+- 메인 브랜치와 개인 이름별 브랜치를 구분하여 사용한다.
+  - main : 배포 가능한 상태의 코드만을 관리하는 브랜치
+  - dev  : main 배포 전 전체 기능 통합 test 브랜치
 
 ### 🥖 Commit 규칙
-- 커밋 메세지는 다음과 같은 형식으로 작성
+- 커밋 메세지는 다음과 같은 형식으로 작성한다.
 
 ```java
 [이름] 명령:구현설명 ex) [gildong] feat:로그인서비스구현
@@ -152,9 +197,9 @@ nav_order: 1
     - fix : 버그 수정
 
 ### 🥖 PR 규칙
-- 공용 템플릿을 사용하여 PR을 작성 : PR 템플릿 바로가기
+- 공용 템플릿을 사용하여 PR을 작성 : [PR 템플릿 바로가기](https://github.com/OhGoodTeam/OhGoodFood/blob/main/.github/PULL_REQUEST_TEMPLATE.md)
 
 ### 🥖 Issue 규칙
-- 공용 템플릿을 사용하여 issue 작성 : issue 템플릿 바로가기
+- 공용 템플릿을 사용하여 issue 작성 : [issue 템플릿 바로가기](https://github.com/OhGoodTeam/OhGoodFood/tree/main/.github/ISSUE_TEMPLATE)
 
 
