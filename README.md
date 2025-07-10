@@ -106,7 +106,7 @@
 
 <a id="시스템-구조"></a>
 ## 🧱 시스템 구조
-![image](https://github.com/user-attachments/assets/e205c49a-f662-4f67-90d8-5f50c23151fb)
+![Web App Reference Architecture (4)](https://github.com/user-attachments/assets/80b0beb8-da97-40cc-8f59-39cdda950769)
 
 <a id="erd"></a>
 ## 🧾 ERD
