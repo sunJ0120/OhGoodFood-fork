@@ -1,6 +1,8 @@
 ---
 title: 가이드
 nav_order: 2 ## index.md 다음으로 두번째로 와야한다는 의미이다.
+has_children: true  # 자식 페이지가 있음을 명시
+has_toc:   false    # 자동 TOC(자식 목록) 비활성화
 ---
 
 # 📖 OhGoodFood - 전체 가이드 모음집
