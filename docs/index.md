@@ -155,10 +155,7 @@ cd repo;
 
 3.1. STS
 
-- File → Import → “Existing Maven Projects”
-- 소스 폴더 선택 → Finish
-- 프로젝트 우클릭 → Run As → Maven build…
-- Goals 에 `clean package` 입력 후 Run
+- 프로젝트 우클릭 → run as → maven clean → build sucess 
 
 3.2. IntelliJ
 
@@ -170,7 +167,7 @@ cd repo;
 4.1. STS
 
 - 프로젝트 우클릭 → Run As → Maven clean → Maven Install
-- Destination: 원하는 경로(ex. `~/export/ohgoodfood.war`) → Finish
+- 루트디렉토리/target 에 war파일 생성 → Tomcat 배포시 ROOT.war로 이름 변경 후 배포
 
 4.2. IntelliJ IDEA
 
