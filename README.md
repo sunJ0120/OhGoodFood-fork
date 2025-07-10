@@ -139,6 +139,6 @@
 ## 📖 참고 자료
 
 - [공식 가이드라인 문서](https://ohgoodteam.github.io/OhGoodFood/)
-- [5조은 푸드 Figma](https://www.figma.com/design/f2ieVUQKNfVIqfFrbhewRq/1%EC%B0%A8%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-5%EC%A1%B0%EC%9D%80%ED%91%B8%EB%93%9C-?node-id=0-1&t=LuMCejmAHiOSvYMK-1)
+- [5조은 푸드 Figma](https://www.figma.com/design/f2ieVUQKNfVIqfFrbhewRq/1%EC%B0%A8%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-5%EC%A1%B0%EC%9D%80%ED%91%B8%EB%93%9C-?node-id=1079-503&t=2tb5WPb0wNlATegH-1)
 - [Notion 개발 문서](https://www.notion.so/1-200008e1b24b808889becafb6796e3cb?source=copy_link)
 - [최종 발표 PPT](https://www.canva.com/design/DAGscPRea8Y/DAbihV2EW7xIso0zTB5fFw/view?utm_content=DAGscPRea8Y&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h74728b40d1)
