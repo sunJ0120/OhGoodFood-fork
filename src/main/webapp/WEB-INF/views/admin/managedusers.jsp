@@ -201,6 +201,17 @@
                 $('#updateButton').prop('disabled', false);
             }
         });
+
+        $(document).ready(function() {
+            <c:choose>
+                <c:when test="${not empty error}">
+                    alert("${error}");
+                </c:when>
+                <c:when test="${not empty success}">
+                    alert("${success}"); 
+                </c:when>
+            </c:choose>
+        });
     </script>
 </body>
 </html>

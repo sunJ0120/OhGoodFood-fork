@@ -28,6 +28,11 @@ public class AdminController {
 
 	private final AdminService adminService;
 
+	@GetMapping("/admin")
+	public String admin() {
+		return "redirect:/admin/login";
+	}
+
 	@GetMapping("/admin/login")
 	public String adminLogin(Model model) {
 		return "admin/login";
@@ -86,8 +91,12 @@ public class AdminController {
 
 	// 회원 정보 수정
 	@PostMapping("/admin/updateuser")
-	public String updateUser(@ModelAttribute Account account) {
-		adminService.updateUser(account);
+	public String updateUser(RedirectAttributes rttr, @ModelAttribute Account account) {
+		if(adminService.updateUser(account)) {
+			rttr.addFlashAttribute("success", "회원 정보가 성공적으로 수정되었습니다.");
+		} else {
+			rttr.addFlashAttribute("error", "회원 정보 수정에 실패했습니다.");
+		}
 		return "redirect:/admin/managedusers";
 	}
 
@@ -104,7 +113,7 @@ public class AdminController {
 
 	// 가게 승인
 	@PostMapping("/admin/updatestore")
-	public String updateStore(@RequestParam("s_store_id") String[] storeIds,
+	public String updateStore(RedirectAttributes rttr, @RequestParam("s_store_id") String[] storeIds,
 			@RequestParam(value = "s_confirmed", required = false) String[] confirmed) {
 				
 		try {
@@ -125,7 +134,11 @@ public class AdminController {
 						}
 					}
 				}
-				adminService.approveStore(store);
+				if(adminService.approveStore(store)) {
+					rttr.addFlashAttribute("success", "가게 승인이 성공적으로 처리되었습니다.");
+				} else {
+					rttr.addFlashAttribute("error", "가게 승인 처리에 실패했습니다.");
+				}
 			}
 
 		} catch (Exception e) {
@@ -145,14 +158,18 @@ public class AdminController {
 
 	// 주문 상태 변경
 	@PostMapping("/admin/updateorders")
-	public String updateOrders(@RequestParam("order_status") String[] orderStatus,
+	public String updateOrders(RedirectAttributes rttr, @RequestParam("order_status") String[] orderStatus,
 			@RequestParam("order_no") int[] orderNos) {
 		try {
 			for (int i = 0; i < orderNos.length; i++) {
 				Orders orders = new Orders();
 				orders.setOrder_no(orderNos[i]);
 				orders.setOrder_status(orderStatus[i]);
-				adminService.updateOrderStatus(orders);
+				if(adminService.updateOrderStatus(orders)) {
+					rttr.addFlashAttribute("success", "주문 상태가 성공적으로 변경되었습니다.");
+				} else {
+					rttr.addFlashAttribute("error", "주문 상태 변경에 실패했습니다.");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,7 +186,7 @@ public class AdminController {
 
 	// 알람 상태 변경
 	@PostMapping("/admin/updatealarm")
-	public String updateAlarm(@RequestParam("alarm_read") String[] alarmRead, @RequestParam("alarm_no") int[] alarmNos,
+	public String updateAlarm(RedirectAttributes rttr, @RequestParam("alarm_read") String[] alarmRead, @RequestParam("alarm_no") int[] alarmNos,
 			@RequestParam("alarm_displayed") String[] alarmDisplay) {
 		try {
 			for (int i = 0; i < alarmNos.length; i++) {
@@ -177,7 +194,11 @@ public class AdminController {
 				alarm.setAlarm_no(alarmNos[i]);
 				alarm.setAlarm_read(alarmRead[i]);
 				alarm.setAlarm_displayed(alarmDisplay[i]);
-				adminService.updateAlarm(alarm);
+				if(adminService.updateAlarm(alarm)) {
+					rttr.addFlashAttribute("success", "알람 상태가 성공적으로 변경되었습니다.");
+				} else {
+					rttr.addFlashAttribute("error", "알람 상태 변경에 실패했습니다.");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -194,14 +215,18 @@ public class AdminController {
 
 	// 리뷰 블러드 처리
 	@PostMapping("/admin/updatereviews")
-	public String updateReviews(@RequestParam("review_no") int[] reviewNos,
+	public String updateReviews(RedirectAttributes rttr, @RequestParam("review_no") int[] reviewNos,
 			@RequestParam("is_blocked") String[] isBlocked) {
 		try {
 			for (int i = 0; i < reviewNos.length; i++) {
 				Review review = new Review();
 				review.setReview_no(reviewNos[i]);
 				review.setIs_blocked(isBlocked[i]);
-				adminService.updateReview(review);
+				if(adminService.updateReview(review)) {
+					rttr.addFlashAttribute("success", "리뷰 블러드 처리가 성공적으로 처리되었습니다.");
+				} else {
+					rttr.addFlashAttribute("error", "리뷰 블러드 처리에 실패했습니다.");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -218,7 +243,7 @@ public class AdminController {
 
 	// 결제 상태 변경 , 실패 이유 변경
 	@PostMapping("/admin/updatepaids")
-	public String updatePaid(@RequestParam("paid_status") String[] paidStatus, @RequestParam("paid_no") int[] paidNos,
+	public String updatePaid(RedirectAttributes rttr, @RequestParam("paid_status") String[] paidStatus, @RequestParam("paid_no") int[] paidNos,
 			@RequestParam("fail_reason") String[] failReason) {
 		try {
 			for (int i = 0; i < paidNos.length; i++) {
@@ -226,8 +251,11 @@ public class AdminController {
 				paid.setPaid_no(paidNos[i]);
 				paid.setPaid_status(paidStatus[i]);
 				paid.setFail_reason(failReason[i]);
-				adminService.updatePaidStatus(paid);
-				adminService.updatePaidFailReason(paid);
+				if(adminService.updatePaidStatus(paid) && adminService.updatePaidFailReason(paid)) {
+					rttr.addFlashAttribute("success", "결제 상태가 성공적으로 변경되었습니다.");
+				} else {
+					rttr.addFlashAttribute("error", "결제 상태 변경에 실패했습니다.");
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -265,8 +293,11 @@ public class AdminController {
 				rttr.addFlashAttribute("error", "내용을 입력해주세요.");
 				return "redirect:/admin/sendalarm";
 			}
-			rttr.addFlashAttribute("success", "알람이 성공적으로 보내졌습니다.");
-			adminService.sendAlarm(alarm);
+			if (adminService.sendAlarm(alarm)) {
+				rttr.addFlashAttribute("success", "알람이 성공적으로 보내졌습니다.");
+			} else {
+				rttr.addFlashAttribute("error", "알람 보내기에 실패했습니다.");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

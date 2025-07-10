@@ -54,7 +54,7 @@ public interface AdminMapper {
     // 미승인 가게 목록 조회 
     public List<Store> getUnapprovedStore(Store store);
     // 가게 승인 
-    public void approveStore(Store store);
+    public int approveStore(Store store);
     // 작년 가게 매출 조회 
     public Integer getLastYearSalesStore(StoreSales store);
     // 금년 가게 매출 조회 
@@ -80,25 +80,25 @@ public interface AdminMapper {
     // 주문 개수 조회 
     public int countOrders(Orders orders);
     // 주문 상태 수정 
-    public void updateOrderStatusPersonal(Orders orders);
+    public int updateOrderStatusPersonal(Orders orders);
     // 결제 목록 조회 
     public List<Paid> searchPaidPersonal(Paid paid);
     // 결제 개수 조회 
     public int countPaid(Paid paid);
     // 결제 상태 수정 
-    public void updatePaidStatusPersonal(Paid paid);
+    public int updatePaidStatusPersonal(Paid paid);
     // 결제 실패 사유 수정 
-    public void updatePaidFailReasonPersonal(Paid paid);
+    public int updatePaidFailReasonPersonal(Paid paid);
     // 알람 목록 조회 
     public List<Alarm> searchAlarm(Alarm alarm);
     // 알람 개수 조회 
     public int countAlarm(Alarm alarm);
     // 알람 읽음 처리 
-    public void readAlarm(Alarm alarm);
+    public int readAlarm(Alarm alarm);
     // 알람 표시 처리 
-    public void displayAlarm(Alarm alarm);
+    public int displayAlarm(Alarm alarm);
     // 알람 보내기 
-    public void sendAlarm(Alarm alarm);
+    public int sendAlarm(Alarm alarm);
     // 알람 수신자 체크 유저
     public Integer checkReceiverAccount(String receiveId);
     // 알람 수신자 체크 가게
@@ -108,7 +108,7 @@ public interface AdminMapper {
     // 리뷰 개수 조회 
     public int countReview(Review review);
     // 리뷰 차단 
-    public void blockReview(Review review);
+    public int blockReview(Review review);
     // Admin 로그인 체크 
     public int checkAdminLogin(Admin admin);
     // 금월 신규 회원 수 조회 

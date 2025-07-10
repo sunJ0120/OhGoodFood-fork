@@ -287,7 +287,7 @@
 		JOIN Orders o ON p.order_no = o.order_no
 		WHERE 1=1 AND o.order_status != 'ready'
 		<if test="s_value != null and s_value != ''">
-			AND ${s_type} = #{s_value}
+			AND p.${s_type} = #{s_value}
 		</if>
 	</select>
 
