@@ -73,8 +73,7 @@
                                         <!-- 탭 메뉴 -->
                                         <div class="tabs">
                                             <button class="tab active">오굿백 정보</button>
-                                            <button class="tab">리뷰 (
-                                                <c:out value='${productDetail.reviewCount}' />)
+                                            <button class="tab">리뷰 (<c:out value='${productDetail.reviewCount}' />)
                                             </button>
                                         </div>
 

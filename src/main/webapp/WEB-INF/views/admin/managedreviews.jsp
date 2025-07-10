@@ -146,8 +146,8 @@
                                     <td>
                                         <input type="hidden" name="review_no" value="${vo.review_no}">
                                         <select name="is_blocked">
-                                            <option value="Y" ${vo.is_blocked == 'Y' ? 'selected' : ''}>보임</option>
-                                            <option value="N" ${vo.is_blocked == 'N' ? 'selected' : ''}>숨김</option>
+                                            <option value="Y" ${vo.is_blocked == 'Y' ? 'selected' : ''}>숨김</option>
+                                            <option value="N" ${vo.is_blocked == 'N' ? 'selected' : ''}>보임</option>
                                         </select>
                                     </td>
                                 </tr>
