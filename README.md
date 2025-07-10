@@ -1,19 +1,28 @@
-# Ohgoodfood
-![image](https://github.com/user-attachments/assets/3a256130-789b-4b20-b158-7f429e61fd44)
-## 🔗 목차
-- 프로젝트 소개
-- 팀 소개
-- 화면명세
-- 기술 스택
-- 파일 구조
-- 시스템 구조
-- ERD
-- 빌드 방법
+# 🥖 Ohgoodfood
+<a href="https://ohgoodfood.com/" >
+<img src="https://github.com/user-attachments/assets/3a256130-789b-4b20-b158-7f429e61fd44">
+</a>
 
+<p align="center">이미지를 클릭하면 OhGoodFood 플랫폼으로 이동합니다.</p>
+
+## 🔗 목차
+- [프로젝트 소개](#프로젝트-소개)
+- [팀 소개](#팀-소개)
+- [화면 명세](#화면-명세)
+- [기술 스택](#기술-스택)
+- [파일 구조](#파일-구조)
+- [시스템 구조](#시스템-구조)
+- [ERD](#erd)
+- [보안](#보안)
+- [빌드 방법](#빌드-방법)
+- [참고 자료](#참고-자료)
+  
 ---
+
 ## 프로젝트 소개
+
 ### 📖 개요
-> > 📦**오굿푸드(OhGoodFood)** 프로젝트 소개
+> 📦**오굿푸드(OhGoodFood)** 프로젝트 소개
 > 
 > - Spring MVC 기반 **마감 식품 특가 플랫폼**  
 > - 실시간 예약 & 결제 시스템  
@@ -24,17 +33,30 @@
 |:--------------:|:--------------:|:--------------:|
 | 예약 가능한 상품 조회<br>필터 기능<br>예약 및 결제<br>주문 확인/취소<br>리뷰 작성<br>북마크 기능 | 오굿백 상품 등록/마감<br>예약 목록 확인 및 픽업 처리<br>리뷰 확인<br>매출 확인<br>가게 정보 수정 | 가게 등록 요청 승인/거절<br>전체 회원/상품 목록 조회<br>예약/픽업 상태 확인<br>알림 전송<br>통계/매출 관리 |
 
-### 👥 팀 소개
+<a id="팀-소개"></a>
+## 👥 팀 소개
 | 5조은팀   | <img src="https://github.com/minsss0726.png" width="80"><br>[김민중](https://github.com/minsss0726)(팀장)        | <img src="https://github.com/parkeunhyo.png" width="80"><br>[박은효](https://github.com/parkeunhyo)        | <img src="https://github.com/window101.png" width="80"><br>[박화준](https://github.com/window101)        | <img src="https://github.com/gaaaani.png" width="80"><br>[서가은](https://github.com/gaaaani)        | <img src="https://github.com/sunJ0120.png" width="80"><br>[오선정](https://github.com/sunJ0120)        |
 |----------|:----------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------:|
 | **담당** | 관리자 / 사용자 페이지<br>DB 설계                                                                       | 사장님 페이지<br>UI/UX 설계                                                                          | 사장님 페이지<br>DB 설계                                                                            | 사용자 페이지<br>UI/UX 설계                                                                         | 사용자 페이지<br>DB 설계                                                                             |
 
 
-
+<a id="화면-명세"></a>
 ## 🖼 화면 명세
 
+- 사용자 화면
+
+| 메인 | 메인지도 | 상품상세 | 주문내역 | 마이페이지 |
+|:----:|:--------:|:--------:|:--------:|:----------:|
+| <img src="https://github.com/user-attachments/assets/43aa6b17-9378-47b3-b098-2de6e8a4c2d6" alt="메인" width="180"/> | <img src="https://github.com/user-attachments/assets/f13ebd3b-6e22-45fe-a9cd-fe929e625b17" alt="메인지도" width="180"/> | <img src="https://github.com/user-attachments/assets/6656aa0c-602e-4da0-b403-122009ff9dd2" alt="상품상세" width="180"/> | <img src="https://github.com/user-attachments/assets/c2daa586-8c56-45ea-96e7-67598ce15a7d" alt="주문내역" width="180"/> | <img src="https://github.com/user-attachments/assets/cd7d4e25-2888-4b75-994f-b21195825806" alt="마이페이지" width="180"/> |
+
+- 사장님 화면
+
+| 메인(오픈) | 리뷰내역 | 주문내역 | 마이페이지 | 매출확인 |
+|:----------:|:--------:|:--------:|:----------:|:--------:|
+| <img src="https://github.com/user-attachments/assets/b1b91feb-a539-4a39-ad78-97061166c063" alt="메인" width="180"/> | <img src="https://github.com/user-attachments/assets/4432ca39-bb22-4ea6-97b5-11679abad75c" alt="리뷰내역" width="180"/> | <img src="https://github.com/user-attachments/assets/8b45886f-0bfa-49ec-8aca-243893ae0c9a" alt="주문내역" width="180"/> | <img src="https://github.com/user-attachments/assets/7853e635-3874-4cbd-90c6-1a020610c1b2" alt="마이페이지" width="180"/> | <img src="https://github.com/user-attachments/assets/b1ab4c36-164d-4c45-957c-8c67ebaeaa441" alt="매출확인" width="180"/> |
 
 
+<a id="기술-스택"></a>
 ## 🔧 기술 스택
 
 #### 📌 프론트엔드  
@@ -67,7 +89,7 @@
 ![Spring Scheduler](https://img.shields.io/badge/Scheduler-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 
 
-
+<a id="파일-구조"></a>
 ## 📂 파일 구조
 ```plaintext
 ├─java
@@ -94,12 +116,26 @@
         └─views                     # ✅ JSP 뷰
 ```
 
-
+<a id="시스템-구조"></a>
 ## 🧱 시스템 구조
-![image](https://github.com/user-attachments/assets/e205c49a-f662-4f67-90d8-5f50c23151fb)
+![Web App Reference Architecture (4)](https://github.com/user-attachments/assets/80b0beb8-da97-40cc-8f59-39cdda950769)
 
+<a id="erd"></a>
 ## 🧾 ERD
 ![스크린샷 2025-07-07 150317](https://github.com/user-attachments/assets/263012c9-a619-4776-83f9-20d20f1df6fc)
 
+<a id="보안"></a>
+## 🕶️ 보안
+- **SQL Injection 방지** : MyBatis `#{}` 플레이스홀더(PreparedStatement) 사용  
+- **XSS 방지** : 출력 시 HTML 이스케이프 적용
 
+<a id="빌드-방법"></a>
 ## 🚀 빌드 방법
+
+<a id="참고-자료"></a>
+## 📖 참고 자료
+
+- [공식 가이드라인 문서](https://ohgoodteam.github.io/OhGoodFood/)
+- [5조은 푸드 Figma](https://www.figma.com/design/f2ieVUQKNfVIqfFrbhewRq/1%EC%B0%A8%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-5%EC%A1%B0%EC%9D%80%ED%91%B8%EB%93%9C-?node-id=0-1&t=LuMCejmAHiOSvYMK-1)
+- [Notion 개발 문서](https://www.notion.so/1-200008e1b24b808889becafb6796e3cb?source=copy_link)
+- [최종 발표 PPT](https://www.canva.com/design/DAGscPRea8Y/DAbihV2EW7xIso0zTB5fFw/view?utm_content=DAGscPRea8Y&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h74728b40d1)
