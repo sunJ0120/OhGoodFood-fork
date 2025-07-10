@@ -132,6 +132,8 @@
 <a id="빌드-방법"></a>
 ## 🚀 빌드 방법
 
+[공식 가이드 - 빌드 방법 바로가기](https://ohgoodteam.github.io/OhGoodFood/#%EB%B9%8C%EB%93%9C-%EB%B0%A9%EB%B2%95)
+
 <a id="참고-자료"></a>
 ## 📖 참고 자료
 
