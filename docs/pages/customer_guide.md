@@ -36,7 +36,7 @@ nav_order: 1
 
 | 회원가입 | 회원가입 내용 입력 |
 |:--------:|:------------------:|
-| <img src="{{ site.baseurl }}/assets/images/customer/userjoin1.png" alt="회원가입" width="200"/> | <img src="{{ site.baseurl }}/assets/images/customer/userjoin2.png" alt="회원가입2" width="200"/> |
+| <img src="{{ site.baseurl }}/assets/images/customer/userjoin1.png" alt="회원가입" width="200"/> | <img src="{{ site.baseurl }}/assets/images/customer/whdlsdld.png" alt="회원가입2" width="200"/> |
 
 
 - 플랫폼 로그인 페이지에서 회원가입 후 서비스를 이용할 수 있습니다.
@@ -121,9 +121,9 @@ nav_order: 1
 |:--------:|:------------------:|:------------------:|
 | <img src="{{ site.baseurl }}/assets/images/customer/userorder2.png" alt="전체" width="200"/> | <img src="{{ site.baseurl }}/assets/images/customer/userorder.png" alt="확정" width="200"/> | <img src="{{ site.baseurl }}/assets/images/customer/userorder3.png" alt="최소" width="200"/> |
 
-| 미확정 | 주문 취소 버튼(불가) | 리뷰 버튼 |
-|:--------:|:------------------:|:------------------:|
-| <img src="{{ site.baseurl }}/assets/images/customer/alghkrwjd.png" alt="미확정" width="200"/> | <img src="{{ site.baseurl }}/assets/images/customer/wjscp.png" alt="리뷰버튼" width="200"/> |  <img src="{{ site.baseurl }}/assets/images/customer/wjscp.png" alt="리뷰버튼" width="200"/> |
+| 미확정 | 주문 취소 버튼(불가) | 
+|:--------:|:------------------:|
+| <img src="{{ site.baseurl }}/assets/images/customer/alghkrwjd.png" alt="미확정" width="200"/> | <img src="{{ site.baseurl }}/assets/images/customer/wjscp.png" alt="리뷰버튼" width="200"/> |
 
 - 주문내역 페이지에서 현재 내 주문 예약 상태를 확인할 수 있습니다.
 - 예약 취소는 **픽업 시작 시간 2시간 전(확정시간 1시간 전)까지만 가능**합니다.
