@@ -43,6 +43,18 @@
 <a id="화면-명세"></a>
 ## 🖼 화면 명세
 
+- 사용자 화면
+
+| 메인 | 메인지도 | 상품상세 | 주문내역 | 마이페이지 |
+|:----:|:--------:|:--------:|:--------:|:----------:|
+| <img src="https://github.com/user-attachments/assets/43aa6b17-9378-47b3-b098-2de6e8a4c2d6" alt="메인" width="180"/> | <img src="https://github.com/user-attachments/assets/f13ebd3b-6e22-45fe-a9cd-fe929e625b17" alt="메인지도" width="180"/> | <img src="https://github.com/user-attachments/assets/6656aa0c-602e-4da0-b403-122009ff9dd2" alt="상품상세" width="180"/> | <img src="https://github.com/user-attachments/assets/c2daa586-8c56-45ea-96e7-67598ce15a7d" alt="주문내역" width="180"/> | <img src="https://github.com/user-attachments/assets/cd7d4e25-2888-4b75-994f-b21195825806" alt="마이페이지" width="180"/> |
+
+- 사장님 화면
+
+| 메인(오픈) | 리뷰내역 | 주문내역 | 마이페이지 | 매출확인 |
+|:----------:|:--------:|:--------:|:----------:|:--------:|
+| <img src="https://github.com/user-attachments/assets/b1b91feb-a539-4a39-ad78-97061166c063" alt="메인" width="180"/> | <img src="https://github.com/user-attachments/assets/4432ca39-bb22-4ea6-97b5-11679abad75c" alt="리뷰내역" width="180"/> | <img src="https://github.com/user-attachments/assets/8b45886f-0bfa-49ec-8aca-243893ae0c9a" alt="주문내역" width="180"/> | <img src="https://github.com/user-attachments/assets/7853e635-3874-4cbd-90c6-1a020610c1b2" alt="마이페이지" width="180"/> | <img src="https://github.com/user-attachments/assets/b1ab4c36-164d-4c45-957c-8c67ebaeaa441" alt="매출확인" width="180"/> |
+
 
 <a id="기술-스택"></a>
 ## 🔧 기술 스택
