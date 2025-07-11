@@ -29,7 +29,7 @@ public class Alarm {
     }
     
     public int getStartIdx() {
-        return (page - 1) * 10;
+        return (page - 1) * 7;
     }
 
 }

@@ -160,7 +160,7 @@
                                 <li><a href="managedstore?page=${map.startPage-1 }&s_type=${store.s_type}&s_value=${store.s_value}"> << </a></li>
                             </c:if>
                             <c:forEach var="p" begin="${map.startPage}" end="${map.endPage}">
-                                <c:if test="${p == account.page}">
+                                <c:if test="${p == store.page}">
                                 <li><a href='#;' class='current'>${p}</a></li>
                                 </c:if>
                                 <c:if test="${p != store.page}">
