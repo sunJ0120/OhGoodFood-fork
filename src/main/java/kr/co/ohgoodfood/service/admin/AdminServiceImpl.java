@@ -157,7 +157,7 @@ public class AdminServiceImpl implements AdminService {
 	// 미승인 가게 목록 가져오기
 	@Override
 	public Map<String, Object> unapprovedStoresList(Store store) {
-		int count = adminMapper.countStores(store);
+		int count = adminMapper.getUnapprovedStoreCountTotal();
 		int totalPage = count / 7;
 		if (count % 7 != 0) {
 			totalPage++;
