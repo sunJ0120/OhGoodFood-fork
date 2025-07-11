@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import kr.co.ohgoodfood.dao.UserMainMapper;
 import kr.co.ohgoodfood.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,18 +22,14 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
 import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.MainStoreDTO;
 import kr.co.ohgoodfood.dto.PickupStatus;
 import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.ReviewForm;
-import kr.co.ohgoodfood.dto.UserMainFilter;
 import kr.co.ohgoodfood.dto.UserMypage;
-import kr.co.ohgoodfood.dto.UserOrder;
+import kr.co.ohgoodfood.dto.UserOrderDTO;
 import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.dto.UserOrderRequest;
-import kr.co.ohgoodfood.util.StringSplitUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,7 +93,7 @@ public class UserServiceImpl implements UsersService{
      * @return                 : PickupStatus ENUM 객체
      */
     @Override
-    public PickupStatus getOrderPickupDateStatus(UserOrder userOrder) {
+    public PickupStatus getOrderPickupDateStatus(UserOrderDTO userOrder) {
         LocalDate today = LocalDate.now();
         LocalDate pickupDate = userOrder.getPickup_start().toLocalDateTime().toLocalDate();
 
@@ -151,11 +146,11 @@ public class UserServiceImpl implements UsersService{
      * @return                   : 조회한 UserOrderList
      */
     @Override
-    public List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter){
-        List<UserOrder> orderList = userMapper.selectOrderList(userOrderFilter);
+    public List<UserOrderDTO> getUserOrderList(UserOrderFilter userOrderFilter){
+        List<UserOrderDTO> orderList = userMapper.selectOrderList(userOrderFilter);
 
         // userOrder에 pickup_status와 block_cancel 상태를 저장.
-        for(UserOrder userOrder : orderList){
+        for(UserOrderDTO userOrder : orderList){
             userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
             //주문에 해당하는 포인트를 적립
             userOrder.setPoint(getOrderPoint(userOrder));
@@ -169,7 +164,7 @@ public class UserServiceImpl implements UsersService{
      * @param userOrder          : orderList 화면에 뿌릴 객체
      * @return                   : 구매 금액의 1%에 해당하는 point
      */
-    public int getOrderPoint(UserOrder userOrder){
+    public int getOrderPoint(UserOrderDTO userOrder){
         return (int) (userOrder.getPaid_price() * 0.01);
     }
 

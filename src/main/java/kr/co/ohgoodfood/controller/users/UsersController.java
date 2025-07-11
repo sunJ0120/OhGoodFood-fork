@@ -65,7 +65,7 @@ public class UsersController {
         String user_id = loginUser.getUser_id();
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
-        List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
+        List<UserOrderDTO> userOrderList = usersService.getUserOrderList(userOrderFilter);
 
         model.addAttribute("userOrderList", userOrderList);
 
@@ -89,7 +89,7 @@ public class UsersController {
         String user_id = loginUser.getUser_id();
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
-        List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
+        List<UserOrderDTO> userOrderList = usersService.getUserOrderList(userOrderFilter);
         model.addAttribute("userOrderList",userOrderList);
 
         return "users/fragment/userOrderList";
