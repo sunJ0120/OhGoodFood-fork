@@ -13,7 +13,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ohgoodfood</title>
+    <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
     <link rel="stylesheet" href="../../../css/reset.css" />
     <link rel="stylesheet" href="../../../css/adminlayout.css" />
     <link rel="stylesheet" href="../../../css/adminsearchlayout.css" />
@@ -159,7 +160,7 @@
                                 <li><a href="managedstore?page=${map.startPage-1 }&s_type=${store.s_type}&s_value=${store.s_value}"> << </a></li>
                             </c:if>
                             <c:forEach var="p" begin="${map.startPage}" end="${map.endPage}">
-                                <c:if test="${p == account.page}">
+                                <c:if test="${p == store.page}">
                                 <li><a href='#;' class='current'>${p}</a></li>
                                 </c:if>
                                 <c:if test="${p != store.page}">
@@ -205,6 +206,17 @@
                 $(this).find(".submenu").css("display", "none");
             }
         );
+
+        $(document).ready(function() {
+            <c:choose>
+                <c:when test="${not empty error}">
+                    alert("${error}");
+                </c:when>
+                <c:when test="${not empty success}">
+                    alert("${success}"); 
+                </c:when>
+            </c:choose>
+        });
     </script>
 </body>
 </html>

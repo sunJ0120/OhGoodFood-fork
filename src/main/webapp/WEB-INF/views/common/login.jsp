@@ -9,7 +9,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ohgoodfood</title>
+	<link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storelogin.css">
 </head>
 <body>
@@ -22,7 +23,7 @@
         <main>
             <form id="loginForm" action="/login" method="post">
 			    <div class="main-head-container" id="main-image">
-			        <img src="${pageContext.request.contextPath}/img/storegroup.png" alt="Family" width="446px" height="317px">
+			        <img class="main-img" src="${pageContext.request.contextPath}/img/storegroup.png" alt="Family" width="446px" height="317px">
 			        <div class="main-body-container">
 			            <div class="main-middle-container">
 			                <input type="text" placeholder="id" id="userId" name="id">

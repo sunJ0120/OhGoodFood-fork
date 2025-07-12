@@ -33,8 +33,6 @@ main {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /*min-width: 120px;*/
-
     padding: 10px 5px;
     background-color: #F5F3EA;
     color: #8b6d5c;
@@ -42,7 +40,6 @@ main {
     border-radius: 10px;
     font-family: 'nanumesquareneo_b';
     font-size: 14px;
-
     box-sizing: border-box;
     width: 115px;
     gap: 6px;

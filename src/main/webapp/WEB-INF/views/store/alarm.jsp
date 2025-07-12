@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="../../../css/storealarm.css" />
     <title>Ohgoodfood</title>
+    <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
 </head>
 <body>
     <div id="wrapper">

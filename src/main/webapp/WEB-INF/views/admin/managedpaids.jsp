@@ -13,7 +13,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ohgoodfood</title>
+    <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
     <link rel="stylesheet" href="../../../css/reset.css" />
     <link rel="stylesheet" href="../../../css/adminlayout.css" />
     <link rel="stylesheet" href="../../../css/adminsearchlayout.css" />
@@ -113,7 +114,7 @@
                         </select>
                     </div>
                     <div class="filterValue">
-                        <input class="searchBox" type="text" name="s_value" value="${orders.s_value != null ? orders.s_value : ''}">
+                        <input class="searchBox" type="text" name="s_value" value="${paid.s_value != null ? paid.s_value : ''}">
                         <div class="magnifying">
                             <input class="magnifyingButton" type="submit" value="">
                         </div>
@@ -220,6 +221,17 @@
                 $(this).find(".submenu").css("display", "none");
             }
         );
+
+        $(document).ready(function() {
+            <c:choose>
+                <c:when test="${not empty error}">
+                    alert("${error}");
+                </c:when>
+                <c:when test="${not empty success}">
+                    alert("${success}"); 
+                </c:when>
+            </c:choose>
+        });
     </script>
 </body>
 </html>

@@ -9,7 +9,8 @@
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>reviewWrite</title>
+                <title>Ohgoodfood</title>
+                <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
                 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/userReviewWrite.css">
             </head>
 
@@ -141,8 +142,16 @@
                         });
                         // 파일 선택 및 미리보기
                         $fileInput.on('change', function () {
+                            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+
                             const file = this.files[0];
                             if (!file) return;
+
+                            if (!allowedTypes.includes(file.type)) {
+                                alert("JPEG 또는 PNG 형식의 이미지 파일만 업로드 가능합니다.");
+                                this.value = ""; // 전체 파일 초기화
+                                return;
+						    }
 
                             const reader = new FileReader();
                             reader.onload = e => {

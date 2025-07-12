@@ -157,7 +157,7 @@ public class AdminServiceImpl implements AdminService {
 	// 미승인 가게 목록 가져오기
 	@Override
 	public Map<String, Object> unapprovedStoresList(Store store) {
-		int count = adminMapper.countStores(store);
+		int count = adminMapper.getUnapprovedStoreCountTotal();
 		int totalPage = count / 7;
 		if (count % 7 != 0) {
 			totalPage++;
@@ -185,8 +185,10 @@ public class AdminServiceImpl implements AdminService {
 	// 가게 승인
 	@Override
 	public boolean approveStore(Store store) {
-		adminMapper.approveStore(store);
-		return true;
+		if(adminMapper.approveStore(store) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// 가게 전년 매출 조회
@@ -280,8 +282,10 @@ public class AdminServiceImpl implements AdminService {
 	// 주문 상태 변경
 	@Override
 	public boolean updateOrderStatus(Orders orders) {
-		adminMapper.updateOrderStatusPersonal(orders);
-		return true;
+		if(adminMapper.updateOrderStatusPersonal(orders) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// 결제 목록 가져오기
@@ -315,15 +319,19 @@ public class AdminServiceImpl implements AdminService {
 	// 결제 상태 변경
 	@Override
 	public boolean updatePaidStatus(Paid paid) {
-		adminMapper.updatePaidStatusPersonal(paid);
-		return true;
+		if(adminMapper.updatePaidStatusPersonal(paid) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// 결제 실패 이유 변경
 	@Override
 	public boolean updatePaidFailReason(Paid paid) {
-		adminMapper.updatePaidFailReasonPersonal(paid);
-		return true;
+		if(adminMapper.updatePaidFailReasonPersonal(paid) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// 알람 목록 가져오기
@@ -357,9 +365,10 @@ public class AdminServiceImpl implements AdminService {
 	// 알람 상태 변경
 	@Override
 	public boolean updateAlarm(Alarm alarm) {
-		adminMapper.readAlarm(alarm);
-		adminMapper.displayAlarm(alarm);
-		return true;
+		if(adminMapper.readAlarm(alarm) > 0 && adminMapper.displayAlarm(alarm) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// 알람 수신자 체크
@@ -371,8 +380,10 @@ public class AdminServiceImpl implements AdminService {
 	// 알람 보내기
 	@Override
 	public boolean sendAlarm(Alarm alarm) {
-		adminMapper.sendAlarm(alarm);
-		return true;
+		if(adminMapper.sendAlarm(alarm) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// 리뷰 목록 가져오기
@@ -406,8 +417,10 @@ public class AdminServiceImpl implements AdminService {
 	// 리뷰 블러드 처리
 	@Override
 	public boolean updateReview(Review review) {
-		adminMapper.blockReview(review);
-		return true;
+		if(adminMapper.blockReview(review) > 0) {
+			return true;
+		}
+		return false;
 	}
 
 	// Admin 로그인 체크

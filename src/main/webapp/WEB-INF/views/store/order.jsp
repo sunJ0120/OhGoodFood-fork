@@ -10,9 +10,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=440, initial-scale=1.0">
-    <title>미확정 주문내역</title>
+    <title>Ohgoodfood</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/storeunconfirmedorder2.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
 </head>
 
 <body>

@@ -11,63 +11,66 @@
 	<select id="getLastYearSalesTotal" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT IFNULL(SUM(p.paid_price+IFNULL(p.paid_point,0)), 0) 
 		FROM Paid p JOIN Orders o ON p.order_no = o.order_no
-		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE()) - 1
+		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE()) - 1 AND p.paid_status = 'Y'
 	</select>
 
 	<!-- 금년 전체 매출 조회 -->
 	<select id="getThisYearSalesTotal" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT IFNULL(SUM(p.paid_price+IFNULL(p.paid_point,0)), 0) 
 		FROM Paid p JOIN Orders o ON p.order_no = o.order_no
-		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE())
+		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE()) AND p.paid_status = 'Y'
 	</select>
 
 	<!-- 전월 전체 매출 조회 -->
 	<select id="getPreviousMonthSalesTotal" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT IFNULL(SUM(p.paid_price+IFNULL(p.paid_point,0)), 0) 
 		FROM Paid p JOIN Orders o ON p.order_no = o.order_no
-		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM p.paid_time) = EXTRACT(MONTH FROM SYSDATE()) - 1
+		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE()) 
+		AND EXTRACT(MONTH FROM p.paid_time) = EXTRACT(MONTH FROM SYSDATE()) - 1 AND p.paid_status = 'Y'
 	</select>
 
 	<!-- 이번 달 전체 매출 조회 -->
 	<select id="getThisMonthSalesTotal" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT IFNULL(SUM(p.paid_price+IFNULL(p.paid_point,0)), 0) 
 		FROM Paid p JOIN Orders o ON p.order_no = o.order_no
-		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM p.paid_time) = EXTRACT(MONTH FROM SYSDATE())
+		WHERE EXTRACT(YEAR FROM p.paid_time) = EXTRACT(YEAR FROM SYSDATE()) 
+		AND EXTRACT(MONTH FROM p.paid_time) = EXTRACT(MONTH FROM SYSDATE()) AND p.paid_status = 'Y'
 	</select>
 
 	<!-- 전년 전체 주문 건수 -->
 	<select id="getLastYearOrderCountTotal" parameterType="kr.co.ohgoodfood.dto.Orders" resultType="int">
 		SELECT COUNT(*)
 		FROM Orders
-		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) - 1
+		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) - 1 AND order_status != 'ready'
 	</select>
 
 	<!-- 금년 전체 주문 건수 -->
 	<select id="getThisYearOrderCountTotal" parameterType="kr.co.ohgoodfood.dto.Orders" resultType="int">	
 		SELECT COUNT(*) AS order_count
 		FROM Orders
-		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE())
+		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND order_status != 'ready'
 	</select>
 
 	<!-- 전월 전체 주문 건수 -->
 	<select id="getPreviousMonthOrderCountTotal" parameterType="kr.co.ohgoodfood.dto.Orders" resultType="int">
 		SELECT COUNT(*) AS order_count
 		FROM Orders
-		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE()) - 1
+		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE()) - 1 AND order_status != 'ready'
 	</select>
 
 	<!-- 이번 달 전체 주문 건수 -->
 	<select id="getThisMonthOrderCountTotal" parameterType="kr.co.ohgoodfood.dto.Orders" resultType="int">
 		SELECT COUNT(*) AS order_count
 		FROM Orders
-		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE())
+		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE()) AND order_status != 'ready'
 	</select>
 
 	<!-- 금일 전체 주문 건수 -->
 	<select id="getTodayOrderCountTotal" parameterType="kr.co.ohgoodfood.dto.Orders" resultType="int">
 		SELECT COUNT(*) AS order_count
 		FROM Orders
-		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE()) AND EXTRACT(DAY FROM ordered_at) = EXTRACT(DAY FROM SYSDATE())
+		WHERE EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE()) 
+		AND EXTRACT(DAY FROM ordered_at) = EXTRACT(DAY FROM SYSDATE()) AND order_status != 'ready'
 	</select>
 
 	<!-- 미승인 점포 수 검색 -->
@@ -201,28 +204,29 @@
 	<select id="getTodayOrderCountStore" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT COUNT(*)
 		FROM Orders
-		WHERE store_id = #{store_id} AND ordered_at BETWEEN DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00') AND DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59')
+		WHERE store_id = #{store_id} AND ordered_at BETWEEN DATE_FORMAT(NOW(), '%Y-%m-%d 00:00:00') AND DATE_FORMAT(NOW(), '%Y-%m-%d 23:59:59') AND order_status != 'ready'
 	</select>
 
 	<!-- Store 금월 주문 건수 -->
 	<select id="getThisMonthOrderCountStore" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT COUNT(*)
 		FROM Orders
-		WHERE store_id = #{store_id} AND EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE())
+		WHERE store_id = #{store_id} AND EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) 
+		AND EXTRACT(MONTH FROM ordered_at) = EXTRACT(MONTH FROM SYSDATE()) AND order_status != 'ready'
 	</select>
 
 	<!-- Store 금년 주문 건수 -->
 	<select id="getThisYearOrderCountStore" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT COUNT(*)
 		FROM Orders
-		WHERE store_id = #{store_id} AND EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE())
+		WHERE store_id = #{store_id} AND EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) AND order_status != 'ready'
 	</select>
 	
 	<!-- Store 전년 주문 건수 -->
 	<select id="getLastYearOrderCountStore" parameterType="kr.co.ohgoodfood.dto.StoreSales" resultType="int">
 		SELECT COUNT(*)
 		FROM Orders
-		WHERE store_id = #{store_id} AND EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) - 1
+		WHERE store_id = #{store_id} AND EXTRACT(YEAR FROM ordered_at) = EXTRACT(YEAR FROM SYSDATE()) - 1 AND order_status != 'ready'
 	</select>
 
 	<!-- Store 기간 지정 주문 건수 -->
@@ -230,17 +234,17 @@
 		SELECT COUNT(*)
 		FROM Orders
 		WHERE store_id = #{store_id} AND ordered_at BETWEEN STR_TO_DATE(CONCAT(#{start_date}, ' 00:00:00'), '%Y-%m-%d %H:%i:%s')
-		AND STR_TO_DATE(CONCAT(#{end_date}, ' 23:59:59'), '%Y-%m-%d %H:%i:%s')
+		AND STR_TO_DATE(CONCAT(#{end_date}, ' 23:59:59'), '%Y-%m-%d %H:%i:%s') AND order_status != 'ready'
 	</select>
 
 	<!-- Orders 검색 -->
 	<select id="searchOrdersPersonal" parameterType="kr.co.ohgoodfood.dto.Orders" resultType="kr.co.ohgoodfood.dto.Orders">
 		SELECT o.order_no AS order_no, o.user_id AS user_id, o.store_id AS store_id, o.quantity AS quantity, p.paid_price AS s_price, o.ordered_at AS ordered_at, o.picked_at AS picked_at, o.order_status AS order_status
 		FROM Orders o LEFT JOIN Paid p ON o.order_no = p.order_no
-		WHERE 1=1
+		WHERE 1=1 AND order_status != 'ready'
 		<!-- 완전일치 검색 -->
 		<if test="s_value != null and s_value != ''">
-			AND o.${s_type} = #{s_value}
+			AND o.${s_type} = #{s_value} 
 		</if>
 		ORDER BY o.order_no DESC
 		LIMIT ${startIdx}, 7
@@ -250,9 +254,9 @@
 	<select id="countOrders" parameterType="kr.co.ohgoodfood.dto.Orders" resultType="int">
 		SELECT COUNT(*)
 		FROM Orders
-		WHERE 1=1
+		WHERE 1=1 AND order_status != 'ready'
 		<if test="s_value != null and s_value != ''">
-			AND ${s_type} = #{s_value}
+			AND ${s_type} = #{s_value} 
 		</if>
 	</select>
 
@@ -268,7 +272,7 @@
 		SELECT p.paid_no AS paid_no, o.user_id AS user_id, o.store_id AS s_store_id, o.order_no AS order_no, p.paid_price AS paid_price, 
 		p.paid_time AS paid_time, p.paid_type AS paid_type, p.paid_status AS paid_status, p.fail_reason AS fail_reason, p.paid_point AS paid_point, p.paid_code AS paid_code 
 		FROM Orders o JOIN Paid p ON o.order_no = p.order_no
-		WHERE 1=1
+		WHERE 1=1 AND o.order_status != 'ready'
 		<if test="s_value != null and s_value != ''">
 			AND p.${s_type} = #{s_value}
 		</if>
@@ -279,10 +283,11 @@
 	<!-- Paid 개수 -->
 	<select id="countPaid" parameterType="kr.co.ohgoodfood.dto.Paid" resultType="int">
 		SELECT COUNT(*)
-		FROM Paid
-		WHERE 1=1
+		FROM Paid p
+		JOIN Orders o ON p.order_no = o.order_no
+		WHERE 1=1 AND o.order_status != 'ready'
 		<if test="s_value != null and s_value != ''">
-			AND ${s_type} = #{s_value}
+			AND p.${s_type} = #{s_value}
 		</if>
 	</select>
 

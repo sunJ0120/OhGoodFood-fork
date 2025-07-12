@@ -13,7 +13,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ohgoodfood</title>
+    <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
     <link rel="stylesheet" href="../../../css/reset.css" />
     <link rel="stylesheet" href="../../../css/adminlayout.css" />
     <link rel="stylesheet" href="../../../css/adminsearchlayout.css" />
@@ -145,8 +146,8 @@
                                     <td>
                                         <input type="hidden" name="review_no" value="${vo.review_no}">
                                         <select name="is_blocked">
-                                            <option value="Y" ${vo.is_blocked == 'Y' ? 'selected' : ''}>보임</option>
-                                            <option value="N" ${vo.is_blocked == 'N' ? 'selected' : ''}>숨김</option>
+                                            <option value="Y" ${vo.is_blocked == 'Y' ? 'selected' : ''}>숨김</option>
+                                            <option value="N" ${vo.is_blocked == 'N' ? 'selected' : ''}>보임</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -206,6 +207,17 @@
                 $(this).find(".submenu").css("display", "none");
             }
         );
+
+        $(document).ready(function() {
+            <c:choose>
+                <c:when test="${not empty error}">
+                    alert("${error}");
+                </c:when>
+                <c:when test="${not empty success}">
+                    alert("${success}"); 
+                </c:when>
+            </c:choose>
+        });
     </script>
 </body>
 </html>

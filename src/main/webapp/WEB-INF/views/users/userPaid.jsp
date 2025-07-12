@@ -6,7 +6,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ohgoodfood</title>
+    <link rel="icon" type="image/jpeg" href="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/shinhanmoilicon32x32.jpg">
     <link rel="stylesheet" href="../../../css/reset.css" />
     <link rel="stylesheet" href="../../../css/userPaid.css" />
 </head>
@@ -191,7 +192,7 @@
                 $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                 $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
             }
-            if(parseInt($(".userPoint").val()) >= parseInt("${userPoint}")){
+            if(parseInt($(".userPoint").val()) > parseInt("${userPoint}")){
                 $(".userPoint").val(0);
                 $(".productTotalPrice").html((parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-$(".userPoint").val()).toLocaleString('ko-KR') + " 원");
                 $('#totalPrice').val(parseInt("${productDetail.sale_price}")*$("#totalQuantity").val()-parseInt($(".userPoint").val()));
@@ -206,6 +207,7 @@
             $(".productTotalPrice").html(parseInt($("#totalPrice").val()).toLocaleString('ko-KR') + " 원");
         })
 
+
         $("#payButton").on("click", function(e) {
             e.preventDefault();
 
@@ -214,6 +216,8 @@
                 alert("주의 사항을 모두 체크해주세요.")
                 return;
             }
+
+            $("#payButton").prop('disabled', true).text('결제 중...');
 
             $.ajax({
                 type: "POST",
@@ -229,7 +233,6 @@
                 dataType: "json",
                 success: function(res){
                     if (res.result === "success" || res.result == "success") {
-                        console.log(res);
                         const tossPayments = TossPayments(res.clientKey);
                         tossPayments.requestPayment("카드", {
                             amount: res.amount,
@@ -239,7 +242,8 @@
                             failUrl: "https://ohgoodfood.com/payment/fail"
                         });
                     } else {
-                        alert("주문이 불가능합니다. 메인으로 돌아주세요")
+                        alert("주문이 불가능합니다. 뒤로 돌아주세요");
+                        $("#payButton").text('결제 실패');
                     }
                 },
                 error: function(){

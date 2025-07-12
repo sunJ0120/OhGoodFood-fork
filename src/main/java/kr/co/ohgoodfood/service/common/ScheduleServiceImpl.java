@@ -27,10 +27,24 @@ public class ScheduleServiceImpl implements ScheduleService {
 	@Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
     @Override
-	public void reservationCheck() {
-		Date currentDate = new Date();
+	public synchronized void reservationCheck() {
+
+        // 논리적 시간 처리 예정
+        Calendar now = Calendar.getInstance();  // 현재 시간
+        int minute = now.get(Calendar.MINUTE);
+
+        if (minute < 30) {
+            now.set(Calendar.MINUTE, 0);
+        } else {
+            now.set(Calendar.MINUTE, 30);
+        }
+
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
+
+		// Date currentDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
-		String formattedDate = sdf.format(currentDate);
+		String formattedDate = sdf.format(now.getTime());
 
 		// 금일 오픈한(예약) 가게 가져오기
 		List<ReservationConfirmed> reservationStoreList = scheduleMapper.todayReservation(formattedDate);
@@ -40,7 +54,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 			scheduleMapper.updateStoreStatus(store);
             Alarm alarm = new Alarm();
             alarm.setAlarm_title("확정 완료");  
-            alarm.setAlarm_contents(scheduleMapper.getStoreName(store.getStore_id()) + " 예약이 확정되었습니다.");
+            alarm.setAlarm_contents( "금일 예약이 마감되었습니다.");
             alarm.setReceive_id(store.getStore_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");
@@ -68,14 +82,25 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
     @Override
-	public void reservationCheckBeforeOneHour() {
+	public synchronized void reservationCheckBeforeOneHour() {
         // 현재 시간 + 1시간
-        Date currentDate = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
+        // 논리적 시간 처리 예정
         Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
+        int minute = calendar.get(Calendar.MINUTE);
+        if (minute < 30) {
+            calendar.set(Calendar.MINUTE, 0);
+        } else {
+            calendar.set(Calendar.MINUTE, 30);
+        }
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        // 1시간 더하기
         calendar.add(Calendar.HOUR_OF_DAY, 1);
         Date oneHourLater = calendar.getTime();
+
+        // 문자열 포맷
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
         String formattedOneHourLater = sdf.format(oneHourLater);
 
         // 현재 시간 + 1시간 이후 예약 가게 가져오기
@@ -84,7 +109,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         for (ReservationConfirmed store : reservationStoreList) {
             Alarm alarm = new Alarm();
             alarm.setAlarm_title("확정 임박");  
-            alarm.setAlarm_contents("확정까지 1시간 남았습니다.");
+            alarm.setAlarm_contents("확정 마감까지 1시간 남았습니다.");
             alarm.setReceive_id(store.getStore_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");
@@ -96,10 +121,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
     @Override
-	public void pickupCheck() {
-		Date currentDate = new Date();
+	public synchronized void pickupCheck() {
+		// 논리적 시간 처리 예정
+        Calendar now = Calendar.getInstance();  // 현재 시간
+        int minute = now.get(Calendar.MINUTE);
+
+        if (minute < 30) {
+            now.set(Calendar.MINUTE, 0);
+        } else {
+            now.set(Calendar.MINUTE, 30);
+        }
+
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
+
+		// Date currentDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
-		String formattedDate = sdf.format(currentDate);
+		String formattedDate = sdf.format(now.getTime());
+
         // 픽업 안 된 주문 가져오기
         List<ReservationConfirmed> pickupNotDoneList = scheduleMapper.pickupNotDone(formattedDate);
         // 픽업 안 된 주문 상태 업데이트 ( confirmed --> cancel )
@@ -110,7 +149,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             // 유저에게 픽업 안 된 주문 알람 보내기
             Alarm alarm = new Alarm();
             alarm.setAlarm_title("픽업 종료");  
-            alarm.setAlarm_contents(scheduleMapper.getStoreName(order.getStore_id()) + " 픽업이 종료되었습니다.");
+            alarm.setAlarm_contents(scheduleMapper.getStoreName(order.getStore_id()) + " 픽업 시간이 종료되었습니다.");
             alarm.setReceive_id(order.getUser_id());
             alarm.setAlarm_displayed("Y");
             alarm.setAlarm_read("N");
@@ -118,12 +157,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
             // 사장님에게 픽업 종료 알람 보내기
             Alarm alarm2 = new Alarm();
-            alarm.setAlarm_title("픽업 종료");  
-            alarm.setAlarm_contents(scheduleMapper.getUserNickname(order.getUser_id()) + " 님이 픽업을 하지 않으셨습니다.");
-            alarm.setReceive_id(order.getStore_id());
-            alarm.setAlarm_displayed("Y");
-            alarm.setAlarm_read("N");
-            adminMapper.sendAlarm(alarm);
+            alarm2.setAlarm_title("픽업 종료");  
+            alarm2.setAlarm_contents(scheduleMapper.getUserNickname(order.getUser_id()) + " 님이 픽업을 하지 않으셨습니다.");
+            alarm2.setReceive_id(order.getStore_id());
+            alarm2.setAlarm_displayed("Y");
+            alarm2.setAlarm_read("N");
+            adminMapper.sendAlarm(alarm2);
         }
 	}
 
@@ -131,10 +170,24 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Scheduled(cron = "0 0,30 * * * ?")
 	@Transactional
     @Override
-	public void pickupStartCheck() {
-		Date currentDate = new Date();
+	public synchronized void pickupStartCheck() {
+		// 논리적 시간 처리 예정
+        Calendar now = Calendar.getInstance();  // 현재 시간
+        int minute = now.get(Calendar.MINUTE);
+
+        if (minute < 30) {
+            now.set(Calendar.MINUTE, 0);
+        } else {
+            now.set(Calendar.MINUTE, 30);
+        }
+
+        now.set(Calendar.SECOND, 0);
+        now.set(Calendar.MILLISECOND, 0);
+
+		// Date currentDate = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:00");
-		String formattedDate = sdf.format(currentDate);
+		String formattedDate = sdf.format(now.getTime());
+
         // 픽업 안 된 주문 가져오기, 픽업 시간 시작 기준
         List<ReservationConfirmed> pickupNotDoneStartList = scheduleMapper.pickupNotDoneStart(formattedDate);
         // 유저에게 픽업 안 된 주문 알람 보내기
