@@ -12,28 +12,28 @@
         <section class="productList">
             <c:forEach var="userOrder" items = "${userOrderList}" >
                 <article class="productCard"
-                         data-order-no="${userOrder.order_no}"
-                         data-order-status="${userOrder.order_status}"
-                         data-canceld-from="${userOrder.canceld_from}"
+                         data-order-no="${userOrder.order.order_no}"
+                         data-order-status="${userOrder.order.order_status}"
+                         data-canceld-from="${userOrder.order.canceld_from}"
                          data-block-cancel="${userOrder.block_cancel}"
                          data-has-review="${userOrder.has_review}">
                     <div class="orderTop">
                         <div class="storeName">
-                            <strong>${userOrder.store_name}</strong>
+                            <strong>${userOrder.store.store_name}</strong>
                         </div>
                         <div class="headerLeftWrapper">
                             <div class="orderStatus">
                                 <c:choose>
-                                    <c:when test="${userOrder.order_status eq 'reservation'}">
+                                    <c:when test="${userOrder.order.order_status eq 'reservation'}">
                                         확정 진행중
                                     </c:when>
 
-                                    <c:when test="${userOrder.order_status eq 'cancel'}">
+                                    <c:when test="${userOrder.order.order_status eq 'cancel'}">
                                         <c:choose>
-                                            <c:when test="${userOrder.canceld_from eq 'user'}">
+                                            <c:when test="${userOrder.order.canceld_from eq 'user'}">
                                                 구매자 취소
                                             </c:when>
-                                            <c:when test="${userOrder.canceld_from eq 'store'}">
+                                            <c:when test="${userOrder.order.canceld_from eq 'store'}">
                                                 가게 취소
                                             </c:when>
                                             <%-- 임시이다. 차피 데이터 수정되면 cancel에 @@취소 이게 안 붙어 있을리가 없어서 사라질 부분임 --%>
@@ -43,19 +43,19 @@
                                         </c:choose>
                                     </c:when>
 
-                                    <c:when test="${userOrder.order_status eq 'pickup'}">
+                                    <c:when test="${userOrder.order.order_status eq 'pickup'}">
                                         픽업 완료
                                     </c:when>
 
                                     <%-- 오늘 픽업, 내일 픽업은 확정일시 말한다. --%>
-                                    <c:when test="${userOrder.order_status eq 'confirmed'}">
+                                    <c:when test="${userOrder.order.order_status eq 'confirmed'}">
                                         ${userOrder.pickup_status.displayName}
                                     </c:when>
                                 </c:choose>
                             </div>
                             <div class="orderDate">
-                                <c:if test="${not empty userOrder.ordered_at}">
-                                    <fmt:formatDate value="${userOrder.ordered_at}" pattern="yyyy.MM.dd"/>
+                                <c:if test="${not empty userOrder.order.ordered_at}">
+                                    <fmt:formatDate value="${userOrder.order.ordered_at}" pattern="yyyy.MM.dd"/>
                                 </c:if>
                             </div>
                         </div>
@@ -63,35 +63,35 @@
                     <hr>
                     <div class="orderMiddle">
                         <div class="imgWrapper">
-                            <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.store_img}" alt="상품 이미지" class="productImg" />
+                            <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${userOrder.image.store_img}" alt="상품 이미지" class="productImg" />
                         </div>
                         <div class="orderInfoWrapper">
                             <div class="orderInfo">
-                                <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.quantity}개</span></div>
+                                <div class="orderInfoSub"><div class="orderAmount">수량 : </div><span class="orderAmountValue">${userOrder.order.quantity}개</span></div>
                                 <div class="orderInfoSub"><div class="orderTime">픽업 시간 : </div>
                                     <span class="orderTimeValue">
-                                      <span class="pickupStartText">
-                                        <c:if test="${not empty userOrder.pickup_start}">
-                                            <fmt:formatDate value="${userOrder.pickup_start}" pattern="HH:mm"/>
-                                            ~
-                                        </c:if>
-                                      </span>
-                                      <span class="pickupEndText">
-                                        <c:if test="${not empty userOrder.pickup_end}">
-                                            <fmt:formatDate value="${userOrder.pickup_end}" pattern="HH:mm"/>
-                                        </c:if>
-                                      </span>
-                                    </span>
+                              <span class="pickupStartText">
+                                <c:if test="${not empty userOrder.product.pickup_start}">
+                                    <fmt:formatDate value="${userOrder.product.pickup_start}" pattern="HH:mm"/>
+                                    ~
+                                </c:if>
+                              </span>
+                              <span class="pickupEndText">
+                                <c:if test="${not empty userOrder.product.pickup_end}">
+                                    <fmt:formatDate value="${userOrder.product.pickup_end}" pattern="HH:mm"/>
+                                </c:if>
+                              </span>
+                            </span>
                                 </div>
                                 <div class="orderInfoSub"><div class="orderPaid">결제 금액 : </div>
                                     <span class="orderPaidValue">
-                                      <fmt:formatNumber value="${userOrder.paid_price}" pattern="#,###" />₩
-                                    </span>
+                              <fmt:formatNumber value="${userOrder.paid.paid_price}" pattern="#,###" />₩
+                            </span>
                                 </div>
                                 <div class="orderInfoSub"><div class="orderPaidPoint">사용 포인트 : </div>
                                     <span class="orderPaidPointValue">
-                                      <fmt:formatNumber value="${userOrder.paid_point}" pattern="#,###" />P
-                                    </span>
+                              <fmt:formatNumber value="${userOrder.paid.paid_point}" pattern="#,###" />P
+                            </span>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +103,7 @@
                         </div>
 
                         <button type="button" class="orderBrown hidden orderReview"
-                                onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order_no}'">
+                                onclick="location.href='${pageContext.request.contextPath}/user/reviewWrite?order_no=${userOrder.order.order_no}'">
                             리뷰 쓰기 (${userOrder.point}P)
                         </button>
 
@@ -112,14 +112,14 @@
                         </div>
 
                         <div class="orderWhite hidden orderPickupCode">
-                            픽업 코드 : ${userOrder.order_code}
+                            픽업 코드 : ${userOrder.order.order_code}
                         </div>
 
                         <form action="/user/order/cancel" method="post" class="postStyle hidden" onsubmit="return confirm('정말 주문을 취소하시겠습니까?');">
-                            <input type="hidden" name="order_no" value="${userOrder.order_no}" />
-                            <input type="hidden" name="quantity"   value="${userOrder.quantity}" />
-                            <input type="hidden" name="product_no"   value="${userOrder.product_no}" />
-                            <button type="submit"  class="orderWhite hidden orderCancel" data-order-no="${userOrder.order_no}">
+                            <input type="hidden" name="order_no" value="${userOrder.order.order_no}" />
+                            <input type="hidden" name="quantity"   value="${userOrder.order.quantity}" />
+                            <input type="hidden" name="product_no"   value="${userOrder.product.product_no}" />
+                            <button type="submit"  class="orderWhite hidden orderCancel" data-order-no="${userOrder.order.order_no}">
                                 주문 취소
                             </button>
                         </form>

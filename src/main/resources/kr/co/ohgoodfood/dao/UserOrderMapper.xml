@@ -34,8 +34,8 @@
             <id column="order_no"   property="order_no"/>
             <result column="ordered_at"   property="ordered_at"/>
             <result column="quantity"   property="quantity"/>
-            <result column="order_status"   property="order_status"/>
-            <result column="canceld_from"   property="canceld_from"/>
+            <result column="order_status"  property="order_status"/>
+            <result column="canceld_from"  property="canceld_from"/>
             <result column="order_code"   property="order_code"/>
             <result column="user_id"   property="user_id"/>
         </association>
@@ -47,7 +47,7 @@
     </resultMap>
 
     <!-- selectOrderList mapper -->
-    <select id="selectOrderList" resultType="UserOrderDTO">
+    <select id="selectOrderList" resultMap="UserOrderDTO">
         SELECT
             s.store_name AS store_name, s.store_id AS store_id,
             pa.paid_no AS paid_no, pa.paid_price AS paid_price, pa.paid_status AS paid_status, pa.paid_point AS paid_point,
@@ -112,10 +112,10 @@
             <if test="order_request.order_status != null">
                 order_status = #{order_request.order_status},
             </if>
-            <if test="order_request.order_status == 'cancel'">
+            <if test="order_request.order_status == T(kr.co.ohgoodfood.dto.OrderStatus).CANCEL">
                 canceld_from = #{order_request.canceld_from},
             </if>
-            <if test="order_request.order_status == 'confirmed'">
+            <if test="order_request.order_status == T(kr.co.ohgoodfood.dto.OrderStatus).CONFIRMED">
                 order_code = #{order_request.order_code},
             </if>
         </set>
