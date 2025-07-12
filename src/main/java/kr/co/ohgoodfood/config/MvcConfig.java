@@ -101,6 +101,9 @@ public class MvcConfig implements WebMvcConfigurer {
 		// config.setMapUnderscoreToCamelCase(true);
 		// config.setCallSettersOnNulls(true);
 		// ssf.setConfiguration(config);
+
+		// 핸들러 스캔 패키지
+		ssf.setTypeHandlersPackage("kr.co.ohgoodfood.util.handler");
 		
 		return ssf.getObject();
 	}

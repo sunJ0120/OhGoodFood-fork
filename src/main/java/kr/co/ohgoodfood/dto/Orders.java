@@ -15,7 +15,7 @@ public class Orders {
     private String user_id;
     private String store_id;
     private String order_code;
-    private String canceld_from ; //이거 db랑 맞춰야 합니다,,!
+    private String canceld_from ;
     private int product_no;
 
     private int s_order_no;

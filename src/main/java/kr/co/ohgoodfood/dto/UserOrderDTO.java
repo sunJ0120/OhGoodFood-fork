@@ -3,7 +3,7 @@ package kr.co.ohgoodfood.dto;
 import lombok.*;
 
 /**
- * [DTO] UserOrder.java
+ * [DTO] UserOrderDTO.java
  *
  * - Order List 정보에 필요한 DTO
  * - 카드 안에 들어가는 모든 정보들을 한 번에 저장해서 사용한다.
@@ -33,6 +33,7 @@ public class UserOrderDTO {
     private Image image;
 
     //[추가 정보] DB에는 없는 추가 정보
+    private PickupStatus pickup_status; //오늘픽업인지 내일 픽업인지를 저장
     private Boolean block_cancel; //확정 시간 한 시간 전에 취소하지 못하도록 변수 생성
     private Boolean has_review; //리뷰가 존재하는 주문인지 판단하기 위함이다.
     private int point; //주문에 해당하는 point 지급을 위한 컬럼 (order 금액의 1%)

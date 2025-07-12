@@ -3,6 +3,7 @@ package kr.co.ohgoodfood.dao;
 import kr.co.ohgoodfood.dto.UserOrderDTO;
 import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.dto.UserOrderRequest;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  *
  * 사용자 order 페이지에서 사용하는 mapper interface
  */
-
+@Mapper
 public interface UserOrderMapper {
     /**
      * 사용자의 모든 주문내역을 출력

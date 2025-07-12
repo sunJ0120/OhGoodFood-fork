@@ -28,9 +28,6 @@ import lombok.extern.slf4j.Slf4j;
  *
  * 사용자 페이지 전용 기능을 처리하는 컨트롤러입니다.
  * - POST /user/signup	              : 사용자 회원가입 페이지
- * - GET  /user/main/orderList        : 유저가 가진 orderList 목록 조회
- * - POST /user/filter/order          : AJAX 기반 오더 목록 필터링
- * - POST /user/order/cancel          : 유저가 선택한 오더 주문 취소
  * - GET  /user/mypage                : 유저 mypage 이동
  * - GET  /user/reviewList            : 하단 메뉴바 Review탭 이동시 전체 리뷰 목록 조회
  *
@@ -47,81 +44,6 @@ public class UsersController {
     // 지도 사용을 위한 앱키
     @Value("${kakao.map.appKey}")
     private String kakaoMapAppKey;
-
-    /**
-     * 세션에 있는 유저가 가진 주문 목록을 조회한다.
-     *
-     * @param userOrderFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
-     * @param model           뷰에 전달할 데이터(Model)
-     * @param session         현재 HTTP 세션(로그인된 사용자 정보)
-     * @return                users/userOrders.jsp로 포워딩
-     */
-    @GetMapping("/orderList")
-    public String userOrderList(@ModelAttribute UserOrderFilter userOrderFilter,
-                                Model model,
-                                HttpSession session){
-
-        Account loginUser = (Account) session.getAttribute("user");
-        String user_id = loginUser.getUser_id();
-
-        userOrderFilter.setUser_id(user_id); //필터에 id값 추가
-        List<UserOrderDTO> userOrderList = usersService.getUserOrderList(userOrderFilter);
-
-        model.addAttribute("userOrderList", userOrderList);
-
-        return "users/userOrders";
-    }
-
-    /**
-     * AJAX 필터링 결과에 따른 주문 목록을 조회하고 뷰 프래그먼트만 반환한다.
-     *
-     * @param userOrderFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
-     * @param model           뷰에 전달할 데이터(Model)
-     * @param session         현재 HTTP 세션(로그인된 사용자 정보)
-     * @return                필터링 된 가게 주문 목록만 포함한 JSP 프래그먼트 ("users/fragment/userOrderList")
-     */
-    @PostMapping("/filter/order")
-    public String filterOrderList(@RequestBody UserOrderFilter userOrderFilter,
-                                  Model model,
-                                  HttpSession session){
-        //세션에서 받아오는 로직
-        Account loginUser = (Account) session.getAttribute("user");
-        String user_id = loginUser.getUser_id();
-
-        userOrderFilter.setUser_id(user_id); //필터에 id값 추가
-        List<UserOrderDTO> userOrderList = usersService.getUserOrderList(userOrderFilter);
-        model.addAttribute("userOrderList",userOrderList);
-
-        return "users/fragment/userOrderList";
-    }
-
-    /**
-     * 세션에 있는 유저가 가진 주문 목록중 선택한 것을 취소한다.
-     *
-     * @param userOrderRequest 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
-     * @param session          현재 HTTP 세션(로그인된 사용자 정보)
-     * @return                 PRG : /user/orderList 로 리다이렉트
-     */
-    @PostMapping("/order/cancel")
-    public String cancelOrder(@ModelAttribute UserOrderRequest userOrderRequest,
-                              HttpSession session,
-                              RedirectAttributes redirectAttributes){
-
-        Account loginUser = (Account) session.getAttribute("user");
-        String user_id = loginUser.getUser_id();
-
-        userOrderRequest.setUser_id(user_id);
-
-        //주문 취소의 경우는, 두 테이블을 UPDATE 하므로 @Transactional 처리, 그러므로 예외처리해준다.
-        try {
-            usersService.updateUserOrderCancel(userOrderRequest);
-            redirectAttributes.addFlashAttribute("msg", "주문이 정상적으로 취소되었습니다.");
-        } catch (IllegalStateException e) {
-            // 트랜잭션은 exception 던졌을 때 롤백됨
-            redirectAttributes.addFlashAttribute("errorMsg", "[ERROR!] 주문 취소에 실패했습니다.");
-        }
-        return "redirect:/user/orderList";
-    }
 
     /**
      *  사용자 회원가입
