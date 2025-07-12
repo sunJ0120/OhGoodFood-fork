@@ -22,24 +22,20 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import kr.co.ohgoodfood.config.AwsS3Config;
 import kr.co.ohgoodfood.dao.UserMapper;
 import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.MainStore;
 import kr.co.ohgoodfood.dto.PickupStatus;
 import kr.co.ohgoodfood.dto.ProductDetail;
 import kr.co.ohgoodfood.dto.Review;
 import kr.co.ohgoodfood.dto.ReviewForm;
-import kr.co.ohgoodfood.dto.UserMainFilter;
 import kr.co.ohgoodfood.dto.UserMypage;
-import kr.co.ohgoodfood.dto.UserOrder;
+import kr.co.ohgoodfood.dto.UserOrderDTO;
 import kr.co.ohgoodfood.dto.UserOrderFilter;
 import kr.co.ohgoodfood.dto.UserOrderRequest;
-import kr.co.ohgoodfood.util.StringSplitUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * UsersServiceImpl.java - UsersService interface 구현체
- * 
+ *
  * @see UsersService - 세부 기능은 해당 클래스인 UsersServiceImpl에 구현한다.
  * 의존성 주입은 생성자 주입으로 구성한다.
  */
@@ -49,66 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class UserServiceImpl implements UsersService{
     private final UserMapper userMapper;
-	private final AwsS3Config awsS3Config;
-
-    /**
-     * 메인 화면에 뿌릴 DTO리스트를 가져오는 method
-     *
-     * @param userMainFilter : 필터링을 위한 객체가 담겨있다.
-     * @return               : mainStoreList (MainStore DTO의 리스트 객체)
-     */
-    @Override
-    public List<MainStore> getMainStoreList(UserMainFilter userMainFilter) {
-        List<MainStore> mainStoreList = userMapper.selectAllStore(userMainFilter);
-
-        // 카테고리 이름과 pickup 상태를 저장
-        for(MainStore mainStore : mainStoreList){
-            PickupStatus pickupStatus = getPickupDateStatus(mainStore);
-            mainStore.setPickup_status(pickupStatus == null ? PickupStatus.CLOSED : pickupStatus);
-            mainStore.setCategory_list(getCategoryList(mainStore));
-            mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
-        }
-        return mainStoreList;
-    }
-
-    /**
-     * 지도에 표시할 가게 정보를 가져오는 method
-     *
-     * @param userMainFilter : 필터링을 위한 객체가 담겨있다. main에서 사용하는걸 그대로 사용한다
-     * @return               : mainStore
-     */
-    //selectOneStoreByStoreId
-    @Override
-    public MainStore getMainStoreOne(UserMainFilter userMainFilter){
-
-        MainStore mainStore = userMapper.selectOneStoreByStoreId(userMainFilter);
-
-        mainStore.setPickup_status(getPickupDateStatus(mainStore));
-        mainStore.setCategory_list(getCategoryList(mainStore));
-        mainStore.setMainmenu_list(StringSplitUtils.splitMenu(mainStore.getStore_menu(), "\\s*\\|\\s*"));
-
-        return mainStore;
-    }
-
-    /**
-     * 사용자가 가진 북마크 리스트를 가져오는 method
-     *
-     * @param user_id           : 현재 세션에 접속한 사용자 id
-     * @return                  : bookmarkList (Bookmark DTO의 리스트 객체)
-     */
-    @Override
-    public List<Bookmark> getBookmarkList(String user_id){
-        List<Bookmark> bookmarkList = userMapper.selectAllBookmark(user_id);
-
-        // 여기에 카테고리 이름과 pickup 상태를 저장
-        for(Bookmark bookmark : bookmarkList){
-            bookmark.setPickup_status(getPickupDateStatus(bookmark));
-            bookmark.setCategory_list(getCategoryList(bookmark));
-            bookmark.setMainmenu_list(StringSplitUtils.splitMenu(bookmark.getStore_menu(), "/"));
-        }
-
-        return bookmarkList;
-    }
+    private final AwsS3Config awsS3Config;
 
     /**
      * LocalDate.now()로 오늘픽업, 내일픽업, 매진, 마감 상태를 판별합니다.
@@ -156,7 +93,7 @@ public class UserServiceImpl implements UsersService{
      * @return                 : PickupStatus ENUM 객체
      */
     @Override
-    public PickupStatus getOrderPickupDateStatus(UserOrder userOrder) {
+    public PickupStatus getOrderPickupDateStatus(UserOrderDTO userOrder) {
         LocalDate today = LocalDate.now();
         LocalDate pickupDate = userOrder.getPickup_start().toLocalDateTime().toLocalDate();
 
@@ -203,55 +140,17 @@ public class UserServiceImpl implements UsersService{
     }
 
     /**
-     * 북마크를 삭제하기 위한 기능이다.
-     *
-     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
-     * @return                   : 실행 결과 행 수에 따라 Boolean
-     */
-    @Override
-    public boolean deleteUserBookMark(BookmarkFilter bookmarkFilter) {
-        String user_id = bookmarkFilter.getUser_id();
-        String store_id = bookmarkFilter.getStore_id();
-
-        int cnt = userMapper.deleteBookmark(user_id, store_id);
-
-        if (cnt == 1) {
-            return true;
-        }
-        return false; //delete 실패!
-    }
-
-    /**
-     * 북마크를 추가하기 위한 기능이다.
-     *
-     * @param bookmarkFilter     : Bookmark 삭제시 필요한 정보값이 담긴 DTO
-     * @return                   : 결과 행 수에 따라 Boolean
-     */
-    @Override
-    public boolean insertUserBookMark(BookmarkFilter bookmarkFilter) {
-        String user_id = bookmarkFilter.getUser_id();
-        String store_id = bookmarkFilter.getStore_id();
-
-        int cnt = userMapper.insertBookmark(user_id, store_id);
-
-        if (cnt == 1) {
-            return true;
-        }
-        return false; //insert 실패!
-    }
-
-    /**
      * 사용자의 OrderList를 가져오는 method
      *
      * @param userOrderFilter    : 세션에 접속한 사용자 id와 필터링을 위한 객체가 담겨있다.
      * @return                   : 조회한 UserOrderList
      */
     @Override
-    public List<UserOrder> getUserOrderList(UserOrderFilter userOrderFilter){
-        List<UserOrder> orderList = userMapper.selectOrderList(userOrderFilter);
+    public List<UserOrderDTO> getUserOrderList(UserOrderFilter userOrderFilter){
+        List<UserOrderDTO> orderList = userMapper.selectOrderList(userOrderFilter);
 
         // userOrder에 pickup_status와 block_cancel 상태를 저장.
-        for(UserOrder userOrder : orderList){
+        for(UserOrderDTO userOrder : orderList){
             userOrder.setPickup_status(getOrderPickupDateStatus(userOrder));
             //주문에 해당하는 포인트를 적립
             userOrder.setPoint(getOrderPoint(userOrder));
@@ -265,7 +164,7 @@ public class UserServiceImpl implements UsersService{
      * @param userOrder          : orderList 화면에 뿌릴 객체
      * @return                   : 구매 금액의 1%에 해당하는 point
      */
-    public int getOrderPoint(UserOrder userOrder){
+    public int getOrderPoint(UserOrderDTO userOrder){
         return (int) (userOrder.getPaid_price() * 0.01);
     }
 
@@ -314,59 +213,59 @@ public class UserServiceImpl implements UsersService{
         }
         return true;
     }
-    
-	/** 유저 정보 한 건 조회 */
-	@Override
-	public UserMypage getUserInfo(String userId) {
-		UserMypage info = userMapper.selectUserInfo(userId);
-		return (info != null ? info : new UserMypage());
-	}
 
-	/** 리뷰 리스트 여러 건 조회 */
-	@Override
-	public List<Review> getUserReviews(String userId) {
-		return userMapper.selectUserReviews(userId);
-	}
+    /** 유저 정보 한 건 조회 */
+    @Override
+    public UserMypage getUserInfo(String userId) {
+        UserMypage info = userMapper.selectUserInfo(userId);
+        return (info != null ? info : new UserMypage());
+    }
 
-	/** 마이페이지 전체 조립 (유저정보+리뷰리스트) */
-	@Override
-	public UserMypage getMypage(String userId) {
-		UserMypage page = getUserInfo(userId);
-		page.setReviews(getUserReviews(userId));
-		return page;
-	}
+    /** 리뷰 리스트 여러 건 조회 */
+    @Override
+    public List<Review> getUserReviews(String userId) {
+        return userMapper.selectUserReviews(userId);
+    }
 
-	/** 제품 상세 보기 */
-	@Override
-	@Transactional(readOnly = true)
-	public ProductDetail getProductDetail(int product_no) {
-		// 기본 상품·매장·계정 정보
-		ProductDetail detail = userMapper.selectProductInfo(product_no);
-		// 이미지 리스트
-		detail.setImages(userMapper.selectProductImages(product_no));
-		// 리뷰 리스트
-		detail.setReviews(userMapper.selectProductReviews(product_no));
-		detail.setReviewCount(detail.getReviews().size());
-		return detail;
-	}
-	
-	@Override
-	public boolean isBookmarked(String user_id, String store_id) {
-	    return userMapper.isBookmarked(user_id, store_id) > 0;
-	}
-	
-	@Override
+    /** 마이페이지 전체 조립 (유저정보+리뷰리스트) */
+    @Override
+    public UserMypage getMypage(String userId) {
+        UserMypage page = getUserInfo(userId);
+        page.setReviews(getUserReviews(userId));
+        return page;
+    }
+
+    /** 제품 상세 보기 */
+    @Override
+    @Transactional(readOnly = true)
+    public ProductDetail getProductDetail(int product_no) {
+        // 기본 상품·매장·계정 정보
+        ProductDetail detail = userMapper.selectProductInfo(product_no);
+        // 이미지 리스트
+        detail.setImages(userMapper.selectProductImages(product_no));
+        // 리뷰 리스트
+        detail.setReviews(userMapper.selectProductReviews(product_no));
+        detail.setReviewCount(detail.getReviews().size());
+        return detail;
+    }
+
+    @Override
+    public boolean isBookmarked(String user_id, String store_id) {
+        return userMapper.isBookmarked(user_id, store_id) > 0;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<String> getProductImages(int product_no) {
         return userMapper.selectProductImages(product_no);
     }
-	
-	@Override
+
+    @Override
     @Transactional(readOnly = true)
     public List<Review> getReviewsByProductNo(int productNo) {
         return userMapper.selectProductReviews(productNo);
     }
-	
+
 
     @Override
     @Transactional
@@ -375,66 +274,66 @@ public class UserServiceImpl implements UsersService{
         return userMapper.insertReservation(userId, product_no) > 0;
     }
 
-	/** 사용자 회원가입 */
-	/** 아이디 중복 체크 */
-	@Override
-	public boolean isDuplicateId(String user_id) {
-		return userMapper.countByUserId(user_id) > 0;
-	}
+    /** 사용자 회원가입 */
+    /** 아이디 중복 체크 */
+    @Override
+    public boolean isDuplicateId(String user_id) {
+        return userMapper.countByUserId(user_id) > 0;
+    }
 
-	@Override
-	public void registerUser(Account account) {
-	    // 비밀번호 MD5 해시
-	    String rawPwd = account.getUser_pwd();
-	    if (rawPwd != null && !rawPwd.isEmpty()) {
-	        account.setUser_pwd(md5(rawPwd));
-	    }
+    @Override
+    public void registerUser(Account account) {
+        // 비밀번호 MD5 해시
+        String rawPwd = account.getUser_pwd();
+        if (rawPwd != null && !rawPwd.isEmpty()) {
+            account.setUser_pwd(md5(rawPwd));
+        }
 
-	    // 가입일, 상태 기본값 세팅
-	    account.setJoin_date(new Timestamp(System.currentTimeMillis()));
-	    account.setUser_status("ACTIVE");
+        // 가입일, 상태 기본값 세팅
+        account.setJoin_date(new Timestamp(System.currentTimeMillis()));
+        account.setUser_status("ACTIVE");
 
-	    // *디버그: 최종 저장될 Account 객체 내용 확인
-	    System.out.println("최종 저장 정보: " + account);
+        // *디버그: 최종 저장될 Account 객체 내용 확인
+        System.out.println("최종 저장 정보: " + account);
 
-	    // DB 저장 (한 번만)
-	    int cnt = userMapper.insertUser(account);
-	    System.out.println("insertUser 반환값: " + cnt);
-	    if (cnt != 1) {
-	        throw new RuntimeException("회원가입 실패 (insertUser 반환값=" + cnt + ")");
-	    }
-	}
+        // DB 저장 (한 번만)
+        int cnt = userMapper.insertUser(account);
+        System.out.println("insertUser 반환값: " + cnt);
+        if (cnt != 1) {
+            throw new RuntimeException("회원가입 실패 (insertUser 반환값=" + cnt + ")");
+        }
+    }
 
-	/** MD5 해시 유틸 */
-	private String md5(String input) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("MD5");
-			byte[] digest = md.digest(input.getBytes());
-			StringBuilder sb = new StringBuilder();
-			for (byte b : digest) {
-				sb.append(String.format("%02x", b));
-			}
-			return sb.toString();
-		} catch (Exception e) {
-			throw new RuntimeException("MD5 암호화 오류", e);
-		}
-	}
-	
-	/**
-	 * 메뉴바 review 탭
-	 * */
+    /** MD5 해시 유틸 */
+    private String md5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] digest = md.digest(input.getBytes());
+            StringBuilder sb = new StringBuilder();
+            for (byte b : digest) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("MD5 암호화 오류", e);
+        }
+    }
 
-	@Override
+    /**
+     * 메뉴바 review 탭
+     * */
+
+    @Override
     public List<Review> getAllReviews(int page, int size) {
         int startIdx = (page - 1) * size;
         return userMapper.getAllReviews(startIdx, size);
     }
 
-	
-	/**
-	 * 리뷰 이미지 AWS S3에 업로드하고, public URL을 반환
-	 */
-	// GET: orderNo로 DTO 채우기
+
+    /**
+     * 리뷰 이미지 AWS S3에 업로드하고, public URL을 반환
+     */
+    // GET: orderNo로 DTO 채우기
     @Override
     @Transactional(readOnly = true)
     public ReviewForm getReviewForm(int orderNo) {
@@ -446,10 +345,10 @@ public class UserServiceImpl implements UsersService{
     @Transactional
     public void writeReview(ReviewForm form, String userId) {
         form.setUser_id(userId);
-        
+
         ReviewForm info = userMapper.selectReviewFormByOrderNo(form.getOrder_no());
-        form.setTotal_price(info.getTotal_price());  
-        
+        form.setTotal_price(info.getTotal_price());
+
         // — 이미지 업로드 —
         MultipartFile imgFile = form.getImageFile();
         if (imgFile != null && !imgFile.isEmpty()) {
@@ -458,33 +357,33 @@ public class UserServiceImpl implements UsersService{
             meta.setContentType(imgFile.getContentType());
             meta.setContentLength(imgFile.getSize());
 
-         // InputStream은 try‐with‐resources 로 안전하게 열고 닫기
+            // InputStream은 try‐with‐resources 로 안전하게 열고 닫기
             try (InputStream is = imgFile.getInputStream()) {
                 awsS3Config.amazonS3()
-                    .putObject(new PutObjectRequest(
-                        awsS3Config.getBucket(),
-                        fileName,
-                        is,
-                        meta
-                    ));
+                        .putObject(new PutObjectRequest(
+                                awsS3Config.getBucket(),
+                                fileName,
+                                is,
+                                meta
+                        ));
             } catch (IOException e) {
                 throw new UncheckedIOException("리뷰 이미지 업로드 실패", e);
             }
 
             form.setReview_img(fileName);
         }
-    	
-        
+
+
         // 리뷰 저장
         userMapper.insertReview(form);
-        
+
         // 포인트 적립
         userMapper.addUserPoint(form);
     }
     // AWS S3 인스턴스 반환
-    	private AmazonS3 amazonS3() {
-            return awsS3Config.amazonS3();
-        }
+    private AmazonS3 amazonS3() {
+        return awsS3Config.amazonS3();
+    }
 
     /* 가게 이미지 하나 가져오기 */
     @Override

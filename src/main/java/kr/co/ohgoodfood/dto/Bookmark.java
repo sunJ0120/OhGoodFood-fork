@@ -1,7 +1,6 @@
 package kr.co.ohgoodfood.dto;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * [DTO] Bookmark
@@ -10,10 +9,14 @@ import lombok.NoArgsConstructor;
  * - Service로직을 사용하기 위해 MainStore를 상속받도록 구성한다.
  */
 
-@Data
-@NoArgsConstructor
-public class Bookmark extends MainStore{
-    //Bookmark table에서 가져오는 정보들
+@Getter
+@Setter
+@ToString
+@Builder
+@AllArgsConstructor //Builder와 테스트용 생성자
+@NoArgsConstructor  // MyBatis 매핑용 기본 생성자
+public class Bookmark{
     private Integer bookmark_no;
     private String user_id;
+    private String store_id;
 }

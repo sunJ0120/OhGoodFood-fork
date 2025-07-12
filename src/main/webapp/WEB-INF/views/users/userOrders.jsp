@@ -18,12 +18,14 @@
     <%-- main의 헤더 부분 --%>
     <section class="orderHeaderWrapper">
       <div class="orderHeaderText">
-        <span class="title">
-          <div class="orderStatusTitle">
-            전체 주문
-          </div>
-           내역
-        </span>
+        <strong>
+          <span class="title">
+            <div class="orderStatusTitle">
+              전체 주문
+            </div>
+             내역
+          </span>
+        </strong>
         <span class="subtitle"> | 주문 기록</span>
       </div>
 

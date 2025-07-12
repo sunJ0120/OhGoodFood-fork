@@ -275,11 +275,11 @@
           data: { store_id : pos.store_id },
           success: function(html) {
             $('.storePinModalWrapper').html(html);
-              //ajax로 fragment 변경할 경우, 기존에 사용하던 이벤트들을 한 번 더 불러와야 한다.
-              //뱃지 상태 변경
-              applyBadgeStyles();
-              //모달 클릭 이벤트
-              storePinModalClickEvent();
+            //ajax로 fragment 변경할 경우, 기존에 사용하던 이벤트들을 한 번 더 불러와야 한다.
+            //뱃지 상태 변경
+            applyBadgeStyles();
+            //모달 클릭 이벤트
+            storePinModalClickEvent();
           },
           error: function(xhr, status, err) {
             console.error("AJAX 오류", status, err);
@@ -471,7 +471,7 @@
 
         const isActive = !!filterParams[mapKey];
         $('#btnText').text(isActive ? selected : '음식 종류'); //active 아니면 음식 종류로 변경
-        
+
         //active 상태에 따라 .active class 해제
         if (isActive) {
           $('.categoryFilterBtn').addClass('active');
@@ -628,47 +628,47 @@
   </script>
   <%-- Product card 누르면 상세 이동 --%>
   <script>
-  function productCardClickEvent() {
-    $('.productCard').on('click', function(){
-      const store_status = $(this).data('storeStatus');
-      const no = $(this).data('productNo');
+    function productCardClickEvent() {
+      $('.productCard').on('click', function(){
+        const store_status = $(this).data('storeStatus');
+        const no = $(this).data('productNo');
 
-      if (store_status === 'N') {
-        alert('아직 오픈 전입니다!');
-        return;  // 클릭 처리 종료
-      }
+        if (store_status === 'N') {
+          alert('아직 오픈 전입니다!');
+          return;  // 클릭 처리 종료
+        }
 
-      const ctx = '${pageContext.request.contextPath}';
-      window.location.href = ctx + '/user/productDetail?product_no=' + no;
-    });
-  }
+        const ctx = '${pageContext.request.contextPath}';
+        window.location.href = ctx + '/user/productDetail?product_no=' + no;
+      });
+    }
   </script>
   <%-- pin에 있는 storePinModal 누르면 상세 이동 --%>
   <script>
-      function storePinModalClickEvent() {
-          const $mapWrapper = $('.mapWrapper');
-          const $wrapper = $('.storePinModalWrapper');
-          $wrapper.removeClass('hidden'); //새로운 핀 클리기 히든 해제
-          const $modal = $wrapper.find('.storePinModal');
+    function storePinModalClickEvent() {
+      const $mapWrapper = $('.mapWrapper');
+      const $wrapper = $('.storePinModalWrapper');
+      $wrapper.removeClass('hidden'); //새로운 핀 클리기 히든 해제
+      const $modal = $wrapper.find('.storePinModal');
 
-          $mapWrapper.addClass('modalOpen'); //modalOpen 후 높이 변경하는 이벤트 추가
-          $modal.on('click', function(){
-              const store_status = $(this).data('storeStatus');
-              const no = $(this).data('productNo');
+      $mapWrapper.addClass('modalOpen'); //modalOpen 후 높이 변경하는 이벤트 추가
+      $modal.on('click', function(){
+        const store_status = $(this).data('storeStatus');
+        const no = $(this).data('productNo');
 
-              if (store_status === 'N') {
-                  alert('아직 오픈 전입니다!');
-                  return;  // 클릭 처리 종료
-              }
-              const ctx = '${pageContext.request.contextPath}';
-              window.location.href = ctx + '/user/productDetail?product_no=' + no;
-          });
+        if (store_status === 'N') {
+          alert('아직 오픈 전입니다!');
+          return;  // 클릭 처리 종료
+        }
+        const ctx = '${pageContext.request.contextPath}';
+        window.location.href = ctx + '/user/productDetail?product_no=' + no;
+      });
 
-          //모달 내부 클릭 전파 방지
-          $modal.off('click.modalInside').on('click.modalInside', function(e){
-              e.stopPropagation();
-          });
-      }
+      //모달 내부 클릭 전파 방지
+      $modal.off('click.modalInside').on('click.modalInside', function(e){
+        e.stopPropagation();
+      });
+    }
   </script>
 </body>
 </html>

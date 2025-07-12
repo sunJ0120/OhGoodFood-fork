@@ -67,12 +67,14 @@ main {
     align-items: center;
     justify-content: center;
     font-family: 'nanumesquareneo_b';
-    padding: 10px 10px;
+    /* 상하 패딩 고정 10px / 좌우 패딩 유동적 */
+    padding-block: 10px;
+    padding-inline: clamp(4px, calc((100vw - 375px) * (5 / 65) + 5px), 10px);
     background-color: #F5F3EA;
     color: #8b6d5c;
     border: 1px solid #8b6d5c;
     border-radius: 10px;
-    font-size: 14px;
+    font-size: 12px;
     gap: 4px;
 }
 
@@ -87,7 +89,7 @@ main {
     align-items: center;
     gap: 6px;
     box-sizing: border-box;
-    width: 125px;
+    width: 115px;
 }
 
 .dropdownToggle {
@@ -336,6 +338,7 @@ main {
     width: 100%;
     position: absolute;
     box-sizing: border-box;
+    font-size: 12px;
 
     top: 100%;
     font-family: 'nanumesquareneo_b';
@@ -362,7 +365,6 @@ main {
     padding: 6px 12px;
     margin: 0 12px;
     border-radius: 8px;
-    font-size: 13px;
     color: #8B6D5C;
     font-weight: normal;
     transition: all 0.2s ease-in-out;

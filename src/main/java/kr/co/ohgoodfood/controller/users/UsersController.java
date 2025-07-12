@@ -1,11 +1,10 @@
 package kr.co.ohgoodfood.controller.users;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import kr.co.ohgoodfood.dto.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,19 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.ohgoodfood.dto.Account;
-import kr.co.ohgoodfood.dto.Alarm;
-import kr.co.ohgoodfood.dto.Bookmark;
-import kr.co.ohgoodfood.dto.BookmarkFilter;
-import kr.co.ohgoodfood.dto.MainStore;
-import kr.co.ohgoodfood.dto.ProductDetail;
-import kr.co.ohgoodfood.dto.Review;
-import kr.co.ohgoodfood.dto.ReviewForm;
-import kr.co.ohgoodfood.dto.UserMainFilter;
-import kr.co.ohgoodfood.dto.UserMypage;
-import kr.co.ohgoodfood.dto.UserOrder;
-import kr.co.ohgoodfood.dto.UserOrderFilter;
-import kr.co.ohgoodfood.dto.UserOrderRequest;
 import kr.co.ohgoodfood.service.common.CommonService;
 import kr.co.ohgoodfood.service.common.PayService;
 import kr.co.ohgoodfood.service.users.UsersService;
@@ -42,15 +28,9 @@ import lombok.extern.slf4j.Slf4j;
  *
  * 사용자 페이지 전용 기능을 처리하는 컨트롤러입니다.
  * - POST /user/signup	              : 사용자 회원가입 페이지
- * - GET  /user/main                  : 사용자 메인 화면 조회
- * - POST /user/filter/store          : AJAX 기반 가게 목록 필터링
- * - GET  /user/bookmark              : 해당 user_id가 가진 bookmark 목록 조회
- * - POST /user/bookmark/delete       : 해당하는 bookmark 삭제
- * - POST /user/bookmark/insert       : 해당하는 bookmark 추가
  * - GET  /user/main/orderList        : 유저가 가진 orderList 목록 조회
  * - POST /user/filter/order          : AJAX 기반 오더 목록 필터링
  * - POST /user/order/cancel          : 유저가 선택한 오더 주문 취소
- * - GET  /user/map/pin               : AJAX 기반 핀으로 선택한 스토어 fragment 조회
  * - GET  /user/mypage                : 유저 mypage 이동
  * - GET  /user/reviewList            : 하단 메뉴바 Review탭 이동시 전체 리뷰 목록 조회
  *
@@ -69,114 +49,6 @@ public class UsersController {
     private String kakaoMapAppKey;
 
     /**
-     * 사용자 메인 화면을 조회하고, 가게 목록을 뷰에 바인딩한다.
-     *
-     * @param userMainFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
-     * @param model          뷰에 전달할 데이터(Model)
-     * @return               포워딩할 JSP 뷰 이름 ("users/userMain")
-     */
-    @GetMapping("/main")
-    public String userMain(@ModelAttribute UserMainFilter userMainFilter,
-                           Model model){
-
-        List<MainStore> mainStoreList = usersService.getMainStoreList(userMainFilter);
-        model.addAttribute("kakaoMapAppKey", kakaoMapAppKey);
-        model.addAttribute("mainStoreList", mainStoreList);
-
-        return "users/userMain";
-    }
-
-    /**
-     * AJAX 필터링 결과에 따른 가게 목록을 조회하고 뷰 프래그먼트만 반환한다.
-     *
-     * @param userMainFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
-     * @param model          뷰에 전달할 데이터(Model)
-     * @return               가게 카드 목록만 포함한 JSP 프래그먼트 ("users/fragment/userMainStoreList")
-     */
-    @PostMapping("/filter/store")
-    public String filterStoreList(@RequestBody UserMainFilter userMainFilter,
-                                  Model model){
-
-        List<MainStore> mainStoreList = usersService.getMainStoreList(userMainFilter);
-        model.addAttribute("mainStoreList", mainStoreList);
-        // JSP fragment만 리턴
-        return "users/fragment/userMainStoreList";
-    }
-
-    /**
-     * 해당 user가 가진 북마크 리스트를 조회한다.
-     *
-     * @param userMainFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
-     * @param model          뷰에 전달할 데이터(Model)
-     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
-     * @return               users/userBookmark.jsp로 포워딩
-     */
-    @GetMapping("/bookmark")
-    public String userBookmark(@ModelAttribute UserMainFilter userMainFilter,
-                               Model model,
-                               HttpSession session){
-
-        //세션에서 받아오는 로직
-        Account loginUser = (Account) session.getAttribute("user");
-        String user_id = loginUser.getUser_id();
-
-        List<Bookmark> bookmarkList = usersService.getBookmarkList(user_id);
-        model.addAttribute("bookmarkList", bookmarkList);
-
-        return "users/userBookmark"; // /WEB-INF/views/users/userBookmark.jsp로 forwarding
-    }
-
-    /**
-     * 해당 user가 가진 북마크 리스트 중, 특정 북마크를 삭제한다.
-     *
-     * @param bookmarkFilter bookMark delete에 필요한 필드 정보가 담긴 DTO
-     * @param model          뷰에 전달할 데이터(Model)
-     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
-     * @return               json 응답, 성공시 {"code" : 200} / 실패시 {"code" : 500}
-     */
-    @PostMapping("/bookmark/delete")
-    @ResponseBody //json으로 code응답을 주기 위함이다.
-    public Map<String,Integer> userBookmarkDelete(@RequestBody BookmarkFilter bookmarkFilter,
-                                                  Model model,
-                                                  HttpSession session){
-        //세션에서 받아오는 로직
-        Account loginUser = (Account) session.getAttribute("user");
-        String user_id = loginUser.getUser_id();
-
-        //bookmark를 위해 user_id 세팅
-        bookmarkFilter.setUser_id(user_id);
-
-        //delete bookmark 실행
-        boolean result = usersService.deleteUserBookMark(bookmarkFilter);
-        return Collections.singletonMap("code", result ? 200 : 500);
-    }
-
-    /**
-     * 해당 user가 가진 북마클 리스트에서 삭제 된 것을 살리기 위함이다.
-     *
-     * @param bookmarkFilter bookMark delete에 필요한 필드 정보가 담긴 DTO
-     * @param model          뷰에 전달할 데이터(Model)
-     * @param session        현재 HTTP 세션(로그인된 사용자 정보)
-     * @return               json 응답, 성공시 {"code" : 200} / 실패시 {"code" : 500}
-     */
-    @PostMapping("/bookmark/insert")
-    @ResponseBody //json으로 code응답을 주기 위함이다.
-    public Map<String,Integer> userBookmarkInsert(@RequestBody BookmarkFilter bookmarkFilter,
-                                                  Model model,
-                                                  HttpSession session){
-        //세션에서 받아오는 로직
-        Account loginUser = (Account) session.getAttribute("user");
-        String user_id = loginUser.getUser_id();
-
-        //bookmark를 위해 user_id 세팅
-        bookmarkFilter.setUser_id(user_id);
-
-        //delete bookmark 실행
-        boolean result = usersService.insertUserBookMark(bookmarkFilter);
-        return Collections.singletonMap("code", result ? 200 : 500);
-    }
-
-    /**
      * 세션에 있는 유저가 가진 주문 목록을 조회한다.
      *
      * @param userOrderFilter 요청 파라미터와 바인딩되어 뷰로 전달되는 DTO
@@ -193,7 +65,7 @@ public class UsersController {
         String user_id = loginUser.getUser_id();
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
-        List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
+        List<UserOrderDTO> userOrderList = usersService.getUserOrderList(userOrderFilter);
 
         model.addAttribute("userOrderList", userOrderList);
 
@@ -217,7 +89,7 @@ public class UsersController {
         String user_id = loginUser.getUser_id();
 
         userOrderFilter.setUser_id(user_id); //필터에 id값 추가
-        List<UserOrder> userOrderList = usersService.getUserOrderList(userOrderFilter);
+        List<UserOrderDTO> userOrderList = usersService.getUserOrderList(userOrderFilter);
         model.addAttribute("userOrderList",userOrderList);
 
         return "users/fragment/userOrderList";
@@ -249,23 +121,6 @@ public class UsersController {
             redirectAttributes.addFlashAttribute("errorMsg", "[ERROR!] 주문 취소에 실패했습니다.");
         }
         return "redirect:/user/orderList";
-    }
-
-    /**
-     * map에서 pin 선택한 가게의 정보를 AJAX로 조회하고 뷰 프래그먼트만 반환한다.
-     *
-     * @param userMainFilter JSON 바디로 전달된 필터 정보 (필터 DTO에 자동 매핑)
-     * @return               가게 정보를 포함한 JSP 프래그먼트 ("users/fragment/userMapPinStore")
-     */
-    @GetMapping("/map/pin")
-    public String getMapPinStore(@ModelAttribute UserMainFilter userMainFilter,
-                                 Model model){
-
-        MainStore mainStore = usersService.getMainStoreOne(userMainFilter);
-        model.addAttribute("mainStore", mainStore);
-
-        //fragment return
-        return "users/fragment/userMapPinStore";
     }
 
     /**

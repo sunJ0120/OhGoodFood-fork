@@ -1,11 +1,11 @@
 package kr.co.ohgoodfood.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
-
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * [DTO] MainStore
@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class MainStore{
+public class MainStore {
     //Store table에서 가져오는 정보들
     private String store_id;
     private String store_name;

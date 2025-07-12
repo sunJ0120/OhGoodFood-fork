@@ -40,17 +40,17 @@
                 <c:forEach var="bookmark" items = "${bookmarkList}" varStatus="st">
                   <%-- store_status를 받아오기 위해 data-status를 지정 --%>
                   <article class="productCard"
-                           data-status="${bookmark.store_status}"
-                           data-bookmark-no="${bookmark.bookmark_no}"
-                           data-product-no="${bookmark.product_no}"
-                           data-store-id="${bookmark.store_id}">
+                           data-status="${bookmark.store.store_status}"
+                           data-bookmark-no="${bookmark.bookmark.bookmark_no}"
+                           data-product-no="${bookmark.product.product_no}"
+                           data-store-id="${bookmark.store.store_id}">
                     <div class="productNameWrapper">
                       <div class="productBookmarkWrapper">
                         <div class="bookmarkWrapper">
                           <img src="${pageContext.request.contextPath}/img/user_bookmark.png" class="bookmarkImage">
                         </div>
                         <div class="productName">
-                          <strong>${bookmark.store_name}</strong>
+                          <strong>${bookmark.store.store_name}</strong>
                         </div>
                       </div>
                       <div class="badge">
@@ -65,8 +65,8 @@
                         </c:when>
 
                         <c:when test="${bookmark.pickup_status.name() == 'TOMORROW' or bookmark.pickup_status.name() == 'TODAY'}">
-                          <c:if test="${bookmark.amount > 5}">+5개 남음</c:if>
-                          <c:if test="${bookmark.amount <= 5}">${bookmark.amount}개 남음</c:if>
+                          <c:if test="${bookmark.product.amount > 5}">+5개 남음</c:if>
+                          <c:if test="${bookmark.product.amount <= 5}">${bookmark.product.amount}개 남음</c:if>
                         </c:when>
 
                       </c:choose>
@@ -76,7 +76,7 @@
                       <%-- 가게 상세 정보 --%>
                     <div class="cardInfo">
                       <div class="imgWrapper">
-                        <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${bookmark.store_img}" alt="상품 이미지" class="storeImage"/>
+                        <img src="https://ohgoodfood.s3.ap-northeast-2.amazonaws.com/${bookmark.image.store_img}" alt="상품 이미지" class="storeImage"/>
                       </div>
                       <div class="productTextWrapper">
                         <div class="productTexts">
@@ -101,29 +101,29 @@
                                   </strong>
                               </span>
                             <span class="pickupStartText">
-                            <c:if test="${not empty bookmark.pickup_start}">
-                              <fmt:formatDate value="${bookmark.pickup_start}" pattern="HH:mm"/>
+                            <c:if test="${not empty bookmark.product.pickup_start}">
+                              <fmt:formatDate value="${bookmark.product.pickup_start}" pattern="HH:mm"/>
                               ~
                             </c:if>
                           </span>
                             <span class="pickupEndText">
-                          <c:if test="${not empty bookmark.pickup_end}">
-                            <fmt:formatDate value="${bookmark.pickup_end}" pattern="HH:mm"/>
+                          <c:if test="${not empty bookmark.product.pickup_end}">
+                            <fmt:formatDate value="${bookmark.product.pickup_end}" pattern="HH:mm"/>
                           </c:if>
                         </span>
                           </p>
                         </div>
                         <div class="priceBox">
 
-                          <c:if test="${bookmark.origin_price != null}">
+                          <c:if test="${bookmark.product.origin_price != null}">
                             <del class="originalPrice">
-                              <fmt:formatNumber value="${bookmark.origin_price}" pattern="#,###" />₩
+                              <fmt:formatNumber value="${bookmark.product.origin_price}" pattern="#,###" />₩
                             </del>
                           </c:if>
 
-                          <c:if test="${bookmark.sale_price != null}">
+                          <c:if test="${bookmark.product.sale_price != null}">
                         <span class="salePrice">
-                          <strong><fmt:formatNumber value="${bookmark.sale_price}" pattern="#,###" />₩</strong>
+                          <strong><fmt:formatNumber value="${bookmark.product.sale_price}" pattern="#,###" />₩</strong>
                         </span>
                           </c:if>
 
@@ -211,7 +211,7 @@
           dataType: 'json',          // 응답을 JSON 으로 파싱
           data: JSON.stringify(bookmarkParams),
           success: function(data) {
-            if (data.code === 500) {
+            if (data.code === 500 || data.code === 400) {
               return alert('요청에 실패했습니다.');
             }
             //이미지 상태 변경 및 오퍼시티 설정
